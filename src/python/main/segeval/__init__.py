@@ -1,8 +1,7 @@
 '''
 Segmentation evaluation metrics, and utility functions.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -34,7 +33,7 @@ import os
 from collections import Counter
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                        os.sep.join(['..']*8)))
+                                        os.sep.join(['..'] * 8)))
 
 DEBUG_MODE  = False
 EXPERIMENTS = False
@@ -42,48 +41,49 @@ EXPERIMENTS = False
 
 def load_tests(loader, tests, pattern):
     '''
-    A load_tests functions utilizing the default loader.
+    A ``load_tests()`` function utilizing the default loader :func:`segeval.Utils.default_load_tests`.
+    
+    .. seealso:: The `load_tests protocol <http://docs.python.org/library/unittest.html#load-tests-protocol>`_.
     '''
+    #pylint: disable=W0613
     from Utils import default_load_tests
-    return default_load_tests(__file__, loader, tests, pattern)
+    return default_load_tests(__file__, loader, tests)
 
 
-def convert_segments_to_masses(segments):
+def convert_segment_pos_to_masses(segments):
     '''
     Convert an ordered sequence of section labels for each unit into a
-    sequence of segment masses, e.g.:
+    sequence of segment masses, e.g., ``[1,1,1,1,1,2,2,2,3,3,3,3,3]`` becomes
+    ``[5,3,5]``.
     
-    [1,1,1,1,1,2,2,2,3,3,3,3,3] => [5,3,5]
+    :param segments: Ordered sequence of which segments a unit belongs to.
+    :type segments: list
     
-    Arguments:
-    segments -- Ordered sequence of which segments a unit belongs to (list)
-    
-    Return :
-    Segment mass sequence (list).
+    :returns: Segment mass sequence.
+    :rtype: :func:`list`
     '''
     counts = Counter(segments)
     masses = list()
-    for i in range(1, max(counts.keys())+1):
+    for i in range(1, max(counts.keys()) + 1):
         masses.append(counts[i])
     return masses
 
 
-def convert_masses_to_segments(seg_masses):
+def convert_masses_to_segment_pos(masses):
     '''
     Converts a sequence of segment masses into an ordered sequence of section
-    labels for each unit, e.g.:
+    labels for each unit, e.g., ``[5,3,5]`` becomes
+    ``[1,1,1,1,1,2,2,2,3,3,3,3,3]``.
     
-    [5,3,5] => [1,1,1,1,1,2,2,2,3,3,3,3,3]
+    :param masses: Segment mass sequence.
+    :type masses: list
     
-    Arguments:
-    segments -- Segment mass sequence (list).
-    
-    Return :
-    Ordered sequence of which segments a unit belongs to (list).
+    :returns: Ordered sequence of which segments a unit belongs to.
+    :rtype: :func:`list`
     '''
     sequence = list()
-    for i, seg_mass in enumerate(seg_masses):
-        sequence.extend([i+1] * seg_mass)
+    for i, mass in enumerate(masses):
+        sequence.extend([i + 1] * mass)
     return sequence
 
 
@@ -92,7 +92,17 @@ class SegmentationMetricError(Exception):
     Indicates that a runtime check has failed, and the algorithm is performing
     incorrectly, or input validation has failed.  Generation of this exception
     is tested.
+        
+    :param message: Explanation for the exception.
+    :type message: str
     '''
     
     def __init__(self, message):
+        '''
+        Initializer.
+        
+        :param message: Explanation for the exception.
+        :type message: str
+        '''
         Exception.__init__(self, message)
+

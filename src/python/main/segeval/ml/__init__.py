@@ -1,8 +1,7 @@
 '''
 Computes a variety of traditional machine learning metrics.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -35,10 +34,13 @@ from decimal import Decimal
 
 def load_tests(loader, tests, pattern):
     '''
-    A load_tests functions utilizing the default loader.
+    A ``load_tests()`` function utilizing the default loader :func:`segeval.Utils.default_load_tests`.
+    
+    .. seealso:: The `load_tests protocol <http://docs.python.org/library/unittest.html#load-tests-protocol>`_.
     '''
+    #pylint: disable=W0613
     from ..Utils import default_load_tests
-    return default_load_tests(__file__, loader, tests, pattern)
+    return default_load_tests(__file__, loader, tests)
 
 
 def precision(tp, fp):
@@ -77,9 +79,12 @@ def recall(tp, fn):
         return Decimal(tp) / Decimal(tp + fn)
 
 
-def fscore(tp, fp, fn, beta=1.0):
+def fmeasure(tp, fp, fn, beta=1.0):
     '''
     Calculate F-measure, also known as F-score.
+    
+    .. math::
+        \\text{F}_{\\beta}\\text{-measure} = \\frac{(1 + \\beta^2) \\cdot TP}{(1 + \\beta^2) \\cdot TP + \\beta^2 \\cdot FN + FP}
     
     Arguments:
     tp   -- Number of true positives
@@ -161,6 +166,6 @@ def prfcf(tp, fp, fn, tn=None, beta=1.0):
     Precision, recall, F-Score, and a confusion matrix.
     '''
     # pylint: disable=C0103
-    return precision(tp, fp), recall(tp, fn), fscore(tp, fp, fn, beta), \
+    return precision(tp, fp), recall(tp, fn), fmeasure(tp, fp, fn, beta), \
            confusionmatrix(tp, fp, fn, tn)
 

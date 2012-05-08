@@ -40,7 +40,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Segmentation Evaluation'
+project = u'segeval'
 copyright = u'2012, Chris Fournier'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -78,7 +78,7 @@ exclude_patterns = []
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
-#show_authors = False
+show_authors = True
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -164,7 +164,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'SegmentationEvaluationdoc'
+htmlhelp_basename = 'segevaldoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------

@@ -40,6 +40,9 @@ def f_b_measure(segs_hypothesis, segs_reference):
     '''
     Calculates the F-Measure between a hypothesis, and reference segmentation.
     
+    .. math::
+        \text{F}_{\beta}\text{-measure}
+    
     Arguments:
     segs_hypothesis -- Hypothesis segmentation masses
     segs_reference  -- Reference segmentation masses

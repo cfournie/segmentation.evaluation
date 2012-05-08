@@ -1,8 +1,7 @@
 '''
 Utility functions for the segmentation agreement module.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -32,15 +31,17 @@ Utility functions for the segmentation agreement module.
 #===============================================================================
 import math
 from decimal import Decimal
-# pylint: disable=C0103
 
 
 def load_tests(loader, tests, pattern):
     '''
-    A load_tests functions utilizing the default loader.
+    A ``load_tests()`` function utilizing the default loader :func:`segeval.Utils.default_load_tests`.
+    
+    .. seealso:: The `load_tests protocol <http://docs.python.org/library/unittest.html#load-tests-protocol>`_.
     '''
+    #pylint: disable=W0613
     from ..Utils import default_load_tests
-    return default_load_tests(__file__, loader, tests, pattern)
+    return default_load_tests(__file__, loader, tests)
 
 
 def choose(n, k):
@@ -54,6 +55,7 @@ def choose(n, k):
     Return:
     Number of combinations as an integer.
     '''
+    # pylint: disable=C0103
     numerator   = math.factorial(n)
     denominator = (math.factorial(k) * math.factorial(n-k))
     return numerator / denominator
@@ -70,6 +72,7 @@ def permute(n, k):
     Return:
     Number of permutations as an integer.
     '''
+    # pylint: disable=C0103
     numerator   = math.factorial(n)
     denominator = (math.factorial(n-k))
     return numerator / denominator

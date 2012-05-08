@@ -37,7 +37,7 @@ from numpy import mean, std, var
 from .WindowDiff import compute_window_size
 from ..ml import fscore
 from .. import SegmentationMetricError
-from .. import convert_masses_to_segments
+from .. import convert_masses_to_segment_pos
 
 
 def win_pr(ref_segments, hyp_segments, window_size=None, return_fscore=False,
@@ -109,8 +109,10 @@ def pairwise_winpr(segs_dict_all, groups=False):
             coders = coder_segs.keys()
             for m in range(0,len(coders)):
                 for n in range(m+1,len(coders)):
-                    segs_m = convert_masses_to_segments(coder_segs[coders[m]])
-                    segs_n = convert_masses_to_segments(coder_segs[coders[n]])
+                    segs_m = convert_masses_to_segment_pos(
+                                coder_segs[coders[m]])
+                    segs_n = convert_masses_to_segment_pos(
+                                coder_segs[coders[n]])
                     tp,fp,fn = win_pr(segs_m,segs_n)[0:3]
                     f_1mn = fscore(tp,fp,fn)
                     tp,fp,fn = win_pr(segs_n,segs_m)[0:3]

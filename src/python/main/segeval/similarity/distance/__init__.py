@@ -1,8 +1,7 @@
 '''
 Edit distance package.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -34,7 +33,10 @@ Edit distance package.
 
 def load_tests(loader, tests, pattern):
     '''
-    A load_tests functions utilizing the default loader.
+    A ``load_tests()`` function utilizing the default loader :func:`segeval.Utils.default_load_tests`.
+    
+    .. seealso:: The `load_tests protocol <http://docs.python.org/library/unittest.html#load-tests-protocol>`_.
     '''
+    #pylint: disable=W0613
     from ...Utils import default_load_tests
-    return default_load_tests(__file__, loader, tests, pattern)
+    return default_load_tests(__file__, loader, tests)

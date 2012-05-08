@@ -1,8 +1,7 @@
 '''
-Utility functions.
+Utility functions for the package.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2012, Chris Fournier
@@ -33,23 +32,26 @@ Utility functions.
 import os
 
 
-
 ROOT_PACKAGE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                 '../'))
 
 
-def default_load_tests(cur_file, loader, tests, pattern):
+def default_load_tests(cur_file, loader, tests):
     '''
-    Default functionality for module load_tests functions (in __init__.py's)
+    Default functionality for module load_tests functions which 
+    are contained in each module's __init__.py file)
     
-    Arguments:
-    cur_file -- __file__ from the calling module
-    loader   -- Test loader
-    tests    -- Test suite
-    pattern  -- Test discovery pattern
+    :param cur_file: __file__ from the calling module.
+    :type cur_file: str
+    :param loader: Test loader.
+    :type loader: str
+    :param tests: Test suite.
+    :type tests: unittest.TestSuite
     
-    Returns:
-    A modified test suite.
+    :returns: A modified test suite.
+    :rtype: :class:`unittest.TestSuite`
+    
+    .. seealso:: The `load_tests protocol <http://docs.python.org/library/unittest.html#load-tests-protocol>`_.
     '''
     pattern = '*Test.py'
     cur_dir = os.path.split(cur_file)[0]
