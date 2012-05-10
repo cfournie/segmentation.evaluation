@@ -51,7 +51,8 @@ def default_load_tests(cur_file, loader, tests):
     :returns: A modified test suite.
     :rtype: :class:`unittest.TestSuite`
     
-    .. seealso:: The `load_tests protocol <http://docs.python.org/library/unittest.html#load-tests-protocol>`_.
+    .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
+    unittest.html#load-tests-protocol>`_.
     '''
     pattern = '*Test.py'
     cur_dir = os.path.split(cur_file)[0]

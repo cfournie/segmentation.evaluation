@@ -35,7 +35,7 @@ from decimal import Decimal
 from .FbMeasure import f_b_measure, pairwise_f_b_measure
 from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
-from .. import convert_segment_pos_to_masses
+from .. import convert_positions_to_masses
 
 
 class TestFbMeasure(unittest.TestCase):
@@ -49,8 +49,8 @@ class TestFbMeasure(unittest.TestCase):
         Test whether identical segmentations produce 1.0.
         '''
         # pylint: disable=C0324,C0103
-        a = convert_segment_pos_to_masses([1,1,1,1,1,2,2,2,3,3,3,3,3])
-        b = convert_segment_pos_to_masses([1,1,1,1,1,2,2,2,3,3,3,3,3])
+        a = convert_positions_to_masses([1,1,1,1,1,2,2,2,3,3,3,3,3])
+        b = convert_positions_to_masses([1,1,1,1,1,2,2,2,3,3,3,3,3])
         self.assertEqual(f_b_measure(a, b), 1.0)
 
     def test_no_boundaries(self):
@@ -58,8 +58,8 @@ class TestFbMeasure(unittest.TestCase):
         Test whether no segments versus some segments produce 0.0.
         '''
         # pylint: disable=C0324,C0103
-        a = convert_segment_pos_to_masses([1,1,1,1,1,1,1,1,1,1,1,1,1])
-        b = convert_segment_pos_to_masses([1,1,1,1,2,2,2,2,3,3,3,3,3])
+        a = convert_positions_to_masses([1,1,1,1,1,1,1,1,1,1,1,1,1])
+        b = convert_positions_to_masses([1,1,1,1,2,2,2,2,3,3,3,3,3])
         self.assertEqual(f_b_measure(a,b), 0)
         self.assertEqual(f_b_measure(b,a), 0)
 
@@ -68,8 +68,8 @@ class TestFbMeasure(unittest.TestCase):
         Test whether all segments versus some segments produces 2/12, or 0.167.
         '''
         # pylint: disable=C0324,C0103
-        a = convert_segment_pos_to_masses([1,2,3,4,5,6,7,8,9,10,11,12,13])
-        b = convert_segment_pos_to_masses([1,1,1,1,2,2,2,2,3,3,3,3,3])
+        a = convert_positions_to_masses([1,2,3,4,5,6,7,8,9,10,11,12,13])
+        b = convert_positions_to_masses([1,1,1,1,2,2,2,2,3,3,3,3,3])
         self.assertEqual(f_b_measure(a,b),
                          Decimal('0.2857142857142857142857142857'))
         self.assertEqual(f_b_measure(b,a),
@@ -80,8 +80,8 @@ class TestFbMeasure(unittest.TestCase):
         Test whether all segments versus no segments produces 0.0.
         '''
         # pylint: disable=C0324,C0103
-        a = convert_segment_pos_to_masses([1,2,3,4,5,6,7,8,9,10,11,12,13])
-        b = convert_segment_pos_to_masses([1,1,1,1,1,1,1,1,1,1,1,1,1])
+        a = convert_positions_to_masses([1,2,3,4,5,6,7,8,9,10,11,12,13])
+        b = convert_positions_to_masses([1,1,1,1,1,1,1,1,1,1,1,1,1])
         self.assertEqual(f_b_measure(a,b), 0)
         self.assertEqual(f_b_measure(b,a), 0)
 
@@ -91,8 +91,8 @@ class TestFbMeasure(unittest.TestCase):
         0.33.
         '''
         # pylint: disable=C0324,C0103
-        a = convert_segment_pos_to_masses([1,1,1,1,1,2,2,2,3,3,3,3,3])
-        b = convert_segment_pos_to_masses([1,1,1,1,2,2,2,2,3,3,3,3,3])
+        a = convert_positions_to_masses([1,1,1,1,1,2,2,2,3,3,3,3,3])
+        b = convert_positions_to_masses([1,1,1,1,2,2,2,2,3,3,3,3,3])
         self.assertEqual(f_b_measure(a,b),
                          Decimal('0.5'))
         self.assertEqual(f_b_measure(b,a),
@@ -103,8 +103,8 @@ class TestFbMeasure(unittest.TestCase):
         Test whether 1/3 segments that are non-existent produces 0.66.
         '''
         # pylint: disable=C0324,C0103
-        a = convert_segment_pos_to_masses([1,1,1,1,1,2,2,2,3,3,3,3,3])
-        b = convert_segment_pos_to_masses([1,1,1,1,1,2,3,3,4,4,4,4,4])
+        a = convert_positions_to_masses([1,1,1,1,1,2,2,2,3,3,3,3,3])
+        b = convert_positions_to_masses([1,1,1,1,1,2,3,3,4,4,4,4,4])
         self.assertEqual(f_b_measure(a,b),
                          Decimal('0.8'))
         self.assertEqual(f_b_measure(b,a),
@@ -116,8 +116,8 @@ class TestFbMeasure(unittest.TestCase):
         0.25. 
         '''
         # pylint: disable=C0324,C0103
-        a = convert_segment_pos_to_masses([1,1,1,1,2,2,2,2,3,3,3,3,3])
-        b = convert_segment_pos_to_masses([1,1,1,1,1,2,3,3,4,4,4,4,4])
+        a = convert_positions_to_masses([1,1,1,1,2,2,2,2,3,3,3,3,3])
+        b = convert_positions_to_masses([1,1,1,1,1,2,3,3,4,4,4,4,4])
         self.assertEqual(f_b_measure(a,b), Decimal('0.4'))
         self.assertEqual(f_b_measure(b,a), Decimal('0.4'))
 

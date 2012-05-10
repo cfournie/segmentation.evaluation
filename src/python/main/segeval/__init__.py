@@ -33,7 +33,7 @@ import os
 from collections import Counter
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                        os.sep.join(['..'] * 8)))
+                                        os.sep.join(['..'] * 1)))
 
 DEBUG_MODE  = False
 EXPERIMENTS = False
@@ -41,18 +41,20 @@ EXPERIMENTS = False
 
 def load_tests(loader, tests, pattern):
     '''
-    A ``load_tests()`` function utilizing the default loader :func:`segeval.Utils.default_load_tests`.
+    A ``load_tests()`` function utilizing the default loader
+    :func:`segeval.Utils.default_load_tests`.
     
-    .. seealso:: The `load_tests protocol <http://docs.python.org/library/unittest.html#load-tests-protocol>`_.
+    .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
+    unittest.html#load-tests-protocol>`_.
     '''
     #pylint: disable=W0613
     from Utils import default_load_tests
     return default_load_tests(__file__, loader, tests)
 
 
-def convert_segment_pos_to_masses(segments):
+def convert_positions_to_masses(positions):
     '''
-    Convert an ordered sequence of section labels for each unit into a
+    Convert an ordered sequence of boundary position labels into a
     sequence of segment masses, e.g., ``[1,1,1,1,1,2,2,2,3,3,3,3,3]`` becomes
     ``[5,3,5]``.
     
@@ -61,15 +63,17 @@ def convert_segment_pos_to_masses(segments):
     
     :returns: Segment mass sequence.
     :rtype: :func:`list`
+    
+    .. deprecated:: 1.0
     '''
-    counts = Counter(segments)
+    counts = Counter(positions)
     masses = list()
     for i in range(1, max(counts.keys()) + 1):
         masses.append(counts[i])
     return masses
 
 
-def convert_masses_to_segment_pos(masses):
+def convert_masses_to_positions(masses):
     '''
     Converts a sequence of segment masses into an ordered sequence of section
     labels for each unit, e.g., ``[5,3,5]`` becomes

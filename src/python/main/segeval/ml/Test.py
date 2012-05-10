@@ -32,14 +32,14 @@ Tests the machine learning (ML) statistics functions, and ml package.
 #===============================================================================
 import unittest
 from decimal import Decimal
-from . import precision, recall, fscore, confusionmatrix, prfcf
+from . import precision, recall, fmeasure, confusionmatrix, prfcf
 
 
 class TestML(unittest.TestCase):
     '''
     Machine-learning metric tests.
     '''
-    # pylint: disable=R0904,C0103
+    #pylint: disable=R0904,C0103
     
     def test_precision(self):
         '''
@@ -95,21 +95,25 @@ class TestML(unittest.TestCase):
         fp = 1
         fn = 1
         beta = 1.0
-        self.assertEqual(fscore(tp, fp, fn, beta), Decimal('4') / Decimal('6'))
+        self.assertEqual(fmeasure(tp, fp, fn, beta),
+                         Decimal('4') / Decimal('6'))
         tp = 1
         fp = 3
         fn = 1
         beta = 1.0
-        self.assertEqual(fscore(tp, fp, fn, beta), Decimal('1') / Decimal('3'))
+        self.assertEqual(fmeasure(tp, fp, fn, beta),
+                         Decimal('1') / Decimal('3'))
         beta = 0.5
-        self.assertAlmostEqual(fscore(tp, fp, fn, beta), Decimal('0.277777777'))
+        self.assertAlmostEqual(fmeasure(tp, fp, fn, beta),
+                               Decimal('0.277777777'))
         beta = 2.0
-        self.assertAlmostEqual(fscore(tp, fp, fn, beta), Decimal('0.416666666'))
+        self.assertAlmostEqual(fmeasure(tp, fp, fn, beta),
+                               Decimal('0.416666666'))
         tp = 0
         fp = 0
         fn = 0
         beta = 1.0
-        self.assertEqual(fscore(tp, fp, fn, beta), Decimal('0'))
+        self.assertEqual(fmeasure(tp, fp, fn, beta), Decimal('0'))
         
     def test_confusion_matrix(self):
         '''

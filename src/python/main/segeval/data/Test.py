@@ -1,10 +1,10 @@
 '''
-Similarity package.
+Tests the data i/o functions and package.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
-# Copyright (c) 2011-2012, Chris Fournier
+# Copyright (c) 2012, Chris Fournier
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -29,17 +29,51 @@ Similarity package.
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
+import os
+import unittest
+from . import load_nested_folders_dict, input_linear_mass_tsv, \
+    input_linear_positions_tsv, input_linear_mass_json
+from .Samples import HEARST_1997
 
 
-def load_tests(loader, tests, pattern):
+class TestData(unittest.TestCase):
     '''
-    A ``load_tests()`` function utilizing the default loader
-    :func:`segeval.Utils.default_load_tests`.
+    Test data i/i functions and package.
+    '''
+    #pylint: disable=R0904,C0103
     
-    .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
-    unittest.html#load-tests-protocol>`_.
-    '''
-    #pylint: disable=W0613
-    from ..Utils import default_load_tests
-    return default_load_tests(__file__, loader, tests)
+    test_data_dir = os.path.split(__file__)[0]
+
+    def test_load_nested_folders_dict(self):
+        '''
+        Test nested folder dict construction.
+        '''
+        data = load_nested_folders_dict(os.path.join(self.test_data_dir, '..'),
+                                        input_linear_mass_json,
+                                        allowable_extensions=['.json'])
+        self.assertEqual(data['data']['hearst1997'], HEARST_1997)
+    
+    def test_input_linear_mass_tsv(self):
+        '''
+        Test mass TSV file input.
+        '''
+        tsv_file = os.path.join(self.test_data_dir, 'hearst1997.tsv')
+        data = input_linear_mass_tsv(tsv_file)
+        self.assertEqual(data, HEARST_1997)
+      
+    def test_input_linear_positions_tsv(self):
+        '''
+        Test position TSV file input.
+        '''
+        tsv_file = os.path.join(self.test_data_dir, 'hearst1997_positions.csv')
+        data = input_linear_positions_tsv(tsv_file, delimiter=',')
+        self.assertEqual(data, HEARST_1997)
+    
+    def test_input_linear_mass_json(self):
+        '''
+        Test mass JSON file input.
+        '''
+        json_file = os.path.join(self.test_data_dir, 'hearst1997.json')
+        data = input_linear_mass_json(json_file)
+        self.assertEqual(data, HEARST_1997)
 

@@ -1,11 +1,14 @@
 '''
-Implementation of the WinPR segmentation evaluation metric described in:
+Implementation of the WinPR segmentation evaluation metric described in Scaiano
+and Inkpen (2012).
 
-Scaiano, M., & Inkpen, D. (n.d.). Revisiting Evaluation Measure for
-Segmentation Evaluation.
+    Scaiano, M. & Inkpen, D. (2012), Getting more from segmentation evaluation,
+    in "Proceedings of Human Language Technologies: The 2012 Annual Conference
+    of the North American Chapter of the Association for Computational
+    Linguistics", Association for Computational Linguistics, Stroudsburg, PA,
+    USA.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -35,31 +38,39 @@ Segmentation Evaluation.
 #===============================================================================
 from numpy import mean, std, var
 from .WindowDiff import compute_window_size
-from ..ml import fscore
+from ..ml import fmeasure
 from .. import SegmentationMetricError
-from .. import convert_masses_to_segment_pos
+from .. import convert_masses_to_positions
 
 
-def win_pr(ref_segments, hyp_segments, window_size=None, return_fscore=False,
+def win_pr(ref_segments, hyp_segments, window_size=None, return_fmeasure=False,
            beta=1.0):
     '''
     Calculates the WinPR segmentation evaluation metric confusion matrix for a
     hypothetical segmentation against a reference segmentation for a given
     window size.  The standard WindowDiff method of calculating the window size
-    is performed a window size is not specified.
+    is performed when a window size is not specified.
     
-    Arguments:
-    ref_segments  -- An ordered sequence of which section each unit belongs to,
-                     e.g.: [1,1,1,1,1,2,2,2,3,3,3,3,3], for 13 units (e.g.
-                     sentences, paragraphs).  This is the reference segmentation
-                     used to compare a hypothetical segmentation against.
-    hyp_segments  -- An ordered sequence of which section each unit belongs to.
-                     This is the hypothetical segmentation that is compared
-                     against the reference ca.chrisfournier.nlp.methods.segmentation.
-    window_size   -- The size of the window that is slid over the two
-                     segmentations used to count mismatches.
-    return_fscore -- If True, specifies that an F-score is to be returned.
+    :param ref_segments: An ordered sequence of which section each unit belongs
+        to, e.g., ``[1,1,1,1,1,2,2,2,3,3,3,3,3]``, for 13 units (e.g.,
+        sentences, paragraphs).  This is the reference segmentation used to
+        compare a hypothetical segmentation against.
+    :type ref_segments: list
+    :param hyp_segments: An ordered sequence of which section each unit belongs
+        to.  This is the hypothetical segmentation that is compared against the
+        reference segmentation.
+    :type hyp_segments: list
+    :param window_size: The size of the window that is slid over the two
+        segmentations used to count mismatches.
+    :type window_size: int
+    :param return_fscore: If True, specifies that an F-score is to be returned.
+    :type return_fscore: bool
+    
+    :returns: TP, FP, FN, TN, or F1 as a decimal.
+    :rtype: :func:`int`, :func:`int`, :func:`int`, :func:`int`, or 
+            :class:`decimal.Decimal`
     '''
+    #pylint: disable=C0103
     if len(ref_segments) != len(hyp_segments):
         raise SegmentationMetricError(
                     'Reference and hypothesis segmentations differ in length.')
@@ -68,7 +79,7 @@ def win_pr(ref_segments, hyp_segments, window_size=None, return_fscore=False,
         window_size = compute_window_size(ref_segments)
     # Create a set of pairs of units from each segmentation to go over using a
     # window
-    tp,fp,fn = [0]*3
+    tp, fp, fn = [0] * 3
     tn = (-1 * window_size) * (window_size - 1)
     # Create and append phantom boundaries at the beginning and end of the
     # segmentation to properly count boundaries at the beginning and end
@@ -76,13 +87,13 @@ def win_pr(ref_segments, hyp_segments, window_size=None, return_fscore=False,
     units_ref_hyp = zip(phantom+ref_segments+phantom,
                         phantom+hyp_segments+phantom)
     # Slide window over and calculate TP, TN, FP, FN
-    for i in xrange(0,len(units_ref_hyp) - window_size + 1):
-        window = units_ref_hyp[i:i+window_size]
+    for i in xrange(0, len(units_ref_hyp) - window_size + 1):
+        window = units_ref_hyp[i:i + window_size]
         ref_boundaries = 0
         hyp_boundaries = 0
         # For pair in window
-        for j in xrange(0,len(window)-1):
-            ref_part,hyp_part = zip(*window[j:j+2])
+        for j in xrange(0, len(window) - 1):
+            ref_part, hyp_part = zip(*window[j:j + 2])
             # Boundary exists in the reference segmentation
             if ref_part[0] != ref_part[1]:
                 ref_boundaries += 1
@@ -90,15 +101,15 @@ def win_pr(ref_segments, hyp_segments, window_size=None, return_fscore=False,
             if hyp_part[0] != hyp_part[1]:
                 hyp_boundaries += 1
         # If the number of boundaries per segmentation in the window differs
-        tp += min(ref_boundaries,hyp_boundaries)
+        tp += min(ref_boundaries, hyp_boundaries)
         fp += max(0, hyp_boundaries - ref_boundaries)
         fn += max(0, ref_boundaries - hyp_boundaries)
-        tn += (window_size - max(ref_boundaries,hyp_boundaries))
+        tn += (window_size - max(ref_boundaries, hyp_boundaries))
     # Return the constituent statistics
-    if not return_fscore:
-        return tp,fp,fn,tn
+    if not return_fmeasure:
+        return tp, fp, fn, tn
     else:
-        return fscore(tp,fp,fn, beta)
+        return fmeasure(tp, fp, fn, beta)
 
 
 def pairwise_winpr(segs_dict_all, groups=False):
@@ -107,16 +118,16 @@ def pairwise_winpr(segs_dict_all, groups=False):
     def per_group(group, values):
         for coder_segs in group.values():
             coders = coder_segs.keys()
-            for m in range(0,len(coders)):
-                for n in range(m+1,len(coders)):
-                    segs_m = convert_masses_to_segment_pos(
+            for m in range(0, len(coders)):
+                for n in range(m + 1,len(coders)):
+                    segs_m = convert_masses_to_positions(
                                 coder_segs[coders[m]])
-                    segs_n = convert_masses_to_segment_pos(
+                    segs_n = convert_masses_to_positions(
                                 coder_segs[coders[n]])
                     tp,fp,fn = win_pr(segs_m,segs_n)[0:3]
-                    f_1mn = fscore(tp,fp,fn)
+                    f_1mn = fmeasure(tp,fp,fn)
                     tp,fp,fn = win_pr(segs_n,segs_m)[0:3]
-                    f_1nm = fscore(tp,fp,fn)
+                    f_1nm = fmeasure(tp,fp,fn)
                     values.append(float(f_1mn))
                     values.append(float(f_1nm))
     # Parse by groups, or not

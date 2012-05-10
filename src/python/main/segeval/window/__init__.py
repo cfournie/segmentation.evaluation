@@ -30,14 +30,16 @@ Window based evaluation methods package.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from numpy import mean, std, var, average
-from .. import convert_masses_to_segment_pos, convert_segment_pos_to_masses
+from .. import convert_positions_to_masses
 
 
 def load_tests(loader, tests, pattern):
     '''
-    A ``load_tests()`` function utilizing the default loader :func:`segeval.Utils.default_load_tests`.
+    A ``load_tests()`` function utilizing the default loader
+    :func:`segeval.Utils.default_load_tests`.
     
-    .. seealso:: The `load_tests protocol <http://docs.python.org/library/unittest.html#load-tests-protocol>`_.
+    .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
+    unittest.html#load-tests-protocol>`_.
     '''
     #pylint: disable=W0613
     from ..Utils import default_load_tests
@@ -52,12 +54,13 @@ def compute_window_size_from_masses(coder_masses, fnc_round=round):
     :type coder_masses: dict
     '''
     masses = list()
-    # List all masses
+    # Define fnc
     def __list_coder_masses__(inner_coder_masses):
         '''
         Recursively collect all masses.
         
-        :param inner_coder_masses: Either a dict of dicts, or dict of a list of masses.
+        :param inner_coder_masses: Either a dict of dicts, or dict of a list of
+            masses.
         :type inner_coder_masses: dict or list
         '''
         if isinstance(inner_coder_masses, list):
@@ -65,6 +68,8 @@ def compute_window_size_from_masses(coder_masses, fnc_round=round):
         elif isinstance(inner_coder_masses, dict):
             for cur_inner_coder_masses in inner_coder_masses.values():
                 __list_coder_masses__(cur_inner_coder_masses)
+    # Recurse and list all masses
+    __list_coder_masses__(coder_masses)
     # Convert to floats
     masses = [float(mass) for mass in masses]
     # Calculate
@@ -89,7 +94,7 @@ def compute_window_size(reference_segments, fnc_round=round):
     :returns: Integer window size to use with win_diff.
     :rtype: int
     '''
-    masses = convert_segment_pos_to_masses(reference_segments)
+    masses = convert_positions_to_masses(reference_segments)
     masses = [float(mass) for mass in masses]
     avg = average(masses) / 2.0
     window_size = int(fnc_round(avg))

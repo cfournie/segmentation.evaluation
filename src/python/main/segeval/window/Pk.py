@@ -37,7 +37,7 @@ from decimal import Decimal
 from numpy import mean, std, var
 from . import compute_window_size
 from .. import SegmentationMetricError
-from .. import convert_masses_to_segment_pos
+from .. import convert_masses_to_positions
 
 
 def pk(ref_segments, hyp_segments, window_size=None, one_minus=False):
@@ -97,9 +97,9 @@ def pairwise_pk(segs_dict_all, groups=False, one_minus=False):
             coders = coder_segs.keys()
             for m in range(0,len(coders)):
                 for n in range(m+1,len(coders)):
-                    segs_m = convert_masses_to_segment_pos(
+                    segs_m = convert_masses_to_positions(
                                 coder_segs[coders[m]])
-                    segs_n = convert_masses_to_segment_pos(
+                    segs_n = convert_masses_to_positions(
                                 coder_segs[coders[n]])
                     values.append(float(pk(segs_m,segs_n,
                                            one_minus=one_minus)))

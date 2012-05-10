@@ -45,7 +45,7 @@ class TestWinPR(unittest.TestCase):
         segs_b = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         self.assertEqual(win_pr(segs_a, segs_b),
                          (4, 0, 0, 22) )
-        self.assertEqual(win_pr(segs_a, segs_b, return_fscore=True),
+        self.assertEqual(win_pr(segs_a, segs_b, return_fmeasure=True),
                          Decimal('1') )
 
     def test_no_boundaries(self):
@@ -53,11 +53,11 @@ class TestWinPR(unittest.TestCase):
         segs_b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         self.assertEqual(win_pr(segs_a, segs_b),
                          (12, 12, 0, 67) )
-        self.assertEqual(win_pr(segs_a, segs_b, return_fscore=True),
+        self.assertEqual(win_pr(segs_a, segs_b, return_fmeasure=True),
                          Decimal('0.6666666666666666666666666667') )
         self.assertEqual(win_pr(segs_b, segs_a),
                          (2, 0, 2, 22) )
-        self.assertEqual(win_pr(segs_b, segs_a, return_fscore=True),
+        self.assertEqual(win_pr(segs_b, segs_a, return_fmeasure=True),
                          Decimal('0.6666666666666666666666666667') )
 
     def test_all_boundaries(self):
@@ -65,11 +65,11 @@ class TestWinPR(unittest.TestCase):
         segs_b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         self.assertEqual(win_pr(segs_a, segs_b),
                          (4, 0, 10, 12) )
-        self.assertEqual(win_pr(segs_a, segs_b, return_fscore=True),
+        self.assertEqual(win_pr(segs_a, segs_b, return_fmeasure=True),
                          Decimal('0.4444444444444444444444444444') )
         self.assertEqual(win_pr(segs_b, segs_a),
                          (4, 10, 0, 12) )
-        self.assertEqual(win_pr(segs_b, segs_a, return_fscore=True),
+        self.assertEqual(win_pr(segs_b, segs_a, return_fmeasure=True),
                          Decimal('0.4444444444444444444444444444') )
 
     def test_all_and_no_boundaries(self):
@@ -77,11 +77,11 @@ class TestWinPR(unittest.TestCase):
         segs_b = [1,1,1,1,1,1,1,1,1,1,1,1,1]
         self.assertEqual(win_pr(segs_a, segs_b),
                          (2, 0, 12, 12) )
-        self.assertEqual(win_pr(segs_a, segs_b, return_fscore=True),
+        self.assertEqual(win_pr(segs_a, segs_b, return_fmeasure=True),
                          Decimal('0.25') )
         self.assertEqual(win_pr(segs_b, segs_a),
                          (12, 72, 0, 7) )
-        self.assertEqual(win_pr(segs_b, segs_a, return_fscore=True),
+        self.assertEqual(win_pr(segs_b, segs_a, return_fmeasure=True),
                          Decimal('0.25') )
 
     def test_translated_boundary(self):
@@ -89,11 +89,11 @@ class TestWinPR(unittest.TestCase):
         segs_b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         self.assertEqual(win_pr(segs_a, segs_b),
                          (3, 1, 1, 21) )
-        self.assertEqual(win_pr(segs_a, segs_b, return_fscore=True),
+        self.assertEqual(win_pr(segs_a, segs_b, return_fmeasure=True),
                          Decimal('0.75') )
         self.assertEqual(win_pr(segs_b, segs_a),
                          (3, 1, 1, 21) )
-        self.assertEqual(win_pr(segs_b, segs_a, return_fscore=True),
+        self.assertEqual(win_pr(segs_b, segs_a, return_fmeasure=True),
                          Decimal('0.75') )
     
     def test_extra_boundary(self):
@@ -101,11 +101,11 @@ class TestWinPR(unittest.TestCase):
         segs_b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
         self.assertEqual(win_pr(segs_a, segs_b),
                          (4, 1, 0, 21) )
-        self.assertEqual(win_pr(segs_a, segs_b, return_fscore=True),
+        self.assertEqual(win_pr(segs_a, segs_b, return_fmeasure=True),
                          Decimal('0.8888888888888888888888888889') )
         self.assertEqual(win_pr(segs_b, segs_a),
                          (4, 0, 1, 21) )
-        self.assertEqual(win_pr(segs_b, segs_a, return_fscore=True),
+        self.assertEqual(win_pr(segs_b, segs_a, return_fmeasure=True),
                          Decimal('0.8888888888888888888888888889') )
     
     def test_full_miss_and_misaligned(self):
@@ -113,11 +113,11 @@ class TestWinPR(unittest.TestCase):
         segs_b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
         self.assertEqual(win_pr(segs_a, segs_b),
                          (3, 2, 1, 20) )
-        self.assertEqual(win_pr(segs_a, segs_b, return_fscore=True),
+        self.assertEqual(win_pr(segs_a, segs_b, return_fmeasure=True),
                          Decimal('0.6666666666666666666666666667') )
         self.assertEqual(win_pr(segs_b, segs_a),
                          (3, 1, 2, 20) )
-        self.assertEqual(win_pr(segs_b, segs_a, return_fscore=True),
+        self.assertEqual(win_pr(segs_b, segs_a, return_fmeasure=True),
                          Decimal('0.6666666666666666666666666667') )
     
     def test_kazantseva2012_g5(self):

@@ -1,10 +1,10 @@
 '''
-Similarity package.
+Tests some general segeval utility functions.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
-# Copyright (c) 2011-2012, Chris Fournier
+# Copyright (c) 2012, Chris Fournier
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -29,17 +29,30 @@ Similarity package.
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
+import unittest
+from . import convert_positions_to_masses, convert_masses_to_positions
 
 
-def load_tests(loader, tests, pattern):
+class TestSegeval(unittest.TestCase):
     '''
-    A ``load_tests()`` function utilizing the default loader
-    :func:`segeval.Utils.default_load_tests`.
+    segeval utlity function tests.
+    '''
+    #pylint: disable=R0904,C0103
     
-    .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
-    unittest.html#load-tests-protocol>`_.
-    '''
-    #pylint: disable=W0613
-    from ..Utils import default_load_tests
-    return default_load_tests(__file__, loader, tests)
-
+    def test_convert_positions_to_masses(self):
+        '''
+        Test segment position sequence conversion to masses.
+        '''
+        #pylint: disable=C0324
+        self.assertEqual([5,3,5],
+                         convert_positions_to_masses(
+                            [1,1,1,1,1,2,2,2,3,3,3,3,3]))
+        
+      
+    def test_convert_masses_to_positions(self):
+        '''
+        Test segment position sequence conversion to masses.
+        '''
+        #pylint: disable=C0324
+        self.assertEqual([1,1,1,1,1,2,2,2,3,3,3,3,3],
+                         convert_masses_to_positions([5,3,5]))

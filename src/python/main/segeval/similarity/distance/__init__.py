@@ -33,9 +33,11 @@ Edit distance package.
 
 def load_tests(loader, tests, pattern):
     '''
-    A ``load_tests()`` function utilizing the default loader :func:`segeval.Utils.default_load_tests`.
+    A ``load_tests()`` function utilizing the default loader
+    :func:`segeval.Utils.default_load_tests`.
     
-    .. seealso:: The `load_tests protocol <http://docs.python.org/library/unittest.html#load-tests-protocol>`_.
+    .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
+    unittest.html#load-tests-protocol>`_.
     '''
     #pylint: disable=W0613
     from ...Utils import default_load_tests

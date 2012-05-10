@@ -159,7 +159,7 @@ def pairwise_similarity(segs_dict_all, groups=False):
                     segs_n = coder_segs[coders[n]]
                     boundaries_unmoved, boundaries_total, \
                     substitutions, transpositions = \
-                        similarity(segs_m,segs_n,return_parts=True)
+                        similarity(segs_m, segs_n, return_parts=True)
                     sim = float(Decimal(boundaries_unmoved) / boundaries_total)
                     total_substitutions  += substitutions
                     total_transpositions += transpositions

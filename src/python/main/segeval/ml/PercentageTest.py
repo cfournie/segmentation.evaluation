@@ -35,7 +35,7 @@ from decimal import Decimal
 from .Percentage import percentage, pairwise_percentage, find_seg_positions
 from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
-from .. import convert_segment_pos_to_masses
+from .. import convert_positions_to_masses
 
 
 
@@ -50,9 +50,9 @@ class TestPercentage(unittest.TestCase):
         Test whether identical segmentations produce 1.0.
         '''
         # pylint: disable=C0324
-        segs_a = convert_segment_pos_to_masses(
+        segs_a = convert_positions_to_masses(
                                         [1,1,1,1,1,2,2,2,3,3,3,3,3])
-        segs_b = convert_segment_pos_to_masses(
+        segs_b = convert_positions_to_masses(
                                         [1,1,1,1,1,2,2,2,3,3,3,3,3])
         self.assertEqual(percentage(segs_a, segs_b),1.0)
 
@@ -61,9 +61,9 @@ class TestPercentage(unittest.TestCase):
         Test whether no segments versus some segments produce 0.0.
         '''
         # pylint: disable=C0324
-        segs_a = convert_segment_pos_to_masses(
+        segs_a = convert_positions_to_masses(
                                         [1,1,1,1,1,1,1,1,1,1,1,1,1])
-        segs_b = convert_segment_pos_to_masses(
+        segs_b = convert_positions_to_masses(
                                         [1,1,1,1,2,2,2,2,3,3,3,3,3])
         self.assertEqual(percentage(segs_a, segs_b),0)
         self.assertEqual(percentage(segs_b, segs_a),0)
@@ -73,9 +73,9 @@ class TestPercentage(unittest.TestCase):
         Test whether all segments versus some segments produces 2/12, or 0.167.
         '''
         # pylint: disable=C0324
-        segs_a = convert_segment_pos_to_masses(
+        segs_a = convert_positions_to_masses(
                                     [1,2,3,4,5,6,7,8,9,10,11,12,13])
-        segs_b = convert_segment_pos_to_masses(
+        segs_b = convert_positions_to_masses(
                                     [1,1,1,1,2,2,2,2,3,3,3,3,3])
         self.assertEqual(percentage(segs_a, segs_b),
                          Decimal('0.1666666666666666666666666667'))
@@ -87,9 +87,9 @@ class TestPercentage(unittest.TestCase):
         Test whether all segments versus no segments produces 0.0.
         '''
         # pylint: disable=C0324
-        segs_a = convert_segment_pos_to_masses(
+        segs_a = convert_positions_to_masses(
                                     [1,2,3,4,5,6,7,8,9,10,11,12,13])
-        segs_b = convert_segment_pos_to_masses(
+        segs_b = convert_positions_to_masses(
                                     [1,1,1,1,1,1,1,1,1,1,1,1,1])
         self.assertEqual(percentage(segs_a, segs_b),0)
         self.assertEqual(percentage(segs_b, segs_a),0)
@@ -100,9 +100,9 @@ class TestPercentage(unittest.TestCase):
         0.33.
         '''
         # pylint: disable=C0324
-        segs_a = convert_segment_pos_to_masses(
+        segs_a = convert_positions_to_masses(
                                         [1,1,1,1,1,2,2,2,3,3,3,3,3])
-        segs_b = convert_segment_pos_to_masses(
+        segs_b = convert_positions_to_masses(
                                         [1,1,1,1,2,2,2,2,3,3,3,3,3])
         self.assertEqual(percentage(segs_a, segs_b),
                          Decimal('0.3333333333333333333333333333'))
@@ -114,9 +114,9 @@ class TestPercentage(unittest.TestCase):
         Test whether 1/3 segments that are non-existent produces 0.66.
         '''
         # pylint: disable=C0324
-        segs_a = convert_segment_pos_to_masses(
+        segs_a = convert_positions_to_masses(
                                         [1,1,1,1,1,2,2,2,3,3,3,3,3])
-        segs_b = convert_segment_pos_to_masses(
+        segs_b = convert_positions_to_masses(
                                         [1,1,1,1,1,2,3,3,4,4,4,4,4])
         self.assertEqual(percentage(segs_a, segs_b),
                          Decimal('0.6666666666666666666666666667'))
@@ -129,9 +129,9 @@ class TestPercentage(unittest.TestCase):
         0.25. 
         '''
         # pylint: disable=C0324
-        segs_a = convert_segment_pos_to_masses(
+        segs_a = convert_positions_to_masses(
                                         [1,1,1,1,2,2,2,2,3,3,3,3,3])
-        segs_b = convert_segment_pos_to_masses(
+        segs_b = convert_positions_to_masses(
                                         [1,1,1,1,1,2,3,3,4,4,4,4,4])
         self.assertEqual(percentage(segs_a, segs_b), Decimal('0.25'))
         self.assertEqual(percentage(segs_b, segs_a), Decimal('0.25'))

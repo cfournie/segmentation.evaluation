@@ -34,9 +34,11 @@ from decimal import Decimal
 
 def load_tests(loader, tests, pattern):
     '''
-    A ``load_tests()`` function utilizing the default loader :func:`segeval.Utils.default_load_tests`.
+    A ``load_tests()`` function utilizing the default loader
+    :func:`segeval.Utils.default_load_tests`.
     
-    .. seealso:: The `load_tests protocol <http://docs.python.org/library/unittest.html#load-tests-protocol>`_.
+    .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
+    unittest.html#load-tests-protocol>`_.
     '''
     #pylint: disable=W0613
     from ..Utils import default_load_tests
@@ -47,9 +49,8 @@ def precision(tp, fp):
     '''
     Calculate precision.
     
-    Arguments:
-    tp -- Number of true positives
-    fp -- Number of false positives
+    :param tp: Number of true positives
+    :param fp: Number of false positives
     
     Returns:
     Precision as a Decimal.
@@ -66,8 +67,8 @@ def recall(tp, fn):
     Calculate recall.
     
     Arguments:
-    tp -- Number of true positives
-    fn -- Number of false negatives
+    :param tp: Number of true positives
+    :param fn: Number of false negatives
     
     Returns:
     Recall as a Decimal.
@@ -86,14 +87,17 @@ def fmeasure(tp, fp, fn, beta=1.0):
     .. math::
         \\text{F}_{\\beta}\\text{-measure} = \\frac{(1 + \\beta^2) \\cdot TP}{(1 + \\beta^2) \\cdot TP + \\beta^2 \\cdot FN + FP}
     
-    Arguments:
-    tp   -- Number of true positives
-    fp   -- Number of false positives
-    fn   -- Number of false negatives
-    beta -- Scales how precision and recall are averaged
+    :param tp: Number of true positives.
+    :type tp: int
+    :param fp: Number of false positives.
+    :type fp: int
+    :param fn: Number of false negatives.
+    :type fn: int
+    :param beta: Scales how precision and recall are averaged.
+    :type beta: double
     
-    Returns:
-    F-score as a Decimal.
+    :returns: F-measure.
+    :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
     if tp == 0 and fp == 0 and fn == 0:

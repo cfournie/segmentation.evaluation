@@ -1,12 +1,15 @@
 '''
-Test data for unit tests.
+Test data for unit tests that has been selected from Kazantseva and Szpakowicz
+(2012), or contrived.
 
 References:
-    Anna Kazantseva and Stan Szpakowicz. 2012. Topical Segmentation: a Study of
-    Human Performance. Submitted manuscript.
+    Kazantseva, A. & Szpakowicz, S. (2012), Topical segmentation: a study of
+    human performance, in "Proceedings of Human Language Technologies: The 2012
+    Annual Conference of the North American Chapter of the Association for
+    Computational Linguistics", Association for Computational Linguistics,
+    Stroudsburg, PA, USA.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -81,6 +84,15 @@ KAZANTSEVA2012_G2 = \
              'an10': [4, 10, 5, 1, 14, 4, 4],
              'an8':  [9, 4, 6, 16, 3, 4],
              'an9':  [13, 6, 15, 8]}}
+
+HEARST_1997 = \
+    {'1' : [2,3,3,1,3,6,3],
+     '2' : [2,8,2,4,2,3],
+     '3' : [2,1,2,3,1,3,1,3,2,2,1],
+     '4' : [2,1,4,1,1,3,1,4,3,1],
+     '5' : [3,2,4,3,5,4],
+     '6' : [2,3,4,2,2,5,3],
+     '7' : [2,3,2,2,3,1,3,2,3]}
 
 COMPLETE_AGREEMENT = \
     {'ch1': {'an4': [2, 8, 2, 1],

@@ -33,26 +33,36 @@ F-Measure metric functions.
 from decimal import Decimal
 from numpy import mean, std, var
 from .Percentage import find_seg_positions
-from . import fscore
+from . import fmeasure
 
 
-def f_b_measure(segs_hypothesis, segs_reference):
+def f_b_measure(hypothesis_masses, reference_masses, beta=1.0):
     '''
-    Calculates the F-Measure between a hypothesis, and reference segmentation.
+    Calculates the F-Measure between a hypothesis and reference segmentation.
     
     .. math::
-        \text{F}_{\beta}\text{-measure}
+        \\text{F}_{\\beta}\\text{-measure} = \\frac{(1 + \\beta^2) \\cdot TP}{(1 + \\beta^2) \\cdot TP + \\beta^2 \\cdot FN + FP}
     
-    Arguments:
-    segs_hypothesis -- Hypothesis segmentation masses
-    segs_reference  -- Reference segmentation masses
+    Each matching boundary position is considered a TP, whereas a missing
+    boundary in the hypothesis is considered a FN, and an extra boundary in the
+    hypothesis that is not found in the reference is considered a FP.  TNs
+    do not occur.
     
-    Returns:
-    F-Measure.
+    :param hypothesis_masses: Hypothesis segmentation masses.
+    :type hypothesis_masses: list
+    :param reference_masses: Reference segmentation masses.
+    :type reference_masses: list
+    :param beta: Scales how precision and recall are averaged.
+    :type beta: double
+    
+    :returns: F-measure.
+    :rtype: :class:`unittest.TestSuite`
+    
+    .. seealso:: :func:`segeval.ml.fmeasure`
     '''
     # pylint: disable=C0103
-    positions_hyp = find_seg_positions([segs_hypothesis])
-    positions_ref = find_seg_positions([segs_reference])
+    positions_hyp = find_seg_positions([hypothesis_masses])
+    positions_ref = find_seg_positions([reference_masses])
     tp = Decimal('0')
     fp = Decimal('0')
     fn = Decimal('0')
@@ -64,7 +74,7 @@ def f_b_measure(segs_hypothesis, segs_reference):
     for pos in positions_hyp.keys():
         if pos not in positions_ref:
             fp += 1
-    return fscore(tp, fp, fn, beta=1.0)
+    return fmeasure(tp, fp, fn, beta)
 
 
 def pairwise_f_b_measure(segs_dict_all, groups=False):
