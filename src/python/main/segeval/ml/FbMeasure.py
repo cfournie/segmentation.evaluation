@@ -1,8 +1,7 @@
 '''
 F-Measure metric functions.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -31,9 +30,9 @@ F-Measure metric functions.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
-from numpy import mean, std, var
-from .Percentage import find_seg_positions
+from .Percentage import find_boundary_position_freqs
 from . import fmeasure
+from .. import compute_pairwise
 
 
 def f_b_measure(hypothesis_masses, reference_masses, beta=1.0):
@@ -41,7 +40,34 @@ def f_b_measure(hypothesis_masses, reference_masses, beta=1.0):
     Calculates the F-Measure between a hypothesis and reference segmentation.
     
     .. math::
-        \\text{F}_{\\beta}\\text{-measure} = \\frac{(1 + \\beta^2) \\cdot TP}{(1 + \\beta^2) \\cdot TP + \\beta^2 \\cdot FN + FP}
+        \\text{F}_{\\beta}\\text{-measure} = \\frac{(1 + \\beta^2) \\cdot TP}\
+        {(1 + \\beta^2) \\cdot TP + \\beta^2 \\cdot FN + FP}
+    
+    .. math::
+        TP = \\sum^{|hyp|}_{i=1}{\\text{tp}(hyp_i, ref_i)}, \quad
+        FP = \\sum^{|hyp|}_{i=1}{\\text{fp}(hyp_i, ref_i)}, \quad
+        FN = \\sum^{|hyp|}_{i=1}{\\text{fn}(hyp_i, ref_i)}
+        
+    .. math::
+        \\text{tp}(hyp_i, ref_i) = 
+        \\begin{cases}
+            1    & \\text{if both } hyp_i \\text{ and } ref_i \\text{ are boundaries}  \\\\
+            0    & \\text{else}
+        \\end{cases}
+        
+    .. math::
+        \\text{fp}(hyp_i, ref_i) = 
+        \\begin{cases}
+            1    & \\text{if } hyp_i \\text{ is a boundary and } ref_i \\text{ is not}  \\\\
+            0    & \\text{else}
+        \\end{cases}
+        
+    .. math::
+        \\text{fn}(hyp_i, ref_i) = 
+        \\begin{cases}
+            1    & \\text{if is not a boundary } hyp_i \\text{ and } ref_i \\text{ is}  \\\\
+            0    & \\text{else}
+        \\end{cases}
     
     Each matching boundary position is considered a TP, whereas a missing
     boundary in the hypothesis is considered a FN, and an extra boundary in the
@@ -49,11 +75,11 @@ def f_b_measure(hypothesis_masses, reference_masses, beta=1.0):
     do not occur.
     
     :param hypothesis_masses: Hypothesis segmentation masses.
-    :type hypothesis_masses: list
     :param reference_masses: Reference segmentation masses.
-    :type reference_masses: list
     :param beta: Scales how precision and recall are averaged.
-    :type beta: double
+    :type hypothesis_masses: list
+    :type reference_masses: list
+    :type beta: float
     
     :returns: F-measure.
     :rtype: :class:`unittest.TestSuite`
@@ -61,8 +87,8 @@ def f_b_measure(hypothesis_masses, reference_masses, beta=1.0):
     .. seealso:: :func:`segeval.ml.fmeasure`
     '''
     # pylint: disable=C0103
-    positions_hyp = find_seg_positions([hypothesis_masses])
-    positions_ref = find_seg_positions([reference_masses])
+    positions_hyp = find_boundary_position_freqs([hypothesis_masses])
+    positions_ref = find_boundary_position_freqs([reference_masses])
     tp = Decimal('0')
     fp = Decimal('0')
     fn = Decimal('0')
@@ -77,43 +103,16 @@ def f_b_measure(hypothesis_masses, reference_masses, beta=1.0):
     return fmeasure(tp, fp, fn, beta)
 
 
-def pairwise_f_b_measure(segs_dict_all, groups=False):
+def pairwise_f_b_measure(dataset_masses):
     '''
     Calculate mean pairwise segmentation F-Measure.
     
-    Arguments:
-    segs_dict_all -- Dict of groups containing coders and segmentations (or just
-                     the group contents)
-    groups        -- True if segs_dict_all is split into groups, false if not
+    :param dataset_masses: Segmentation mass dataset (including multiple \
+                           codings).
+    :type dataset_masses: dict
     
-    Returns:
-    Mean, standard deviation, and variance of segmentation F-Measure.
+    :returns: Mean, standard deviation, and variance of segmentation F-Measure.
+    :rtype: :func:`float`, :func:`float`, :func:`float`
     '''
-    # pylint: disable=C0103
-    values = list()
-    # Define fnc per group
-    def per_group(group, values):
-        '''
-        Calculate pairwise segmentation F-Measure for each group and append to
-        output.
-        
-        Arguments:
-        group  -- Dict of coders and segmentation masses
-        values -- list of output segmentation F-Measures
-        '''
-        for coder_segs in group.values():
-            coders = coder_segs.keys()
-            for m in range(0, len(coders)):
-                for n in range(m+1, len(coders)):
-                    segs_m = coder_segs[coders[m]]
-                    segs_n = coder_segs[coders[n]]
-                    values.append(float(f_b_measure(segs_m, segs_n)))
-    # Parse by groups, or not
-    if groups:
-        for segs_dict_all_g in segs_dict_all.values():
-            per_group(segs_dict_all_g, values)
-    else:
-        per_group(segs_dict_all, values)
-    # Return mean, std dev, and variance
-    return mean(values), std(values), var(values)
+    return compute_pairwise(dataset_masses, f_b_measure, permuted=False)
 

@@ -30,6 +30,7 @@ Segmentation evaluation metrics, and utility functions.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 import os
+from numpy import mean, std, var
 from collections import Counter
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),
@@ -90,6 +91,51 @@ def convert_masses_to_positions(masses):
         sequence.extend([i + 1] * mass)
     return sequence
 
+
+def compute_pairwise(dataset_masses, fnc_metric, permuted=False):
+    '''
+    Calculate mean pairwise segmentation metric values.
+    
+    :param dataset_masses: Segmentation mass dataset (including multiple \
+                           codings).
+    :param fnc_metric:     Metric function to call on segmentation mass pairs.
+    :param permuted:       Permute coder combinations if true.
+    :type dataset_masses: dict
+    :type fnc_metric:     func
+    :type permuted:       bool
+    
+    :returns: Mean, standard deviation, and variance of segmentation metric.
+    :rtype: :func:`float`, :func:`float`, :func:`float`
+    '''
+    # pylint: disable=C0103
+    values = list()
+    # Define fnc per group
+    def __per_group__(inner_dataset_masses):
+        '''
+        Calculate pairwise segmentation F-Measure for each group and append to
+        output.
+        
+        
+        '''
+        for coder_masses in inner_dataset_masses.values():
+            if len(coder_masses.values()) > 0 and \
+                isinstance(coder_masses.values()[0], list):
+                # If is a group
+                coders = coder_masses.keys()
+                for m in range(0, len(coders)):
+                    for n in range(m+1, len(coders)):
+                        segs_m = coder_masses[coders[m]]
+                        segs_n = coder_masses[coders[n]]
+                        values.append(float(fnc_metric(segs_m, segs_n)))
+                        if permuted:
+                            values.append(float(fnc_metric(segs_n, segs_m)))
+            else:
+                # Else, recurse deeper
+                __per_group__(coder_masses)
+    # Parse
+    __per_group__(dataset_masses)
+    # Return mean, std dev, and variance
+    return mean(values), std(values), var(values)
 
 class SegmentationMetricError(Exception):
     '''

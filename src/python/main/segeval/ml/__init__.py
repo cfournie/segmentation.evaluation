@@ -49,11 +49,14 @@ def precision(tp, fp):
     '''
     Calculate precision.
     
+    .. math::
+        \\text{Precision} = \\frac{TP}{TP + FP}
+    
     :param tp: Number of true positives
     :param fp: Number of false positives
     
-    Returns:
-    Precision as a Decimal.
+    :returns: Precision.
+    :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
     if tp == 0 and fp == 0:
@@ -66,12 +69,15 @@ def recall(tp, fn):
     '''
     Calculate recall.
     
+    .. math::
+        \\text{Recall} = \\frac{TP}{TP + FN}
+    
     Arguments:
     :param tp: Number of true positives
     :param fn: Number of false negatives
     
-    Returns:
-    Recall as a Decimal.
+    :returns: Recall.
+    :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
     if tp == 0 and fn == 0:
@@ -85,7 +91,8 @@ def fmeasure(tp, fp, fn, beta=1.0):
     Calculate F-measure, also known as F-score.
     
     .. math::
-        \\text{F}_{\\beta}\\text{-measure} = \\frac{(1 + \\beta^2) \\cdot TP}{(1 + \\beta^2) \\cdot TP + \\beta^2 \\cdot FN + FP}
+        \\text{F}_{\\beta}\\text{-measure} = \\frac{(1 + \\beta^2) \\cdot TP}\
+        {(1 + \\beta^2) \\cdot TP + \\beta^2 \\cdot FN + FP}
     
     :param tp: Number of true positives.
     :type tp: int
@@ -121,14 +128,18 @@ def confusionmatrix(tp, fp, fn, tn=None):
     '''
     Creates 2D tuples representing a confusion matrix.
     
-    Arguments:
-    tp   -- Number of true positives
-    fp   -- Number of false positives
-    fn   -- Number of false negatives
-    tn   -- Number of true negatives
+    :param tp: Number of true positives.
+    :type tp: int
+    :param fp: Number of false positives.
+    :type fp: int
+    :param fn: Number of false negatives.
+    :type fn: int
+    :param tn: Number of true negatives.
+    :type tn: int
     
-    Returns:
-    2D tuples containing a confusion matrix.
+    :returns: 2D tuples containing a confusion matrix.
+    :rtype: :func:`tuple` containing a pair of :func:`tuple` objects, each \
+        containing two :func:`int` values.
     '''
     # pylint: disable=C0103
     tp = Decimal(tp)
@@ -141,14 +152,17 @@ def cf_tostring(tp, fp, fn, tn=None):
     '''
     Creates a string representation of a confusion matrix.
     
-    Arguments:
-    tp   -- Number of true positives
-    fp   -- Number of false positives
-    fn   -- Number of false negatives
-    tn   -- Number of true negatives
+    :param tp: Number of true positives.
+    :type tp: int
+    :param fp: Number of false positives.
+    :type fp: int
+    :param fn: Number of false negatives.
+    :type fn: int
+    :param tn: Number of true negatives.
+    :type tn: int
     
-    Returns:
-    String representation of a confusion matrix.
+    :returns: String representation of a confusion matrix.
+    :rtype: :func:`str`
     '''
     # pylint: disable=C0103
     return '[%(tp)i \t %(fp)i\n %(fn)i \t %(tn)i]' % \
@@ -159,15 +173,20 @@ def prfcf(tp, fp, fn, tn=None, beta=1.0):
     '''
     Calculates precision, recall, F-Score, and creates a confusion matrix.
     
-    Arguments:
-    tp   -- Number of true positives
-    fp   -- Number of false positives
-    fn   -- Number of false negatives
-    tn   -- Number of true negatives
-    beta -- Scales how precision and recall are averaged
+    :param tp:   Number of true positives.
+    :param fp:   Number of false positives.
+    :param fn:   Number of false negatives.
+    :param beta: Scales how precision and recall are averaged.
+    :type tp:    int
+    :type fp:    int
+    :type fn:    int
+    :type beta:  float
     
-    Returns:
-    Precision, recall, F-Score, and a confusion matrix.
+    :returns: Precision, recall, F-measure, and a confusion matrix.
+    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
+        :class:`decimal.Decimal`, \
+        :func:`tuple` containing a pair of :func:`tuple` objects, each \
+        containing two :func:`int` values.
     '''
     # pylint: disable=C0103
     return precision(tp, fp), recall(tp, fn), fmeasure(tp, fp, fn, beta), \

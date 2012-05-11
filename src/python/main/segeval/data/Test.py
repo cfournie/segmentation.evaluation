@@ -38,7 +38,7 @@ from .Samples import HEARST_1997
 
 class TestData(unittest.TestCase):
     '''
-    Test data i/i functions and package.
+    Test data i/o functions and package.
     '''
     #pylint: disable=R0904,C0103
     

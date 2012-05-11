@@ -1,8 +1,7 @@
 '''
 Percentage metric functions.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -31,10 +30,10 @@ Percentage metric functions.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
-from numpy import mean, std, var
+from .. import compute_pairwise
 
 
-def find_seg_positions(segs_set):
+def find_boundary_position_freqs(segs_set):
     '''
     Converts a list of segmentation mass sets into a dict of boundary positions,
     and the frequency of the whether boundaries were chosen at that location or,
@@ -71,8 +70,8 @@ def percentage(segs_hypothesis, segs_reference):
     Returns:
     Percentage.
     '''
-    positions_hyp = find_seg_positions([segs_hypothesis])
-    positions_ref = find_seg_positions([segs_reference])
+    positions_hyp = find_boundary_position_freqs([segs_hypothesis])
+    positions_ref = find_boundary_position_freqs([segs_reference])
     agree    = Decimal('0')
     disagree = Decimal('0')
     for pos in positions_ref.keys():
@@ -86,42 +85,16 @@ def percentage(segs_hypothesis, segs_reference):
     return agree / (agree + disagree)
 
 
-def pairwise_percentage(segs_dict_all, groups=False):
+def pairwise_percentage(dataset_masses):
     '''
-    Calculate mean permuted pairwise percentage.
+    Calculate mean pairwise segmentation percentage.
     
-    Arguments:
-    segs_dict_all -- Dict of groups containing coders and segmentations (or just
-                     the group contents)
-    groups        -- True if segs_dict_all is split into groups, false if not
+    :param dataset_masses: Segmentation mass dataset (including multiple \
+                           codings).
+    :type dataset_masses: dict
     
-    Returns:
-    Mean, standard deviation, and variance of percentages.
+    :returns: Mean, standard deviation, and variance of segmentation percentage.
+    :rtype: :func:`float`, :func:`float`, :func:`float`
     '''
-    values = list()
-    # Define fnc per group
-    def per_group(group, values):
-        '''
-        Calculate pairwise percentages for each group and append to output.
-        
-        Arguments:
-        group  -- Dict of coders and segmentation masses
-        values -- list of output percentages
-        '''
-        # pylint: disable=C0103
-        for coder_segs in group.values():
-            coders = coder_segs.keys()
-            for m in range(0, len(coders)):
-                for n in range(m+1, len(coders)):
-                    segs_m = coder_segs[coders[m]]
-                    segs_n = coder_segs[coders[n]]
-                    values.append(float(percentage(segs_m, segs_n)))
-    # Parse by groups, or not
-    if groups:
-        for segs_dict_all_g in segs_dict_all.values():
-            per_group(segs_dict_all_g, values)
-    else:
-        per_group(segs_dict_all, values)
-    # Return mean, std dev, and variance
-    return mean(values), std(values), var(values)
+    return compute_pairwise(dataset_masses, percentage, permuted=False)
 

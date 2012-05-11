@@ -76,12 +76,12 @@ def load_nested_folders_dict(containing_dir, fnc_load,
     representing a key in these :func:`dict`.
     
     :param containing_dir: Root directory containing sub-directories which 
-         contain segmentation files (either
-    :type containing_dir: str
-    :param fnc_load: Function used to load a segmentation file.
-    :type loader: func
+                           contain segmentation files (either
+    :param fnc_load:       Function used to load a segmentation file.
     :param allowable_extensions: List of file extensions to load using
-        fnc_load.
+                                 fnc_load.
+    :type containing_dir: str
+    :type loader: func
     :type allowable_extensions: list
     
     :returns: Segmentation mass codings.
@@ -122,9 +122,9 @@ def input_linear_mass_tsv(tsv_filename, delimiter='\t'):
     Load a linear segmentation mass TSV file.
     
     :param tsv_filename: path to the mass file containing segment mass codings.
+    :param delimiter:    the delimiter used when reading a TSV file (by default,
+                         a tab, but it can also be a comma, whitespace, etc.
     :type tsv_filename: str
-    :param delimiter: the delimiter used when reading a TSV file (by default, a
-        tab, but it can also be a comma, whitespace, etc.
     :type delimiter: str
     
     :returns: Segmentation mass codings.
@@ -167,11 +167,16 @@ def input_linear_positions_tsv(tsv_filename, delimiter='\t'):
     Load a segment position TSV file.
     
     :param csv_filename: path to the mass file containing segment position
-        codings.
+                         codings.
+    :param delimiter:    the delimiter used when reading a TSV file (by default,
+                         a tab, but it can also be a comma, whitespace, etc.
     :type csv_filename: str
-    :param delimiter: the delimiter used when reading a TSV file (by default, a
-        tab, but it can also be a comma, whitespace, etc.
     :type delimiter: str
+    
+    .. deprecated:: 1.0
+    
+    .. warning:: This i/o function is for legacy files only and will be removed
+        in later versions.
     
     :returns: Segmentation mass codings.
     :rtype: :func:`dict`
@@ -189,7 +194,7 @@ def input_linear_mass_json(json_filename):
     Load a segment mass JSON file.
     
     :param json_filename: path to the mass file containing segment position
-        codings.
+                          codings.
     :type json_filename: str
     
     :returns: Segmentation mass codings.

@@ -1,8 +1,7 @@
 '''
 Tests the WindowDiff evaluation metric.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -32,7 +31,8 @@ Tests the WindowDiff evaluation metric.
 #===============================================================================
 import unittest
 from decimal import Decimal
-from .Percentage import percentage, pairwise_percentage, find_seg_positions
+from .Percentage import percentage, pairwise_percentage, \
+    find_boundary_position_freqs
 from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
 from .. import convert_positions_to_masses
@@ -195,8 +195,8 @@ class TestPercentageUtils(unittest.TestCase):
         Test segmentation position frequency counting.
         '''
         # pylint: disable=C0324
-        seg_positions = find_seg_positions([[1,2,3,3,2,1],
-                                            [1,2,2,4,2,1]])
+        seg_positions = find_boundary_position_freqs([[1,2,3,3,2,1],
+                                                      [1,2,2,4,2,1]])
         self.assertEqual(seg_positions, { 1: 2,
                                           3: 2,
                                           5: 1,

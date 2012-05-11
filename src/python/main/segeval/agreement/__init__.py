@@ -48,14 +48,18 @@ def load_tests(loader, tests, pattern):
 
 def choose(n, k):
     '''
-    Calculates a number of combinations (i.e. 4 choose 2).
+    Calculates a number of combinations (i.e., 4 choose 2).
     
     Arguments:
-    n -- Number of elements to choose from
-    k -- Number of elements to chose
+    :param n: Number of elements to choose from.
+    :param k ;Number of elements to chose.
     
-    Return:
-    Number of combinations as an integer.
+    .. math::
+        C(n,k) = \\frac{n!}{k!(n-k)!}
+    
+    
+    :returns: Number of combinations.
+    :rtype: :func:`int`
     '''
     # pylint: disable=C0103
     numerator   = math.factorial(n)
@@ -65,14 +69,17 @@ def choose(n, k):
 
 def permute(n, k):
     '''
-    Calculates a number of permutations (i.e. 4 permute 2).
+    Calculates a number of permutations (i.e., 4 permute 2).
     
     Arguments:
-    n -- Number of elements to choose from
-    k -- Number of elements to chose
+    :param n: Number of elements to permute from.
+    :param k: Number of elements to permute.
     
-    Return:
-    Number of permutations as an integer.
+    .. math::
+        P(n,k) = \\frac{n!}{(n-k)!}
+    
+    :returns: Number of permutations.
+    :rtype: :func:`int`
     '''
     # pylint: disable=C0103
     numerator   = math.factorial(n)
