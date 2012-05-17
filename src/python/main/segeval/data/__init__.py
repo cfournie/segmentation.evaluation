@@ -77,7 +77,9 @@ def load_nested_folders_dict(containing_dir, fnc_load,
     
     :param containing_dir: Root directory containing sub-directories which 
                            contain segmentation files (either
-    :param fnc_load:       Function used to load a segmentation file.
+    :param fnc_load:       Function used to load a segmentation file (e.g.,
+                           :func:`input_linear_mass_json` or 
+                           :func:`input_linear_mass_tsv`)
     :param allowable_extensions: List of file extensions to load using
                                  fnc_load.
     :type containing_dir: str

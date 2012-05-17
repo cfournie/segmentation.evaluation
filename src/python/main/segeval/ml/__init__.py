@@ -1,5 +1,16 @@
 '''
-Computes a variety of traditional machine learning metrics.
+Machine learning metric package.  This package a variety of traditional machine
+learning metrics that have been adapted for use in segmentation, including:
+
+* F-measure; and
+* Percentage agreement.
+
+.. warning:: These are provided for comparison, but are not recommended for \
+    segmentation evaluation.  Instead, use  the segmentation similarity
+    metric [FournierInkpen2012]_ implemented in
+    :func:`segeval.similarity.SegmentationSimilarity.similarity` and the
+    associated inter-coder agreement coefficients
+    :mod:`segeval.agreement`.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
@@ -191,4 +202,29 @@ def prfcf(tp, fp, fn, tn=None, beta=1.0):
     # pylint: disable=C0103
     return precision(tp, fp), recall(tp, fn), fmeasure(tp, fp, fn, beta), \
            confusionmatrix(tp, fp, fn, tn)
+
+
+def find_boundary_position_freqs(masses_set):
+    '''
+    Converts a list of segmentation mass sets into a dict of boundary positions,
+    and the frequency of the whether boundaries were chosen at that location or,
+    or not,
+    
+    :param masses_set: List of segmentation masses
+    :type masses_set: list
+    
+    :returns: :func:`dict` of boundary position frequencies.
+    :rtype: :class:`decimal.Decimal`
+    '''
+    seg_positions = dict()
+    for masses in masses_set:
+        # Iterate over boundary positions that precede the index, excluding the
+        # first position so that the start is not counted as a boundary
+        for i in xrange(1, len(masses)):
+            position = sum(masses[0:i])
+            try:
+                seg_positions[position] += 1
+            except KeyError:
+                seg_positions[position] = 1
+    return seg_positions
 

@@ -2,10 +2,16 @@ segeval
 *******
 
 .. automodule:: segeval
-   :members:
 
-Utils
-=====
+Utility functions
+=================
 
-.. automodule:: segeval.Utils
-   :members:
+.. autofunction:: convert_positions_to_masses
+.. autofunction:: convert_masses_to_positions
+.. autofunction:: compute_pairwise
+
+Exceptions
+==========
+
+.. autoclass:: SegmentationMetricError
+

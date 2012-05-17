@@ -2,12 +2,6 @@
 Implementation of the WinPR segmentation evaluation metric described in Scaiano
 and Inkpen (2012).
 
-    Scaiano, M. & Inkpen, D. (2012), Getting more from segmentation evaluation,
-    in "Proceedings of Human Language Technologies: The 2012 Annual Conference
-    of the North American Chapter of the Association for Computational
-    Linguistics", Association for Computational Linguistics, Stroudsburg, PA,
-    USA.
-
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================

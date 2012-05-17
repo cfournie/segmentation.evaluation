@@ -1,5 +1,5 @@
 '''
-F-Measure metric functions.
+Provides a segmentation version of the F-Measure metric.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
@@ -37,11 +37,15 @@ from .. import compute_pairwise
 
 def f_b_measure(hypothesis_masses, reference_masses, beta=1.0):
     '''
-    Calculates the F-Measure between a hypothesis and reference segmentation.
+    Calculates the F-Measure between a hypothesis and reference segmentation,
+    where F-Measure is calculated as:
     
     .. math::
         \\text{F}_{\\beta}\\text{-measure} = \\frac{(1 + \\beta^2) \\cdot TP}\
         {(1 + \\beta^2) \\cdot TP + \\beta^2 \\cdot FN + FP}
+    
+    Counts of true positives (:math:`TP`), false positives (:math:`FP`), and
+    false negatives (:math:`FN`) are calculated as:
     
     .. math::
         TP = \\sum^{|hyp|}_{i=1}{\\text{tp}(hyp_i, ref_i)}, \quad
@@ -82,7 +86,7 @@ def f_b_measure(hypothesis_masses, reference_masses, beta=1.0):
     :type beta: float
     
     :returns: F-measure.
-    :rtype: :class:`unittest.TestSuite`
+    :rtype: :class:`decimal.Decimal`
     
     .. seealso:: :func:`segeval.ml.fmeasure`
     '''

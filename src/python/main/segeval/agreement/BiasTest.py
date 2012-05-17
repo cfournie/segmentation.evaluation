@@ -1,16 +1,7 @@
 '''
-Tests the segmentation version of Arstein and Poesio's (2008) annotator bias.
+Tests the segmentation version of Arstein and Poesio's bias.
 
-References:
-    Chris Fournier and Diana Inkpen. 2012. Segmentation Similarity and
-    Agreement. Submitted manuscript.
-    
-    Ron Artstein and Massimo Poesio. 2008. Inter-coder agreement for
-    computational linguistics. Computational Linguistics, 34(4):555-596. MIT
-    Press.
-
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier

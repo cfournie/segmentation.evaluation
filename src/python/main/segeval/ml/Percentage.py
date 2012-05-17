@@ -1,5 +1,5 @@
 '''
-Percentage metric functions.
+Provides a segmentation version of the  percentage agreement metric.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
@@ -30,48 +30,26 @@ Percentage metric functions.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
+from . import find_boundary_position_freqs
 from .. import compute_pairwise
 
 
-def find_boundary_position_freqs(segs_set):
-    '''
-    Converts a list of segmentation mass sets into a dict of boundary positions,
-    and the frequency of the whether boundaries were chosen at that location or,
-    or not,
-    
-    Arguments:
-    segs_set -- List of segmentation mass sets
-    
-    Returns:
-    Dict of boundary positions and their frequencies.
-    '''
-    seg_positions = dict()
-    for segs_i in segs_set:
-        # Iterate over boundary positions that precede the index, excluding the
-        # first position so that the start is not counted as a boundary
-        for i in xrange(1, len(segs_i)):
-            position = sum(segs_i[0:i])
-            try:
-                seg_positions[position] += 1
-            except KeyError:
-                seg_positions[position] = 1
-    return seg_positions
-
-
-def percentage(segs_hypothesis, segs_reference):
+def percentage(hypothesis_masses, reference_masses):
     '''
     Calculates the percentage agreement between a hypothesis, and reference
     segmentation.
     
-    Arguments:
-    segs_hypothesis -- Hypothesis segmentation masses
-    segs_reference  -- Reference segmentation masses
+    :param hypothesis_masses: Hypothesis segmentation masses.
+    :param reference_masses: Reference segmentation masses.
+    :param beta: Scales how precision and recall are averaged.
+    :type hypothesis_masses: list
+    :type reference_masses: list
     
-    Returns:
-    Percentage.
+    :returns: F-measure.
+    :rtype: :class:`decimal.Decimal`
     '''
-    positions_hyp = find_boundary_position_freqs([segs_hypothesis])
-    positions_ref = find_boundary_position_freqs([segs_reference])
+    positions_hyp = find_boundary_position_freqs([hypothesis_masses])
+    positions_ref = find_boundary_position_freqs([reference_masses])
     agree    = Decimal('0')
     disagree = Decimal('0')
     for pos in positions_ref.keys():

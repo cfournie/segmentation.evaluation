@@ -1,25 +1,23 @@
 '''
-Segmentation versions of Scott's and Fleiss' Pi.
+This module contains implementations of Scott's and Fleiss' Pi, adapted in
+[FournierInkpen2012]_ for segmentation (in as similar a manner as [Hearst1997]_)
+using the formulation of Kappa provided in [ArtsteinPoesio2008]_.
 
-References:
-    Chris Fournier and Diana Inkpen. 2012. Segmentation Similarity and
-    Agreement. Submitted manuscript.
-    
-    Ron Artstein and Massimo Poesio. 2008. Inter-coder agreement for
-    computational linguistics. Computational Linguistics, 34(4):555-596. MIT
-    Press.
-    
-    Marti A. Hearst. 1997. TextTiling: Segmenting Text into Multi-paragraph
-    Subtopic Passages. Computational Linguistics, 23(1):33-64.
-    
-    William A. Scott. 1955. Reliability of content analysis: The case of nominal
-    scale coding. Public Opinion Quarterly, 19(3):321-325.
-    
-    Joseph L. Fleiss. 1971. Measuring nominal scale agreement among many raters.
-    Psychological Bulletin, 76(5):378-382.
+Pi's general form could be described, as it is in [ArtsteinPoesio2008]_, in 
+terms of actual agreement (:math:`\\text{A}_a`) and expected agreement 
+(:math:`\\text{A}_e`) as:
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. math::
+    \pi,\pi^* = \\frac{\\text{A}_a-\\text{A}_e}{1 \
+    - \\text{A}_e}
+
+:math:`\pi` represents Scott's Pi (for 2 coders), whereas :math:`\pi^*`
+represents its generalization to more than 2 coders.  Each metric calculates
+:math:`\\text{A}_a` using :func:`segeval.agreement.observed_agreement` and
+only varies the calculation of :math:`\\text{A}_e`.
+
+
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -48,65 +46,88 @@ References:
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
-from .Kappa import observed_agreement
+from . import observed_agreement
 
 
-def scotts_pi(segs_set_all, return_parts=False):
+def scotts_pi(items_masses, return_parts=False):
     '''
-    Calculates Scott's Pi, originally proposed in Scott (1995), for
-    segmentations.  Adapted from the formulations provided in
-    Hearst (1997, pp. 53) and Artstein and Poesio (2008).
+    Calculates Scott's Pi, originally proposed in [Scott1955]_, for
+    segmentations.  Adapted in [FournierInkpen2012]_ from the formulations
+    provided in [Hearst1997]_ and [ArtsteinPoesio2008]_'s formulation for
+    expected agreement:
     
-    Arguments:
-    segs_set_a -- List of segmentations (same coder, different documents, in
-                  the same order as segs_set_b).
-    segs_set_b -- List of segmentations (see segs_set_a).
+    .. math::
+        \\text{A}^\pi_e = \sum_{k \in K} \\big(\\text{P}^\pi_e(k)\\big)^2
     
-    Returns:
-    Segmentation version of Scott's Pi as a Decimal.
+    .. math::
+        \\text{P}^\pi_e(\\text{seg}_t) = 
+        \\frac{
+            \sum_{c \in C}\sum_{i \in I}|\\text{boundaries}(t, s_{ic})|
+        }{
+            \\textbf{c} \cdot \sum_{i \in I} \\big( \\text{mass}(i) - 1 \\big)
+        }
+    
+    :param items_masses: Segmentation masses for a collection of items where \
+                        each item is multiply coded (all coders code all items).
+    :param return_parts: If true, return the numerator and denominator
+    :type item_masses:  dict
+    :type return_parts: bool
+    
+    :returns: Scott's Pi
+    :rtype: :class:`decomal.Decimal`
+    
+    .. seealso:: :func:`segeval.agreement.observed_agreement` for an example of\
+     ``items_masses``.
+    
+    .. note:: Applicable for only 2 coders.
     '''
     # Check that there are no more than 2 coders
-    if len([True for coder_segs in segs_set_all.values() \
+    if len([True for coder_segs in items_masses.values() \
             if len(coder_segs.keys()) > 2]) > 0:
         raise Exception('Unequal number of items specified.')
     # Check that there are an identical number of items
-    num_items = len(segs_set_all.values()[0].keys())
-    if len([True for coder_segs in segs_set_all.values() \
+    num_items = len(items_masses.values()[0].keys())
+    if len([True for coder_segs in items_masses.values() \
             if len(coder_segs.values()) != num_items]) > 0:
         raise Exception('Unequal number of items contained.')
     # Return
-    return fleiss_pi(segs_set_all, return_parts)
+    return fleiss_pi(items_masses, return_parts)
 
 
-def fleiss_pi(segs_set_all, return_parts=False):
+def fleiss_pi(items_masses, return_parts=False):
     '''
-    Calculates Fleiss' Pi (or multi-Pi), originally proposed in Fleiss (1971),
-    for segmentations (and described in Siegel and Castellan (1988) as K).
-    Adapted from the formulations provided in Hearst (1997, pp. 53) and Artstein
-    and Poesio (2008).
+    Calculates Fleiss' Pi (or multi-Pi), originally proposed in [Fleiss1971]_,
+    for segmentations (and described in [SiegelCastellan1988]_ as K).
+    Adapted from the formulations
+    provided in [Hearst1997]_ (p. 53) and [ArtsteinPoesio2008]_'s formulation
+    for expected agreement:
     
-    Arguments:
-    segs_set_a -- List of segmentations (same coder, different documents, in
-                  the same order as segs_set_b).
-    segs_set_b -- List of segmentations (see segs_set_a).
+    .. math::
+        \\text{A}^{\pi^*}_e = \sum_{k \in K} \\big(\\text{P}^\pi_e(k)\\big)^2
     
-    Arguments:
-    segs_set_all -- A list of document segments for each coder (each in the
-                    same item order), e.g.: [an1, an2, an3], where an1 = 
-                    [d1, d2, d3], where d1 = segmass_d1.
+    :param items_masses: Segmentation masses for a collection of items where \
+                        each item is multiply coded (all coders code all items).
+    :param return_parts: If true, return the numerator and denominator
+    :type items_masses:  dict
+    :type return_parts: bool
     
-    Returns:
-    Segmentation version of Fleiss's Pi as a Decimal.
+    :returns: Fleiss's Pi
+    :rtype: :class:`decomal.Decimal`
+    
+    .. seealso:: :func:`segeval.agreement.observed_agreement` for an example of\
+     ``items_masses``.
+    
+    .. note:: Applicable for more than 2 coders.
     '''
     # pylint: disable=C0103,R0914
     # Check that there are an equal number of items for each coder
-    num_items = len(segs_set_all.values()[0].keys())
-    if len([True for coder_segs in segs_set_all.values() \
+    num_items = len(items_masses.values()[0].keys())
+    if len([True for coder_segs in items_masses.values() \
             if len(coder_segs.values()) != num_items]) > 0:
         raise Exception('Unequal number of items contained.')
     # Initialize totals
     unmoved_masses, total_masses, coders_boundaries_totalboundaries = \
-        observed_agreement(segs_set_all)
+        observed_agreement(items_masses)
     # Calculate Aa
     A_o = sum(unmoved_masses) / sum(total_masses)
     # Calculate Ae

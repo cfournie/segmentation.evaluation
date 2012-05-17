@@ -1,9 +1,6 @@
 '''
 Implementation of the Pk segmentation evaluation metric described in:
 
-Doug Beeferman and Adam Berger. 1999. Statistical models for text segmentation.
-Machine learning, 34(1-3):177-210.
-
 @author: Chris Fournier
 @contact: chris.m.fournier@gmail.com
 '''

@@ -24,3 +24,4 @@ WinPR
 
 .. automodule:: segeval.window.WinPR
    :members:
+

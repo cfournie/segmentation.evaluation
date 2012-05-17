@@ -115,7 +115,7 @@ class TestPi(unittest.TestCase):
             return
         data = LARGE_DISAGREEMENT
         self.assertEqual(fleiss_pi(data),
-                         Decimal('-0.5365079365079365079365079368'))
+                         Decimal('-0.5757942099675148626179719687'))
 
 
     def test_scotts_pi(self):

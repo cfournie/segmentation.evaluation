@@ -1,9 +1,7 @@
 '''
 Implementation of the WindowDiff segmentation evaluation metric described in:
 
-Pevzner, L., & Hearst, M. A. (2002). A critique and improvement of an
-evaluation metric for text segmentation. Computational Linguistics, 28(1),
-19--36. MIT Press. doi:10.1162/089120102317341756
+
 
 @author: Chris Fournier
 @contact: chris.m.fournier@gmail.com

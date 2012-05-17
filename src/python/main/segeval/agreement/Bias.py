@@ -1,16 +1,9 @@
 '''
-Segmentation version of Arstein Poesio's annotator bias.
+Segmentation version of Arstein and Poesio's inter-coder agreement bias
+[ArtsteinPoesio2008]_ that has been adapted to use Segmentation 
+Similarity [FournierInkpen2012]_.
 
-References:
-    Chris Fournier and Diana Inkpen. 2012. Segmentation Similarity and
-    Agreement. Submitted manuscript.
-    
-    Ron Artstein and Massimo Poesio. 2008. Inter-coder agreement for
-    computational linguistics. Computational Linguistics, 34(4):555-596. MIT
-    Press.
-
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -42,21 +35,26 @@ from .Kappa import fleiss_kappa
 from .Pi import fleiss_pi
 
 
-def artstein_poesio_bias(segs_set_all):
+def artstein_poesio_bias(dataset_masses):
     '''
-    Artstein and Poesio's annotator bias, or B (Artstein and Poesio, 2008,
-    pp. 572).
+    Artstein and Poesio's annotator bias, or B [ArtsteinPoesio2008]_
+    (p. 572):
     
-    Arguments:
-    segs_set_all -- A list of document segments for each coder (each in the
-                    same item order), e.g.: [an1, an2, an3], where an1 = 
-                    [d1, d2, d3], where d1 = segmass_d1.
+    .. math::
+        B = A^{\pi^*}_e - A^{\kappa^*}_e
     
-    Returns:
-    B as a Decimal object.
+    :param items_masses: Segmentation masses for a collection of items where \
+                        each item is multiply coded (all coders code all items).
+    :type items_masses: dict
+    
+    :returns: B, or Bias
+    :rtype: :class:`decimal.Decimal`
+    
+    .. seealso:: :func:`segeval.agreement.observed_agreement` for an example of\
+     ``items_masses``.
     '''
     # pylint: disable=C0103
-    A_pi_e     = fleiss_pi(   segs_set_all, return_parts=True)[1]
-    A_fleiss_e = fleiss_kappa(segs_set_all, return_parts=True)[1]
+    A_pi_e     = fleiss_pi(   dataset_masses, return_parts=True)[1]
+    A_fleiss_e = fleiss_kappa(dataset_masses, return_parts=True)[1]
     return A_pi_e - A_fleiss_e
 

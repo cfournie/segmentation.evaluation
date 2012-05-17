@@ -134,9 +134,9 @@ class TestWinPR(unittest.TestCase):
     
     def test_large_disagreement(self):
         self.assertEqual(pairwise_winpr(LARGE_DISAGREEMENT),
-                         (0.26666666666666666,
-                          0.0,
-                          0.0))
+                         (0.25736714975845409,
+                          0.15354697430405589,
+                          0.023576673317930404))
     
     def test_complete_agreement(self):
         self.assertEqual(pairwise_winpr(COMPLETE_AGREEMENT),

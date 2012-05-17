@@ -1,25 +1,21 @@
 '''
-Segmentation versions of Cohen's and Fleiss' Kappa.
+This module contains implementations of Cohen's and Fleiss' Kappa, adapted in
+[FournierInkpen2012]_ for segmentation (in as similar a manner as [Hearst1997]_)
+using the formulation of Kappa provided in [ArtsteinPoesio2008]_.
 
-References:
-    Chris Fournier and Diana Inkpen. 2012. Segmentation Similarity and
-    Agreement. Submitted manuscript.
-    
-    Ron Artstein and Massimo Poesio. 2008. Inter-coder agreement for
-    computational linguistics. Computational Linguistics, 34(4):555-596. MIT
-    Press.
-    
-    Marti A. Hearst. 1997. TextTiling: Segmenting Text into Multi-paragraph
-    Subtopic Passages. Computational Linguistics, 23(1):33-64.
+Kappa's general form could be described, as it is in [ArtsteinPoesio2008]_, in 
+terms of actual agreement (:math:`\\text{A}_a`) and expected agreement 
+(:math:`\\text{A}_e`) as:
 
-    Jacob Cohen. 1960. A Coefficient of Agreement for Nominal Scales.
-    Educational and Psychological Measurement, 20(1):37-46.
-    
-    Mark Davies and Joseph L. Fleiss. 1982. Measuring agreement for multinomial
-    data. Biometrics, 38(4):1047-1051.
+.. math::
+    \kappa,\kappa^* = \\frac{\\text{A}_a-\\text{A}_e}{1 - \\text{A}_e}
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+:math:`\kappa` represents Coken's Kappa (for 2 coders), whereas :math:`\kappa^*`
+represents its generalization to more than 2 coders.  Each metric calculates
+:math:`\\text{A}_a` using :func:`segeval.agreement.observed_agreement` and
+only varies the calculation of :math:`\\text{A}_e`.
+
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -48,109 +44,96 @@ References:
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
-from ..similarity.SegmentationSimilarity import similarity as similarity_linear
+from . import observed_agreement
 
 
-def observed_agreement(segs_set_all):
+def cohen_kappa(item_masses, return_parts=False):
     '''
-    Calculate observed segmentation agreement without accounting for chance.
+    Calculates Cohen's Kappa, originally proposed in [Cohen1960]_, for
+    segmentations.  Adapted in [FournierInkpen2012]_ from the formulations
+    provided in [Hearst1997]_ and using [ArtsteinPoesio2008]_'s for expected
+    agreement:
     
-    Arguments:
-    segs_set_all -- A list of document segments for each coder (each in the
-                    same item order), e.g.: [an1, an2, an3], where an1 = 
-                    [d1, d2, d3], where d1 = segmass_d1
+    .. math::
+        \\text{A}^\kappa_e = \sum_{k \in K} \\text{P}^\kappa_e(k|c_1) \cdot \
+        \\text{P}^\kappa_e(k|c_2)
+        
+    .. math::
+        \\text{P}^\kappa_e(\\text{seg}_t|c) = 
+        \\frac{
+            \sum_{i \in I}|\\text{boundaries}(t, s_{ic})|
+        }{
+            \sum_{i \in I} \\big( \\text{mass}(i) - 1 \\big)
+        }
     
-    Returns:
-    unmoved_masses    -- Number of pb unmoved
-    total_masses      -- Number of pb total
-    coders_boundaries -- Dict of boundaries per coder
-    '''
-    # pylint: disable=C0103
-    all_pbs_unedited = list()
-    all_pbs          = list()
-    coders_boundaries = dict()
-    coders = segs_set_all.values()[0].keys()
-    # FOr each permutation of coders
-    for m in range(0, len(coders) - 1):
-        for n in range(m+1, len(coders)):
-            for item in segs_set_all.keys():
-                segs_a = segs_set_all[item][coders[m]]
-                segs_b = segs_set_all[item][coders[n]]
-                pbs_unedited, total_pbs = \
-                    similarity_linear(segs_a, segs_b, return_parts=True)[0:2]
-                all_pbs_unedited.append(pbs_unedited)
-                all_pbs.append(total_pbs)
-                # Create in dicts if not present
-                if coders[m] not in coders_boundaries:
-                    coders_boundaries[coders[m]] = list()
-                if coders[n] not in coders_boundaries:
-                    coders_boundaries[coders[n]] = list()
-                # Add per-coder values to dicts
-                coders_boundaries[coders[m]].append(
-                    [Decimal(len(segs_a)),
-                     total_pbs])
-                coders_boundaries[coders[n]].append(
-                    [Decimal(len(segs_b)),
-                     total_pbs])
-    return all_pbs_unedited, all_pbs, coders_boundaries
-
-
-def cohen_kappa(segs_set_all, return_parts=False):
-    '''
-    Calculates Cohen's Kappa, originally proposed in Cohen (1960), for
-    segmentations.  Adapted from the formulations provided in Hearst (1997) and
-    Artstein and Poesio (2008).
+    :param items_masses: Segmentation masses for a collection of items where \
+                        each item is multiply coded (all coders code all items).
+    :param return_parts: If true, return the numerator and denominator
+    :type item_masses:  dict
+    :type return_parts: bool
     
-    Arguments:
-    segs_set_all -- A list of document segments for each coder (each in the
-                    same item order), e.g.: [an1, an2, an3], where an1 = 
-                    [d1, d2, d3], where d1 = segmass_d1
-    return_parts -- If true, return the numerator and denominator 
+    :returns: Cohen's Kappa
+    :rtype: :class:`decomal.Decimal`
     
-    Returns:
-    Cohen's Kappa as a Decimal object.
+    .. seealso:: :func:`segeval.agreement.observed_agreement` for an example of\
+     ``items_masses``.
+    
+    .. note:: Applicable for only 2 coders.
     '''
     # Check that there are exactly 2 coders
-    if len([True for coder_segs in segs_set_all.values() \
+    if len([True for coder_segs in item_masses.values() \
             if len(coder_segs.keys()) != 2]) > 0:
         raise Exception('Unequal number of items specified.')
     # Check that there are an identical number of items
-    num_items = len(segs_set_all.values()[0].keys())
-    if len([True for coder_segs in segs_set_all.values() \
+    num_items = len(item_masses.values()[0].keys())
+    if len([True for coder_segs in item_masses.values() \
             if len(coder_segs.values()) != num_items]) > 0:
         raise Exception('Unequal number of items contained.')
     # Return
-    return fleiss_kappa(segs_set_all, return_parts)
+    return fleiss_kappa(item_masses, return_parts)
 
 
-def fleiss_kappa(segs_set_all, return_parts=False):
+def fleiss_kappa(items_masses, return_parts=False):
     '''
-    Calculates Fleiss' Kappa (or multi-Kappa), originally proposed in Davies and
-    Fleiss (1982), for segmentations.  Adapted from the formulations provided in
-    Hearst (1997, pp. 53) and Artstein and Poesio (2008).
+    Calculates Fleiss' Kappa (or multi-Kappa), originally proposed in
+    [DaviesFleiss1982]_, for segmentations.  Adapted in [FournierInkpen2012]_ 
+    from the formulations provided in [Hearst1997]_ (p. 53) and using
+    [ArtsteinPoesio2008]_'s formulation for expected agreement:
     
-    Arguments:
-    segs_set_all -- A list of document segments for each coder (each in the
-                    same item order), e.g.: [an1, an2, an3], where an1 = 
-                    [d1, d2, d3], where d1 = segmass_d1
-    return_parts -- If true, return the numerator and denominator 
+    .. math::
+        \\text{A}^{\kappa^*}_e = \sum_{k \in K} \\bigg(
+        \\frac{1}{{\\textbf{c} \\choose 2}}
+        \sum^{\\textbf{c}-1}_{m=1}
+        \sum^{\\textbf{c}}_{n=m+1} \\text{P}^\kappa_e(k|c_m) \cdot
+            \\text{P}^\kappa_e(k|c_n) \\bigg)
     
-    Returns:
-    Fleiss' Kappa as a Decimal object.
+    :param items_masses: Segmentation masses for a collection of items where \
+                        each item is multiply coded (all coders code all items).
+    :param return_parts: If true, return the numerator and denominator
+    :type item_masses:  dict
+    :type return_parts: bool
+    
+    :returns: Fleiss's Kappa
+    :rtype: :class:`decomal.Decimal`
+    
+    .. seealso:: :func:`segeval.agreement.observed_agreement` for an example of\
+     ``items_masses``.
+    
+    .. note:: Applicable for more than 2 coders.
     '''
     # pylint: disable=C0103,R0914
     # Check that there are more than 2 coders
-    if len([True for coder_segs in segs_set_all.values() \
+    if len([True for coder_segs in items_masses.values() \
             if len(coder_segs.keys()) < 2]) > 0:
         raise Exception('Less than 2 coders specified.')
     # Check that there are an identical number of items
-    num_items = len(segs_set_all.values()[0].keys())
-    if len([True for coder_segs in segs_set_all.values() \
+    num_items = len(items_masses.values()[0].keys())
+    if len([True for coder_segs in items_masses.values() \
             if len(coder_segs.values()) != num_items]) > 0:
         raise Exception('Unequal number of items contained.')
     # Initialize totals
     unmoved_masses, total_masses, coders_boundaries_totalboundaries = \
-        observed_agreement(segs_set_all)
+        observed_agreement(items_masses)
     # Calculate Aa
     A_o = sum(unmoved_masses) / sum(total_masses)
     # Calculate Ae

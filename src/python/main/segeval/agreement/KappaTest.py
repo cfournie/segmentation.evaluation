@@ -1,25 +1,7 @@
 '''
 Tests the segmentation versions of Cohen's and Fleiss' Kappa.
 
-References:
-    Chris Fournier and Diana Inkpen. 2012. Segmentation Similarity and
-    Agreement. Submitted manuscript.
-    
-    Ron Artstein and Massimo Poesio. 2008. Inter-coder agreement for
-    computational linguistics. Computational Linguistics, 34(4):555-596. MIT
-    Press.
-
-    Marti A. Hearst. 1997. TextTiling: Segmenting Text into Multi-paragraph
-    Subtopic Passages. Computational Linguistics, 23(1):33-64.
-
-    Jacob Cohen. 1960. A Coefficient of Agreement for Nominal Scales.
-    Educational and Psychological Measurement, 20(1):37-46.
-    
-    Mark Davies and Joseph L. Fleiss. 1982. Measuring agreement for multinomial
-    data. Biometrics, 38(4):1047-1051.
-
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -116,7 +98,7 @@ class TestKappa(unittest.TestCase):
             return
         data = LARGE_DISAGREEMENT
         self.assertEqual(fleiss_kappa(data),
-                         Decimal('-0.1100917431192660550458715596'))
+                         Decimal('-0.05952156715012243360331512524'))
     
     
     def test_cohen_kappa(self):

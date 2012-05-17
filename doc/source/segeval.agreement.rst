@@ -2,25 +2,29 @@ segeval.agreement
 *****************
 
 .. automodule:: segeval.agreement
-   :members:
 
 
-Bias
-=====
-
-.. automodule:: segeval.agreement.Bias
-   :members:
+Agreement
+=========
+.. autofunction:: observed_agreement
 
 
 Kappa
 =====
-
 .. automodule:: segeval.agreement.Kappa
-   :members:
+.. autofunction:: cohen_kappa
+.. autofunction:: fleiss_kappa
 
 
 Pi
 ==
-
 .. automodule:: segeval.agreement.Pi
-   :members:
+.. autofunction:: scotts_pi
+.. autofunction:: fleiss_pi
+
+
+Bias
+====
+.. automodule:: segeval.agreement.Bias
+.. autofunction:: artstein_poesio_bias
+
