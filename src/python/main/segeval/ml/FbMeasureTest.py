@@ -86,7 +86,7 @@ class TestFbMeasure(unittest.TestCase):
 
     def test_translated_boundary(self):
         '''
-        Test whether 2/3 total segments participate in  mis-alignment produces
+        Test whether 2/3 total segments participate in mis-alignment produces
         0.33.
         '''
         # pylint: disable=C0324,C0103
@@ -130,7 +130,7 @@ class TestPairwiseFbMeasure(unittest.TestCase):
     def test_kazantseva2012_g5(self):
         '''
         Calculate permuted pairwise percentage on Group 5 from the dataset
-        collected in Kazantseva (2012).
+        collected in [KazantsevaSzpakowicz2012]_.
         '''
         self.assertEqual(pairwise_f_b_measure(KAZANTSEVA2012_G5),
                          (Decimal('0.2441586812212541867438777318'),
@@ -140,7 +140,7 @@ class TestPairwiseFbMeasure(unittest.TestCase):
     def test_kazantseva2012_g2(self):
         '''
         Calculate mean permuted pairwise percentage on Group 2 from the dataset
-        collected in Kazantseva (2012).
+        collected in [KazantsevaSzpakowicz2012]_.
         '''
         self.assertEqual(pairwise_f_b_measure(KAZANTSEVA2012_G2),
                          (Decimal('0.4777419851104061630377419848'),

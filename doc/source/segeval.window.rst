@@ -2,26 +2,30 @@ segeval.window
 **************
 
 .. automodule:: segeval.window
-   :members:
+.. autofunction:: compute_window_size
+.. autofunction:: compute_window_size_from_masses
 
 
 Pk
 ==
 
 .. automodule:: segeval.window.Pk
-   :members:
+.. autofunction:: pk
+.. autofunction:: pairwise_pk
 
 
 WindowDiff
 ==========
 
 .. automodule:: segeval.window.WindowDiff
-   :members:
+.. autofunction:: window_diff
+.. autofunction:: pairwise_window_diff
 
 
 WinPR
 =====
 
 .. automodule:: segeval.window.WinPR
-   :members:
+.. autofunction:: win_pr
+.. autofunction:: pairwise_win_pr
 

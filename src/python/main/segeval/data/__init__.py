@@ -1,5 +1,5 @@
 '''
-Data i/o package.  Used to import and export data to and from TSV and JSON
+Data I/O package.  Used to import and export data to and from TSV and JSON
 files.
 
 .. seealso:: File format documentation in: `Segmentation Representation \

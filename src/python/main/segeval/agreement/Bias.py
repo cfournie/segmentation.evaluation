@@ -33,6 +33,7 @@ Similarity [FournierInkpen2012]_.
 #===============================================================================
 from .Kappa import fleiss_kappa
 from .Pi import fleiss_pi
+from .. import compute_mean
 
 
 def artstein_poesio_bias(dataset_masses):
@@ -57,4 +58,20 @@ def artstein_poesio_bias(dataset_masses):
     A_pi_e     = fleiss_pi(   dataset_masses, return_parts=True)[1]
     A_fleiss_e = fleiss_kappa(dataset_masses, return_parts=True)[1]
     return A_pi_e - A_fleiss_e
+
+
+def mean_artstein_poesio_bias(dataset_masses):
+    '''
+    Calculate mean segmentation bias.
+    
+    .. seealso:: :func:`artstein_poesio_bias`, :func:`segeval.compute_mean`
+    
+    :param dataset_masses: Segmentation mass dataset (including multiple \
+                           codings).
+    :type dataset_masses: dict
+    
+    :returns: Mean, standard deviation, and variance.
+    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, :class:`decimal.Decimal`
+    '''
+    return compute_mean(dataset_masses, artstein_poesio_bias)
 

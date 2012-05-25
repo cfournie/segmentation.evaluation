@@ -30,7 +30,11 @@ Tests some general segeval utility functions.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 import unittest
-from . import convert_positions_to_masses, convert_masses_to_positions
+from decimal import Decimal
+from . import convert_positions_to_masses, convert_masses_to_positions, \
+    compute_pairwise
+from .data.Samples import KAZANTSEVA2012_G5
+from .ml.FbMeasure import f_b_measure
 
 
 class TestSegeval(unittest.TestCase):
@@ -56,3 +60,26 @@ class TestSegeval(unittest.TestCase):
         #pylint: disable=C0324
         self.assertEqual([1,1,1,1,1,2,2,2,3,3,3,3,3],
                          convert_masses_to_positions([5,3,5]))
+    
+    
+    def test_compute_pairwise(self):
+        '''
+        Tests computing pairwise values from dicts.  Ensures that dicts of
+        arbitrary size can still be used.
+        '''
+        expected = (Decimal('0.2441586812212541867438777318'),
+                    Decimal('0.2305169230001435997031211478'),
+                    Decimal('0.05313805178945413332341442158'))
+        
+        self.assertEqual(compute_pairwise(KAZANTSEVA2012_G5,
+                                          f_b_measure),
+                         expected)
+        self.assertEqual(compute_pairwise({'G5' : KAZANTSEVA2012_G5},
+                                          f_b_measure),
+                         expected)
+        self.assertEqual(compute_pairwise({'Kazantseva' : 
+                                                {'G5' : KAZANTSEVA2012_G5}},
+                                          f_b_measure),
+                         expected)
+        
+        

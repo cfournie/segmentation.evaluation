@@ -111,12 +111,15 @@ def pairwise_f_b_measure(dataset_masses):
     '''
     Calculate mean pairwise segmentation F-Measure.
     
+    .. seealso:: :func:`f_b_measure`
+    .. seealso:: :func:`segeval.compute_pairwise`
+    
     :param dataset_masses: Segmentation mass dataset (including multiple \
                            codings).
     :type dataset_masses: dict
     
-    :returns: Mean, standard deviation, and variance of segmentation F-Measure.
-    :rtype: :func:`float`, :func:`float`, :func:`float`
+    :returns: Mean, standard deviation, and variance.
+    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, :class:`decimal.Decimal`
     '''
     return compute_pairwise(dataset_masses, f_b_measure, permuted=False)
 

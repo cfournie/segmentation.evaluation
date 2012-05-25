@@ -1,5 +1,6 @@
 '''
-Implementation of the Pk segmentation evaluation metric described in:
+Implementation of the Pk segmentation evaluation metric described in 
+[BeefermanBerger1999]_
 
 @author: Chris Fournier
 @contact: chris.m.fournier@gmail.com
@@ -32,45 +33,57 @@ Implementation of the Pk segmentation evaluation metric described in:
 #===============================================================================
 from decimal import Decimal
 from . import compute_window_size
-from ..Math import mean, std, var
-from .. import SegmentationMetricError
-from .. import convert_masses_to_positions
+from .. import SegmentationMetricError, compute_pairwise, \
+    convert_masses_to_positions
 
 
-def pk(ref_segments, hyp_segments, window_size=None, one_minus=False):
+#pylint: disable=C0103
+def pk(hypothesis_positions, reference_positions, window_size=None,
+       one_minus=False, convert_from_masses=False):
     '''
     Calculates the Pk segmentation evaluation metric score for a
     hypothetical segmentation against a reference segmentation for a given
     window size.  The standard method of calculating the window size
-    is performed a window size is not specified.
+    is performed if a window size is not specified.
     
-    Arguments:
-    ref_segments -- An ordered sequence of which section each unit belongs to,
-                    e.g.: [1,1,1,1,1,2,2,2,3,3,3,3,3], for 13 units (e.g.
-                    sentences, paragraphs).  This is the reference segmentation
-                    used to compare a hypothetical segmentation against.
-    hyp_segments -- An ordered sequence of which section each unit belongs to.
-                    This is the hypothetical segmentation that is compared
-                    against the reference segmentation.
-    window_size  -- The size of the window that is slid over the two
-                    segmentations used to count mismatches.
+    :param hypothesis_positions: Hypothesis segmentation section labels
+                                 sequence.
+    :param reference_positions: Reference segmentation section labels sequence.
+    :param window_size: The size of the window that is slid over the two
+                        segmentations used to count mismatches (default is None
+                        and will use the average window size)
+    :param one_minus: Return 1-Pk to make it no longer a penalty-metric.
+    :param convert_from_masses: Convert the segmentations provided from masses
+                                into positions.
+    :type hypothesis_positions: list
+    :type reference_positions: list
+    :type window_size: int
+    :type one_minus: bool
+    :type convert_from_masses: bool
     
+    .. note:: See :func:`segeval.convert_masses_to_positions` for an example of
+              the input format.
     '''
-    if len(ref_segments) != len(hyp_segments):
+    # Convert from masses into positions 
+    if convert_from_masses:
+        reference_positions  = convert_masses_to_positions(reference_positions)
+        hypothesis_positions = convert_masses_to_positions(hypothesis_positions)
+    # Check for input errors
+    if len(reference_positions) != len(hypothesis_positions):
         raise SegmentationMetricError(
                     'Reference and hypothesis segmentations differ in length.')
     # Compute window size to use if unspecified
     if window_size is None:
-        window_size = compute_window_size(ref_segments)
+        window_size = compute_window_size(reference_positions)
     # Create a set of pairs of units from each segmentation to go over using a
     # window
     sum_differences = 0
     # Slide window over and sum the number of varying windows
     measurements = 0
-    for i in xrange(0,len(ref_segments) - (window_size)):
+    for i in xrange(0, len(reference_positions) - (window_size)):
         # Create probe windows with k boundaries inside
-        window_ref = ref_segments[i:i+window_size+1]
-        window_hyp = hyp_segments[i:i+window_size+1]
+        window_ref = reference_positions[i:i+window_size+1]
+        window_hyp = hypothesis_positions[i:i+window_size+1]
         # Probe agreement
         agree_ref = window_ref[0] == window_ref[-1]
         agree_hyp = window_hyp[0] == window_hyp[-1]
@@ -86,27 +99,26 @@ def pk(ref_segments, hyp_segments, window_size=None, one_minus=False):
         return Decimal('1.0') - p_k
 
 
-def pairwise_pk(segs_dict_all, groups=False, one_minus=False):
-    values = list()
-    # Define fnc per group
-    def per_group(group, values):
-        for coder_segs in group.values():
-            coders = coder_segs.keys()
-            for m in range(0,len(coders)):
-                for n in range(m+1,len(coders)):
-                    segs_m = convert_masses_to_positions(
-                                coder_segs[coders[m]])
-                    segs_n = convert_masses_to_positions(
-                                coder_segs[coders[n]])
-                    values.append(Decimal(pk(segs_m,segs_n,
-                                             one_minus=one_minus)))
-                    values.append(Decimal(pk(segs_n,segs_m,
-                                             one_minus=one_minus)))
-    # Parse by groups, or not
-    if groups:
-        for segs_dict_all_g in segs_dict_all.values():
-            per_group(segs_dict_all_g, values)
-    else:
-        per_group(segs_dict_all, values)
-    return mean(values), std(values), var(values)
+def pairwise_pk(dataset_masses, one_minus=False, convert_from_masses=False):
+    '''
+    Calculate mean pairwise segmentation F-Measure.
+    
+    .. seealso:: :func:`pk`
+    .. seealso:: :func:`segeval.compute_pairwise`
+    
+    :param dataset_masses: Segmentation mass dataset (including multiple \
+                           codings).
+    :type dataset_masses: dict
+    
+    :returns: Mean, standard deviation, and variance.
+    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, :class:`decimal.Decimal`
+    '''
+    def pk_wrapper(hypothesis_masses, reference_masses):
+        '''
+        Wrapper for Pk to provide the one_minus parameter.
+        '''
+        return pk(hypothesis_masses, reference_masses, one_minus=one_minus,
+                  convert_from_masses=convert_from_masses)
+    
+    return compute_pairwise(dataset_masses, pk_wrapper, permuted=True)
 

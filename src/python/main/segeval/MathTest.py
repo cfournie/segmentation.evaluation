@@ -1,5 +1,5 @@
 '''
-Tests some general segeval utility functions.
+Tests some math related utility functions.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''

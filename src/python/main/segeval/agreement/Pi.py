@@ -47,6 +47,7 @@ only varies the calculation of :math:`\\text{A}_e`.
 #===============================================================================
 from decimal import Decimal
 from . import observed_agreement
+from .. import compute_mean
 
 
 def scotts_pi(items_masses, return_parts=False):
@@ -150,4 +151,20 @@ def fleiss_pi(items_masses, return_parts=False):
         return A_o, A_e
     else:
         return pi
+
+
+def mean_fleiss_pi(dataset_masses):
+    '''
+    Calculate mean segmentation Fleiss' Pi.
+    
+    .. seealso:: :func:`fleiss_pi`, :func:`segeval.compute_mean`
+    
+    :param dataset_masses: Segmentation mass dataset (including multiple \
+                           codings).
+    :type dataset_masses: dict
+    
+    :returns: Mean, standard deviation, and variance.
+    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, :class:`decimal.Decimal`
+    '''
+    return compute_mean(dataset_masses, fleiss_pi)
 

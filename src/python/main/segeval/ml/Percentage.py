@@ -65,14 +65,17 @@ def percentage(hypothesis_masses, reference_masses):
 
 def pairwise_percentage(dataset_masses):
     '''
-    Calculate mean pairwise segmentation percentage.
+    Calculate mean pairwise segmentation percentage correctness.
+    
+    .. seealso:: :func:`percentage`
+    .. seealso:: :func:`segeval.compute_pairwise`
     
     :param dataset_masses: Segmentation mass dataset (including multiple \
                            codings).
     :type dataset_masses: dict
     
-    :returns: Mean, standard deviation, and variance of segmentation percentage.
-    :rtype: :func:`float`, :func:`float`, :func:`float`
+    :returns: Mean, standard deviation, and variance.
+    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, :class:`decimal.Decimal`
     '''
     return compute_pairwise(dataset_masses, percentage, permuted=False)
 

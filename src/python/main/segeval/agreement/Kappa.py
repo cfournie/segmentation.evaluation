@@ -45,6 +45,7 @@ only varies the calculation of :math:`\\text{A}_e`.
 #===============================================================================
 from decimal import Decimal
 from . import observed_agreement
+from .. import compute_mean
 
 
 def cohen_kappa(item_masses, return_parts=False):
@@ -160,4 +161,20 @@ def fleiss_kappa(items_masses, return_parts=False):
         return A_o, A_e
     else:
         return kappa
+
+
+def mean_fleiss_kappa(dataset_masses):
+    '''
+    Calculate mean segmentation Fleiss' Kappa.
+    
+    .. seealso:: :func:`fleiss_kappa`, :func:`segeval.compute_mean`
+    
+    :param dataset_masses: Segmentation mass dataset (including multiple \
+                           codings).
+    :type dataset_masses: dict
+    
+    :returns: Mean, standard deviation, and variance.
+    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, :class:`decimal.Decimal`
+    '''
+    return compute_mean(dataset_masses, fleiss_kappa)
 

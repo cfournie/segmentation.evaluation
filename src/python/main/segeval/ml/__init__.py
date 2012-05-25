@@ -9,7 +9,7 @@ learning metrics that have been adapted for use in segmentation, including:
     segmentation evaluation.  Instead, use  the segmentation similarity
     metric [FournierInkpen2012]_ implemented in
     :func:`segeval.similarity.SegmentationSimilarity.similarity` and the
-    associated inter-coder agreement coefficients
+    associated inter-coder agreement coefficients in
     :mod:`segeval.agreement`.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
@@ -140,12 +140,12 @@ def confusionmatrix(tp, fp, fn, tn=None):
     Creates 2D tuples representing a confusion matrix.
     
     :param tp: Number of true positives.
-    :type tp: int
     :param fp: Number of false positives.
-    :type fp: int
     :param fn: Number of false negatives.
-    :type fn: int
     :param tn: Number of true negatives.
+    :type tp: int
+    :type fp: int
+    :type fn: int
     :type tn: int
     
     :returns: 2D tuples containing a confusion matrix.
@@ -164,12 +164,12 @@ def cf_tostring(tp, fp, fn, tn=None):
     Creates a string representation of a confusion matrix.
     
     :param tp: Number of true positives.
-    :type tp: int
     :param fp: Number of false positives.
-    :type fp: int
     :param fn: Number of false negatives.
-    :type fn: int
     :param tn: Number of true negatives.
+    :type tp: int
+    :type fp: int
+    :type fn: int
     :type tn: int
     
     :returns: String representation of a confusion matrix.

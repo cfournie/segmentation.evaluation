@@ -1,17 +1,6 @@
 '''
 Test data for unit tests that has been selected from
-[KazantsevaSzpakowicz2012]_, or contrived.
-
-.. [KazantsevaSzpakowicz2012] Kazantseva, A. & Szpakowicz, S. (2012), **Topical\
- segmentation: a study of human performance**. Proceedings of Human Language \
-Technologies: The 2012 Annual Conference of the North American Chapter of the \
-Association for Computational Linguistics. (HLT '12). Association for \
-Computational Linguistics.
-
-.. [Collins1868] Wilkie Collins. 1868. **The Moonstone**. Tinsley Brothers.
-
-.. [Hearst1997] Marti A. Hearst. 1997. **TextTiling: Segmenting Text into \
-Multi-paragraph Subtopic Passages**. Computational Linguistics, 23(1):33-64.
+[KazantsevaSzpakowicz2012]_, [Hearst1997]_, or contrived.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''

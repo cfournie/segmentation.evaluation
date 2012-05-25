@@ -12,6 +12,9 @@ Additionally, inter-coder agreement coefficients that are based upon S for both 
 * Kappa; and
 * Pi.
 
+:Release: |version|
+:Date: |today|
+
 
 Installation
 ============
@@ -88,6 +91,8 @@ References
 
 .. [Cohen1960] Jacob Cohen. 1960. **A Coefficient of Agreement for Nominal \
     Scales**. Educational and Psychological Measurement, 20(1):37-46.
+
+.. [Collins1868] Wilkie Collins. 1868. **The Moonstone**. Tinsley Brothers.
     
 .. [DaviesFleiss1982] Mark Davies and Joseph L. Fleiss. 1982. **Measuring \
     agreement for multinomial data**. Biometrics, 38(4):1047-1051.
@@ -103,6 +108,12 @@ References
 
 .. [Hearst1997] Marti A. Hearst. 1997. **TextTiling: Segmenting Text into \
     Multi-paragraph Subtopic Passages**. Computational Linguistics, 23(1):33-64.
+
+.. [KazantsevaSzpakowicz2012] Kazantseva, A. & Szpakowicz, S. (2012), **Topical\
+    segmentation: a study of human performance**. Proceedings of Human Language \
+    Technologies: The 2012 Annual Conference of the North American Chapter of the \
+    Association for Computational Linguistics. (HLT '12). Association for \
+    Computational Linguistics.
 
 .. [LamprierEtAl2007] Sylvain Lamprier, Tassadit Amghar, Bernard Levrat, and \
     Frederic Saubion 2007. **On evaluation methodologies for text \

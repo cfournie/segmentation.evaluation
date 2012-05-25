@@ -101,7 +101,8 @@ def convert_masses_to_positions(masses):
 
 def compute_pairwise(dataset_masses, fnc_metric, permuted=False):
     '''
-    Calculate mean pairwise segmentation metric values.
+    Calculate mean pairwise segmentation metric values for functions that take
+    pairs of segmentations.
     
     :param dataset_masses: Segmentation mass dataset (including multiple \
                            codings).
@@ -111,18 +112,20 @@ def compute_pairwise(dataset_masses, fnc_metric, permuted=False):
     :type fnc_metric:     func
     :type permuted:       bool
     
-    :returns: Mean, standard deviation, and variance of segmentation metric.
-    :rtype: :func:`float`, :func:`float`, :func:`float`
+    :returns: Mean, standard deviation, and variance of a segmentation metric.
+    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
     values = list()
     # Define fnc per group
     def __per_group__(inner_dataset_masses):
         '''
-        Calculate pairwise segmentation F-Measure for each group and append to
-        output.
+        Recurse through a dict to find levels where a metric can be calculated.
         
         
+        :param inner_dataset_masses: Segmentation mass dataset (including \
+                                     multiple codings).
+        :type inner_dataset_masses: dict
         '''
         for coder_masses in inner_dataset_masses.values():
             if len(coder_masses.values()) > 0 and \
@@ -136,6 +139,52 @@ def compute_pairwise(dataset_masses, fnc_metric, permuted=False):
                         values.append(Decimal(fnc_metric(segs_m, segs_n)))
                         if permuted:
                             values.append(Decimal(fnc_metric(segs_n, segs_m)))
+            else:
+                # Else, recurse deeper
+                __per_group__(coder_masses)
+    # Parse
+    __per_group__(dataset_masses)
+    # Return mean, std dev, and variance
+    return mean(values), std(values), var(values)
+
+
+def compute_mean(dataset_masses, fnc_metric):
+    '''
+    Calculate mean segmentation metric values for functions that take
+    dicts of items and their segmentations per coder (``items_masses``).
+    
+    .. seealso:: :func:`segeval.agreement.observed_agreement` for an example of\
+     ``items_masses``.
+    
+    :param dataset_masses: Segmentation mass dataset (including multiple \
+                           codings).
+    :param fnc_metric:     Metric function to call on segmentation mass pairs.
+    :type dataset_masses: dict
+    :type fnc_metric:     func
+    
+    :returns: Mean, standard deviation, and variance of a segmentation metric.
+    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
+            :class:`decimal.Decimal`
+    '''
+    # pylint: disable=C0103
+    values = list()
+    # Define fnc per group
+    def __per_group__(inner_dataset_masses):
+        '''
+        Recurse through a dict to find levels where a metric can be calculated.
+        
+        
+        :param inner_dataset_masses: Segmentation mass dataset (including \
+                                     multiple codings).
+        :type inner_dataset_masses: dict
+        '''
+        for coder_masses in inner_dataset_masses.values():
+            if len(coder_masses.values()) > 0 and \
+                isinstance(coder_masses.values()[0], dict) and \
+                len(coder_masses.values()[0].values()) > 0 and \
+                isinstance(coder_masses.values()[0].values()[0], list):
+                # If is a group
+                values.append(fnc_metric(coder_masses))
             else:
                 # Else, recurse deeper
                 __per_group__(coder_masses)
@@ -165,15 +214,15 @@ class SegmentationMetricError(Exception):
         Exception.__init__(self, message)
 
 
-#if __name__ == '__main__':
-#    import argparse
-#    parser = argparse.ArgumentParser(description='Process some integers.')
-#    parser.add_argument('integers', metavar='N', type=int, nargs='+',
-#                       help='an integer for the accumulator')
-#    parser.add_argument('--sum', dest='accumulate', action='store_const',
-#                       const=sum, default=max,
-#                       help='sum the integers (default: find the max)')
-#    
-#    args = parser.parse_args()
-#    print args.accumulate(args.integers)
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('integers', metavar='N', type=int, nargs='+',
+                       help='an integer for the accumulator')
+    parser.add_argument('--sum', dest='accumulate', action='store_const',
+                       const=sum, default=max,
+                       help='sum the integers (default: find the max)')
+    
+    args = parser.parse_args()
+    print args.accumulate(args.integers)
 

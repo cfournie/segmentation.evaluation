@@ -10,7 +10,7 @@ evaluation metrics including:
     segmentation evaluation.  Instead, use  the segmentation similarity
     metric [FournierInkpen2012]_ implemented in
     :func:`segeval.similarity.SegmentationSimilarity.similarity` and the
-    associated inter-coder agreement coefficients
+    associated inter-coder agreement coefficients in
     :mod:`segeval.agreement`.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
