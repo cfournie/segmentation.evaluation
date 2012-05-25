@@ -3,3 +3,4 @@
 *.pdf
 *.brf
 *.gz
+doc/build/**
