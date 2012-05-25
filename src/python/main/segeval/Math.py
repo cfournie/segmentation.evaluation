@@ -1,7 +1,7 @@
 '''
-Utility functions for the package.
+Tests some general segeval utility functions.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2012, Chris Fournier
@@ -29,36 +29,50 @@ Utility functions for the package.
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
-import os
+from decimal import Decimal
 
 
-ROOT_PACKAGE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                '../'))
-
-
-def default_load_tests(cur_file, loader, tests):
+def mean(values):
     '''
-    Default functionality for module load_tests functions which 
-    are contained in each module's __init__.py file)
+    Calculates the mean of a list of numeric values.
     
-    :param cur_file: __file__ from the calling module.
-    :param loader: Test loader.
-    :param tests: Test suite.
-    :type cur_file: str
-    :type loader: str
-    :type tests: unittest.TestSuite
+    :param values: List of numeric values.
+    :type values: list
     
-    :returns: A modified test suite.
-    :rtype: :class:`unittest.TestSuite`
-    
-    .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
-    unittest.html#load-tests-protocol>`_.
+    :returns: Mean.
+    :rtype: :class:`decimal.Decimal`
     '''
-    pattern = '*Test.py'
-    cur_dir = os.path.split(cur_file)[0]
-    discovered_tests = loader.discover(cur_dir,
-                                       pattern=pattern,
-                                       top_level_dir=ROOT_PACKAGE_DIR)
-    tests.addTests(discovered_tests)
-    return tests
+    summation = Decimal(0)
+    for value in values:
+        summation += value
+    return summation / len(values)
+    
+    
+def var(values):
+    '''
+    Calculates the population variance of a list of numeric values.
+    
+    :param values: List of numeric values.
+    :type values: list
+    
+    :returns: Mean.
+    :rtype: :class:`decimal.Decimal`
+    '''
+    mean_value = mean(values)
+    summation = Decimal(0)
+    for value in values:
+        summation += (value - mean_value) ** 2
+    return summation / len(values)
+
+def std(values):
+    '''
+    Calculates the population standard deviation of a list of numeric values.
+    
+    :param values: List of numeric values.
+    :type values: list
+    
+    :returns: Mean.
+    :rtype: :class:`decimal.Decimal`
+    '''
+    return var(values).sqrt()
 

@@ -36,8 +36,9 @@ To use S, see the :mod:`segeval.similarity` module.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 import os
-from numpy import mean, std, var
+from decimal import Decimal
 from collections import Counter
+from .Math import mean, std, var
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                         os.sep.join(['..'] * 1)))
@@ -132,9 +133,9 @@ def compute_pairwise(dataset_masses, fnc_metric, permuted=False):
                     for n in range(m+1, len(coders)):
                         segs_m = coder_masses[coders[m]]
                         segs_n = coder_masses[coders[n]]
-                        values.append(float(fnc_metric(segs_m, segs_n)))
+                        values.append(Decimal(fnc_metric(segs_m, segs_n)))
                         if permuted:
-                            values.append(float(fnc_metric(segs_n, segs_m)))
+                            values.append(Decimal(fnc_metric(segs_n, segs_m)))
             else:
                 # Else, recurse deeper
                 __per_group__(coder_masses)
@@ -162,4 +163,17 @@ class SegmentationMetricError(Exception):
         :type message: str
         '''
         Exception.__init__(self, message)
+
+
+#if __name__ == '__main__':
+#    import argparse
+#    parser = argparse.ArgumentParser(description='Process some integers.')
+#    parser.add_argument('integers', metavar='N', type=int, nargs='+',
+#                       help='an integer for the accumulator')
+#    parser.add_argument('--sum', dest='accumulate', action='store_const',
+#                       const=sum, default=max,
+#                       help='sum the integers (default: find the max)')
+#    
+#    args = parser.parse_args()
+#    print args.accumulate(args.integers)
 

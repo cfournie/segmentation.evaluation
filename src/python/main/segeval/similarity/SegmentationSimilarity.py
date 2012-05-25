@@ -31,9 +31,9 @@ Segmentation similarity evaluation metric functions.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
-from numpy import mean, std, var
 from .distance.SingleBoundaryDistance import linear_edit_distance
 from .. import SegmentationMetricError
+from ..Math import mean, std, var
 
 
 def similarity(segs_a, segs_b, n=2, weight=(1, 1), scale_transpositions=True,

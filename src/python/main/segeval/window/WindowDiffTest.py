@@ -108,15 +108,15 @@ class TestWindowDiff(unittest.TestCase):
     
     def test_Kazantseva2012_g5(self):
         self.assertEqual(pairwise_windiff(KAZANTSEVA2012_G5),
-                         (0.36045062372598652,
-                          0.16741031890126951,
-                          0.028026214874624755))
+                         (Decimal('0.3604506237259865251208907685'),
+                          Decimal('0.1674103189012695088955568781'),
+                          Decimal('0.02802621487462475498810473915')))
     
     def test_Kazantseva2012_g2(self):
         self.assertEqual(pairwise_windiff(KAZANTSEVA2012_G2),
-                         (0.25455124234555987,
-                          0.12277644444889446,
-                          0.015074055311512468))
+                         (Decimal('0.254551242345560022664175451'),
+                          Decimal('0.1227764444488944596833784804'),
+                          Decimal('0.0150740553115124671839593874')))
     
     def test_large_disagreement(self):
         self.assertEqual(pairwise_windiff(LARGE_DISAGREEMENT),

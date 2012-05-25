@@ -48,5 +48,5 @@ setup(name='segeval',
                 'segeval.similarity.distance',
                 'segeval.window'],
       
-      requires=['numpy (>=1.0.3)'])
+      requires=[])
     

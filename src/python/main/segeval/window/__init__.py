@@ -41,7 +41,8 @@ evaluation metrics including:
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
-from numpy import mean, std, var, average
+from decimal import Decimal
+from ..Math import mean, std, var
 from .. import convert_positions_to_masses
 
 
@@ -83,9 +84,9 @@ def compute_window_size_from_masses(coder_masses, fnc_round=round):
     # Recurse and list all masses
     __list_coder_masses__(coder_masses)
     # Convert to floats
-    masses = [float(mass) for mass in masses]
+    masses = [Decimal(mass) for mass in masses]
     # Calculate
-    avg = average(masses) / 2.0
+    avg = mean(masses) / 2.0
     window_size = int(fnc_round(avg))
     return window_size if window_size > 1 else 2
     
@@ -107,8 +108,8 @@ def compute_window_size(reference_segments, fnc_round=round):
     :rtype: int
     '''
     masses = convert_positions_to_masses(reference_segments)
-    masses = [float(mass) for mass in masses]
-    avg = average(masses) / 2.0
+    masses = [Decimal(mass) for mass in masses]
+    avg = mean(masses) / Decimal(2)
     window_size = int(fnc_round(avg))
     return window_size if window_size > 1 else 2
 

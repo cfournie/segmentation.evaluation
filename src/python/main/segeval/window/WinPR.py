@@ -30,9 +30,10 @@ and Inkpen (2012).
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
-from numpy import mean, std, var
+from decimal import Decimal
 from .WindowDiff import compute_window_size
 from ..ml import fmeasure
+from ..Math import mean, std, var
 from .. import SegmentationMetricError
 from .. import convert_masses_to_positions
 
@@ -122,8 +123,8 @@ def pairwise_winpr(segs_dict_all, groups=False):
                     f_1mn = fmeasure(tp,fp,fn)
                     tp,fp,fn = win_pr(segs_n,segs_m)[0:3]
                     f_1nm = fmeasure(tp,fp,fn)
-                    values.append(float(f_1mn))
-                    values.append(float(f_1nm))
+                    values.append(Decimal(f_1mn))
+                    values.append(Decimal(f_1nm))
     # Parse by groups, or not
     if groups:
         for segs_dict_all_g in segs_dict_all.values():
@@ -131,5 +132,5 @@ def pairwise_winpr(segs_dict_all, groups=False):
     else:
         per_group(segs_dict_all, values)
     # Return mean, std dev, and variance
-    return mean(values),std(values),var(values)
+    return mean(values), std(values), var(values)
 

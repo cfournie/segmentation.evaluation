@@ -33,8 +33,8 @@ Implementation of the WindowDiff segmentation evaluation metric described in:
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
-from numpy import mean, std, var
 from . import compute_window_size
+from ..Math import mean, std, var
 from .. import SegmentationMetricError
 from .. import convert_masses_to_positions
 
@@ -126,12 +126,12 @@ def pairwise_windiff(segs_dict_all, groups=False, one_minus=False,
                                 coder_segs[coders[m]])
                     segs_n = convert_masses_to_positions(
                                 coder_segs[coders[n]])
-                    values.append(float(window_diff(segs_m, segs_n,
+                    values.append(Decimal(window_diff(segs_m, segs_n,
                                                     one_minus=one_minus,
                                                     window_size=window_size,
                                                     fixed=fixed)))
                     if permute:
-                        values.append(float(window_diff(segs_n, segs_m,
+                        values.append(Decimal(window_diff(segs_n, segs_m,
                                                         one_minus=one_minus,
                                                         window_size=\
                                                             window_size,

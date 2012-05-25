@@ -122,21 +122,21 @@ class TestWinPR(unittest.TestCase):
     
     def test_kazantseva2012_g5(self):
         self.assertEqual(pairwise_winpr(KAZANTSEVA2012_G5),
-                         (0.5666704244829246,
-                          0.12888939175854155,
-                          0.016612475307886801))
+                         (Decimal('0.5666704244829244829244829242'),
+                          Decimal('0.1288893917585415321352486586'),
+                          Decimal('0.01661247530788679382562351445')))
     
     def test_kazantseva2012_g2(self):
         self.assertEqual(pairwise_winpr(KAZANTSEVA2012_G2),
-                         (0.69788839687219373,
-                          0.10885799550018138,
-                          0.01185006318431751))
+                         (Decimal('0.697888396872193480081486543'),
+                          Decimal('0.1088579955001813616115484223'),
+                          Decimal('0.01185006318431750557298765469')))
     
     def test_large_disagreement(self):
         self.assertEqual(pairwise_winpr(LARGE_DISAGREEMENT),
-                         (0.25736714975845409,
-                          0.15354697430405589,
-                          0.023576673317930404))
+                         (Decimal('0.2573671497584541062801932369'),
+                          Decimal('0.1535469743040559128336768347'),
+                          Decimal('0.02357667331793040677728768466')))
     
     def test_complete_agreement(self):
         self.assertEqual(pairwise_winpr(COMPLETE_AGREEMENT),

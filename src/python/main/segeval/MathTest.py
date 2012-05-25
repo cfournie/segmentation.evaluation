@@ -1,7 +1,7 @@
 '''
-Utility functions for the package.
+Tests some general segeval utility functions.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2012, Chris Fournier
@@ -29,36 +29,31 @@ Utility functions for the package.
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
-import os
+import unittest
+from .Math import mean, std, var
 
 
-ROOT_PACKAGE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                '../'))
-
-
-def default_load_tests(cur_file, loader, tests):
+class TestMath(unittest.TestCase):
     '''
-    Default functionality for module load_tests functions which 
-    are contained in each module's __init__.py file)
-    
-    :param cur_file: __file__ from the calling module.
-    :param loader: Test loader.
-    :param tests: Test suite.
-    :type cur_file: str
-    :type loader: str
-    :type tests: unittest.TestSuite
-    
-    :returns: A modified test suite.
-    :rtype: :class:`unittest.TestSuite`
-    
-    .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
-    unittest.html#load-tests-protocol>`_.
+    Math utlity function tests.
     '''
-    pattern = '*Test.py'
-    cur_dir = os.path.split(cur_file)[0]
-    discovered_tests = loader.discover(cur_dir,
-                                       pattern=pattern,
-                                       top_level_dir=ROOT_PACKAGE_DIR)
-    tests.addTests(discovered_tests)
-    return tests
-
+    #pylint: disable=R0904,C0103
+    
+    def test_mean(self):
+        '''
+        Tests population mean.
+        '''
+        self.assertEqual(5, mean([2, 4, 4, 4, 5, 5, 7, 9]))
+    
+    def test_std(self):
+        '''
+        Tests population mean.
+        '''
+        self.assertEqual(2, std([2, 4, 4, 4, 5, 5, 7, 9]))
+    
+    def test_var(self):
+        '''
+        Tests population mean.
+        '''
+        self.assertEqual(4, var([2, 4, 4, 4, 5, 5, 7, 9]))
+        

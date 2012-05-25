@@ -31,8 +31,8 @@ Implementation of the Pk segmentation evaluation metric described in:
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
-from numpy import mean, std, var
 from . import compute_window_size
+from ..Math import mean, std, var
 from .. import SegmentationMetricError
 from .. import convert_masses_to_positions
 
@@ -98,15 +98,15 @@ def pairwise_pk(segs_dict_all, groups=False, one_minus=False):
                                 coder_segs[coders[m]])
                     segs_n = convert_masses_to_positions(
                                 coder_segs[coders[n]])
-                    values.append(float(pk(segs_m,segs_n,
-                                           one_minus=one_minus)))
-                    values.append(float(pk(segs_n,segs_m,
-                                           one_minus=one_minus)))
+                    values.append(Decimal(pk(segs_m,segs_n,
+                                             one_minus=one_minus)))
+                    values.append(Decimal(pk(segs_n,segs_m,
+                                             one_minus=one_minus)))
     # Parse by groups, or not
     if groups:
         for segs_dict_all_g in segs_dict_all.values():
             per_group(segs_dict_all_g, values)
     else:
         per_group(segs_dict_all, values)
-    return mean(values),std(values),var(values)
+    return mean(values), std(values), var(values)
 

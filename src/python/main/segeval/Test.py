@@ -35,7 +35,7 @@ from . import convert_positions_to_masses, convert_masses_to_positions
 
 class TestSegeval(unittest.TestCase):
     '''
-    segeval utlity function tests.
+    segeval utility function tests.
     '''
     #pylint: disable=R0904,C0103
     

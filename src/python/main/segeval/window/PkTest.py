@@ -93,15 +93,16 @@ class TestPk(unittest.TestCase):
     
     def test_Kazantseva2012_g5(self):
         self.assertEqual(pairwise_pk(KAZANTSEVA2012_G5),
-                         (0.35530058282396698,
-                          0.11001760846099215,
-                          0.012103874171476171))
+                         (Decimal('0.3553005828239669303205984462'),
+                          Decimal('0.1100176084609921563234047476'),
+                          Decimal('0.01210387417147617290343989768')))
     
     def test_Kazantseva2012_g2(self):
         self.assertEqual(pairwise_pk(KAZANTSEVA2012_G2),
-                         (0.28822569237763263,
-                          0.14543956567879662,
-                          0.021152667264836993))
+                         (Decimal('0.2882256923776327507173609773'),
+                          Decimal('0.1454395656787966169084191446'),
+                          Decimal('0.02115266726483699483402909757'))
+)
     
     def test_large_disagreement(self):
         self.assertEqual(pairwise_pk(LARGE_DISAGREEMENT),
