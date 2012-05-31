@@ -43,6 +43,7 @@ class TestMain(unittest.TestCase):
     test_data_dir = os.path.join(os.path.split(__file__)[0], 'data')
     
     print_output = True
+    test_help    = False
 
     def test_load_files(self):
         '''
@@ -84,11 +85,11 @@ class TestMain(unittest.TestCase):
                 print main(argv)
 
 
-    def test_help(self):
+    def test_help_output(self):
         '''
         Test the help output.
         '''
         argv = ['wd', '-h']
-        if self.print_output:
-            print main(argv)
+        if self.print_output and self.test_help:
+            main(argv)
 
