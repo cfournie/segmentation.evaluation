@@ -128,7 +128,7 @@ def window_diff(hypothesis_positions, reference_positions, window_size=None,
 
 
 def pairwise_window_diff(dataset_masses, one_minus=False,
-                         lamprier_et_al_2007_fix=True,
+                         lamprier_et_al_2007_fix=False,
                          convert_from_masses=True):
     '''
     Calculate mean pairwise segmentation F-Measure.
@@ -170,8 +170,10 @@ def parse(args):
     
     values = load_file(args)[0]
     one_minus = args['oneminus']
+    lamprier_et_al_2007_fix = args['lamprier_et_al_2007']
     
-    mean, std, var, stderr = pairwise_window_diff(values, one_minus)
+    mean, std, var, stderr = pairwise_window_diff(values, one_minus, 
+                                                  lamprier_et_al_2007_fix)
     name = SHORT_NAME
     
     if one_minus:
@@ -189,5 +191,15 @@ def create_parser(subparsers):
                                    help=OUTPUT_NAME)
     parser_add_file_support(parser)
     parser_one_minus_support(parser)
+    
+    parser.add_argument('--lamprier_et_al_2007',
+                        default=False,
+                        action='store_true',
+                        help='Applies the phantom-boundary fix from Lamprier \
+                            et al. (2007) to properly count errors at the \
+                            beginning and end of a segmentation; default is \
+                            false to remain canon with existing reported \
+                            values.')
+    
     parser.set_defaults(func=parse)
 
