@@ -188,7 +188,7 @@ FILETYPE_TSV  = 'tsv'
 FILETYPE_JSON = 'json'
 
 EXT = 'ext'
-FNC = 'ext'
+FNC = 'fnc'
 FILETYPES           = {FILETYPE_TSV  : {EXT : ['.tsv', '.csv'],
                                         FNC : input_linear_mass_tsv},
                        FILETYPE_JSON : {EXT : ['.json', '.jsn'],

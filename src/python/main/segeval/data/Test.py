@@ -32,7 +32,7 @@ Tests the data i/o functions and package.
 import os
 import unittest
 from . import load_nested_folders_dict, input_linear_mass_tsv, \
-    input_linear_positions_tsv, input_linear_mass_json
+    input_linear_positions_tsv, input_linear_mass_json, FILETYPE_JSON
 from .Samples import HEARST_1997
 
 
@@ -49,8 +49,7 @@ class TestData(unittest.TestCase):
         Test nested folder dict construction.
         '''
         data = load_nested_folders_dict(os.path.join(self.test_data_dir, '..'),
-                                        input_linear_mass_json,
-                                        allowable_extensions=['.json'])
+                                        FILETYPE_JSON)
         self.assertEqual(data['data']['hearst1997'], HEARST_1997)
     
     def test_input_linear_mass_tsv(self):
