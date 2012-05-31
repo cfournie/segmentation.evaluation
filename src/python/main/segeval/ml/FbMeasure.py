@@ -254,6 +254,22 @@ def parse(args):
     return render_mean_values(name, mean, std, var, stderr)
 
 
+def parser_beta_support(parser):
+    '''
+    Add support for the "beta" parameter to allow for F_beta Measure calculation
+    
+    :param parser: Argument parser
+    :type parser: argparse.ArgumentParser
+    '''
+    parser.add_argument('-b', '--beta',
+                        type=float,
+                        default=1.0,
+                        help='Beta, the ratio of recall to precision in '+\
+                            'F_beta measure; default is 1 (equal weight), '+\
+                            '2 weights recall higher than precision, and '+\
+                            '0.5 weights precision more than recall.')
+
+
 def create_parser(subparsers):
     '''
     Setup a command line parser for this module's metric.
@@ -263,15 +279,7 @@ def create_parser(subparsers):
                                    help=OUTPUT_NAME_F)
     parser_add_file_support(parser_f)
     parser_f.set_defaults(func=parse)
-    
-    parser_f.add_argument('-b', '--beta',
-                          type=float,
-                          default=1.0,
-                          help='Beta, the ratio of recall to precision in '+\
-                            'F_beta measure; default is 1 (equal weight), '+\
-                            '2 weights recall higher than precision, and '+\
-                            '0.5 weights precision more than recall.')
-
+    parser_beta_support(parser_f)
     parser = subparsers.add_parser('r',
                                    help=OUTPUT_NAME_R)
     parser_add_file_support(parser)

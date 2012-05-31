@@ -1,10 +1,10 @@
 '''
-Implementation of the WindowDiff segmentation evaluation metric described in:
+Implementation of the WindowDiff segmentation evaluation metric described in
+[PevznerHearst2002]_ with an optional modification to fix incorrect error
+counting at the beginning and end of segmentations provided by 
+[LamprierEtAl2007]_.
 
-
-
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -36,6 +36,23 @@ from decimal import Decimal
 from . import compute_window_size, parser_one_minus_support
 from .. import SegmentationMetricError, compute_pairwise, \
     convert_masses_to_positions
+
+
+def create_paired_window(hypothesis_positions, reference_positions, window_size,
+                  lamprier_et_al_2007_fix):
+    '''
+    Create a set of pairs of units from each segmentation to go over using a
+    window.
+    '''
+    phantom_size = window_size - 1
+    phantom_size = 1 if phantom_size <= 0 else phantom_size
+    if lamprier_et_al_2007_fix == False:
+        units_ref_hyp = zip(reference_positions, hypothesis_positions)
+    else:
+        phantom = [0] * phantom_size
+        units_ref_hyp = zip(phantom + reference_positions + phantom,
+                            phantom + hypothesis_positions + phantom)
+    return units_ref_hyp, phantom_size
 
 
 def window_diff(hypothesis_positions, reference_positions, window_size=None,
@@ -73,7 +90,7 @@ def window_diff(hypothesis_positions, reference_positions, window_size=None,
     .. note:: See :func:`segeval.convert_masses_to_positions` for an example of
               the input format.
     '''
-    # pylint: disable=C0103,R0913
+    # pylint: disable=C0103,R0913,R0914
     # Convert from masses into positions 
     if convert_from_masses:
         reference_positions  = convert_masses_to_positions(reference_positions)
@@ -87,17 +104,12 @@ def window_diff(hypothesis_positions, reference_positions, window_size=None,
         window_size = compute_window_size(reference_positions)
     # Create a set of pairs of units from each segmentation to go over using a
     # window
-    sum_differences = 0
-    units_ref_hyp = None
-    phantom_size = window_size - 1
-    phantom_size = 1 if phantom_size <= 0 else phantom_size
-    if lamprier_et_al_2007_fix == False:
-        units_ref_hyp = zip(reference_positions, hypothesis_positions)
-    else:
-        phantom = [0] * phantom_size
-        units_ref_hyp = zip(phantom + reference_positions + phantom,
-                            phantom + hypothesis_positions + phantom)
+    units_ref_hyp, phantom_size = create_paired_window(hypothesis_positions,
+                                                       reference_positions,
+                                                       window_size,
+                                                       lamprier_et_al_2007_fix)
     # Slide window over and sum the number of varying windows
+    sum_differences = 0
     for i in xrange(0, len(units_ref_hyp) - window_size + 1):
         window = units_ref_hyp[i:i+window_size]
         ref_boundaries = 0
@@ -129,6 +141,7 @@ def window_diff(hypothesis_positions, reference_positions, window_size=None,
 
 def pairwise_window_diff(dataset_masses, one_minus=False,
                          lamprier_et_al_2007_fix=False,
+                         window_size=None,
                          convert_from_masses=True):
     '''
     Calculate mean pairwise segmentation F-Measure.
@@ -150,7 +163,7 @@ def pairwise_window_diff(dataset_masses, one_minus=False,
         Wrapper to provide parameters.
         '''
         return window_diff(hypothesis_masses, reference_masses,
-                           one_minus=one_minus,
+                           window_size=window_size, one_minus=one_minus,
                            lamprier_et_al_2007_fix=lamprier_et_al_2007_fix,
                            convert_from_masses=convert_from_masses)
     

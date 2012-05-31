@@ -87,7 +87,7 @@ class TestFbMeasure(unittest.TestCase):
     def test_translated_boundary(self):
         '''
         Test whether 2/3 total segments participate in mis-alignment produces
-        0.33.
+        0.5.
         '''
         # pylint: disable=C0324,C0103
         a = convert_positions_to_masses([1,1,1,1,1,2,2,2,3,3,3,3,3])
@@ -99,7 +99,7 @@ class TestFbMeasure(unittest.TestCase):
     
     def test_extra_boundary(self):
         '''
-        Test whether 1/3 segments that are non-existent produces 0.66.
+        Test whether 1/3 segments that are non-existent produces 0.8.
         '''
         # pylint: disable=C0324,C0103
         a = convert_positions_to_masses([1,1,1,1,1,2,2,2,3,3,3,3,3])

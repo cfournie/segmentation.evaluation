@@ -1,8 +1,7 @@
 '''
 Tests the WinPR evaluation metric.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -32,115 +31,168 @@ Tests the WinPR evaluation metric.
 #===============================================================================
 import unittest
 from decimal import Decimal
-from .WinPR import win_pr, pairwise_winpr
+from .WinPR import pairwise_win_pr, win_pr, win_pr_f
 from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
 
 
 class TestWinPR(unittest.TestCase):
+    '''
+    Test WinPR.
+    '''
     # pylint: disable=R0904,C0324
 
     def test_identical(self):
+        '''
+        Test whether identical segmentations produce 1.0.
+        '''
         segs_a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         segs_b = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         self.assertEqual(win_pr(segs_a, segs_b),
                          (4, 0, 0, 22) )
-        self.assertEqual(win_pr(segs_a, segs_b, return_fmeasure=True),
+        self.assertEqual(win_pr_f(segs_a, segs_b),
                          Decimal('1') )
 
     def test_no_boundaries(self):
-        segs_a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
-        segs_b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        '''
+        Test whether no segments versus some segments produce 0.6667.
+        '''
+        segs_a = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        segs_b = [1,1,1,1,1,1,1,1,1,1,1,1,1]
         self.assertEqual(win_pr(segs_a, segs_b),
                          (12, 12, 0, 67) )
-        self.assertEqual(win_pr(segs_a, segs_b, return_fmeasure=True),
+        self.assertEqual(win_pr_f(segs_a, segs_b),
                          Decimal('0.6666666666666666666666666667') )
         self.assertEqual(win_pr(segs_b, segs_a),
                          (2, 0, 2, 22) )
-        self.assertEqual(win_pr(segs_b, segs_a, return_fmeasure=True),
+        self.assertEqual(win_pr_f(segs_b, segs_a),
                          Decimal('0.6666666666666666666666666667') )
 
     def test_all_boundaries(self):
-        segs_a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-        segs_b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        '''
+        Test whether all segments versus some segments produces 0.4444.
+        '''
+        segs_a = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        segs_b = [1,2,3,4,5,6,7,8,9,10,11,12,13]
         self.assertEqual(win_pr(segs_a, segs_b),
                          (4, 0, 10, 12) )
-        self.assertEqual(win_pr(segs_a, segs_b, return_fmeasure=True),
+        self.assertEqual(win_pr_f(segs_a, segs_b),
                          Decimal('0.4444444444444444444444444444') )
         self.assertEqual(win_pr(segs_b, segs_a),
                          (4, 10, 0, 12) )
-        self.assertEqual(win_pr(segs_b, segs_a, return_fmeasure=True),
+        self.assertEqual(win_pr_f(segs_b, segs_a),
                          Decimal('0.4444444444444444444444444444') )
 
     def test_all_and_no_boundaries(self):
-        segs_a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-        segs_b = [1,1,1,1,1,1,1,1,1,1,1,1,1]
+        '''
+        Test whether all segments versus no segments produces 0.25.
+        '''
+        segs_a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
+        segs_b = [1,2,3,4,5,6,7,8,9,10,11,12,13]
         self.assertEqual(win_pr(segs_a, segs_b),
                          (2, 0, 12, 12) )
-        self.assertEqual(win_pr(segs_a, segs_b, return_fmeasure=True),
+        self.assertEqual(win_pr_f(segs_a, segs_b),
                          Decimal('0.25') )
         self.assertEqual(win_pr(segs_b, segs_a),
                          (12, 72, 0, 7) )
-        self.assertEqual(win_pr(segs_b, segs_a, return_fmeasure=True),
+        self.assertEqual(win_pr_f(segs_b, segs_a),
                          Decimal('0.25') )
 
     def test_translated_boundary(self):
+        '''
+        Test whether 2/3 total segments participate in mis-alignment produces
+        0.75.
+        '''
         segs_a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         segs_b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         self.assertEqual(win_pr(segs_a, segs_b),
                          (3, 1, 1, 21) )
-        self.assertEqual(win_pr(segs_a, segs_b, return_fmeasure=True),
+        self.assertEqual(win_pr_f(segs_a, segs_b),
                          Decimal('0.75') )
         self.assertEqual(win_pr(segs_b, segs_a),
                          (3, 1, 1, 21) )
-        self.assertEqual(win_pr(segs_b, segs_a, return_fmeasure=True),
+        self.assertEqual(win_pr_f(segs_b, segs_a),
                          Decimal('0.75') )
     
     def test_extra_boundary(self):
-        segs_a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
-        segs_b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
+        '''
+        Test whether 1/3 segments that are non-existent produces 0.889.
+        '''
+        segs_a = [1,1,1,1,1,2,3,3,4,4,4,4,4]
+        segs_b = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         self.assertEqual(win_pr(segs_a, segs_b),
                          (4, 1, 0, 21) )
-        self.assertEqual(win_pr(segs_a, segs_b, return_fmeasure=True),
+        self.assertEqual(win_pr_f(segs_a, segs_b),
                          Decimal('0.8888888888888888888888888889') )
         self.assertEqual(win_pr(segs_b, segs_a),
                          (4, 0, 1, 21) )
-        self.assertEqual(win_pr(segs_b, segs_a, return_fmeasure=True),
+        self.assertEqual(win_pr_f(segs_b, segs_a),
                          Decimal('0.8888888888888888888888888889') )
     
     def test_full_miss_and_misaligned(self):
-        segs_a = [1,1,1,1,2,2,2,2,3,3,3,3,3]
-        segs_b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
+        '''
+        Test whether a full miss and a translated boundary out of 4 produces
+        '0.6667. 
+        '''
+        segs_a = [1,1,1,1,1,2,3,3,4,4,4,4,4]
+        segs_b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         self.assertEqual(win_pr(segs_a, segs_b),
                          (3, 2, 1, 20) )
-        self.assertEqual(win_pr(segs_a, segs_b, return_fmeasure=True),
+        self.assertEqual(win_pr_f(segs_a, segs_b),
                          Decimal('0.6666666666666666666666666667') )
         self.assertEqual(win_pr(segs_b, segs_a),
                          (3, 1, 2, 20) )
-        self.assertEqual(win_pr(segs_b, segs_a, return_fmeasure=True),
+        self.assertEqual(win_pr_f(segs_b, segs_a),
                          Decimal('0.6666666666666666666666666667') )
     
+
+class TestPairwiseWinPR(unittest.TestCase):
+    # pylint: disable=R0904
+    '''
+    Test pairwise WinPR.
+    '''
+    
     def test_kazantseva2012_g5(self):
-        self.assertEqual(pairwise_winpr(KAZANTSEVA2012_G5),
-                         (Decimal('0.5666704244829244829244829242'),
+        '''
+        Calculate permuted pairwise percentage on Group 5 from the dataset
+        collected in [KazantsevaSzpakowicz2012]_.
+        '''
+        self.assertEqual(pairwise_win_pr(KAZANTSEVA2012_G5, ),
+                         (Decimal('0.5666704244829244829244829244'),
                           Decimal('0.1288893917585415321352486586'),
-                          Decimal('0.01661247530788679382562351445')))
+                          Decimal('0.01661247530788679382562351445'),
+                          Decimal('0.01860358125687027151882264390')))
     
     def test_kazantseva2012_g2(self):
-        self.assertEqual(pairwise_winpr(KAZANTSEVA2012_G2),
+        '''
+        Calculate mean permuted pairwise percentage on Group 2 from the dataset
+        collected in [KazantsevaSzpakowicz2012]_.
+        '''
+        self.assertEqual(pairwise_win_pr(KAZANTSEVA2012_G2),
                          (Decimal('0.697888396872193480081486543'),
                           Decimal('0.1088579955001813616115484223'),
-                          Decimal('0.01185006318431750557298765469')))
+                          Decimal('0.01185006318431750557298765469'),
+                          Decimal('0.009937329950040866641860311062')))
     
     def test_large_disagreement(self):
-        self.assertEqual(pairwise_winpr(LARGE_DISAGREEMENT),
+        '''
+        Calculate mean permuted pairwise percentage on a theoretical dataset
+        containing large disagreement.
+        '''
+        self.assertEqual(pairwise_win_pr(LARGE_DISAGREEMENT),
                          (Decimal('0.2573671497584541062801932369'),
                           Decimal('0.1535469743040559128336768347'),
-                          Decimal('0.02357667331793040677728768466')))
+                          Decimal('0.02357667331793040677728768466'),
+                          Decimal('0.05428705338053724985174975383')))
     
     def test_complete_agreement(self):
-        self.assertEqual(pairwise_winpr(COMPLETE_AGREEMENT),
+        '''
+        Calculate mean permuted pairwise percentage on a theoretical dataset
+        containing complete agreement.
+        '''
+        self.assertEqual(pairwise_win_pr(COMPLETE_AGREEMENT),
                          (1.0,
+                          0.0,
                           0.0,
                           0.0))
 

@@ -46,14 +46,16 @@ def pk(hypothesis_positions, reference_positions, window_size=None,
     is performed if a window size is not specified.
     
     :param hypothesis_positions: Hypothesis segmentation section labels
-                                 sequence.
-    :param reference_positions: Reference segmentation section labels sequence.
-    :param window_size: The size of the window that is slid over the two
-                        segmentations used to count mismatches (default is None
-                        and will use the average window size)
-    :param one_minus: Return 1-Pk to make it no longer a penalty-metric.
-    :param convert_from_masses: Convert the segmentations provided from masses
-                                into positions.
+                                    sequence.
+    :param reference_positions:  Reference segmentation section labels sequence.
+    :param window_size:          The size of the window that is slid over the \
+                                    two segmentations used to count mismatches \
+                                    (default is None and will use the average \
+                                    window size)
+    :param one_minus:            Return 1-Pk to make it no longer a \
+                                    penalty-metric.
+    :param convert_from_masses:  Convert the segmentations provided from \
+                                    masses into positions.
     :type hypothesis_positions: list
     :type reference_positions: list
     :type window_size: int
