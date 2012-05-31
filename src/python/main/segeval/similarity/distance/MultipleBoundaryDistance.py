@@ -51,6 +51,10 @@ def boundary_string_from_masses(segm):
 
 
 class SetError(object):
+    '''
+    Represents a set error at a particular potential boundary position.
+    '''
+    # pylint: disable=R0903
     
     def __init__(self, type_name, start, end, boundaries, types_b):
         # pylint: disable=C0103
@@ -157,6 +161,9 @@ class Transposition(object):
         self.n          = (end - start) + 1
     
     def overlaps(self, other):
+        '''
+        Check to see if a transposition overlaps.
+        '''
         overlap = False
         
         if other.type_b == self.type_b:
@@ -316,8 +323,6 @@ def __set_errors_transpositions_n(string_a, string_b, types_b, n):
     
     set_errors = set_errors - (sum_converted_to_transpositions * 2)
     
-    # This reporting functionality is occasionally off by 1
-    # TODO: Fix
     if set_errors != len(untransposted_set_errors):
         raise Exception('Incorrect set error discounting has occurred.')
     

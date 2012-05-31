@@ -75,3 +75,37 @@ def mean_artstein_poesio_bias(dataset_masses):
     '''
     return compute_mean(dataset_masses, artstein_poesio_bias)
 
+
+OUTPUT_NAME     = 'S-based Artstein and Poesio\'s (2008) Bias'
+SHORT_NAME      = 'B_s'
+SHORT_NAME_MEAN = 'Mean %s' % SHORT_NAME
+
+
+def parse(args):
+    '''
+    Parse this module's metric arguments and perform requested actions.
+    '''
+    output = None
+    
+    from ..data import load_file
+    from ..data.Display import render_value, render_mean_values
+    values, is_file = load_file(args)
+    
+    if not args['output'] and is_file:
+        output = render_value(SHORT_NAME, str(artstein_poesio_bias(values)))
+    else:
+        mean, std, var, stderr = mean_artstein_poesio_bias(values)
+        output = render_mean_values(SHORT_NAME_MEAN, mean, std, var, stderr)
+    
+    return output
+
+def create_parser(subparsers):
+    '''
+    Setup a command line parser for this module's metric.
+    '''
+    from ..data import parser_add_file_support
+    parser = subparsers.add_parser('b',
+                                   help=OUTPUT_NAME)
+    parser_add_file_support(parser)
+    parser.set_defaults(func=parse)
+

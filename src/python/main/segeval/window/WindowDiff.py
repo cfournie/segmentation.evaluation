@@ -33,55 +33,69 @@ Implementation of the WindowDiff segmentation evaluation metric described in:
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
-from . import compute_window_size
-from ..Math import mean, std, var
-from .. import SegmentationMetricError
-from .. import convert_masses_to_positions
+from . import compute_window_size, parser_one_minus_support
+from .. import SegmentationMetricError, compute_pairwise, \
+    convert_masses_to_positions
 
 
-def window_diff(ref_segments, hyp_segments, window_size=None, one_minus=False,
-                fixed=True, lamprier_et_al_2007_fix=False):
+def window_diff(hypothesis_positions, reference_positions, window_size=None,
+                one_minus=False, lamprier_et_al_2007_fix=False,
+                convert_from_masses=False):
     '''
     Calculates the WindowDiff segmentation evaluation metric score for a
     hypothetical segmentation against a reference segmentation for a given
     window size.  The standard method of calculating the window size
     is performed a window size is not specified.
     
-    Arguments:
-    ref_segments -- An ordered sequence of which section each unit belongs to,
-                    e.g.: [1,1,1,1,1,2,2,2,3,3,3,3,3], for 13 units (e.g.
-                    sentences, paragraphs).  This is the reference segmentation
-                    used to compare a hypothetical segmentation against.
-    hyp_segments -- An ordered sequence of which section each unit belongs to.
-                    This is the hypothetical segmentation that is compared
-                    against the reference segmentation.
-    window_size  -- The size of the window that is slid over the two
-                    segmentations used to count mismatches.
-    one_minus    -- Calculates 1-WD, turning WD into a reward metric (instead of
-                    a penalty metric).
-    fixed        -- Enables a fix, which deviates from the official method, but
-                    allows for the implementation to range form [0,1] as
-                    intended.
+    :param hypothesis_positions:     Hypothesis segmentation section labels
+                                        sequence.
+    :param reference_positions:      Reference segmentation section labels
+                                        sequence.
+    :param window_size:              The size of the window that is slid over \
+                                        the two segmentations used to count \
+                                        mismatches (default is None and will \
+                                        use the average window size)
+    :param one_minus:                Return 1-WindowDiff to make it no longer \
+                                         a penalty-metric.
+    :param lamprier_et_al_2007_fix:  Apply a fix for improperly counted errors \
+                                        at the beginning and end of \
+                                        segmentations, provided by \
+                                        _[LamprierEtAl2007].
+    :param convert_from_masses:      Convert the segmentations provided from \
+                                        masses into positions.
+    :type hypothesis_positions: list
+    :type reference_positions: list
+    :type window_size: int
+    :type one_minus: bool
+    :type lamprier_et_al_2007_fix: bool
+    :type convert_from_masses: bool
     
+    .. note:: See :func:`segeval.convert_masses_to_positions` for an example of
+              the input format.
     '''
-    # pylint: disable=C0103
-    if len(ref_segments) != len(hyp_segments):
+    # pylint: disable=C0103,R0913
+    # Convert from masses into positions 
+    if convert_from_masses:
+        reference_positions  = convert_masses_to_positions(reference_positions)
+        hypothesis_positions = convert_masses_to_positions(hypothesis_positions)
+    # Check for input errors
+    if len(reference_positions) != len(hypothesis_positions):
         raise SegmentationMetricError(
                     'Reference and hypothesis segmentations differ in length.')
     # Compute window size to use if unspecified
     if window_size is None:
-        window_size = compute_window_size(ref_segments)
+        window_size = compute_window_size(reference_positions)
     # Create a set of pairs of units from each segmentation to go over using a
     # window
     sum_differences = 0
     units_ref_hyp = None
     phantom_size = window_size - 1
     if lamprier_et_al_2007_fix == False:
-        units_ref_hyp = zip(ref_segments, hyp_segments)
+        units_ref_hyp = zip(reference_positions, hypothesis_positions)
     else:
         phantom = [0] * phantom_size
-        units_ref_hyp = zip(phantom + ref_segments + phantom,
-                            phantom + hyp_segments + phantom)
+        units_ref_hyp = zip(phantom + reference_positions + phantom,
+                            phantom + hypothesis_positions + phantom)
     # Slide window over and sum the number of varying windows
     for i in xrange(0, len(units_ref_hyp) - window_size + 1):
         window = units_ref_hyp[i:i+window_size]
@@ -100,9 +114,7 @@ def window_diff(ref_segments, hyp_segments, window_size=None, one_minus=False,
         if ref_boundaries != hyp_boundaries:
             sum_differences += 1
     # Perform final division
-    n = len(ref_segments)
-    if fixed:
-        n += 1
+    n = len(reference_positions) + 1
     if lamprier_et_al_2007_fix:
         n += phantom_size
     win_diff = Decimal(sum_differences) / (n - window_size)
@@ -112,35 +124,67 @@ def window_diff(ref_segments, hyp_segments, window_size=None, one_minus=False,
         return Decimal('1.0') - win_diff
 
 
-def pairwise_windiff(segs_dict_all, groups=False, one_minus=False,
-                     window_size=None, permute=True, fixed=True):
-    # pylint: disable=C0103
-    values = list()
-    # Define fnc per group
-    def per_group(group, values):
-        for coder_segs in group.values():
-            coders = coder_segs.keys()
-            for m in range(0, len(coders)):
-                for n in range(m+1, len(coders)):
-                    segs_m = convert_masses_to_positions(
-                                coder_segs[coders[m]])
-                    segs_n = convert_masses_to_positions(
-                                coder_segs[coders[n]])
-                    values.append(Decimal(window_diff(segs_m, segs_n,
-                                                    one_minus=one_minus,
-                                                    window_size=window_size,
-                                                    fixed=fixed)))
-                    if permute:
-                        values.append(Decimal(window_diff(segs_n, segs_m,
-                                                        one_minus=one_minus,
-                                                        window_size=\
-                                                            window_size,
-                                                        fixed=fixed)))
-    # Parse by groups, or not
-    if groups:
-        for segs_dict_all_g in segs_dict_all.values():
-            per_group(segs_dict_all_g, values)
-    else:
-        per_group(segs_dict_all, values)
-    return mean(values), std(values), var(values)
+def pairwise_window_diff(dataset_masses, one_minus=False,
+                         lamprier_et_al_2007_fix=True,
+                         convert_from_masses=True):
+    '''
+    Calculate mean pairwise segmentation F-Measure.
+    
+    .. seealso:: :func:`window_diff`
+    .. seealso:: :func:`segeval.compute_pairwise`
+    
+    :param dataset_masses: Segmentation mass dataset (including multiple \
+                           codings).
+    :type dataset_masses: dict
+        
+    :returns: Mean, standard deviation, variance, and standard error of a \
+        segmentation metric.
+    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
+        :class:`decimal.Decimal`, :class:`decimal.Decimal`
+    '''
+    def wrapper(hypothesis_masses, reference_masses):
+        '''
+        Wrapper to provide parameters.
+        '''
+        return window_diff(hypothesis_masses, reference_masses,
+                           one_minus=one_minus,
+                           lamprier_et_al_2007_fix=lamprier_et_al_2007_fix,
+                           convert_from_masses=convert_from_masses)
+    
+    return compute_pairwise(dataset_masses, wrapper, permuted=True)
+
+
+OUTPUT_NAME = 'Mean WindowDiff'
+SHORT_NAME  = 'WindowDiff'
+
+
+def parse(args):
+    '''
+    Parse this module's metric arguments and perform requested actions.
+    '''
+    from ..data import load_file
+    from ..data.Display import render_mean_values
+    
+    values = load_file(args)[0]
+    one_minus = args['oneminus']
+    
+    mean, std, var, stderr = pairwise_window_diff(values, one_minus)
+    name = SHORT_NAME
+    
+    if one_minus:
+        name = '1 - %s' % name
+    
+    return render_mean_values(name, mean, std, var, stderr)
+
+
+def create_parser(subparsers):
+    '''
+    Setup a command line parser for this module's metric.
+    '''
+    from ..data import parser_add_file_support
+    parser = subparsers.add_parser('wd',
+                                   help=OUTPUT_NAME)
+    parser_add_file_support(parser)
+    parser_one_minus_support(parser)
+    parser.set_defaults(func=parse)
 

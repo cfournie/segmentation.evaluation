@@ -19,8 +19,6 @@ Percentage
 .. automodule:: segeval.ml.Percentage
 .. autofunction:: percentage
 .. autofunction:: pairwise_percentage
-
-
 .. autofunction:: find_boundary_position_freqs
 
 

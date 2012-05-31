@@ -70,7 +70,7 @@ def precision(tp, fp):
     :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
-    if tp == 0 and fp == 0:
+    if tp == 0:
         return Decimal(0)
     else:
         return Decimal(tp) / Decimal(tp + fp)
@@ -91,7 +91,7 @@ def recall(tp, fn):
     :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
-    if tp == 0 and fn == 0:
+    if tp == 0:
         return Decimal(0)
     else:
         return Decimal(tp) / Decimal(tp + fn)

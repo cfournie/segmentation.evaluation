@@ -1,5 +1,5 @@
 '''
-Tests some math related utility functions.
+Display and output related utility functions.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
@@ -29,39 +29,40 @@ Tests some math related utility functions.
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
-import unittest
-from decimal import Decimal
-from .Math import mean, std, var, stderr
 
 
-class TestMath(unittest.TestCase):
+def values_to_str(mean, std, var, stderr):
     '''
-    Math utlity function tests.
+    Create a text representation of a metric's mean.
     '''
-    #pylint: disable=R0904,C0103
+    return ('\tmean\t= %(mean)s\n'+\
+            '\tstd\t= %(std)s\n'+\
+            '\tvar\t= %(var)s\n'+\
+            '\tstderr\t= %(stderr)s') % \
+            {'mean'   : mean,
+             'std'    : std,
+             'var'    : var,
+             'stderr' : stderr}
+
+
+def render_mean_values(name, mean, std, var, stderr):
+    '''
+    Render text representing means of a metric.
+    '''
+    return render_value(name, values_to_str(mean, std, var, stderr),
+                        operator='\n')
+
+
+def render_value(name, value, operator='='):
+    '''
+    Render text representing the value of a metric.
+    '''
+    return '%(name)s %(operator)s %(value)s' % {'name' : name,
+                                                'value' : value,
+                                                'operator' : operator}
+
+
+
+
+
     
-    def test_mean(self):
-        '''
-        Tests population mean.
-        '''
-        self.assertEqual(5, mean([2, 4, 4, 4, 5, 5, 7, 9]))
-    
-    def test_std(self):
-        '''
-        Tests population standard deviation.
-        '''
-        self.assertEqual(2, std([2, 4, 4, 4, 5, 5, 7, 9]))
-    
-    def test_var(self):
-        '''
-        Tests population variance.
-        '''
-        self.assertEqual(4, var([2, 4, 4, 4, 5, 5, 7, 9]))
-    
-    def test_stderr(self):
-        '''
-        Tests population standard error of the mean.
-        '''
-        self.assertEqual(Decimal('0.7071067811865475244008443622'),
-                         stderr([2, 4, 4, 4, 5, 5, 7, 9]))
-        

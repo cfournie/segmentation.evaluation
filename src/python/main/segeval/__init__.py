@@ -38,7 +38,7 @@ To use S, see the :mod:`segeval.similarity` module.
 import os
 from decimal import Decimal
 from collections import Counter
-from .Math import mean, std, var
+from .Math import mean, std, var, stderr
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                         os.sep.join(['..'] * 1)))
@@ -112,8 +112,8 @@ def compute_pairwise(dataset_masses, fnc_metric, permuted=False):
     :type fnc_metric:     func
     :type permuted:       bool
     
-    :returns: Mean, standard deviation, and variance of a segmentation metric.
-    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, :class:`decimal.Decimal`
+    :returns: |compute_mean_return|
+    :rtype: |compute_mean_return_type|
     '''
     # pylint: disable=C0103
     values = list()
@@ -145,7 +145,7 @@ def compute_pairwise(dataset_masses, fnc_metric, permuted=False):
     # Parse
     __per_group__(dataset_masses)
     # Return mean, std dev, and variance
-    return mean(values), std(values), var(values)
+    return mean(values), std(values), var(values), stderr(values)
 
 
 def compute_mean(dataset_masses, fnc_metric):
@@ -162,9 +162,14 @@ def compute_mean(dataset_masses, fnc_metric):
     :type dataset_masses: dict
     :type fnc_metric:     func
     
-    :returns: Mean, standard deviation, and variance of a segmentation metric.
-    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
-            :class:`decimal.Decimal`
+    .. |compute_mean_return| replace:: Mean, standard deviation, variance, and \
+        standard error of a segmentation metric.
+    .. |compute_mean_return_type| replace:: :class:`decimal.Decimal`, \
+        :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
+        :class:`decimal.Decimal`
+        
+    :returns: |compute_mean_return|
+    :rtype: |compute_mean_return_type|
     '''
     # pylint: disable=C0103
     values = list()
@@ -191,7 +196,7 @@ def compute_mean(dataset_masses, fnc_metric):
     # Parse
     __per_group__(dataset_masses)
     # Return mean, std dev, and variance
-    return mean(values), std(values), var(values)
+    return mean(values), std(values), var(values), stderr(values)
 
 
 class SegmentationMetricError(Exception):
@@ -212,17 +217,4 @@ class SegmentationMetricError(Exception):
         :type message: str
         '''
         Exception.__init__(self, message)
-
-
-if __name__ == '__main__':
-    import argparse
-    parser = argparse.ArgumentParser(description='Process some integers.')
-    parser.add_argument('integers', metavar='N', type=int, nargs='+',
-                       help='an integer for the accumulator')
-    parser.add_argument('--sum', dest='accumulate', action='store_const',
-                       const=sum, default=max,
-                       help='sum the integers (default: find the max)')
-    
-    args = parser.parse_args()
-    print args.accumulate(args.integers)
 

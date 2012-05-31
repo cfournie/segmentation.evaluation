@@ -113,3 +113,21 @@ def compute_window_size(reference_segments, fnc_round=round):
     window_size = int(fnc_round(avg))
     return window_size if window_size > 1 else 2
 
+
+def parser_one_minus_support(parser):
+    '''
+    Add support for the "one minus" parameter to convert penalty metrics into
+    reward metrics.
+    
+    :param parser: Argument parser
+    :type parser: argparse.ArgumentParser
+    '''
+    parser.add_argument('-om', '--oneminus',
+                        default=False,
+                        action='store_true',
+                        help='Calculates 1-metric to make this metric no \
+                                longer penalty-based, meaning that 1.0 \
+                                represents the best performance and 0.0 the \
+                                worst.')
+    
+    

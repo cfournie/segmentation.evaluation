@@ -38,6 +38,10 @@ import csv
 import json
 from .. import convert_positions_to_masses
 
+RESULTS             = ['summary', 'tsv']
+
+DEFAULT_DELIMITER   = '\t'
+
 
 def load_tests(loader, tests, pattern):
     '''
@@ -65,61 +69,9 @@ class DataIOError(Exception):
         :type message: str
         '''
         Exception.__init__(self, message, exception)
-
-
-
-def load_nested_folders_dict(containing_dir, fnc_load, 
-                             allowable_extensions=list(['.tsv', '.json'])):
-    '''
-    Loads TSV files from a file directory structure, which reflects the
-    directory structure in nested :func:`dict` with each directory name
-    representing a key in these :func:`dict`.
-    
-    :param containing_dir: Root directory containing sub-directories which 
-                           contain segmentation files (either
-    :param fnc_load:       Function used to load a segmentation file (e.g.,
-                           :func:`input_linear_mass_json` or 
-                           :func:`input_linear_mass_tsv`)
-    :param allowable_extensions: List of file extensions to load using
-                                 fnc_load.
-    :type containing_dir: str
-    :type loader: func
-    :type allowable_extensions: list
-    
-    :returns: Segmentation mass codings.
-    :rtype: :func:`dict`
-    '''
-    data = dict()
-    datafile_found = False
-    # List of entries
-    files = dict()
-    dirs = dict()
-    # For each filesystem item
-    for name in os.listdir(containing_dir):
-        path = os.path.join(containing_dir, name)
-        # Found a directory
-        if os.path.isdir(path):
-            dirs[name] = path
-        # Found a file
-        elif os.path.isfile(path):
-            name, ext = os.path.splitext(name)
-            if len(ext) > 0 and ext.lower() in allowable_extensions:
-                files[name] = path
-                datafile_found = True
-    # If a data file was found
-    if datafile_found:
-        # If TSV files were found, load
-        for name, filepath in files.items():
-            data[name] = fnc_load(filepath)
-    else:
-        # If only dirs were found, recurse
-        for name, dirpath in dirs.items():
-            data[name] = load_nested_folders_dict(dirpath, fnc_load,
-                                                  allowable_extensions)
-    return data
     
 
-def input_linear_mass_tsv(tsv_filename, delimiter='\t'):
+def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
     '''
     Load a linear segmentation mass TSV file.
     
@@ -164,7 +116,7 @@ def input_linear_mass_tsv(tsv_filename, delimiter='\t'):
     return segment_masses
 
 
-def input_linear_positions_tsv(tsv_filename, delimiter='\t'):
+def input_linear_positions_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
     '''
     Load a segment position TSV file.
     
@@ -230,9 +182,124 @@ def input_linear_mass_json(json_filename):
         codings[key] = value
     # Return
     return codings
+
+
+FILETYPE_TSV  = 'tsv'
+FILETYPE_JSON = 'json'
+
+EXT = 'ext'
+FNC = 'ext'
+FILETYPES           = {FILETYPE_TSV  : {EXT : ['.tsv', '.csv'],
+                                        FNC : input_linear_mass_tsv},
+                       FILETYPE_JSON : {EXT : ['.json', '.jsn'],
+                                        FNC : input_linear_mass_json}}
+FILETYPES_DEFAULT   = FILETYPE_JSON
+
+
+def load_nested_folders_dict(containing_dir, filetype):
+    '''
+    Loads TSV files from a file directory structure, which reflects the
+    directory structure in nested :func:`dict` with each directory name
+    representing a key in these :func:`dict`.
     
+    :param containing_dir: Root directory containing sub-directories which 
+                           contain segmentation files.
+    :param filetype:       File type to load (e.g., json or tsv).
+    :type containing_dir: str
+    :type filetype: str
     
+    :returns: Segmentation mass codings.
+    :rtype: :func:`dict`
+    '''
+    allowable_extensions = list(FILETYPES[filetype][EXT])
+    fnc_load = FILETYPES[filetype][FNC]
+    data = dict()
+    datafile_found = False
+    # List of entries
+    files = dict()
+    dirs = dict()
+    # For each filesystem item
+    for name in os.listdir(containing_dir):
+        path = os.path.join(containing_dir, name)
+        # Found a directory
+        if os.path.isdir(path):
+            dirs[name] = path
+        # Found a file
+        elif os.path.isfile(path):
+            name, ext = os.path.splitext(name)
+            if len(ext) > 0 and ext.lower() in allowable_extensions:
+                files[name] = path
+                datafile_found = True
+    # If a data file was found
+    if datafile_found:
+        # If TSV files were found, load
+        for name, filepath in files.items():
+            data[name] = fnc_load(filepath)
+    else:
+        # If only dirs were found, recurse
+        for name, dirpath in dirs.items():
+            data[name] = load_nested_folders_dict(dirpath, filetype)
+    return data
+
+
+def load_file(args):
+    '''
+    Load a file or set of directories from command line arguments.
     
+    :param args: Command line arguments
+    :type args: dict
     
+    :returns: The loaded values and whether a file was loaded or not.
+    :rtype: :func:`dict`, :func:`bool`
+    '''
+    values = None
     
+    input_path = args['input'][0]
+    is_file = os.path.isfile(input_path)
+    
+    filetype = args['format']
+    
+    # Load file or dir
+    if is_file:
+        values = FILETYPES[filetype][FNC](input_path)
+        values = {'item' : values}
+    else:
+        values = load_nested_folders_dict(input_path, filetype)
+    
+    return values, is_file
+
+
+def parser_add_file_support(parser):
+    '''
+    Add support for file input and output parameters to an argument parser.
+    
+    :param parser: Argument parser
+    :type parser: argparse.ArgumentParser
+    '''
+    
+    parser.add_argument('-o', '--output',
+                        type=str,
+                        nargs=1,
+                        required=False,
+                        help='Output file or directory. If not specified, a '+\
+                        'summary or results is printed to the console.')
+    
+    parser.add_argument('input',
+                        type=str,
+                        nargs=1,
+                        action='store',
+                        help='Input file or directory')
+    
+    parser.add_argument('-f', '--format',
+                        type=str,
+                        default=FILETYPES_DEFAULT,
+                        choices=FILETYPES.keys(),
+                        help='Input file format; default is %s' % \
+                            FILETYPES_DEFAULT)
+    
+    parser.add_argument('-d', '--delimiter',
+                        type=str,
+                        default='\t',
+                        help='Delimiting character for TSV files; ignored if '+\
+                        'JSON is specified and is a tab if unspecified')
 

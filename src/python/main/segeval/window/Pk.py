@@ -32,12 +32,11 @@ Implementation of the Pk segmentation evaluation metric described in
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
-from . import compute_window_size
+from . import compute_window_size, parser_one_minus_support
 from .. import SegmentationMetricError, compute_pairwise, \
     convert_masses_to_positions
 
 
-#pylint: disable=C0103
 def pk(hypothesis_positions, reference_positions, window_size=None,
        one_minus=False, convert_from_masses=False):
     '''
@@ -64,6 +63,7 @@ def pk(hypothesis_positions, reference_positions, window_size=None,
     .. note:: See :func:`segeval.convert_masses_to_positions` for an example of
               the input format.
     '''
+    # pylint: disable=C0103
     # Convert from masses into positions 
     if convert_from_masses:
         reference_positions  = convert_masses_to_positions(reference_positions)
@@ -99,7 +99,7 @@ def pk(hypothesis_positions, reference_positions, window_size=None,
         return Decimal('1.0') - p_k
 
 
-def pairwise_pk(dataset_masses, one_minus=False, convert_from_masses=False):
+def pairwise_pk(dataset_masses, one_minus=False, convert_from_masses=True):
     '''
     Calculate mean pairwise segmentation F-Measure.
     
@@ -109,16 +109,53 @@ def pairwise_pk(dataset_masses, one_minus=False, convert_from_masses=False):
     :param dataset_masses: Segmentation mass dataset (including multiple \
                            codings).
     :type dataset_masses: dict
-    
-    :returns: Mean, standard deviation, and variance.
-    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, :class:`decimal.Decimal`
+        
+    :returns: Mean, standard deviation, variance, and standard error of a \
+        segmentation metric.
+    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
+        :class:`decimal.Decimal`, :class:`decimal.Decimal`
     '''
-    def pk_wrapper(hypothesis_masses, reference_masses):
+    def wrapper(hypothesis_masses, reference_masses):
         '''
-        Wrapper for Pk to provide the one_minus parameter.
+        Wrapper to provide parameters.
         '''
         return pk(hypothesis_masses, reference_masses, one_minus=one_minus,
                   convert_from_masses=convert_from_masses)
     
-    return compute_pairwise(dataset_masses, pk_wrapper, permuted=True)
+    return compute_pairwise(dataset_masses, wrapper, permuted=True)
+
+
+OUTPUT_NAME = 'Mean Pk'
+SHORT_NAME  = 'Pk'
+
+
+def parse(args):
+    '''
+    Parse this module's metric arguments and perform requested actions.
+    '''
+    from ..data import load_file
+    from ..data.Display import render_mean_values
+    
+    values = load_file(args)[0]
+    one_minus = args['oneminus']
+    
+    mean, std, var, stderr = pairwise_pk(values, one_minus)
+    name = SHORT_NAME
+    
+    if one_minus:
+        name = '1 - %s' % name
+    
+    return render_mean_values(name, mean, std, var, stderr)
+
+
+def create_parser(subparsers):
+    '''
+    Setup a command line parser for this module's metric.
+    '''
+    from ..data import parser_add_file_support
+    parser = subparsers.add_parser('pk',
+                                   help=OUTPUT_NAME)
+    parser_add_file_support(parser)
+    parser_one_minus_support(parser)
+    parser.set_defaults(func=parse)
 

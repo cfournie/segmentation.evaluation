@@ -55,7 +55,7 @@ def var(values):
     :param values: List of numeric values.
     :type values: list
     
-    :returns: Mean.
+    :returns: Variance.
     :rtype: :class:`decimal.Decimal`
     '''
     mean_value = mean(values)
@@ -64,6 +64,7 @@ def var(values):
         summation += (value - mean_value) ** 2
     return summation / len(values)
 
+
 def std(values):
     '''
     Calculates the population standard deviation of a list of numeric values.
@@ -71,8 +72,22 @@ def std(values):
     :param values: List of numeric values.
     :type values: list
     
-    :returns: Mean.
+    :returns: Standard deviation.
     :rtype: :class:`decimal.Decimal`
     '''
     return var(values).sqrt()
+
+
+def stderr(values):
+    '''
+    Calculates the population standard error of the mean of a list of numeric
+    values.
+    
+    :param values: List of numeric values.
+    :type values: list
+    
+    :returns: Standard error of the mean.
+    :rtype: :class:`decimal.Decimal`
+    '''
+    return std(values) / Decimal(len(values)).sqrt()
 

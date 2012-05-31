@@ -110,7 +110,7 @@ def fleiss_kappa(items_masses, return_parts=False):
     
     :param items_masses: Segmentation masses for a collection of items where \
                         each item is multiply coded (all coders code all items).
-    :param return_parts: If true, return the numerator and denominator
+    :param return_parts: If true, return the numerator and denominator.
     :type item_masses:  dict
     :type return_parts: bool
     
@@ -177,4 +177,41 @@ def mean_fleiss_kappa(dataset_masses):
     :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, :class:`decimal.Decimal`
     '''
     return compute_mean(dataset_masses, fleiss_kappa)
+
+
+OUTPUT_NAME     = 'S-based Fleiss\' Multi Kappa'
+SHORT_NAME      = 'K*_s'
+SHORT_NAME_MEAN = 'Mean %s' % SHORT_NAME
+
+
+def parse(args):
+    '''
+    Parse this module's metric arguments and perform requested actions.
+    '''
+    output = None
+    
+    from ..data import load_file
+    from ..data.Display import render_value, render_mean_values
+    values, is_file = load_file(args)
+    
+    if not args['output'] and is_file:
+        output = render_value(SHORT_NAME, str(fleiss_kappa(values)))
+    else:
+        mean, std, var, stderr = mean_fleiss_kappa(values)
+        output = render_mean_values(SHORT_NAME_MEAN, mean, std, var, stderr)
+    
+    return output
+
+
+def create_parser(subparsers):
+    '''
+    Setup a command line parser for this module's metric.
+    '''
+    from ..data import parser_add_file_support
+    parser = subparsers.add_parser('k',
+                                   help=OUTPUT_NAME)
+    parser_add_file_support(parser)
+    parser.set_defaults(func=parse)
+
+
 

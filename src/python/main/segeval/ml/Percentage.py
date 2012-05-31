@@ -73,9 +73,40 @@ def pairwise_percentage(dataset_masses):
     :param dataset_masses: Segmentation mass dataset (including multiple \
                            codings).
     :type dataset_masses: dict
-    
-    :returns: Mean, standard deviation, and variance.
-    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, :class:`decimal.Decimal`
+        
+    :returns: Mean, standard deviation, variance, and standard error of a \
+        segmentation metric.
+    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
+        :class:`decimal.Decimal`, :class:`decimal.Decimal`
     '''
     return compute_pairwise(dataset_masses, percentage, permuted=False)
+
+
+OUTPUT_NAME = 'Pairwise Mean Percentage'
+SHORT_NAME  = 'Pr'
+
+
+def parse(args):
+    '''
+    Parse this module's metric arguments and perform requested actions.
+    '''
+    from ..data import load_file
+    from ..data.Display import render_mean_values
+    values = load_file(args)[0]
+    
+    mean, std, var, stderr = pairwise_percentage(values)
+    name = SHORT_NAME
+    
+    return render_mean_values(name, mean, std, var, stderr)
+
+
+def create_parser(subparsers):
+    '''
+    Setup a command line parser for this module's metric.
+    '''
+    from ..data import parser_add_file_support
+    parser = subparsers.add_parser('pr',
+                                   help=OUTPUT_NAME)
+    parser_add_file_support(parser)
+    parser.set_defaults(func=parse)
 
