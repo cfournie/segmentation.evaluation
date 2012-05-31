@@ -146,8 +146,8 @@ def win_pr_p(hypothesis_positions, reference_positions, window_size=None,
     .. seealso:: :func:`segeval.ml.precision`
     '''
     # pylint: disable=C0103
-    tp, fp, fn, tn = win_pr(hypothesis_positions, reference_positions, window_size,
-                            convert_from_masses)
+    tp, fp = win_pr(hypothesis_positions, reference_positions, window_size,
+                    convert_from_masses)[0:2]
     return precision(tp, fp)
 
 
@@ -160,8 +160,10 @@ def win_pr_r(hypothesis_positions, reference_positions, window_size=None,
     .. seealso:: :func:`segeval.ml.recall`
     '''
     # pylint: disable=C0103
-    tp, fp, fn, tn = win_pr(hypothesis_positions, reference_positions, window_size,
-                            convert_from_masses)
+    values = win_pr(hypothesis_positions, reference_positions, window_size,
+                    convert_from_masses)
+    tp = values[0]
+    fn = values[2]
     return recall(tp, fn)
 
 
