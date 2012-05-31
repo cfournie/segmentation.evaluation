@@ -69,7 +69,8 @@ class TestSegeval(unittest.TestCase):
         '''
         expected = (Decimal('0.2441586812212541867438777318'),
                     Decimal('0.2305169230001435997031211478'),
-                    Decimal('0.05313805178945413332341442158'))
+                    Decimal('0.05313805178945413332341442158'),
+                    Decimal('0.04705406986889928477977431108'))
         
         self.assertEqual(compute_pairwise(KAZANTSEVA2012_G5,
                                           f_b_measure),

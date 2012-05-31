@@ -142,7 +142,8 @@ class TestPairwisePkMeasure(unittest.TestCase):
                                      convert_from_masses=True),
                          (Decimal('0.3553005828239669303205984462'),
                           Decimal('0.1100176084609921563234047476'),
-                          Decimal('0.01210387417147617290343989768')))
+                          Decimal('0.01210387417147617290343989768'),
+                        Decimal('0.01587967396513816764352290376')))
     
     def test_kazantseva2012_g2(self):
         '''
@@ -153,7 +154,8 @@ class TestPairwisePkMeasure(unittest.TestCase):
                                      convert_from_masses=True),
                          (Decimal('0.2882256923776327507173609773'),
                           Decimal('0.1454395656787966169084191446'),
-                          Decimal('0.02115266726483699483402909757'))
+                          Decimal('0.02115266726483699483402909757'),
+                          Decimal('0.01327675514600517730547602482'))
 )
     
     def test_large_disagreement(self):
@@ -165,6 +167,7 @@ class TestPairwisePkMeasure(unittest.TestCase):
                                      convert_from_masses=True),
                          (1.0,
                           0.0,
+                          0.0,
                           0.0))
     
     def test_complete_agreement(self):
@@ -175,6 +178,7 @@ class TestPairwisePkMeasure(unittest.TestCase):
         self.assertEqual(pairwise_pk(COMPLETE_AGREEMENT,
                                      convert_from_masses=True),
                          (0.0,
+                          0.0,
                           0.0,
                           0.0))
 

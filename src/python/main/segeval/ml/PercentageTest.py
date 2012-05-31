@@ -151,7 +151,8 @@ class TestPairwisePercentage(unittest.TestCase):
         self.assertEqual(pairwise_percentage(KAZANTSEVA2012_G5),
                          (Decimal('0.1621263635243898401793138635'),
                           Decimal('0.1788409781886208812486660585'),
-                          Decimal('0.03198409547946276978304443503')))
+                          Decimal('0.03198409547946276978304443503'),
+                          Decimal('0.03650576180519474391025947712')))
     
     def test_kazantseva2012_g2(self):
         '''
@@ -161,7 +162,8 @@ class TestPairwisePercentage(unittest.TestCase):
         self.assertEqual(pairwise_percentage(KAZANTSEVA2012_G2),
                          (Decimal('0.3398087832646656176067940768'),
                           Decimal('0.1948481072924021072633034333'),
-                          Decimal('0.03796578491543144325163024142'))
+                          Decimal('0.03796578491543144325163024142'),
+                          Decimal('0.02515478248611697670879150624'))
 )
     
     def test_large_disagreement(self):
@@ -172,6 +174,7 @@ class TestPairwisePercentage(unittest.TestCase):
         self.assertEqual(pairwise_percentage(LARGE_DISAGREEMENT),
                          (0.0,
                           0.0,
+                          0.0,
                           0.0))
     
     def test_complete_agreement(self):
@@ -181,6 +184,7 @@ class TestPairwisePercentage(unittest.TestCase):
         '''
         self.assertEqual(pairwise_percentage(COMPLETE_AGREEMENT),
                          (1.0,
+                          0.0,
                           0.0,
                           0.0))
 
