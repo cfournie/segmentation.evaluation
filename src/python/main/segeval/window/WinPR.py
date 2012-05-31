@@ -146,8 +146,8 @@ def win_pr_p(hypothesis_positions, reference_positions, window_size=None,
     .. seealso:: :func:`segeval.ml.precision`
     '''
     # pylint: disable=C0103
-    tp, fp = win_pr(hypothesis_positions, reference_positions, window_size,
-                    convert_from_masses)[0:2]
+    tp, fp, fn, tn = win_pr(hypothesis_positions, reference_positions, window_size,
+                            convert_from_masses)
     return precision(tp, fp)
 
 
@@ -160,10 +160,8 @@ def win_pr_r(hypothesis_positions, reference_positions, window_size=None,
     .. seealso:: :func:`segeval.ml.recall`
     '''
     # pylint: disable=C0103
-    values = win_pr(hypothesis_positions, reference_positions, window_size,
-                    convert_from_masses)
-    tp = values[0]
-    fn = values[2]
+    tp, fp, fn, tn = win_pr(hypothesis_positions, reference_positions, window_size,
+                            convert_from_masses)
     return recall(tp, fn)
 
 
@@ -193,7 +191,7 @@ def pairwise_win_pr(dataset_masses,
         return fnc_winpr(hypothesis_masses, reference_masses, window_size,
                          convert_from_masses)
     
-    return compute_pairwise(dataset_masses, wrapper, permuted=True)
+    return compute_pairwise(dataset_masses, wrapper, permuted=False)
 
 
 OUTPUT_NAME = 'Mean WinPR'

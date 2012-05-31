@@ -158,10 +158,10 @@ class TestPairwiseWinPR(unittest.TestCase):
         collected in [KazantsevaSzpakowicz2012]_.
         '''
         self.assertEqual(pairwise_win_pr(KAZANTSEVA2012_G5, ),
-                         (Decimal('0.5666704244829244829244829244'),
-                          Decimal('0.1288893917585415321352486586'),
-                          Decimal('0.01661247530788679382562351445'),
-                          Decimal('0.01860358125687027151882264390')))
+                         (Decimal('0.5868367743367743367743367746'),
+                          Decimal('0.1198711646320202975515773835'),
+                          Decimal('0.01436909611023691387771751852'),
+                          Decimal('0.02446859901846728286113130960')))
     
     def test_kazantseva2012_g2(self):
         '''
@@ -169,10 +169,10 @@ class TestPairwiseWinPR(unittest.TestCase):
         collected in [KazantsevaSzpakowicz2012]_.
         '''
         self.assertEqual(pairwise_win_pr(KAZANTSEVA2012_G2),
-                         (Decimal('0.697888396872193480081486543'),
-                          Decimal('0.1088579955001813616115484223'),
-                          Decimal('0.01185006318431750557298765469'),
-                          Decimal('0.009937329950040866641860311062')))
+                         (Decimal('0.6980631577775708883529586183'),
+                          Decimal('0.1121769660131793859585435576'),
+                          Decimal('0.01258367170392200306131853235'),
+                          Decimal('0.01448198403990397250690864769')))
     
     def test_large_disagreement(self):
         '''
@@ -180,10 +180,10 @@ class TestPairwiseWinPR(unittest.TestCase):
         containing large disagreement.
         '''
         self.assertEqual(pairwise_win_pr(LARGE_DISAGREEMENT),
-                         (Decimal('0.2573671497584541062801932369'),
+                         (Decimal('0.2573671497584541062801932368'),
                           Decimal('0.1535469743040559128336768347'),
                           Decimal('0.02357667331793040677728768466'),
-                          Decimal('0.05428705338053724985174975383')))
+                          Decimal('0.07677348715202795641683841735')))
     
     def test_complete_agreement(self):
         '''

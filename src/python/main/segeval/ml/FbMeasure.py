@@ -220,7 +220,7 @@ def pairwise_ml_measure(dataset_masses, fnc=f_b_measure):
     :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
         :class:`decimal.Decimal`, :class:`decimal.Decimal`
     '''
-    return compute_pairwise(dataset_masses, fnc, permuted=True)
+    return compute_pairwise(dataset_masses, fnc, permuted=False)
 
 
 OUTPUT_NAME_F = 'Pairwise Mean F_beta Measure'

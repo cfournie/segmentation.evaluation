@@ -63,13 +63,24 @@ class TestMain(unittest.TestCase):
         self.assertEqual('Pi*_s = 0.7165532879818594104308390023', main(argv))
 
 
-    def test_all_metrics(self):
+    def test_all_but_winpr_metrics(self):
         '''
         Run through each metric and load from a file.
         '''
         for metric in ['pi', 'k', 'b', 'f', 'p', 'r', 'pr', 's', 'pk', 'wd']:
             argv = [metric, os.path.join(self.test_data_dir,
                                          'hearst1997.json')]
+            if self.print_output:
+                print main(argv)
+
+
+    def test_winpr_metrics(self):
+        '''
+        Run through each metric and load from a file.
+        '''
+        for submetric in ['f', 'p', 'r']:
+            argv = ['wpr', submetric, os.path.join(self.test_data_dir,
+                                                   'hearst1997.json')]
             if self.print_output:
                 print main(argv)
 
