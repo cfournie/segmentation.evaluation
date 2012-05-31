@@ -90,6 +90,7 @@ def window_diff(hypothesis_positions, reference_positions, window_size=None,
     sum_differences = 0
     units_ref_hyp = None
     phantom_size = window_size - 1
+    phantom_size = 1 if phantom_size <= 0 else phantom_size
     if lamprier_et_al_2007_fix == False:
         units_ref_hyp = zip(reference_positions, hypothesis_positions)
     else:
@@ -116,8 +117,10 @@ def window_diff(hypothesis_positions, reference_positions, window_size=None,
     # Perform final division
     n = len(reference_positions) + 1
     if lamprier_et_al_2007_fix:
-        n += phantom_size
+        n += (phantom_size * 2)
     win_diff = Decimal(sum_differences) / (n - window_size)
+    if win_diff > 1:
+        raise SegmentationMetricError('Incorrect value calculated.')
     if not one_minus:
         return win_diff
     else:

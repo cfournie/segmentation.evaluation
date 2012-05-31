@@ -60,9 +60,9 @@ class TestWindowDiff(unittest.TestCase):
         a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         self.assertEqual(window_diff(a,b),
-                         Decimal('1.0'))
-        self.assertEqual(window_diff(b,a),
                          Decimal('0.1666666666666666666666666667'))
+        self.assertEqual(window_diff(b,a),
+                         Decimal('1.0'))
 
     def test_all_boundaries(self):
         '''
@@ -156,38 +156,70 @@ class TestPairwiseWindowDiff(unittest.TestCase):
         Calculate permuted pairwise WindowDiff on Group 5 from the dataset
         collected in [KazantsevaSzpakowicz2012]_.
         '''
-        self.assertEqual(pairwise_window_diff(KAZANTSEVA2012_G5),
+        self.assertEqual(pairwise_window_diff(KAZANTSEVA2012_G5,
+                                              lamprier_et_al_2007_fix=False),
                          (Decimal('0.3604506237259865251208907685'),
                           Decimal('0.1674103189012695088955568781'),
-                          Decimal('0.02802621487462475498810473915')))
+                          Decimal('0.02802621487462475498810473915'),
+                          Decimal('0.02416359817069226127768032185')))
+        self.assertEqual(pairwise_window_diff(KAZANTSEVA2012_G5,
+                                              lamprier_et_al_2007_fix=True),
+                         (Decimal('0.3389327650117214732278073265'),
+                          Decimal('0.1644218164415795205498766707'),
+                          Decimal('0.02703453372194846954943255452'),
+                          Decimal('0.02373224499579829290476994226')))
     
     def test_kazantseva2012_g2(self):
         '''
         Calculate mean permuted pairwise WindowDiff on Group 2 from the dataset
         collected in [KazantsevaSzpakowicz2012]_.
         '''
-        self.assertEqual(pairwise_window_diff(KAZANTSEVA2012_G2),
+        self.assertEqual(pairwise_window_diff(KAZANTSEVA2012_G2,
+                                              lamprier_et_al_2007_fix=False),
                          (Decimal('0.254551242345560022664175451'),
                           Decimal('0.1227764444488944596833784804'),
-                          Decimal('0.0150740553115124671839593874')))
+                          Decimal('0.0150740553115124671839593874'),
+                          Decimal('0.01120790469248990475787117303')))
+        self.assertEqual(pairwise_window_diff(KAZANTSEVA2012_G2,
+                                              lamprier_et_al_2007_fix=True),
+                         (Decimal('0.2282101219734164495559781363'),
+                          Decimal('0.09824964933538713480770055112'),
+                          Decimal('0.009652993594526537660429053483'),
+                          Decimal('0.008968924867993997594174187048')))
     
     def test_large_disagreement(self):
         '''
         Calculate mean permuted pairwise WindowDiff on a theoretical dataset
         containing large disagreement.
         '''
-        self.assertEqual(pairwise_window_diff(LARGE_DISAGREEMENT),
+        self.assertEqual(pairwise_window_diff(LARGE_DISAGREEMENT,
+                                              lamprier_et_al_2007_fix=False),
                          (1.0,
                           0.0,
+                          0.0,
                           0.0))
+        self.assertEqual(pairwise_window_diff(LARGE_DISAGREEMENT,
+                                              lamprier_et_al_2007_fix=True),
+                         (Decimal('0.8583107329225146711972779545'),
+                          Decimal('0.1040894435363239488284336823'),
+                          Decimal('0.01083461225570157148986770720'),
+                          Decimal('0.03680117568723445601862258284')))
     
     def test_complete_agreement(self):
         '''
         Calculate mean permuted pairwise WindowDiff on a theoretical dataset
         containing complete agreement.
         '''
-        self.assertEqual(pairwise_window_diff(COMPLETE_AGREEMENT),
+        self.assertEqual(pairwise_window_diff(COMPLETE_AGREEMENT,
+                                              lamprier_et_al_2007_fix=False),
                          (0.0,
                           0.0,
+                          0.0,
                           0.0))
+        self.assertEqual(pairwise_window_diff(LARGE_DISAGREEMENT,
+                                              lamprier_et_al_2007_fix=True),
+                         (Decimal('0.8583107329225146711972779545'),
+                          Decimal('0.1040894435363239488284336823'),
+                          Decimal('0.01083461225570157148986770720'),
+                          Decimal('0.03680117568723445601862258284')))
 
