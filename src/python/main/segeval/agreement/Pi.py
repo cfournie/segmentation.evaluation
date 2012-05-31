@@ -13,7 +13,7 @@ terms of actual agreement (:math:`\\text{A}_a`) and expected agreement
 
 :math:`\pi` represents Scott's Pi (for 2 coders), whereas :math:`\pi^*`
 represents its generalization to more than 2 coders.  Each metric calculates
-:math:`\\text{A}_a` using :func:`segeval.agreement.observed_agreement` and
+:math:`\\text{A}_a` using :func:`segeval.agreement.actual_agreement` and
 only varies the calculation of :math:`\\text{A}_e`.
 
 
@@ -46,7 +46,7 @@ only varies the calculation of :math:`\\text{A}_e`.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
-from . import observed_agreement
+from . import actual_agreement
 from .. import compute_mean
 
 
@@ -77,7 +77,7 @@ def scotts_pi(items_masses, return_parts=False):
     :returns: Scott's Pi
     :rtype: :class:`decomal.Decimal`
     
-    .. seealso:: :func:`segeval.agreement.observed_agreement` for an example of\
+    .. seealso:: :func:`segeval.agreement.actual_agreement` for an example of\
      ``items_masses``.
     
     .. note:: Applicable for only 2 coders.
@@ -115,7 +115,7 @@ def fleiss_pi(items_masses, return_parts=False):
     :returns: Fleiss's Pi
     :rtype: :class:`decomal.Decimal`
     
-    .. seealso:: :func:`segeval.agreement.observed_agreement` for an example of\
+    .. seealso:: :func:`segeval.agreement.actual_agreement` for an example of\
      ``items_masses``.
     
     .. note:: Applicable for more than 2 coders.
@@ -128,27 +128,24 @@ def fleiss_pi(items_masses, return_parts=False):
         raise Exception('Unequal number of items contained.')
     # Initialize totals
     unmoved_masses, total_masses, coders_boundaries_totalboundaries = \
-        observed_agreement(items_masses)
+        actual_agreement(items_masses)
     # Calculate Aa
-    A_o = sum(unmoved_masses) / sum(total_masses)
+    A_a = Decimal(sum(unmoved_masses)) / sum(total_masses)
     # Calculate Ae
-    p_e_segs   = list()
-    #p_e_unsegs = list()
+    p_e_segs = list()
     for boundaries_info in coders_boundaries_totalboundaries.values():
         for item in boundaries_info:
             boundaries, total_boundaries = item
             p_e_seg = boundaries / total_boundaries
             p_e_segs.append(p_e_seg)
-            #p_e_unsegs.append((Decimal(1) - p_e_seg))
     # Calculate P_e_seg
-    P_e_seg   = sum(p_e_segs)   / len(p_e_segs)
-    #P_e_unseg = sum(p_e_unsegs) / len(p_e_unsegs)
-    A_e = (P_e_seg ** 2) #+ (P_e_unseg ** 2)
+    P_e_seg = Decimal(sum(p_e_segs)) / len(p_e_segs)
+    A_e = (P_e_seg ** 2)
     # Calculate pi
-    pi = (A_o - A_e) / (Decimal('1.0') - A_e)
+    pi = (A_a - A_e) / (Decimal('1.0') - A_e)
     # Return
     if return_parts:
-        return A_o, A_e
+        return A_a, A_e
     else:
         return pi
 

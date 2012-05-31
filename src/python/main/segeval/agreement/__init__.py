@@ -110,9 +110,9 @@ def permute(n, k):
     return numerator / denominator
 
 
-def observed_agreement(items_masses):
+def actual_agreement(items_masses):
     '''
-    Calculate observed (i.e., actual or :math:`\\text{A}_a`), segmentation
+    Calculate actual (i.e., observed or :math:`\\text{A}_a`), segmentation
     agreement without accounting for chance, using [ArtsteinPoesio2008]_'s
     formulation as adapted in [FournierInkpen2012]_:
     

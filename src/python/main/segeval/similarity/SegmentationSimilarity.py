@@ -121,7 +121,7 @@ def similarity(hypothesis_masses, reference_masses, n=DEFAULT_N,
         else:
             # Return the total sum of unmoved mass during all transformations \
             # over the total mass
-            return pbs_unedited / pbs_total
+            return Decimal(pbs_unedited) / Decimal(pbs_total)
 
 
 def pairwise_similarity(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,

@@ -12,7 +12,7 @@ terms of actual agreement (:math:`\\text{A}_a`) and expected agreement
 
 :math:`\kappa` represents Coken's Kappa (for 2 coders), whereas :math:`\kappa^*`
 represents its generalization to more than 2 coders.  Each metric calculates
-:math:`\\text{A}_a` using :func:`segeval.agreement.observed_agreement` and
+:math:`\\text{A}_a` using :func:`segeval.agreement.actual_agreement` and
 only varies the calculation of :math:`\\text{A}_e`.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
@@ -44,7 +44,7 @@ only varies the calculation of :math:`\\text{A}_e`.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
-from . import observed_agreement
+from . import actual_agreement
 from .. import compute_mean
 
 
@@ -76,7 +76,7 @@ def cohen_kappa(item_masses, return_parts=False):
     :returns: Cohen's Kappa
     :rtype: :class:`decomal.Decimal`
     
-    .. seealso:: :func:`segeval.agreement.observed_agreement` for an example of\
+    .. seealso:: :func:`segeval.agreement.actual_agreement` for an example of\
      ``items_masses``.
     
     .. note:: Applicable for only 2 coders.
@@ -117,7 +117,7 @@ def fleiss_kappa(items_masses, return_parts=False):
     :returns: Fleiss's Kappa
     :rtype: :class:`decomal.Decimal`
     
-    .. seealso:: :func:`segeval.agreement.observed_agreement` for an example of\
+    .. seealso:: :func:`segeval.agreement.actual_agreement` for an example of\
      ``items_masses``.
     
     .. note:: Applicable for more than 2 coders.
@@ -134,12 +134,12 @@ def fleiss_kappa(items_masses, return_parts=False):
         raise Exception('Unequal number of items contained.')
     # Initialize totals
     unmoved_masses, total_masses, coders_boundaries_totalboundaries = \
-        observed_agreement(items_masses)
+        actual_agreement(items_masses)
     # Calculate Aa
-    A_o = sum(unmoved_masses) / sum(total_masses)
+    A_a = Decimal(sum(unmoved_masses)) / sum(total_masses)
     # Calculate Ae
     coders = coders_boundaries_totalboundaries.keys()
-    P_segs   = list()
+    P_segs = list()
     for m in range(0, len(coders) - 1):
         for n in range(m+1, len(coders)):
             boundaries_m       = sum(info [0] for info in \
@@ -152,13 +152,13 @@ def fleiss_kappa(items_masses, return_parts=False):
                                  coders_boundaries_totalboundaries[coders[n]])
             P_segs.append((boundaries_m / total_boundaries_m) * \
                           (boundaries_n / total_boundaries_n))
-    P_seg   = sum(P_segs)   / len(P_segs)
+    P_seg = Decimal(sum(P_segs)) / len(P_segs)
     A_e = P_seg
     # Calculate pi
-    kappa = (A_o - A_e) / (Decimal('1.0') - A_e)
+    kappa = (A_a - A_e) / (Decimal('1.0') - A_e)
     # Return
     if return_parts:
-        return A_o, A_e
+        return A_a, A_e
     else:
         return kappa
 
