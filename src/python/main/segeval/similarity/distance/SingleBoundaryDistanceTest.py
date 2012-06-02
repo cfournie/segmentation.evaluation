@@ -1,8 +1,7 @@
 '''
 Tests the boundary distance and string methods functionality.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -35,11 +34,17 @@ from .SingleBoundaryDistance import linear_edit_distance
 
 
 class TestBoundaryDistance(unittest.TestCase):
+    '''
+    Test single boundary type edit distance.
+    '''
     # pylint: disable=R0904,C0324,C0103
     
     SKIP = False
     
     def test_st_2_basic_cases(self):
+        '''
+        Substitution and transpsition (n=2) basic cases.
+        '''
         if TestBoundaryDistance.SKIP:
             return
         # Transposition
@@ -64,6 +69,9 @@ class TestBoundaryDistance(unittest.TestCase):
 
 
     def test_st_2_edge_cases(self):
+        '''
+        Substitution and transpsition (n=2) edge cases.
+        '''
         if TestBoundaryDistance.SKIP:
             return
         d,t,s = linear_edit_distance([], [], 2)[0:3]
@@ -71,6 +79,9 @@ class TestBoundaryDistance(unittest.TestCase):
 
 
     def test_st_2_complex_cases(self):
+        '''
+        Substitution and transpsition (n=2) complex cases.
+        '''
         if TestBoundaryDistance.SKIP:
             return
         mass_a = [1,2,2,4]
@@ -81,6 +92,9 @@ class TestBoundaryDistance(unittest.TestCase):
 
 
     def test_nested_transp_case(self):
+        '''
+        Nested transpsition case.
+        '''
         if TestBoundaryDistance.SKIP:
             return
         mass_a = [1,1,7]
@@ -89,22 +103,12 @@ class TestBoundaryDistance(unittest.TestCase):
         self.assertEqual((d,t,s), (1,1,0))
         d,t,s = linear_edit_distance(mass_a, mass_b, 5)[0:3]
         self.assertEqual((d,t,s), (3,1,2))
-
-
-    def test_nested_transp_case_linear(self):
-        #if TestBoundaryDistance.SKIP:
-        #    return
-        
-        mass_a = [1,1,7]
-        mass_b = [5,1,3]
-        
-        d,t,s = linear_edit_distance(mass_a, mass_b, 7)[0:3]
-        self.assertEqual((d,t,s), (1,1,0))
-        d,t,s = linear_edit_distance(mass_a, mass_b, 5)[0:3]
-        self.assertEqual((d,t,s), (3,1,2))
     
     
     def test_st_1_basic_cases(self):
+        '''
+        Substitution and transpsition (n=1) basic cases.
+        '''
         if TestBoundaryDistance.SKIP:
             return
         # Transposition
@@ -124,6 +128,9 @@ class TestBoundaryDistance(unittest.TestCase):
 
 
     def test_st_1_edge_cases(self):
+        '''
+        Substitution and transpsition (n=1) edge cases.
+        '''
         if TestBoundaryDistance.SKIP:
             return
         d,t,s = linear_edit_distance([],
@@ -132,6 +139,9 @@ class TestBoundaryDistance(unittest.TestCase):
 
 
     def test_st_1_complex_cases(self):
+        '''
+        Substitution and transpsition (n=1) complex cases.
+        '''
         if TestBoundaryDistance.SKIP:
             return
         # Combination of add/sub/del and transposition
@@ -141,6 +151,9 @@ class TestBoundaryDistance(unittest.TestCase):
     
     
     def test_st_3_basic_cases(self):
+        '''
+        Substitution and transpsition (n=3) basic cases.
+        '''
         if TestBoundaryDistance.SKIP:
             return
         # Transposition
@@ -161,6 +174,9 @@ class TestBoundaryDistance(unittest.TestCase):
 
 
     def test_st_3_complex_cases(self):
+        '''
+        Substitution and transpsition (n=3) complex cases.
+        '''
         if TestBoundaryDistance.SKIP:
             return
         # Combination of add/sub/del and transposition
@@ -174,6 +190,9 @@ class TestBoundaryDistance(unittest.TestCase):
     
     
     def test_st_3_mixup_cases(self):
+        '''
+        Substitution and transpsition (n=3) mixup (tricky) cases.
+        '''
         if TestBoundaryDistance.SKIP:
             return
         # Combination of add/sub/del and transposition
@@ -188,6 +207,9 @@ class TestBoundaryDistance(unittest.TestCase):
         self.assertEqual((d,t,s), (4,2,2))
         
     def test_st_4_mixup_cases(self):
+        '''
+        Substitution and transpsition (n=4) mixup (tricky) cases.
+        '''
         if TestBoundaryDistance.SKIP:
             return
         # Combination of add/sub/del and transposition
@@ -205,6 +227,9 @@ class TestBoundaryDistance(unittest.TestCase):
         self.assertEqual((d,t,s), (4,2,2))
         
     def test_st_5_mixup_cases(self):
+        '''
+        Substitution and transpsition (n=5) mixup (tricky) cases.
+        '''
         if TestBoundaryDistance.SKIP:
             return
         # Combination of add/sub/del and transposition
@@ -225,6 +250,9 @@ class TestBoundaryDistance(unittest.TestCase):
         self.assertEqual((d,t,s), (4,2,2))
         
     def test_st_6_mixup_cases(self):
+        '''
+        Substitution and transpsition (n=6) mixup (tricky) cases.
+        '''
         if TestBoundaryDistance.SKIP:
             return
         # Combination of add/sub/del and transposition

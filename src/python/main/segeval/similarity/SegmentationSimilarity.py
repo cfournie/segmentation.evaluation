@@ -1,8 +1,7 @@
 '''
 Segmentation similarity evaluation metric functions.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -40,7 +39,7 @@ DEFAULT_WEIGHT = (1, 1)
 DEFAULT_SCALE  = True
 
 
-def similarity(hypothesis_masses, reference_masses, n=DEFAULT_N,
+def similarity(segment_masses_a, segment_masses_b, n=DEFAULT_N,
                weight=DEFAULT_WEIGHT, scale_transp=DEFAULT_SCALE,
                return_parts=False):
     # pylint: disable=C0103,R0913,R0914
@@ -48,30 +47,21 @@ def similarity(hypothesis_masses, reference_masses, n=DEFAULT_N,
     Calculates similarity between two sequences of segment masses using
     boundary edit distance as in _[FournierInkpen2012].
     
-    When evaluating segmentation, use this chart as a rule of thumb:
-    
-    
-    :param hypothesis_masses: Hypothesis segmentation masses.
-    :param reference_masses:  Reference segmentation masses.
-    :param n:                 The maximum number of units that boundaries can \
+    :param segment_masses_a:  Segmentation masses.
+    :param segment_masses_b:  Segmentation masses.
+    :param n:                 The maximum number of PBs that boundaries can \
                                   span to be considered transpositions (n<2 \
                                   means no transpositions)
     :param beta:              Scales how precision and recall are averaged.
     :param scale_transp:      If true, scales transpositions by their size \
                                   and the number of boundaires
     :param return_parts:      Scales how precision and recall are averaged.
-    :type hypothesis_masses: list
-    :type reference_masses: list
-    :type beta: float
-    :type beta: tuple
-    :type beta: bool
-    :type beta: bool
-
-    Returns:
-    if return_parts is False:
-        
-    else:
-        The mass unmoved, and the total mass
+    :type segment_masses_a: list
+    :type segment_masses_b: list
+    :type n: int
+    :type weight: tuple
+    :type scale_transp: bool
+    :type return_parts: bool
     
     :returns: Similarity, where 0.0 <= sim <= 1.0, or the pbs unedited, total \
         pbs, substitutions and transpositions
@@ -79,24 +69,24 @@ def similarity(hypothesis_masses, reference_masses, n=DEFAULT_N,
         :func:`int`, :func:`int`
     '''
     # Total number of segments to be evaluated
-    if len(hypothesis_masses) == 0 and len(reference_masses) == 0:
+    if len(segment_masses_a) == 0 and len(segment_masses_b) == 0:
         if return_parts:
             return 0, 0
         else:
             return Decimal('1.0')
-    elif sum(hypothesis_masses) != sum(reference_masses):
+    elif sum(segment_masses_a) != sum(segment_masses_b):
         raise SegmentationMetricError('Unequal segmentation masses (%i != %i)' \
-                                      % (sum(hypothesis_masses),
-                                         sum(reference_masses)))
-    elif 0 in hypothesis_masses or 0 in reference_masses:
+                                      % (sum(segment_masses_a),
+                                         sum(segment_masses_b)))
+    elif 0 in segment_masses_a or 0 in segment_masses_b:
         raise SegmentationMetricError('Non-plausable mass 0 present')
     else:
         # Compute total pbs
-        pbs_total = sum(hypothesis_masses) - 1
+        pbs_total = sum(segment_masses_a) - 1
         
         # Compute edit distance
         set_transpositions, set_errors, set_transpositions_details = \
-            linear_edit_distance(hypothesis_masses, reference_masses, n)[1:4]
+            linear_edit_distance(segment_masses_a, segment_masses_b, n)[1:4]
         
         # Scale transpositions
         if scale_transp:
@@ -142,11 +132,11 @@ def pairwise_similarity(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
         :class:`decimal.Decimal`, :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103,R0913,R0914
-    def wrapper(hypothesis_masses, reference_masses):
+    def wrapper(segment_masses_a, segment_masses_b):
         '''
         Wrapper to provide parameters.
         '''
-        return similarity(hypothesis_masses, reference_masses, n, weight,
+        return similarity(segment_masses_a, segment_masses_b, n, weight,
                   scale_transp)
     
     return compute_pairwise(dataset_masses, wrapper, permuted=False)
