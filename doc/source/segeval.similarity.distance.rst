@@ -16,5 +16,7 @@ MultipleBoundaryDistance
 
 .. automodule:: segeval.similarity.distance.MultipleBoundaryDistance
 .. autoclass:: SetError
+   :members:
 .. autoclass:: Transposition
-.. autoclass:: set_errors_transpositions_n
+   :members:
+.. autofunction:: set_errors_transpositions_n

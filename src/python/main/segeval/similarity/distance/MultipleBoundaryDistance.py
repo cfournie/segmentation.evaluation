@@ -245,6 +245,8 @@ class Transposition(object):
         
         :param n: PBs over which transpositions are allowed
         :param b: number of boundaries involved in the current transposition
+        :type n: int
+        :type b: int
         
         :returns: Scaled penalty for the transposition in question
         :rtype: :class:`decimal.Decimal`
@@ -258,21 +260,30 @@ class Transposition(object):
                                       self.boundary_type)
         
 
-def set_errors_transpositions_n(string_a, string_b, types, n):
+def set_errors_transpositions_n_edits(string_a, string_b, boundary_types, n):
     '''
     Computes edit distance of boundary strings using n-wise transpositions and
     substitutions (symmetrically).
     
     Arguments:
-    seq1 -- Boundary string
-    seq2 -- Boundary string to compare against
-    n    -- maximum transposition window size allows (e.g. allows off by n-1)
+    :param string_a:       Boundary string
+    :param string_b:       Boundary string to compare against
+    :param boundary_types: Boundary types used
+    :param n:              Maximum transposition window size allows (e.g. \
+                                allows off by n-1)
+    :type string_a:       :func:`list` of :func:`set` onjects containing \
+                            :func:`int`
+    :type string_b:       :func:`list` of :func:`set` onjects containing \
+                            :func:`int`
+    :type boundary_types: :func:`list` of :func:`int`
+    :type n:                int
     
-    Returns:
-    distance                -- Edit distance
-    transposed              -- Distance from transposition
-    substituted             -- Distance from substitution
-    detailed_transpositions -- List of transpositions per position
+    .. seealso:: :func:`boundary_string_from_masses`
+    
+    :returns: edit distance, list of transpositions per position, and a list of 
+        set errors (additions/substitutions)
+    :rtype: func:`int`, func:`list` of class:`Transposition`, func:`list` of \
+        class:`SetError`
     '''
     # pylint: disable=R0914,C0103,R0912
     
@@ -285,8 +296,11 @@ def set_errors_transpositions_n(string_a, string_b, types, n):
         Creates an actual string representing boundaries of one type for a 
         subsequence of the large boundary set sequence.
         
-        :param subseq: sequence of boundary type sets
-        :param boundary_type: -- boundary type (int)
+        :param subseq:        sequence of boundary type sets
+        :param boundary_type: boundary type
+        :type subseq:         func:`list` of :func:`set` onjects containing \
+                                :func:`int`
+        :type boundary_type:  int
         '''
         string = ''
         for part in subsequence:
@@ -302,7 +316,12 @@ def set_errors_transpositions_n(string_a, string_b, types, n):
         '''
         Find transpositions which overlap each other.
         
+        :param current: Transposition
+        :type current:  Transposition
         
+        :returns: Overlapping transpositions and the number of boundaries that \
+            they span
+        :rtype: :func:`list` of :class:`Transposition`, :func:`int`
         '''
         overlap = list()
         boundaries = 0
@@ -332,7 +351,7 @@ def set_errors_transpositions_n(string_a, string_b, types, n):
                 
                 # Look for transpositions by type
                 types_transposed = list()
-                for boundary_type in types:
+                for boundary_type in boundary_types:
                     string_t_a = render_boundary_type_string(subseq_a,
                                                              boundary_type)
                     string_t_b = render_boundary_type_string(subseq_b,

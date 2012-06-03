@@ -30,7 +30,7 @@ Boundary edit distance for one boundary type [FournierInkpen2012]_.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from .MultipleBoundaryDistance import boundary_string_from_masses, \
-    set_errors_transpositions_n
+    set_errors_transpositions_n_edits
 
 
 def linear_edit_distance(segment_masses_a, segment_masses_b, n):
@@ -60,4 +60,4 @@ def linear_edit_distance(segment_masses_a, segment_masses_b, n):
     string_b[-1] = []
     
     # Compute edit distance
-    return set_errors_transpositions_n(string_a, string_b, [1], n)
+    return set_errors_transpositions_n_edits(string_a, string_b, [1], n)
