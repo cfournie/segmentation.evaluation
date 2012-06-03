@@ -33,7 +33,7 @@ Similarity [FournierInkpen2012]_.
 #===============================================================================
 from .Kappa import fleiss_kappa
 from .Pi import fleiss_pi
-from .. import compute_mean
+from .. import compute_mean, compute_mean_values
 
 
 def artstein_poesio_bias(dataset_masses):
@@ -76,6 +76,14 @@ def mean_artstein_poesio_bias(dataset_masses):
     return compute_mean(dataset_masses, artstein_poesio_bias)
 
 
+def values_artstein_poesio_bias(dataset_masses):
+    '''
+    Produces a TSV for this metric
+    '''
+    header = list(['label', 'bias'])
+    return header, compute_mean_values(dataset_masses, artstein_poesio_bias)
+
+
 OUTPUT_NAME     = 'S-based Artstein and Poesio\'s (2008) Bias'
 SHORT_NAME      = 'B_s'
 SHORT_NAME_MEAN = 'Mean %s' % SHORT_NAME
@@ -88,16 +96,23 @@ def parse(args):
     output = None
     
     from ..data import load_file
+    from ..data.TSV import write_tsv
     from ..data.Display import render_value, render_mean_values
     values, is_file = load_file(args)
     
-    if not args['output'] and is_file:
-        output = render_value(SHORT_NAME, str(artstein_poesio_bias(values)))
+    if args['output'] != None:
+        output_file = args['output'][0]
+        header, rows = values_artstein_poesio_bias(values)
+        write_tsv(output_file, header, rows)
     else:
-        mean, std, var, stderr = mean_artstein_poesio_bias(values)
-        output = render_mean_values(SHORT_NAME_MEAN, mean, std, var, stderr)
-    
+        if not args['output'] and is_file:
+            output = render_value(SHORT_NAME, str(artstein_poesio_bias(values)))
+        else:
+            mean, std, var, stderr = mean_artstein_poesio_bias(values)
+            output = render_mean_values(SHORT_NAME_MEAN, mean, std, var, stderr)
+        
     return output
+
 
 def create_parser(subparsers):
     '''

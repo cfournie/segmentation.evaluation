@@ -32,9 +32,10 @@ Tests some general segeval utility functions.
 import unittest
 from decimal import Decimal
 from . import convert_positions_to_masses, convert_masses_to_positions, \
-    compute_pairwise
+    compute_pairwise, compute_mean
 from .data.Samples import KAZANTSEVA2012_G5
 from .ml.FbMeasure import f_b_measure
+from .agreement.Kappa import fleiss_kappa
 
 
 class TestSegeval(unittest.TestCase):
@@ -68,9 +69,13 @@ class TestSegeval(unittest.TestCase):
         arbitrary size can still be used.
         '''
         expected = (Decimal('0.2441586812212541867438777318'),
-                    Decimal('0.2305169230001435997031211478'),
-                    Decimal('0.05313805178945413332341442158'),
-                    Decimal('0.04705406986889928477977431108'))
+                    Decimal('0.2305169230001435997031211480'),
+                    Decimal('0.05313805178945413332341442167'),
+                    Decimal('0.04705406986889928477977431112'))
+        expected_variant = (Decimal('0.2441586812212541867438777318'),
+                            Decimal('0.2305169230001435997031211479'),
+                            Decimal('0.05313805178945413332341442162'),
+                            Decimal('0.04705406986889928477977431110'))
         
         self.assertEqual(compute_pairwise(KAZANTSEVA2012_G5,
                                           f_b_measure),
@@ -81,6 +86,26 @@ class TestSegeval(unittest.TestCase):
         self.assertEqual(compute_pairwise({'Kazantseva' : 
                                                 {'G5' : KAZANTSEVA2012_G5}},
                                           f_b_measure),
+                         expected_variant)
+    
+    
+    def test_compute_mean(self):
+        '''
+        Tests computing pairwise values from dicts.  Ensures that dicts of
+        arbitrary size can still be used.
+        '''
+        expected = ((Decimal('0.8198449828922561273654074438'),
+                     Decimal('2E-28'),
+                     Decimal('4E-56'),
+                     Decimal('1E-28')))
+        
+        self.assertEqual(compute_mean(KAZANTSEVA2012_G5, fleiss_kappa),
+                         expected)
+        self.assertEqual(compute_mean({'G5' : KAZANTSEVA2012_G5}, fleiss_kappa),
+                         expected)
+        self.assertEqual(compute_mean({'Kazantseva' : 
+                                            {'G5' : KAZANTSEVA2012_G5}},
+                                                fleiss_kappa),
                          expected)
         
         

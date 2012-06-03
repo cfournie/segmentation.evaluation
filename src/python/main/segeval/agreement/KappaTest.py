@@ -156,8 +156,8 @@ class TestKappa(unittest.TestCase):
         self.assertEqual(mean_fleiss_kappa(
                                 {'g2' : KAZANTSEVA2012_G2,
                                  'g5' : KAZANTSEVA2012_G5}),
-                         (Decimal('0.8532200830551737262407422695'),
+                         (Decimal('0.8532200830551737262407422694'),
                           Decimal('0.03337510016291759887533482579'),
                           Decimal('0.001113897310884782334990518712'),
-                          Decimal('0.02359975964797928122100972439')))
+                          Decimal('0.01179987982398964061050486219')))
 

@@ -296,9 +296,9 @@ def set_errors_transpositions_n_edits(string_a, string_b, boundary_types, n):
         Creates an actual string representing boundaries of one type for a 
         subsequence of the large boundary set sequence.
         
-        :param subseq:        sequence of boundary type sets
+        :param subsequence:   sequence of boundary type sets
         :param boundary_type: boundary type
-        :type subseq:         func:`list` of :func:`set` onjects containing \
+        :type subsequence:    func:`list` of :func:`set` onjects containing \
                                 :func:`int`
         :type boundary_type:  int
         '''

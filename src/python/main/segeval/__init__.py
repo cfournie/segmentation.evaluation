@@ -101,7 +101,7 @@ def convert_masses_to_positions(masses):
 
 def compute_pairwise(dataset_masses, fnc_metric, permuted=False):
     '''
-    Calculate mean pairwise segmentation metric values for functions that take
+    Calculate mean pairwise segmentation metric pairs for functions that take
     pairs of segmentations.
     
     :param dataset_masses: Segmentation mass dataset (including multiple \
@@ -115,10 +115,32 @@ def compute_pairwise(dataset_masses, fnc_metric, permuted=False):
     :returns: |compute_mean_return|
     :rtype: |compute_mean_return_type|
     '''
+    pairs = compute_pairwise_values(dataset_masses, fnc_metric, permuted)
+    return mean(pairs.values()), std(pairs.values()), var(pairs.values()), \
+        stderr(pairs.values())
+
+
+def compute_pairwise_values(dataset_masses, fnc_metric, permuted=False,
+                            return_parts=False):
+    '''
+    Calculate mean pairwise segmentation metric pairs for functions that take
+    pairs of segmentations.
+    
+    :param dataset_masses: Segmentation mass dataset (including multiple \
+                           codings).
+    :param fnc_metric:     Metric function to call on segmentation mass pairs.
+    :param permuted:       Permute coder combinations if true.
+    :type dataset_masses: dict
+    :type fnc_metric:     func
+    :type permuted:       bool
+    
+    :returns: List of values
+    :rtype: :func:`list`
+    '''
     # pylint: disable=C0103
-    values = list()
+    pairs = dict()
     # Define fnc per group
-    def __per_group__(inner_dataset_masses):
+    def __per_group__(prefix, inner_dataset_masses):
         '''
         Recurse through a dict to find levels where a metric can be calculated.
         
@@ -127,7 +149,7 @@ def compute_pairwise(dataset_masses, fnc_metric, permuted=False):
                                      multiple codings).
         :type inner_dataset_masses: dict
         '''
-        for coder_masses in inner_dataset_masses.values():
+        for label, coder_masses in inner_dataset_masses.items():
             if len(coder_masses.values()) > 0 and \
                 isinstance(coder_masses.values()[0], list):
                 # If is a group
@@ -136,16 +158,34 @@ def compute_pairwise(dataset_masses, fnc_metric, permuted=False):
                     for n in range(m+1, len(coders)):
                         segs_m = coder_masses[coders[m]]
                         segs_n = coder_masses[coders[n]]
-                        values.append(Decimal(fnc_metric(segs_m, segs_n)))
+                        entry_parts = list(prefix)
+                        entry_parts.extend([label, str(segs_m), str(segs_n)])
+                        entry = ','.join(entry_parts)
+                        if return_parts:
+                            pairs[entry] = \
+                                Decimal(fnc_metric(segs_m, segs_n,
+                                                   return_parts=return_parts))
+                        else:
+                            pairs[entry] = \
+                                Decimal(fnc_metric(segs_m, segs_n))
+                            
                         if permuted:
-                            values.append(Decimal(fnc_metric(segs_n, segs_m)))
+                            if return_parts:
+                                pairs[entry] = \
+                                    Decimal(fnc_metric(segs_n, segs_m,
+                                                    return_parts=return_parts))
+                            else:
+                                pairs[entry] = \
+                                    Decimal(fnc_metric(segs_n, segs_m))
             else:
                 # Else, recurse deeper
-                __per_group__(coder_masses)
+                innter_prefix = list(prefix)
+                innter_prefix.append(label)
+                __per_group__(innter_prefix, coder_masses)
     # Parse
-    __per_group__(dataset_masses)
+    __per_group__(list(), dataset_masses)
     # Return mean, std dev, and variance
-    return mean(values), std(values), var(values), stderr(values)
+    return pairs
 
 
 def compute_mean(dataset_masses, fnc_metric):
@@ -172,9 +212,39 @@ def compute_mean(dataset_masses, fnc_metric):
     :rtype: |compute_mean_return_type|
     '''
     # pylint: disable=C0103
-    values = list()
+    values = compute_mean_values(dataset_masses, fnc_metric)
+    # Return mean, std dev, and variance
+    return mean(values.values()), std(values.values()), var(values.values()), \
+                stderr(values.values())
+
+
+def compute_mean_values(dataset_masses, fnc_metric):
+    '''
+    Calculate mean segmentation metric values for functions that take
+    dicts of items and their segmentations per coder (``items_masses``).
+    
+    .. seealso:: :func:`segeval.agreement.observed_agreement` for an example of\
+     ``items_masses``.
+    
+    :param dataset_masses: Segmentation mass dataset (including multiple \
+                           codings).
+    :param fnc_metric:     Metric function to call on segmentation mass pairs.
+    :type dataset_masses: dict
+    :type fnc_metric:     func
+    
+    .. |compute_mean_return| replace:: Mean, standard deviation, variance, and \
+        standard error of a segmentation metric.
+    .. |compute_mean_return_type| replace:: :class:`decimal.Decimal`, \
+        :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
+        :class:`decimal.Decimal`
+        
+    :returns: |compute_mean_return|
+    :rtype: |compute_mean_return_type|
+    '''
+    # pylint: disable=C0103
+    values = dict()
     # Define fnc per group
-    def __per_group__(inner_dataset_masses):
+    def __per_group__(prefix, inner_dataset_masses):
         '''
         Recurse through a dict to find levels where a metric can be calculated.
         
@@ -183,20 +253,23 @@ def compute_mean(dataset_masses, fnc_metric):
                                      multiple codings).
         :type inner_dataset_masses: dict
         '''
-        for coder_masses in inner_dataset_masses.values():
-            if len(coder_masses.values()) > 0 and \
-                isinstance(coder_masses.values()[0], dict) and \
-                len(coder_masses.values()[0].values()) > 0 and \
-                isinstance(coder_masses.values()[0].values()[0], list):
+        for label, coder_masses in inner_dataset_masses.items():
+            if isinstance(coder_masses, dict) and \
+                len(coder_masses.values()) > 0 and \
+                isinstance(coder_masses.values()[0], list):
                 # If is a group
-                values.append(fnc_metric(coder_masses))
+                entry_parts = list(prefix)
+                entry_parts.append(label)
+                values[','.join(entry_parts)] = fnc_metric(inner_dataset_masses)
             else:
                 # Else, recurse deeper
-                __per_group__(coder_masses)
+                inner_prefix = list(prefix)
+                inner_prefix.append(label)
+                __per_group__(inner_prefix, coder_masses)
     # Parse
-    __per_group__(dataset_masses)
+    __per_group__(list(), dataset_masses)
     # Return mean, std dev, and variance
-    return mean(values), std(values), var(values), stderr(values)
+    return values
 
 
 class SegmentationMetricError(Exception):

@@ -158,7 +158,7 @@ class TestPairwiseWinPR(unittest.TestCase):
         collected in [KazantsevaSzpakowicz2012]_.
         '''
         self.assertEqual(pairwise_win_pr(KAZANTSEVA2012_G5, ),
-                         (Decimal('0.5868367743367743367743367746'),
+                         (Decimal('0.5868367743367743367743367742'),
                           Decimal('0.1198711646320202975515773835'),
                           Decimal('0.01436909611023691387771751852'),
                           Decimal('0.02446859901846728286113130960')))
@@ -169,10 +169,10 @@ class TestPairwiseWinPR(unittest.TestCase):
         collected in [KazantsevaSzpakowicz2012]_.
         '''
         self.assertEqual(pairwise_win_pr(KAZANTSEVA2012_G2),
-                         (Decimal('0.6980631577775708883529586183'),
-                          Decimal('0.1121769660131793859585435576'),
-                          Decimal('0.01258367170392200306131853235'),
-                          Decimal('0.01448198403990397250690864769')))
+                         (Decimal('0.6930903672953632698335380585'),
+                          Decimal('0.1165717046661569455738675445'),
+                          Decimal('0.01358896232877371699772707120'),
+                          Decimal('0.01601235509340334181415402993')))
     
     def test_large_disagreement(self):
         '''

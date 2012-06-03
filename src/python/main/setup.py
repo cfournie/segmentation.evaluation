@@ -5,7 +5,7 @@ Setup script for installing the segeval package.
 '''
 from distutils.core import setup
 setup(name='segeval',
-      version='1.0.0',
+      version='1.0.0 beta',
       
       description='A package and utilities providing a variety of discourse \
       segmentation evaluation metrics',
