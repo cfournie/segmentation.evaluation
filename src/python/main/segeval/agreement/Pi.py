@@ -47,7 +47,10 @@ only varies the calculation of :math:`\\text{A}_e`.
 #===============================================================================
 from decimal import Decimal
 from . import actual_agreement
-from .. import compute_mean
+from .. import compute_mean, compute_mean_values, create_tsv_rows
+from ..data import load_file
+from ..data.TSV import write_tsv
+from ..data.Display import render_value, render_mean_values
 
 
 def scotts_pi(items_masses, return_parts=False):
@@ -166,6 +169,15 @@ def mean_fleiss_pi(dataset_masses):
     return compute_mean(dataset_masses, fleiss_pi)
 
 
+def values_artstein_poesio_bias(dataset_masses):
+    '''
+    Produces a TSV for this metric
+    '''
+    header = list(['pi'])
+    values = compute_mean_values(dataset_masses, fleiss_pi)
+    return create_tsv_rows(header, values)
+
+
 OUTPUT_NAME     = 'S-based Fleiss\' Multi Pi'
 SHORT_NAME      = 'Pi*_s'
 SHORT_NAME_MEAN = 'Mean %s' % SHORT_NAME
@@ -176,17 +188,23 @@ def parse(args):
     Parse this module's metric arguments and perform requested actions.
     '''
     output = None
-    
-    from ..data import load_file
-    from ..data.Display import render_value, render_mean_values
     values, is_file = load_file(args)
-    
-    if not args['output'] and is_file:
-        output = render_value(SHORT_NAME, str(fleiss_pi(values)))
+    # Is a TSV requested?
+    if args['output'] != None:
+        # Create a TSV
+        output_file = args['output'][0]
+        header, rows = values_artstein_poesio_bias(values)
+        write_tsv(output_file, header, rows)
     else:
-        mean, std, var, stderr = mean_fleiss_pi(values)
-        output = render_mean_values(SHORT_NAME_MEAN, mean, std, var, stderr)
-    
+        # Create a string to output
+        if not args['output'] and is_file:
+            # Render for one item
+            output = render_value(SHORT_NAME, str(fleiss_pi(values)))
+        else:
+            # Render for one or more items
+            mean, std, var, stderr = mean_fleiss_pi(values)
+            output = render_mean_values(SHORT_NAME_MEAN, mean, std, var, stderr)
+    # Return
     return output
 
 

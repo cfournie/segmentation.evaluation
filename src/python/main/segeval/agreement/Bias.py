@@ -34,6 +34,9 @@ Similarity [FournierInkpen2012]_.
 from .Kappa import fleiss_kappa
 from .Pi import fleiss_pi
 from .. import compute_mean, compute_mean_values, create_tsv_rows
+from ..data import load_file
+from ..data.TSV import write_tsv
+from ..data.Display import render_value, render_mean_values
 
 
 def artstein_poesio_bias(dataset_masses):
@@ -95,23 +98,23 @@ def parse(args):
     Parse this module's metric arguments and perform requested actions.
     '''
     output = None
-    
-    from ..data import load_file
-    from ..data.TSV import write_tsv
-    from ..data.Display import render_value, render_mean_values
     values, is_file = load_file(args)
-    
+    # Is a TSV requested?
     if args['output'] != None:
+        # Create a TSV
         output_file = args['output'][0]
         header, rows = values_artstein_poesio_bias(values)
         write_tsv(output_file, header, rows)
     else:
+        # Create a string to output
         if not args['output'] and is_file:
+            # Render for one item
             output = render_value(SHORT_NAME, str(artstein_poesio_bias(values)))
         else:
+            # Render for one or more items
             mean, std, var, stderr = mean_artstein_poesio_bias(values)
             output = render_mean_values(SHORT_NAME_MEAN, mean, std, var, stderr)
-        
+    # Return
     return output
 
 

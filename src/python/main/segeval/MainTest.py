@@ -165,8 +165,8 @@ class TestMain(unittest.TestCase):
         '''
         Run through each metric and load from a file.
         '''
-        metrics = ['b']
-        filesizes = [50]
+        metrics = ['pi', 'k', 'b', ]
+        filesizes = [48, 47, 50]
         for metric, filesize in zip(metrics, filesizes):
             filename = 'testfile.tsv'
             if os.path.exists(filename):
