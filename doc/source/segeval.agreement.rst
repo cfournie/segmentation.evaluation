@@ -6,7 +6,7 @@ segeval.agreement
 
 Agreement
 =========
-.. autofunction:: observed_agreement
+.. autofunction:: actual_agreement
 
 
 Kappa

@@ -1,5 +1,5 @@
 '''
-Multiple-boundary edit distance.
+Multiple-boundary edit distance.  Detailed in [FournierInkpen2012]_.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
@@ -30,7 +30,6 @@ Multiple-boundary edit distance.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
-from ... import SegmentationMetricError
 
 
 NO_BOUNDARY = '-'
@@ -44,7 +43,7 @@ def boundary_string_from_masses(segment_masses):
     :param segment_masses: Segmentation masses.
     :type segment_masses:  list
     :returns: A sequence of boundary type sets
-    :rtype: :func:`list` of :func:`set` onjects containing :func:`int`s
+    :rtype: :func:`list` of :func:`set` onjects containing :func:`int` values.
     '''
     string = [set() for _ in xrange(0, sum(segment_masses) + 1)]
     
@@ -165,8 +164,8 @@ def calculate_set_errors(string_a, string_b):
     
     :param string_a: Boundary string.
     :param string_b: Boundary string.
-    :type string_a:  :func:`list` of :func:`set` onjects containing :func:`int`s
-    :type string_b:  :func:`list` of :func:`set` onjects containing :func:`int`s
+    :type string_a:  :func:`list` of :func:`set` onjects containing :func:`int`
+    :type string_b:  :func:`list` of :func:`set` onjects containing :func:`int`
     :returns: Number of errors, and detailed information on errors as a list of\
         error objects
     :rtype: func:`int`, :func:`list`
@@ -204,10 +203,10 @@ class Transposition(object):
         :param end:           Position of the end boundary in the transposition
         :param boundary_type: Type of boundary
         :param boundaries:    Number of boundaries involved in a transposition
-        :type start: int
-        :type start: int
-        :type start: int
-        :type start: int
+        :type start:         int
+        :type end:           int
+        :type boundary_type: int
+        :type boundaries:    int
         
         '''
         # pylint: disable=C0103
@@ -239,12 +238,14 @@ class Transposition(object):
         '''
         Transposition error scaling function (te).
         
-        Arguments:
-        n -- PBs over which transpositions are allowed
-        b -- number of boundaries involved in the current transposition
+        .. math::
+            \\text{te}(n,b)=b-(^1/_b)^{n-2} \quad \\text{where } n \geq 2 \\text{ and } b > 0
         
-        Returns:
-        Scaled penality for the transposition in question.
+        :param n: PBs over which transpositions are allowed
+        :param b: number of boundaries involved in the current transposition
+        
+        :returns: Scaled penalty for the transposition in question
+        :rtype: :class:`decimal.Decimal`
         '''
         max_penalty = Decimal(self.boundaries*2)
         discount = (Decimal(1)/Decimal(self.boundaries*2)) ** (self.n-2)
@@ -294,6 +295,9 @@ def set_errors_transpositions_n(string_a, string_b, types, n):
     set_transpositions = list()
     
     def find_overlapping_transpositions(current):
+        '''
+        Find transpositions which overlap each other.
+        '''
         overlap = list()
         boundaries = 0
         for transposition in set_transpositions:

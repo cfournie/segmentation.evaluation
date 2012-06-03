@@ -65,7 +65,7 @@ def similarity(segment_masses_a, segment_masses_b, n=DEFAULT_N,
     
     :returns: Similarity, where 0.0 <= sim <= 1.0, or the pbs unedited, total \
         pbs, substitutions and transpositions
-    :rtype: :class:`decomal.Decimal`, or :func:`int`, :func:`int`, \
+    :rtype: :class:`decimal.Decimal`, or :func:`int`, :func:`int`, \
         :func:`int`, :func:`int`
     '''
     # Total number of segments to be evaluated

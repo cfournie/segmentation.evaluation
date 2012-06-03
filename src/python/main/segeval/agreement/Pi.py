@@ -75,7 +75,7 @@ def scotts_pi(items_masses, return_parts=False):
     :type return_parts: bool
     
     :returns: Scott's Pi
-    :rtype: :class:`decomal.Decimal`
+    :rtype: :class:`decimal.Decimal`
     
     .. seealso:: :func:`segeval.agreement.actual_agreement` for an example of\
      ``items_masses``.
@@ -113,7 +113,7 @@ def fleiss_pi(items_masses, return_parts=False):
     :type return_parts: bool
     
     :returns: Fleiss's Pi
-    :rtype: :class:`decomal.Decimal`
+    :rtype: :class:`decimal.Decimal`
     
     .. seealso:: :func:`segeval.agreement.actual_agreement` for an example of\
      ``items_masses``.

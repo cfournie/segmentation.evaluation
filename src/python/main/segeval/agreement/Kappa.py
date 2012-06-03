@@ -74,7 +74,7 @@ def cohen_kappa(item_masses, return_parts=False):
     :type return_parts: bool
     
     :returns: Cohen's Kappa
-    :rtype: :class:`decomal.Decimal`
+    :rtype: :class:`decimal.Decimal`
     
     .. seealso:: :func:`segeval.agreement.actual_agreement` for an example of\
      ``items_masses``.
@@ -115,7 +115,7 @@ def fleiss_kappa(items_masses, return_parts=False):
     :type return_parts: bool
     
     :returns: Fleiss's Kappa
-    :rtype: :class:`decomal.Decimal`
+    :rtype: :class:`decimal.Decimal`
     
     .. seealso:: :func:`segeval.agreement.actual_agreement` for an example of\
      ``items_masses``.
