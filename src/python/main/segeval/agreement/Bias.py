@@ -80,9 +80,32 @@ def values_artstein_poesio_bias(dataset_masses):
     '''
     Produces a TSV for this metric
     '''
-    header = list(['label', 'bias'])
-    return header, compute_mean_values(dataset_masses, artstein_poesio_bias)
-
+    header = list(['bias'])
+    values = compute_mean_values(dataset_masses, artstein_poesio_bias)
+    
+    rows = list()
+    max_len = 0
+    for key, value in values.items():
+        row = key.split(',')
+        row.append(value)
+        rows.append(row)
+        max_len = len(row) if len(row) > max_len else max_len
+    
+    padded_rows = list()
+    for row in rows:
+        difference = max_len - len(row)
+        if difference > 0:
+            padded_row = list([''] * difference)
+            padded_row.extend(row)
+            padded_rows.append(padded_row)
+        else:
+            padded_rows.append(row)
+    
+    labels = max_len - 1
+    padded_header = ['label%i' % i for i in xrange(1, labels + 1)]
+    padded_header.extend(header)
+    
+    return padded_header, padded_rows
 
 OUTPUT_NAME     = 'S-based Artstein and Poesio\'s (2008) Bias'
 SHORT_NAME      = 'B_s'

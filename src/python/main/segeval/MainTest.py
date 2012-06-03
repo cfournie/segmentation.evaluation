@@ -173,11 +173,16 @@ class TestMain(unittest.TestCase):
             self.assertFalse(os.path.exists(filename))
             argv = [metric, '-o', filename, os.path.join(self.test_data_dir,
                                                          'hearst1997.json')]
-            main(argv)
-            self.assertTrue(os.path.exists(filename))
-            self.assertEqual(21, len(open(filename).read()))
-            os.remove(filename)
+            try:
+                main(argv)
+                self.assertTrue(os.path.exists(filename))
+                self.assertEqual(50, len(open(filename).read()))
+            finally:
+                if os.path.exists(filename):
+                    os.remove(filename)
+            
             self.assertFalse(os.path.exists(filename))
+                
 
 
     def test_help_output(self):
