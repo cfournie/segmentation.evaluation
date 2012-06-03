@@ -166,7 +166,8 @@ class TestMain(unittest.TestCase):
         Run through each metric and load from a file.
         '''
         metrics = ['b']
-        for metric in metrics:
+        filesizes = [50]
+        for metric, filesize in zip(metrics, filesizes):
             filename = 'testfile.tsv'
             if os.path.exists(filename):
                 os.remove(filename)
@@ -176,13 +177,12 @@ class TestMain(unittest.TestCase):
             try:
                 main(argv)
                 self.assertTrue(os.path.exists(filename))
-                self.assertEqual(50, len(open(filename).read()))
+                self.assertEqual(filesize, len(open(filename).read()))
             finally:
                 if os.path.exists(filename):
                     os.remove(filename)
             
-            self.assertFalse(os.path.exists(filename))
-                
+            self.assertFalse(os.path.exists(filename))         
 
 
     def test_help_output(self):

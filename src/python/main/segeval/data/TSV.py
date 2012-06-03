@@ -38,9 +38,20 @@ To use S, see the :mod:`segeval.similarity` module.
 import csv
 
 
-def write_tsv(filename, header, rows):
-    tsv = csv.writer(open(filename, 'wb'), delimiter='\t', quotechar='"',
+def write_tsv(filepath, header, rows):
+    '''
+    Write a TSV file using the given header and rows.
+    
+    :param filepath: Path and filename of a file to write to
+    :param header:   List of category names
+    :param rows:     Data to write for all categories
+    :type rows:   str
+    :type header: :class:`list`
+    :type rows:   :class:`list` of :class:`list`
+    '''
+    tsv = csv.writer(open(filepath, 'wb'), delimiter='\t', quotechar='"',
                      quoting=csv.QUOTE_MINIMAL)
     tsv.writerow(header)
     for row in rows:
         tsv.writerow(row)
+

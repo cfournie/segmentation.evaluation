@@ -272,6 +272,42 @@ def compute_mean_values(dataset_masses, fnc_metric):
     return values
 
 
+def create_tsv_rows(header, values):
+    '''
+    Convert a dict of values into a list of properly padded rows.
+    
+    :param filepath: Path and filename of a file to write to
+    :param header:   List of known category names
+    :param values:   Dict of computed values
+    :type header: :class:`list`
+    :type values: :class:`dict`
+    '''
+    # Parse labels
+    rows = list()
+    max_len = 0
+    for key, value in values.items():
+        row = key.split(',')
+        row.append(value)
+        rows.append(row)
+        max_len = len(row) if len(row) > max_len else max_len
+    # Pad rows to match the max depth/number of labels
+    padded_rows = list()
+    for row in rows:
+        difference = max_len - len(row)
+        if difference > 0:
+            padded_row = list([''] * difference)
+            padded_row.extend(row)
+            padded_rows.append(padded_row)
+        else:
+            padded_rows.append(row)
+    # Pad headers to match the depth/number of labels
+    labels = max_len - 1
+    padded_header = ['label%i' % i for i in xrange(1, labels + 1)]
+    padded_header.extend(header)
+    # Return
+    return padded_header, padded_rows
+
+
 class SegmentationMetricError(Exception):
     '''
     Indicates that a runtime check has failed, and the algorithm is performing
