@@ -172,17 +172,19 @@ def calculate_set_errors(string_a, string_b):
     '''
     set_error_details = list()
     for i in range(0, len(string_a)):
-        type_ai = []
-        type_bi = []
+        boundary_type_a_i = []
+        boundary_type_b_i = []
         try:
-            type_ai = string_a[i]
+            boundary_type_a_i = string_a[i]
         except KeyError:
             pass
         try:
-            type_bi = string_b[i]
+            boundary_type_b_i = string_b[i]
         except KeyError:
             pass
-        substitutions, add_or_del = compare_sets(i, type_ai, type_bi)
+        substitutions, add_or_del = compare_sets(i,
+                                                 boundary_type_a_i,
+                                                 boundary_type_b_i)
         set_error_details.extend(substitutions)
         set_error_details.extend(add_or_del)
     return set_error_details
@@ -278,15 +280,17 @@ def set_errors_transpositions_n(string_a, string_b, types, n):
     set_errors = calculate_set_errors(string_a, string_b)
     
     # Define boundary type string renderer
-    def render_boundary_type_string(subseq, type_b):
+    def render_boundary_type_string(subsequence, boundary_type):
         '''
-        Arguments:
-        subseq -- sequence of boundary type sets
-        type_b -- boundary type (int)
+        Creates an actual string representing boundaries of one type for a 
+        subsequence of the large boundary set sequence.
+        
+        :param subseq: sequence of boundary type sets
+        :param boundary_type: -- boundary type (int)
         '''
         string = ''
-        for part in subseq:
-            if type_b in part:
+        for part in subsequence:
+            if boundary_type in part:
                 string += BOUNDARY
             else:
                 string += NO_BOUNDARY
@@ -297,6 +301,8 @@ def set_errors_transpositions_n(string_a, string_b, types, n):
     def find_overlapping_transpositions(current):
         '''
         Find transpositions which overlap each other.
+        
+        
         '''
         overlap = list()
         boundaries = 0

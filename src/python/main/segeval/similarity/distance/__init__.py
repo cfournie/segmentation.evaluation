@@ -1,5 +1,5 @@
 '''
-Edit distance package.
+Edit distance package [FournierInkpen2012]_.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''

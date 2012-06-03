@@ -2,18 +2,19 @@ segeval.similarity.distance
 ***************************
 
 .. automodule:: segeval.similarity.distance
-   :members:
 
 
 SingleBoundaryDistance
 ======================
 
 .. automodule:: segeval.similarity.distance.SingleBoundaryDistance
-   :members:
+.. autofunction:: linear_edit_distance
 
 
 MultipleBoundaryDistance
 ========================
 
 .. automodule:: segeval.similarity.distance.MultipleBoundaryDistance
-   :members:
+.. autoclass:: SetError
+.. autoclass:: Transposition
+.. autoclass:: set_errors_transpositions_n

@@ -1,5 +1,5 @@
 '''
-Boundary edit distance for one boundary type.
+Boundary edit distance for one boundary type [FournierInkpen2012]_.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''

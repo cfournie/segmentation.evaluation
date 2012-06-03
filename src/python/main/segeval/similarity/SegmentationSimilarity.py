@@ -1,5 +1,5 @@
 '''
-Segmentation similarity evaluation metric functions.
+Segmentation similarity evaluation metric functions [FournierInkpen2012]_.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
@@ -45,7 +45,12 @@ def similarity(segment_masses_a, segment_masses_b, n=DEFAULT_N,
     # pylint: disable=C0103,R0913,R0914
     '''
     Calculates similarity between two sequences of segment masses using
-    boundary edit distance as in _[FournierInkpen2012].
+    boundary edit distance as in [FournierInkpen2012]_.
+    
+    .. math::
+        \\text{S}(s_{i1},s_{i2}) = \\frac
+        {\\textbf{t} \cdot \\text{mass}(i) - \\textbf{t} - \\text{d}(s_{i1},s_{i2},T)}
+        {\\textbf{t} \cdot \\text{mass}(i) - \\textbf{t}}
     
     :param segment_masses_a:  Segmentation masses.
     :param segment_masses_b:  Segmentation masses.
