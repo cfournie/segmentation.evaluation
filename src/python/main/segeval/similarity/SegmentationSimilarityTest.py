@@ -1,8 +1,7 @@
 '''
 Tests the similarity evaluation metric functions.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier

@@ -53,13 +53,13 @@ class TestLinearBoundaryDistance(unittest.TestCase):
         
         d,t,s = linear_edit_distance(mass_a,
                                      mass_b,
-                                     7)[0:3]
-        self.assertEqual((d,t,s), (1,1,0))
+                                     7)
+        self.assertEqual((d,len(t),len(s)), (1,1,0))
         d,t,s = linear_edit_distance(mass_a,
                                      mass_b,
-                                     5)[0:3]
+                                     5)
         
-        self.assertEqual((d,t,s), (3,1,2))
+        self.assertEqual((d,len(t),len(s)), (3,1,2))
 
 
     def test_suboptimal_transp(self):
@@ -74,13 +74,13 @@ class TestLinearBoundaryDistance(unittest.TestCase):
         
         d,t,s = linear_edit_distance(mass_a,
                                      mass_b,
-                                     4)[0:3]
-        self.assertEqual((d,t,s), (2,2,0))
+                                     4)
+        self.assertEqual((d,len(t),len(s)), (2,2,0))
         
         d,t,s = linear_edit_distance(mass_a,
                                      mass_b,
-                                     2)[0:3]
-        self.assertEqual((d,t,s), (2,2,0))
+                                     2)
+        self.assertEqual((d,len(t),len(s)), (2,2,0))
 
 
     def test_n2_transp(self):
@@ -95,18 +95,18 @@ class TestLinearBoundaryDistance(unittest.TestCase):
         
         d,t,s = linear_edit_distance(mass_a,
                                      mass_b,
-                                     1)[0:3]
-        self.assertEqual((d,t,s), (2,0,2))
+                                     1)
+        self.assertEqual((d,len(t),len(s)), (2,0,2))
         
         d,t,s = linear_edit_distance(mass_a,
                                      mass_b,
-                                     2)[0:3]
-        self.assertEqual((d,t,s), (1,1,0))
+                                     2)
+        self.assertEqual((d,len(t),len(s)), (1,1,0))
         
         d,t,s = linear_edit_distance(mass_a,
                                      mass_b,
-                                     3)[0:3]
-        self.assertEqual((d,t,s), (1,1,0))
+                                     3)
+        self.assertEqual((d,len(t),len(s)), (1,1,0))
 
 
     def test_n3_transp(self):
@@ -121,23 +121,23 @@ class TestLinearBoundaryDistance(unittest.TestCase):
         
         d,t,s = linear_edit_distance(mass_a,
                                      mass_b,
-                                     1)[0:3]
-        self.assertEqual((d,t,s), (2,0,2))
+                                     1)
+        self.assertEqual((d,len(t),len(s)), (2,0,2))
         
         d,t,s = linear_edit_distance(mass_a,
                                      mass_b,
-                                     2)[0:3]
-        self.assertEqual((d,t,s), (2,0,2))
+                                     2)
+        self.assertEqual((d,len(t),len(s)), (2,0,2))
         
         d,t,s = linear_edit_distance(mass_a,
                                      mass_b,
-                                     3)[0:3]
-        self.assertEqual((d,t,s), (1,1,0))
+                                     3)
+        self.assertEqual((d,len(t),len(s)), (1,1,0))
         
         d,t,s = linear_edit_distance(mass_a,
                                      mass_b,
-                                     4)[0:3]
-        self.assertEqual((d,t,s), (1,1,0))
+                                     4)
+        self.assertEqual((d,len(t),len(s)), (1,1,0))
 
     
     def test_complex_case(self):
@@ -152,8 +152,8 @@ class TestLinearBoundaryDistance(unittest.TestCase):
         
         d,t,s = linear_edit_distance(mass_a,
                                      mass_b,
-                                     4)[0:3]
-        self.assertEqual((d,t,s), (3,2,1))
+                                     4)
+        self.assertEqual((d,len(t),len(s)), (3,2,1))
         
     def test_distance_1(self):
         '''
@@ -167,9 +167,9 @@ class TestLinearBoundaryDistance(unittest.TestCase):
         
         d,t,s = linear_edit_distance(mass_a,
                                      mass_b,
-                                     5)[0:3]
+                                     5)
                                      
-        self.assertEqual((d,t,s), (1,1,0))
+        self.assertEqual((d,len(t),len(s)), (1,1,0))
         
         
         

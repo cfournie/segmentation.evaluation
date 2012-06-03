@@ -85,29 +85,34 @@ def similarity(segment_masses_a, segment_masses_b, n=DEFAULT_N,
         pbs_total = sum(segment_masses_a) - 1
         
         # Compute edit distance
-        set_transpositions, set_errors, set_transpositions_details = \
-            linear_edit_distance(segment_masses_a, segment_masses_b, n)[1:4]
+        set_transpositions, set_errors = \
+            linear_edit_distance(segment_masses_a, segment_masses_b, n)[1:3]
+        
+        # Get totals
+        total_set_transpositions = len(set_transpositions)
+        total_set_errors         = len(set_errors)
         
         # Scale transpositions
         if scale_transp:
-            set_transpositions = 0
-            for transposition in set_transpositions_details:
-                set_transpositions += transposition.te()
+            total_set_transpositions = 0
+            for set_transposition in set_transpositions:
+                total_set_transpositions += set_transposition.te()
         
         # Apply weights
         if weight != DEFAULT_WEIGHT:
             weight_s = Decimal(weight[0])
             weight_t = Decimal(weight[1])
-            set_errors         = Decimal(set_errors) * weight_s
-            set_transpositions = Decimal(set_transpositions) * weight_t
+            total_set_errors         = Decimal(total_set_errors) * weight_s
+            total_set_transpositions = Decimal(total_set_transpositions) * \
+                                            weight_t
         
-        pbs_unedited = pbs_total - (set_errors + set_transpositions)
+        pbs_unedited = pbs_total - (total_set_errors + total_set_transpositions)
         
         if return_parts:
             # Return the total sum of unmoved mass during all transformations,
             # and the total mass
             return pbs_unedited, pbs_total, \
-                set_errors, set_transpositions
+                total_set_errors, total_set_transpositions
         else:
             # Return the total sum of unmoved mass during all transformations \
             # over the total mass

@@ -30,6 +30,7 @@ Multiple-boundary edit distance.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
+from ... import SegmentationMetricError
 
 
 NO_BOUNDARY = '-'
@@ -59,8 +60,7 @@ def boundary_string_from_masses(segment_masses):
 
 class SetError(object):
     '''
-    Represents a transposition error that spans a sequence of potential
-    boundary position.
+    Represents a set error at a particular potential boundary position.
     '''
     # pylint: disable=R0903
     
@@ -83,7 +83,7 @@ class SetError(object):
     
     def overlaps(self, other):
         '''
-        Tests to see whether another error overlaps with this error.
+        Tests to see whether a transposition error overlaps with this set error.
         
         :param other: Other error object (usually a :func:`Transposition`)
         
@@ -110,7 +110,7 @@ class SetError(object):
                                         ','.join(self.boundary_types))
 
 
-def set_error(position, set_a, set_b):
+def compare_sets(position, set_a, set_b):
     '''
     Calculate the number of substitution or addition/deletion operations
     required to edit one set to be the other.
@@ -122,7 +122,9 @@ def set_error(position, set_a, set_b):
     :type set_a:     :func:`set` or :func:`list`
     :type set_b:     :func:`set` or :func:`list`
     
-    Returns: The number of substitutions and additions/deletions
+    :returns: A list of the substitutions and list of additions/deletions /
+        performed
+    :rtype: :func:`list`, :func:`list`
     '''
     # pylint: disable=W0141
     set_a, set_b = set(set_a), set(set_b)
@@ -169,7 +171,6 @@ def calculate_set_errors(string_a, string_b):
         error objects
     :rtype: func:`int`, :func:`list`
     '''
-    set_errors = 0
     set_error_details = list()
     for i in range(0, len(string_a)):
         type_ai = []
@@ -182,19 +183,33 @@ def calculate_set_errors(string_a, string_b):
             type_bi = string_b[i]
         except KeyError:
             pass
-        substitutions, add_or_del = set_error(i, type_ai, type_bi)
-        set_errors += len(substitutions) + len(add_or_del)
+        substitutions, add_or_del = compare_sets(i, type_ai, type_bi)
         set_error_details.extend(substitutions)
         set_error_details.extend(add_or_del)
-    return set_errors, set_error_details
+    return set_error_details
 
 
 class Transposition(object):
     '''
-    Represents a set error at a particular potential boundary position.
+    Represents a transposition error that spans a sequence of potential
+    boundary position.
     '''
     
     def __init__(self, start, end, boundary_type, boundaries):
+        '''
+        Creates an object that represents a transposition error.
+        
+        :param start:         Position of the beginning boundary in the \
+                              transposition
+        :param end:           Position of the end boundary in the transposition
+        :param boundary_type: Type of boundary
+        :param boundaries:    Number of boundaries involved in a transposition
+        :type start: int
+        :type start: int
+        :type start: int
+        :type start: int
+        
+        '''
         # pylint: disable=C0103
         self.start         = start
         self.end           = end
@@ -240,7 +255,7 @@ class Transposition(object):
                                       self.boundary_type)
         
 
-def __set_errors_transpositions_n(string_a, string_b, types, n):
+def set_errors_transpositions_n(string_a, string_b, types, n):
     '''
     Computes edit distance of boundary strings using n-wise transpositions and
     substitutions (symmetrically).
@@ -259,7 +274,7 @@ def __set_errors_transpositions_n(string_a, string_b, types, n):
     # pylint: disable=R0914,C0103,R0912
     
     # Identify the number of direct set errors
-    set_errors, set_error_details = calculate_set_errors(string_a, string_b)
+    set_errors = calculate_set_errors(string_a, string_b)
     
     # Define boundary type string renderer
     def render_boundary_type_string(subseq, type_b):
@@ -276,12 +291,12 @@ def __set_errors_transpositions_n(string_a, string_b, types, n):
                 string += NO_BOUNDARY
         return string
     
-    set_transpositions_details = list()
+    set_transpositions = list()
     
     def find_overlapping_transpositions(current):
         overlap = list()
         boundaries = 0
-        for transposition in set_transpositions_details:
+        for transposition in set_transpositions:
             if transposition.overlaps(current):
                 overlap.append(transposition)
                 boundaries += transposition.boundaries
@@ -333,46 +348,34 @@ def __set_errors_transpositions_n(string_a, string_b, types, n):
                                                                 transposition)
                     
                     if len(overlap) == 0:
-                        set_transpositions_details.append(transposition)
+                        set_transpositions.append(transposition)
                     else:
                         if transposition.boundaries > boundaries:
                             # Remove overlapping
                             for transp_overlap in overlap:
-                                set_transpositions_details.remove(
-                                                                transp_overlap)
+                                set_transpositions.remove(transp_overlap)
                             # Add new
-                            set_transpositions_details.append(transposition)
+                            set_transpositions.append(transposition)
                     
                 i += 1
-    set_transpositions = len(set_transpositions_details)
     
     # Discount substitutions by transpositions
     untransposted_set_errors = list()
     transposted_set_errors   = list()
-    for set_error_detail in set_error_details:
+    for set_error in set_errors:
         overlap = False
-        for transposition in set_transpositions_details:
-            if set_error_detail.overlaps(transposition):
+        for transposition in set_transpositions:
+            if set_error.overlaps(transposition):
                 overlap = True
                 break
         if overlap == False:
-            untransposted_set_errors.append(set_error_detail)
+            untransposted_set_errors.append(set_error)
         else:
-            transposted_set_errors.append(set_error_detail)
+            transposted_set_errors.append(set_error)
     
     # Calculate distance
-    sum_converted_to_transpositions = 0
-    for set_transpositions_detail in set_transpositions_details:
-        sum_converted_to_transpositions += set_transpositions_detail.boundaries
+    distance = len(untransposted_set_errors) + len(set_transpositions)
     
-    set_errors = set_errors - (sum_converted_to_transpositions * 2)
-    
-    if set_errors != len(untransposted_set_errors):
-        raise Exception('Incorrect set error discounting has occurred.')
-    
-    distance = set_errors + set_transpositions
-    
-    return distance, set_transpositions, set_errors, \
-        set_transpositions_details, set_error_details
+    return distance, set_transpositions, untransposted_set_errors
         
 

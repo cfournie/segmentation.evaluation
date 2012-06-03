@@ -1,8 +1,7 @@
 '''
-Boundary edit distance.
+Boundary edit distance for one boundary type.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -31,23 +30,27 @@ Boundary edit distance.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from .MultipleBoundaryDistance import boundary_string_from_masses, \
-    multiple_boundary_type_edit_distance
+    set_errors_transpositions_n
 
 
-def linear_edit_distance(segment_a, segment_b, n):
+def linear_edit_distance(segment_masses_a, segment_masses_b, n):
     '''
     Compute edit distance for linear single boundary type segmentations.
     
-    Arguments:
-    segment_a -- Linear segment masses
-    segment_b -- Linear segment masses
-    n         -- PBs over which transpositions are allowed
+    :param segment_masses_a:  Segmentation masses.
+    :param segment_masses_b:  Segmentation masses.
+    :param n:                 The maximum number of PBs that boundaries can \
+                                  span to be considered transpositions (n<2 \
+                                  means no transpositions)
+    :type segment_masses_a: list
+    :type segment_masses_b: list
+    :type beta: float
     '''
     # pylint: disable=C0103
     
     # Convert
-    string_a = boundary_string_from_masses(segment_a)
-    string_b = boundary_string_from_masses(segment_b)
+    string_a = boundary_string_from_masses(segment_masses_a)
+    string_b = boundary_string_from_masses(segment_masses_b)
     
     # There exist no boundaries at the beginning and end of linear single
     # boundary segmentations (that can differ)
@@ -57,4 +60,4 @@ def linear_edit_distance(segment_a, segment_b, n):
     string_b[-1] = []
     
     # Compute edit distance
-    return multiple_boundary_type_edit_distance(string_a, string_b, [1], n)
+    return set_errors_transpositions_n(string_a, string_b, [1], n)
