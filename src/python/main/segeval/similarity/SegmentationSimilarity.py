@@ -31,7 +31,11 @@ Segmentation similarity evaluation metric functions [FournierInkpen2012]_.
 #===============================================================================
 from decimal import Decimal
 from .distance.SingleBoundaryDistance import linear_edit_distance
-from .. import SegmentationMetricError, compute_pairwise
+from .. import SegmentationMetricError, compute_pairwise, \
+    compute_pairwise_values, create_tsv_rows
+from ..data import load_file
+from ..data.TSV import write_tsv
+from ..data.Display import render_mean_values
 
 
 DEFAULT_N      = 2
@@ -57,14 +61,16 @@ def similarity(segment_masses_a, segment_masses_b, n=DEFAULT_N,
     :param n:                 The maximum number of PBs that boundaries can \
                                   span to be considered transpositions (n<2 \
                                   means no transpositions)
-    :param beta:              Scales how precision and recall are averaged.
+    :param weight:            Weights for substitution and transposition \
+                                  operations
     :param scale_transp:      If true, scales transpositions by their size \
-                                  and the number of boundaires
+                                  and the number of boundaries
     :param return_parts:      Scales how precision and recall are averaged.
     :type segment_masses_a: list
     :type segment_masses_b: list
     :type n: int
-    :type weight: tuple
+    :type weight: :func:`tuple` of :func:`float` objects \
+                        (substitutions,transpositions)
     :type scale_transp: bool
     :type return_parts: bool
     
@@ -116,8 +122,8 @@ def similarity(segment_masses_a, segment_masses_b, n=DEFAULT_N,
         if return_parts:
             # Return the total sum of unmoved mass during all transformations,
             # and the total mass
-            return pbs_unedited, pbs_total, \
-                total_set_errors, total_set_transpositions
+            return pbs_unedited, pbs_total, total_set_errors, \
+                total_set_transpositions, set_errors, set_transpositions
         else:
             # Return the total sum of unmoved mass during all transformations \
             # over the total mass
@@ -125,7 +131,7 @@ def similarity(segment_masses_a, segment_masses_b, n=DEFAULT_N,
 
 
 def pairwise_similarity(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
-                        scale_transp=DEFAULT_SCALE):
+                        scale_transp=DEFAULT_SCALE, return_parts=False):
     '''
     Calculate mean pairwise segmentation F-Measure.
     
@@ -142,12 +148,12 @@ def pairwise_similarity(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
         :class:`decimal.Decimal`, :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103,R0913,R0914
-    def wrapper(segment_masses_a, segment_masses_b):
+    def wrapper(segment_masses_a, segment_masses_b, return_parts=return_parts):
         '''
         Wrapper to provide parameters.
         '''
         return similarity(segment_masses_a, segment_masses_b, n, weight,
-                  scale_transp)
+                  scale_transp, return_parts)
     
     return compute_pairwise(dataset_masses, wrapper, permuted=False)
 
@@ -156,18 +162,126 @@ OUTPUT_NAME = 'Mean S'
 SHORT_NAME  = 'S'
 
 
+def values_s_detailed(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
+                      scale_transp=DEFAULT_SCALE):
+    '''
+    Produces a TSV for this metric
+    '''
+    # pylint: disable=C0103
+    header = list(['coder1', 'coder2', 'error', 'edits', 'boundaries', 'n'])
+    def wrapper(segment_masses_a, segment_masses_b, return_parts):
+        '''
+        Wrapper to provide parameters.
+        '''
+        return similarity(segment_masses_a, segment_masses_b, n, weight,
+                  scale_transp, return_parts)
+    # Get values
+    values = compute_pairwise_values(dataset_masses, wrapper, return_parts=True)
+    adjusted_values = dict()
+    for label, value in values.items():
+        subvalues = list()
+        set_errors, set_transpositions = value[4:6]
+        # For set errors
+        for _ in set_errors:
+            subvalues.append(['sub', 1, 1, 1])
+        # For transposition errors
+        for set_transposition in set_transpositions:
+            subvalues.append(['transp', 1, set_transposition.boundaries,
+                             set_transposition.n])
+        adjusted_values[label] = subvalues
+    return create_tsv_rows(header, adjusted_values, expand=True)
+
+
+def values_s(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
+                      scale_transp=DEFAULT_SCALE):
+    '''
+    Produces a TSV for this metric
+    '''
+    # pylint: disable=C0103
+    header = list(['coder1', 'coder2', 'pbs_unedited', 'pbs_total', \
+                   'sub_edits', 'transp_edits', SHORT_NAME])
+    def wrapper(segment_masses_a, segment_masses_b, return_parts):
+        '''
+        Wrapper to provide parameters.
+        '''
+        return similarity(segment_masses_a, segment_masses_b, n, weight,
+                  scale_transp, return_parts)
+    # Get values
+    values = compute_pairwise_values(dataset_masses, wrapper, return_parts=True)
+    adjusted_values = dict()
+    for label, value in values.items():
+        # Get values
+        pbs_unedited, pbs_total, total_set_errors, \
+                total_set_transpositions = value[0:4]
+        s = Decimal(pbs_unedited) / Decimal(pbs_total)
+        # Store values
+        adjusted_values[label] = [pbs_unedited, pbs_total, total_set_errors, \
+                total_set_transpositions, s]
+    return create_tsv_rows(header, adjusted_values)
+
+
 def parse(args):
     '''
     Parse this module's metric arguments and perform requested actions.
     '''
-    from ..data import load_file
-    from ..data.Display import render_mean_values
+    # pylint: disable=C0103
+    output = None
     values = load_file(args)[0]
+    # Parse args
+    n  = args['n']
+    wt = args['wt']
+    ws = args['ws']
+    te = args['te']
+    weight = DEFAULT_WEIGHT
+    if wt != 1.0 or ws != 1.0:
+        weight = (ws, wt)
+    # Is a TSV requested?
+    if args['output'] != None:
+        # Create a TSV
+        output_file = args['output'][0]
+        if args['detailed']:
+            header, rows = values_s_detailed(values, n, weight, te)
+        else:
+            header, rows = values_s(values, n, weight, te)
+        write_tsv(output_file, header, rows)
+    else:
+        # Create a string to output
+        mean, std, var, stderr = pairwise_similarity(values, n, weight, te)
+        output = render_mean_values(SHORT_NAME, mean, std, var, stderr)
+    # Return
+    return output
+
+
+def parser_s_support(parser):
+    '''
+    Add support for S parameters
     
-    mean, std, var, stderr = pairwise_similarity(values)
-    name = SHORT_NAME
-    
-    return render_mean_values(name, mean, std, var, stderr)
+    :param parser: Argument parser
+    :type parser: argparse.ArgumentParser
+    '''
+    parser.add_argument('-n',
+                        type=int,
+                        default=DEFAULT_N,
+                        help='The maximum number of PBs that boundaries can '+\
+                              'span to be considered transpositions (n<2 '+\
+                              ('means no transpositions); default is %i.' \
+                                    % DEFAULT_N))
+    parser.add_argument('-wt',
+                        type=float,
+                        default=DEFAULT_WEIGHT[0],
+                        help='Weight, 0 <= wt <= 1, to scale transposition '+\
+                            'error by; default is 1 (no scaling).')
+    parser.add_argument('-ws',
+                        type=float,
+                        default=DEFAULT_WEIGHT[0],
+                        help='Weight, 0 <= wt <= 1, to scale substitution '+\
+                            'error by; default is 1 (no scaling).')
+    parser.add_argument('-te',
+                        type=bool,
+                        default=DEFAULT_SCALE,
+                        help='Scale transpositions by their size and the '+\
+                            'number of boundaries the span; %s by default' \
+                            % str(DEFAULT_SCALE))
 
 
 def create_parser(subparsers):
@@ -178,5 +292,12 @@ def create_parser(subparsers):
     parser = subparsers.add_parser('s',
                                    help=OUTPUT_NAME)
     parser_add_file_support(parser)
+    parser_s_support(parser)
+    parser.add_argument('-de', '--detailed',
+                        action='store_true',
+                        default=False,
+                        help='When specifying an output TSV file, specify '+\
+                            'this to obtain a detailed error breakdown per '+\
+                            'edit')
     parser.set_defaults(func=parse)
 

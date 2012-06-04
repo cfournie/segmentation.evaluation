@@ -31,7 +31,10 @@ Provides a segmentation version of the  percentage agreement metric.
 #===============================================================================
 from decimal import Decimal
 from . import find_boundary_position_freqs
-from .. import compute_pairwise
+from .. import compute_pairwise, compute_pairwise_values, create_tsv_rows
+from ..data import load_file
+from ..data.TSV import write_tsv
+from ..data.Display import render_mean_values
 
 
 def percentage(hypothesis_masses, reference_masses):
@@ -85,19 +88,33 @@ def pairwise_percentage(dataset_masses):
 OUTPUT_NAME = 'Pairwise Mean Percentage'
 SHORT_NAME  = 'Pr'
 
+def values_percentage(dataset_masses):
+    '''
+    Produces a TSV for this metric
+    '''
+    header = list(['coder1', 'coder2', SHORT_NAME])
+    values = compute_pairwise_values(dataset_masses, percentage)
+    return create_tsv_rows(header, values)
+
 
 def parse(args):
     '''
     Parse this module's metric arguments and perform requested actions.
     '''
-    from ..data import load_file
-    from ..data.Display import render_mean_values
+    output = None
     values = load_file(args)[0]
-    
-    mean, std, var, stderr = pairwise_percentage(values)
-    name = SHORT_NAME
-    
-    return render_mean_values(name, mean, std, var, stderr)
+    # Is a TSV requested?
+    if args['output'] != None:
+        # Create a TSV
+        output_file = args['output'][0]
+        header, rows = values_percentage(values,)
+        write_tsv(output_file, header, rows)
+    else:
+        # Create a string to output
+        mean, std, var, stderr = pairwise_percentage(values)
+        name = SHORT_NAME
+        output = render_mean_values(name, mean, std, var, stderr)
+    return output
 
 
 def create_parser(subparsers):

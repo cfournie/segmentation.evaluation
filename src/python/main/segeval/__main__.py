@@ -67,7 +67,6 @@ def main(argv=None):
     create_parser_pk(subparsers)
     create_parser_windowdiff(subparsers)
     create_parser_winpr(subparsers)
-    
     # Parse arguments
     args = None
     if argv:
@@ -79,6 +78,9 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
-    print main()
+    # pylint: disable=C0103
+    output = main()
+    if output != None:
+        print output
     sys.exit(0)
 

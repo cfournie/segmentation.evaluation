@@ -300,6 +300,7 @@ def parser_add_file_support(parser):
     parser.add_argument('-d', '--delimiter',
                         type=str,
                         default='\t',
-                        help='Delimiting character for TSV files; ignored if '+\
-                        'JSON is specified and is a tab if unspecified')
+                        help='Delimiting character for input TSV files; '+\
+                        'ignored if JSON is specified, default is a tab '+\
+                        'character')
 

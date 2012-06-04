@@ -79,18 +79,18 @@ def mean_artstein_poesio_bias(dataset_masses):
     return compute_mean(dataset_masses, artstein_poesio_bias)
 
 
+OUTPUT_NAME     = 'S-based Artstein and Poesio\'s (2008) Bias'
+SHORT_NAME      = 'B_s'
+SHORT_NAME_MEAN = 'Mean %s' % SHORT_NAME
+
+
 def values_artstein_poesio_bias(dataset_masses):
     '''
     Produces a TSV for this metric
     '''
-    header = list(['bias'])
+    header = list([SHORT_NAME])
     values = compute_mean_values(dataset_masses, artstein_poesio_bias)
     return create_tsv_rows(header, values)
-
-
-OUTPUT_NAME     = 'S-based Artstein and Poesio\'s (2008) Bias'
-SHORT_NAME      = 'B_s'
-SHORT_NAME_MEAN = 'Mean %s' % SHORT_NAME
 
 
 def parse(args):

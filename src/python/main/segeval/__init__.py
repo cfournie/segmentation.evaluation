@@ -159,21 +159,24 @@ def compute_pairwise_values(dataset_masses, fnc_metric, permuted=False,
                         segs_m = coder_masses[coders[m]]
                         segs_n = coder_masses[coders[n]]
                         entry_parts = list(prefix)
-                        entry_parts.extend([label, str(segs_m), str(segs_n)])
+                        entry_parts.extend([label, str(m), str(n)])
                         entry = ','.join(entry_parts)
                         if return_parts:
                             pairs[entry] = \
-                                Decimal(fnc_metric(segs_m, segs_n,
-                                                   return_parts=return_parts))
+                                fnc_metric(segs_m, segs_n,
+                                                   return_parts=return_parts)
                         else:
                             pairs[entry] = \
                                 Decimal(fnc_metric(segs_m, segs_n))
                             
                         if permuted:
+                            entry_parts = list(prefix)
+                            entry_parts.extend([label, str(n), str(m)])
+                            entry = ','.join(entry_parts)
                             if return_parts:
                                 pairs[entry] = \
-                                    Decimal(fnc_metric(segs_n, segs_m,
-                                                    return_parts=return_parts))
+                                    fnc_metric(segs_n, segs_m,
+                                                    return_parts=return_parts)
                             else:
                                 pairs[entry] = \
                                     Decimal(fnc_metric(segs_n, segs_m))
@@ -272,7 +275,7 @@ def compute_mean_values(dataset_masses, fnc_metric):
     return values
 
 
-def create_tsv_rows(header, values):
+def create_tsv_rows(header, values, expand=False):
     '''
     Convert a dict of values into a list of properly padded rows.
     
@@ -282,14 +285,28 @@ def create_tsv_rows(header, values):
     :type header: :class:`list`
     :type values: :class:`dict`
     '''
+    # pylint: disable=R0914
     # Parse labels
     rows = list()
     max_len = 0
     for key, value in values.items():
-        row = key.split(',')
-        row.append(value)
-        rows.append(row)
-        max_len = len(row) if len(row) > max_len else max_len
+        # Get label parts
+        items_parts = key.split(',')
+        # Expand if we are creating multiple rows per label part
+        subvalues = None
+        if expand:
+            subvalues = value
+        else:
+            subvalues = [value]
+        # Create rows
+        for subvalue in subvalues:
+            row = list(items_parts)
+            if isinstance(subvalue, list):
+                row.extend(subvalue)
+            else:
+                row.append(subvalue)
+            rows.append(row)
+            max_len = len(row) if len(row) > max_len else max_len
     # Pad rows to match the max depth/number of labels
     padded_rows = list()
     for row in rows:
@@ -301,7 +318,7 @@ def create_tsv_rows(header, values):
         else:
             padded_rows.append(row)
     # Pad headers to match the depth/number of labels
-    labels = max_len - 1
+    labels = max_len - len(header)
     padded_header = ['label%i' % i for i in xrange(1, labels + 1)]
     padded_header.extend(header)
     # Return

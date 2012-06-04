@@ -169,18 +169,18 @@ def mean_fleiss_pi(dataset_masses):
     return compute_mean(dataset_masses, fleiss_pi)
 
 
-def values_artstein_poesio_bias(dataset_masses):
-    '''
-    Produces a TSV for this metric
-    '''
-    header = list(['pi'])
-    values = compute_mean_values(dataset_masses, fleiss_pi)
-    return create_tsv_rows(header, values)
-
-
 OUTPUT_NAME     = 'S-based Fleiss\' Multi Pi'
 SHORT_NAME      = 'Pi*_s'
 SHORT_NAME_MEAN = 'Mean %s' % SHORT_NAME
+
+
+def values_pi(dataset_masses):
+    '''
+    Produces a TSV for this metric
+    '''
+    header = list([SHORT_NAME])
+    values = compute_mean_values(dataset_masses, fleiss_pi)
+    return create_tsv_rows(header, values)
 
 
 def parse(args):
@@ -193,7 +193,7 @@ def parse(args):
     if args['output'] != None:
         # Create a TSV
         output_file = args['output'][0]
-        header, rows = values_artstein_poesio_bias(values)
+        header, rows = values_pi(values)
         write_tsv(output_file, header, rows)
     else:
         # Create a string to output

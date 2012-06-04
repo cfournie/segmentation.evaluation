@@ -36,6 +36,7 @@ To use S, see the :mod:`segeval.similarity` module.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 import csv
+import os
 
 
 def write_tsv(filepath, header, rows):
@@ -49,6 +50,10 @@ def write_tsv(filepath, header, rows):
     :type header: :class:`list`
     :type rows:   :class:`list` of :class:`list`
     '''
+    # Create a default filename if a dir is specified
+    if os.path.isdir(filepath):
+        filepath = os.path.join(filepath, 'output.tsv')
+    # Open file
     tsv = csv.writer(open(filepath, 'wb'), delimiter='\t', quotechar='"',
                      quoting=csv.QUOTE_MINIMAL)
     tsv.writerow(header)

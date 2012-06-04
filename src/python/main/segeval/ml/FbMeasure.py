@@ -31,13 +31,17 @@ Provides a segmentation version of the F-Measure metric.
 #===============================================================================
 from .Percentage import find_boundary_position_freqs
 from . import fmeasure, precision as ml_precision, recall as ml_recall
-from .. import compute_pairwise
+from .. import compute_pairwise, compute_pairwise_values, create_tsv_rows
+from ..data import load_file
+from ..data.TSV import write_tsv
+from ..data.Display import render_mean_values
 
 
 DEFAULT_BETA = 1.0
 
 
-def f_b_measure(hypothesis_masses, reference_masses, beta=DEFAULT_BETA):
+def f_b_measure(hypothesis_masses, reference_masses, beta=DEFAULT_BETA,
+                return_parts=False):
     '''
     Calculates the F-Measure between a hypothesis and reference segmentation,
     where F-Measure is calculated as:
@@ -74,21 +78,29 @@ def f_b_measure(hypothesis_masses, reference_masses, beta=DEFAULT_BETA):
             1    & \\text{if is not a boundary } hyp_i \\text{ and } ref_i \\text{ is}  \\\\
             0    & \\text{else}
         \\end{cases}
+        
+    .. math::
+        \\text{tn}(hyp_i, ref_i) = 
+        \\begin{cases}
+            1    & \\text{if both } hyp_i \\text{ and } ref_i \\text{ are not boundaries}  \\\\
+            0    & \\text{else}
+        \\end{cases}
     
     Each matching boundary position is considered a TP, whereas a missing
     boundary in the hypothesis is considered a FN, and an extra boundary in the
     hypothesis that is not found in the reference is considered a FP.  TNs
     do not occur.
     
-    :param hypothesis_masses: Hypothesis segmentation masses.
-    :param reference_masses: Reference segmentation masses.
-    :param beta: Scales how precision and recall are averaged.
+    :param hypothesis_masses: Hypothesis segmentation masses
+    :param reference_masses:  Reference segmentation masses
+    :param beta:              Scales how precision and recall are averaged
     :type hypothesis_masses: list
-    :type reference_masses: list
-    :type beta: float
+    :type reference_masses:  list
+    :type beta:              :func:`float` or :class:`decimal.Decimal`
     
-    :returns: F-measure.
-    :rtype: :class:`decimal.Decimal`
+    :returns: F-measure or the values of the confusion matrix
+    :rtype: :class:`decimal.Decimal` or :func:`int`, :func:`int`, :func:`int`, \
+        :func:`int`
     
     .. seealso:: :func:`segeval.ml.fmeasure`
     '''
@@ -106,7 +118,14 @@ def f_b_measure(hypothesis_masses, reference_masses, beta=DEFAULT_BETA):
     for pos in positions_hyp.keys():
         if pos not in positions_ref:
             fp += 1
-    return fmeasure(tp, fp, fn, beta)
+    
+    tn = len(reference_masses) - 1 - len(positions_ref) - fn - fp
+    
+    if not return_parts:
+        return fmeasure(tp, fp, fn, beta)
+    else:
+        return tp, fp, fn, tn
+        
 
 
 def precision(hypothesis_masses, reference_masses):
@@ -227,31 +246,77 @@ OUTPUT_NAME_F = 'Pairwise Mean F_beta Measure'
 OUTPUT_NAME_R = 'Pairwise Mean Recall'
 OUTPUT_NAME_P = 'Pairwise Mean Precision'
 SHORT_NAME_F  = 'F_%s'
-SHORT_NAME_R  = 'R'
 SHORT_NAME_P  = 'P'
+SHORT_NAME_R  = 'R'
+
+
+def values_f_b_measure(dataset_masses, beta=DEFAULT_BETA):
+    '''
+    Produces a TSV for this metric
+    '''
+    # Define a dnc to retrieve F_Beta-Measure values
+    def wrapper_f(hypothesis_masses, reference_masses, return_parts=False):
+        '''
+        Wrapper to provide parameters.
+        '''
+        return f_b_measure(hypothesis_masses, reference_masses, beta,
+                           return_parts=return_parts)
+    # Create header
+    header = list(['coder1', 'coder2', SHORT_NAME_F % str(beta), SHORT_NAME_P, \
+                   SHORT_NAME_R, 'TP', 'FP', 'FN', 'TN'])
+    # Calculate values
+    values_f = compute_pairwise_values(dataset_masses, wrapper_f,
+                                       permuted=False)
+    values_p = compute_pairwise_values(dataset_masses, precision,
+                                       permuted=False)
+    values_r = compute_pairwise_values(dataset_masses, recall,
+                                       permuted=False)
+    values_cf = compute_pairwise_values(dataset_masses, wrapper_f,
+                                        permuted=False, return_parts=True)
+    # Combine into one table
+    combined_values = dict()
+    for label in values_f.keys():
+        row = list()
+        row.append(values_f[label])
+        row.append(values_p[label])
+        row.append(values_r[label])
+        row.extend(values_cf[label])
+        combined_values[label] = row
+    # Return
+    return create_tsv_rows(header, combined_values)
 
 
 def parse(args):
     '''
     Parse this module's metric arguments and perform requested actions.
     '''
-    from ..data import load_file
-    from ..data.Display import render_mean_values
+    output = None
     values = load_file(args)[0]
-    
-    subparser = args['subparser_name']
-    if subparser == 'f':
-        beta = args['beta']
-        mean, std, var, stderr = pairwise_f_b_measure(values, beta)
-        name = SHORT_NAME_F % str(beta)
-    elif subparser == 'r':
-        mean, std, var, stderr = pairwise_ml_measure(values, fnc=recall)
-        name = SHORT_NAME_R
-    elif subparser == 'p':
-        mean, std, var, stderr = pairwise_ml_measure(values, fnc=precision)
-        name = SHORT_NAME_P
-    
-    return render_mean_values(name, mean, std, var, stderr)
+    # Is a TSV requested?
+    if args['output'] != None:
+        # Create a TSV
+        output_file = args['output'][0]
+        beta = 1
+        if 'beta' in args:
+            beta = args['beta']
+        header, rows = values_f_b_measure(values, beta)
+        write_tsv(output_file, header, rows)
+    else:
+        # Create a string to output
+        subparser = args['subparser_name']
+        if subparser == 'f':
+            beta = args['beta']
+            mean, std, var, stderr = pairwise_f_b_measure(values, beta)
+            name = SHORT_NAME_F % str(beta)
+        elif subparser == 'r':
+            mean, std, var, stderr = pairwise_ml_measure(values, fnc=recall)
+            name = SHORT_NAME_R
+        elif subparser == 'p':
+            mean, std, var, stderr = pairwise_ml_measure(values, fnc=precision)
+            name = SHORT_NAME_P
+        output = render_mean_values(name, mean, std, var, stderr)
+    # Return
+    return output
 
 
 def parser_beta_support(parser):
