@@ -157,16 +157,16 @@ class TestPairwiseWindowDiff(unittest.TestCase):
         '''
         self.assertEqual(pairwise_window_diff(KAZANTSEVA2012_G5,
                                               lamprier_et_al_2007_fix=False),
-                         (Decimal('0.3346808778477464646756666835'),
-                          Decimal('0.1548359646350644285479295987'),
-                          Decimal('0.02397417594447092239596242763'),
-                          Decimal('0.03160575893229410229605643339')))
+                         (Decimal('0.3604506237259865251208907685'),
+                          Decimal('0.1674103189012695088955568781'),
+                          Decimal('0.02802621487462475498810473917'),
+                          Decimal('0.02416359817069226127768032185')))
         self.assertEqual(pairwise_window_diff(KAZANTSEVA2012_G5,
                                               lamprier_et_al_2007_fix=True),
-                         (Decimal('0.3132488451884422284933124958'),
-                          Decimal('0.1504970340183621608256398094'),
-                          Decimal('0.02264935724832405748451673388'),
-                          Decimal('0.03072007842893909445584931717')))
+                         (Decimal('0.3389327650117214732278073273'),
+                          Decimal('0.1644218164415795205498766705'),
+                          Decimal('0.02703453372194846954943255446'),
+                          Decimal('0.02373224499579829290476994223')))
     
     def test_kazantseva2012_g2(self):
         '''
@@ -175,16 +175,16 @@ class TestPairwiseWindowDiff(unittest.TestCase):
         '''
         self.assertEqual(pairwise_window_diff(KAZANTSEVA2012_G2,
                                               lamprier_et_al_2007_fix=False),
-                         (Decimal('0.2320175115879447163831997425'),
-                          Decimal('0.1120117646913460670148287930'),
-                          Decimal('0.01254663542926948147954575889'),
-                          Decimal('0.01538599916689114871263558635')))
+                         (Decimal('0.2545512423455600226641754513'),
+                          Decimal('0.1227764444488944596833784806'),
+                          Decimal('0.01507405531151246718395938745'),
+                          Decimal('0.01120790469248990475787117304')))
         self.assertEqual(pairwise_window_diff(KAZANTSEVA2012_G2,
                                               lamprier_et_al_2007_fix=True),
-                         (Decimal('0.2177394026283560619148130360'),
-                          Decimal('0.1025027049723129189687548044'),
-                          Decimal('0.01050680452664102360225293032'),
-                          Decimal('0.01407982936126299309751920047')))
+                         (Decimal('0.2282101219734164495559781364'),
+                          Decimal('0.09824964933538713480770055124'),
+                          Decimal('0.009652993594526537660429053508'),
+                          Decimal('0.008968924867993997594174187059')))
     
     def test_large_disagreement(self):
         '''
@@ -199,10 +199,10 @@ class TestPairwiseWindowDiff(unittest.TestCase):
                           0.0))
         self.assertEqual(pairwise_window_diff(LARGE_DISAGREEMENT,
                                               lamprier_et_al_2007_fix=True),
-                          (Decimal('0.8738537684261691328366719325'),
-                           Decimal('0.09697786067530433386741553343'),
-                           Decimal('0.009404705461158738750410907665'),
-                           Decimal('0.04848893033765216693370776672')))
+                          (Decimal('0.8583107329225146711972779545'),
+                           Decimal('0.1040894435363239488284336823'),
+                           Decimal('0.01083461225570157148986770720'),
+                           Decimal('0.03680117568723445601862258284')))
     
     def test_complete_agreement(self):
         '''
@@ -217,8 +217,8 @@ class TestPairwiseWindowDiff(unittest.TestCase):
                           0.0))
         self.assertEqual(pairwise_window_diff(LARGE_DISAGREEMENT,
                                               lamprier_et_al_2007_fix=True),
-                         (Decimal('0.8738537684261691328366719325'),
-                          Decimal('0.09697786067530433386741553343'),
-                          Decimal('0.009404705461158738750410907665'),
-                          Decimal('0.04848893033765216693370776672')))
+                          (Decimal('0.8583107329225146711972779545'),
+                           Decimal('0.1040894435363239488284336823'),
+                           Decimal('0.01083461225570157148986770720'),
+                           Decimal('0.03680117568723445601862258284')))
 

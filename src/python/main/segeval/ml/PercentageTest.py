@@ -160,10 +160,10 @@ class TestPairwisePercentage(unittest.TestCase):
         collected in Kazantseva (2012).
         '''
         self.assertEqual(pairwise_percentage(KAZANTSEVA2012_G2),
-                         (Decimal('0.3400351005511937809385090183'),
-                          Decimal('0.2052392529871103688967507465'),
-                          Decimal('0.04212315096670709248201325726'),
-                          Decimal('0.02819177953471713861413055106')))
+                         (Decimal('0.3398087832646656176067940768'),
+                          Decimal('0.1948481072924021072633034332'),
+                          Decimal('0.03796578491543144325163024138'),
+                          Decimal('0.02515478248611697670879150623')))
     
     def test_large_disagreement(self):
         '''

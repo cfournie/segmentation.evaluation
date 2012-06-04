@@ -292,20 +292,19 @@ def parse(args):
     '''
     output = None
     values = load_file(args)[0]
+    beta = 1
+    if 'beta' in args and args['beta'] != 1:
+        beta = args['beta']
     # Is a TSV requested?
     if args['output'] != None:
         # Create a TSV
         output_file = args['output'][0]
-        beta = 1
-        if 'beta' in args and args['beta'] != 1:
-            beta = args['beta']
         header, rows = values_f_b_measure(values, beta)
         write_tsv(output_file, header, rows)
     else:
         # Create a string to output
         subparser = args['subparser_name']
         if subparser == 'f':
-            beta = args['beta']
             mean, std, var, stderr = pairwise_f_b_measure(values, beta)
             name = SHORT_NAME_F % str(beta)
         elif subparser == 'r':

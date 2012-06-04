@@ -133,10 +133,10 @@ class TestPairwiseFbMeasure(unittest.TestCase):
         collected in [KazantsevaSzpakowicz2012]_.
         '''
         self.assertEqual(pairwise_f_b_measure(KAZANTSEVA2012_G5),
-                         (Decimal('0.2441586812212541867438777318'),
-                          Decimal('0.2305169230001435997031211480'),
-                          Decimal('0.05313805178945413332341442167'),
-                          Decimal('0.04705406986889928477977431112')))
+                         (Decimal('0.2441586812212541867438777317'),
+                          Decimal('0.2305169230001435997031211478'),
+                          Decimal('0.05313805178945413332341442160'),
+                          Decimal('0.03327225188672428552085603181')))
     
     def test_kazantseva2012_g2(self):
         '''
@@ -144,10 +144,10 @@ class TestPairwiseFbMeasure(unittest.TestCase):
         collected in [KazantsevaSzpakowicz2012]_.
         '''
         self.assertEqual(pairwise_f_b_measure(KAZANTSEVA2012_G2),
-                         (Decimal('0.47480224729479942985404753'),
-                          Decimal('0.2199376293591112276619510953'),
-                          Decimal('0.04837256080810578504745834864'),
-                          Decimal('0.03021075680230526234508976824')))
+                         (Decimal('0.4777419851104061630377419851'),
+                          Decimal('0.2090943663384804017117580489'),
+                          Decimal('0.04372045403449064611325971031'),
+                          Decimal('0.01908761684847243358481821492')))
     
     def test_large_disagreement(self):
         '''

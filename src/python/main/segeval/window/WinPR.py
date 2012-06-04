@@ -250,19 +250,18 @@ def parse(args):
     values = load_file(args)[0]
     subsubparser_name = args['subsubparser_name']
     name = SHORT_NAME % subsubparser_name
+    beta = 1
+    if 'beta' in args and args['beta'] != 1:
+        beta = args['beta']
     # Is a TSV requested?
     if args['output'] != None:
         # Create a TSV
         output_file = args['output'][0]
-        beta = 1
-        if 'beta' in args and args['beta'] != 1:
-            beta = args['beta']
         header, rows = values_win_pr(values, beta)
         write_tsv(output_file, header, rows)
     else:
         # Create a string to output
         if subsubparser_name == SHORT_NAME_F:
-            beta = args['beta']
             name += '_%s' % str(beta)
             mean, std, var, stderr = pairwise_win_pr(values, wrap_win_p_f(beta))
         elif subsubparser_name == SHORT_NAME_P:

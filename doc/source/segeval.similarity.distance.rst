@@ -19,4 +19,4 @@ MultipleBoundaryDistance
    :members:
 .. autoclass:: Transposition
    :members:
-.. autofunction:: set_errors_transpositions_n
+.. autofunction:: set_errors_transpositions_n_edits
