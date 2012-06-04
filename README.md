@@ -1,7 +1,7 @@
-SegEval v1.0.0 beta
-==============================================
+SegEval v1.0 beta
+=================
 
-This package is a collection of tools and metrics for evaluating segmentation. A variety of metrics are provided, including:
+This package is a collection of metrics and a [command-line interface](http://packages.python.org/segeval/#commandline-usage) for evaluating segmentation. A variety of metrics are provided, including:
 
 - Segmentation Similarity (S) [(Fournier and Inkpen, 2012)](http://nlp.chrisfournier.ca/publications/#segmentation);
 - WindowDiff;
@@ -12,11 +12,13 @@ Additionally, inter-coder agreement coefficients that are based upon S for both 
 - Kappa; and
 - Pi.
 
-For more details, see the manual at http://nlp.chrisfournier.ca/software/segeval/
+For more details, see the manual at http://packages.python.org/segeval/
 
 If you're using this software for research, please cite:
 
 *Chris Fournier and Diana Inkpen. 2012. Segmentation Similarity and Agreement. Proceedings of Human Language Technologies: The 2012 Annual Conference of the North American Chapter of the Association for Computational Linguistics. (HLT '12), pp. 152—161. Association for Computational Linguistics, Stroudsburg, PA, USA.*
+
+If you would like to read the paper, [visit my website](http://nlp.chrisfournier.ca/publications/#segmentation).
 
 ```
 @inproceedings{FournierInkpen2012,

@@ -1,7 +1,7 @@
 Segmentation Evaluation using segeval
 *************************************
 
-This package is a collection of tools and metrics for evaluating segmentation.  A variety of metrics are provided, including:
+This package is a collection of metrics and a `command-line interface <#commandline-usage>`_ for evaluating segmentation.  A variety of metrics are provided, including:
 
 * Segmentation Similarity (S) [FournierInkpen2012]_;
 * WindowDiff;
@@ -12,12 +12,16 @@ Additionally, inter-coder agreement coefficients that are based upon S for both 
 * Kappa; and
 * Pi.
 
+If you have any problems or difficulties, please `log an issue <https://github.com/cfournie/segmentation.evaluation/issues>`_.
+
 :Release: |version| (beta)
 :Date: |today|
 
 If you're using this software for research, please cite:
 
 *Chris Fournier and Diana Inkpen. 2012. Segmentation Similarity and Agreement. Proceedings of Human Language Technologies: The 2012 Annual Conference of the North American Chapter of the Association for Computational Linguistics. (HLT '12), pp. 152—161. Association for Computational Linguistics, Stroudsburg, PA, USA.*
+
+If you would like to read the paper, `visit my website <http://nlp.chrisfournier.ca/publications/#segmentation>`_.
 
 BibTeX::
 
@@ -41,11 +45,14 @@ Installation
 Requirements:
 
 * `Python 2.7 <http://www.python.org/download/>`_
-* Recommended: `setuptools0.6c11 <http://pypi.python.org/pypi/setuptools>`_
+* Recommended: `setuptools0.6c11 <http://pypi.python.org/pypi/setuptools>`_ or `pip <http://pypi.python.org/pypi/pip>`_ (either is required to effortlessly install)
 
 
 Mac OSX and Linux
 -----------------
+
+Verifying Requirements
+++++++++++++++++++++++
 
 First let's verify that you have all of the requirements setup. Let's check for the right version of python.  Open up your terminal and enter::
 
@@ -71,9 +78,17 @@ It should return a path that matches (except for the text after ``/bin/``) the o
 
   /Library/Frameworks/Python.framework/Versions/2.7/bin/easy_install
 
+
+Installing
+++++++++++
+
 After installing the required packages, open up your terminal and enter::
   
   sudo easy_install segeval
+
+Or, if you are using pip, open up your terminal and enter::
+  
+  sudo pip segeval
 
 To verify that it worked, type::
 
@@ -90,6 +105,9 @@ If that worked, then you're done; enjoy!
 Windows
 -------
 
+Verifying Requirements
+++++++++++++++++++++++
+
 First let's verify that you have all of the requirements setup. Let's check for the right version of python.  Open up your terminal and enter::
 
   python --version
@@ -98,9 +116,17 @@ You should see a version string returned that contains the number ``2.7`` in it,
 
   Python 2.7.3
 
+
+Installing
+++++++++++
+
 Open up a command prompt and run::
 
   easy_install segeval
+
+Or, if you are using pip, open up your terminal and enter::
+  
+  sudo pip segeval
 
 To verify that it worked, type::
 
@@ -132,6 +158,8 @@ It should complain by saying::
 
 If that worked, then you're done; enjoy!
 
+
+.. _commandline-usage:
 
 Commandline usage
 =================
