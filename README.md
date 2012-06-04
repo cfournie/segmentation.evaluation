@@ -1,19 +1,42 @@
-Segmentation Mass Similarity Evaluation Metric
+SegEval v1.0.0 beta
 ==============================================
 
-This project allows for a segmentation hypothesis to be compared in similarity to a segmentation reference.  A reference implementation of WinDiff is also present, and the mass similarity metric is compared and contrasted with it in both unit tests and the contained paper (TeX provided).
+This package is a collection of tools and metrics for evaluating segmentation. A variety of metrics are provided, including:
 
+- Segmentation Similarity (S) [(Fournier and Inkpen, 2012)](http://nlp.chrisfournier.ca/publications/#segmentation);
+- WindowDiff;
+- Pk; and others.
+
+Additionally, inter-coder agreement coefficients that are based upon S for both 2 and more coders are provided, including:
+
+- Kappa; and
+- Pi.
+
+For more details, see the manual at http://nlp.chrisfournier.ca/software/segeval/
+
+If you're using this software for research, please cite:
+
+```Chris Fournier and Diana Inkpen. 2012. Segmentation Similarity and Agreement. Proceedings of Human Language Technologies: The 2012 Annual Conference of the North American Chapter of the Association for Computational Linguistics. (HLT '12), pp. 152—161. Association for Computational Linguistics, Stroudsburg, PA, USA.```
+
+```@inproceedings{FournierInkpen2012,
+	author		= {Chris Fournier and Diana Inkpen},
+	title		= {Segmentation Similarity and Agreement},
+	booktitle	= {Human Language Technologies: The 2012 Annual Conference of the North American Chapter of the Association for Computational Linguistics},
+	series		= {HLT '12},
+	year		= {2012},
+	location	= {Montreal, Quebec, Canada},
+	pages		= {152--161},
+	numpages	= {10},
+	publisher	= {Association for Computational Linguistics},
+	address		= {Stroudsburg, PA, USA}
+}```
 
 Requirements
 ------------
 - [Python 2.7+](http://www.python.org/)
-- [NumPy](http://numpy.scipy.org/)
-- [Jinja2](http://jinja.pocoo.org/docs/)
 
 
 Directories
 -----------
-- /data/ - Datasets for testing purposes
-- /tex/  - LaTeX 2e source, and [TeXlipse](http://texlipse.sourceforge.net/) project files for the paper on this method
-- /proj/ - [Eclipse](http://www.eclipse.org/) ([PyDev](http://pydev.org/)) project files
+- /doc/  - Sphinx auto-documentation code
 - /src/  - Source code (Python 2.7)

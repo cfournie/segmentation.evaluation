@@ -12,20 +12,227 @@ Additionally, inter-coder agreement coefficients that are based upon S for both 
 * Kappa; and
 * Pi.
 
-:Release: |version|
+:Release: |version| (beta)
 :Date: |today|
+
+If you're using this software for research, please cite:
+
+*Chris Fournier and Diana Inkpen. 2012. Segmentation Similarity and Agreement. Proceedings of Human Language Technologies: The 2012 Annual Conference of the North American Chapter of the Association for Computational Linguistics. (HLT '12), pp. 152—161. Association for Computational Linguistics, Stroudsburg, PA, USA.*
+
+BibTeX::
+
+  @inproceedings{FournierInkpen2012,
+    author    = {Chris Fournier and Diana Inkpen},
+    title   = {Segmentation Similarity and Agreement},
+    booktitle = {Human Language Technologies: The 2012 Annual Conference of the North American Chapter of the Association for Computational Linguistics},
+    series    = {HLT '12},
+    year    = {2012},
+    location  = {Montreal, Quebec, Canada},
+    pages   = {152--161},
+    numpages  = {10},
+    publisher = {Association for Computational Linguistics},
+    address   = {Stroudsburg, PA, USA}
+  }
 
 
 Installation
 ============
 
+Requirements:
+
+* `Python 2.7 <http://www.python.org/download/>`_
+* Recommended: `setuptools0.6c11 <http://pypi.python.org/pypi/setuptools>`_
+
+
+Mac OSX and Linux
+-----------------
+
+First let's verify that you have all of the requirements setup. Let's check for the right version of python.  Open up your terminal and enter::
+
+  which python
+
+It should output some string that contains the number ``2.7`` in it, much like::
+  
+  /Library/Frameworks/Python.framework/Versions/2.7/bin/python
+
+Now type::
+
+  python --version
+
+You should see a version string returned that contains the number ``2.7`` in it, much like::
+
+  Python 2.7.3
+
+Now let's try to see whether ``setuptools`` is installed; type::
+
+  which easy_install
+
+It should return a path that matches (except for the text after ``/bin/``) the output of the earlier call to ``which python``::
+
+  /Library/Frameworks/Python.framework/Versions/2.7/bin/easy_install
+
+After installing the required packages, open up your terminal and enter::
+  
+  sudo easy_install segeval
+
+To verify that it worked, type::
+
+  python -m segeval
+
+It should complain by saying::
+
+  usage: segeval [-h] {pi,k,b,f,r,p,pr,s,pk,wd,wpr} ...
+  segeval: error: too few arguments
+
+If that worked, then you're done; enjoy!
+
+
+Windows
+-------
+
+First let's verify that you have all of the requirements setup. Let's check for the right version of python.  Open up your terminal and enter::
+
+  python --version
+
+You should see a version string returned that contains the number ``2.7`` in it, much like::
+
+  Python 2.7.3
+
+Open up a command prompt and run::
+
+  easy_install segeval
+
+To verify that it worked, type::
+
+  python -m segeval
+
+It should complain by saying::
+
+  usage: segeval [-h] {pi,k,b,f,r,p,pr,s,pk,wd,wpr} ...
+  segeval: error: too few arguments
+
+If that worked, then you're done; enjoy!
+
+
+Source Install
+--------------
+
+To install from source, `download or clone the source code repository from github <https://github.com/cfournie/segmentation.evaluation>`_, extract it, and navigate to the ``src/python/main`` directory and run::
+  
+  python setup.py install
+
+To verify that it worked, type::
+
+  python -m segeval
+
+It should complain by saying::
+
+  usage: segeval [-h] {pi,k,b,f,r,p,pr,s,pk,wd,wpr} ...
+  segeval: error: too few arguments
+
+If that worked, then you're done; enjoy!
+
 
 Commandline usage
 =================
 
+From a terminal, use::
+
+  python -m segeval -h
+
+This will present you with the available options::
+
+  usage: segeval [-h] {pi,k,b,f,r,p,pr,s,pk,wd,wpr} ...
+
+  A discourse segmentation evaluation utility.
+
+  optional arguments:
+    -h, --help            show this help message and exit
+
+  metric:
+    Calculates a specified segmentation evaluation metric upon provided data
+
+    {pi,k,b,f,r,p,pr,s,pk,wd,wpr}
+                          Available metrics
+      pi                  S-based Fleiss' Multi Pi
+      k                   S-based Fleiss' Multi Kappa
+      b                   S-based Artstein and Poesio's (2008) Bias
+      f                   Pairwise Mean F_beta Measure
+      r                   Pairwise Mean Recall
+      p                   Pairwise Mean Precision
+      pr                  Pairwise Mean Percentage
+      s                   Mean S
+      pk                  Mean Pk
+      wd                  Mean WindowDiff
+      wpr                 Mean WinPR
+
+From here, you can ask for more detailed help for a specific metric, such as ``S``::
+
+  python -m segeval s -h
+
+It's usage has the following options::
+
+  usage: segeval s [-h] [-o OUTPUT] [-f {tsv,json}] [-d DELIMITER] [-n N]
+                   [-wt WT] [-ws WS] [-te TE] [-de]
+                   input
+
+  positional arguments:
+    input                 Input file or directory
+
+  optional arguments:
+    -h, --help            show this help message and exit
+    -o OUTPUT, --output OUTPUT
+                          Output file or directory. If not specified, a summary
+                          or results is printed to the console.
+    -f {tsv,json}, --format {tsv,json}
+                          Input file format; default is json
+    -d DELIMITER, --delimiter DELIMITER
+                          Delimiting character for input TSV files; ignored if
+                          JSON is specified, default is a tab character
+    -n N                  The maximum number of PBs that boundaries can span to
+                          be considered transpositions (n<2 means no
+                          transpositions); default is 2.
+    -wt WT                Weight, 0 <= wt <= 1, to scale transposition error by;
+                          default is 1 (no scaling).
+    -ws WS                Weight, 0 <= wt <= 1, to scale substitution error by;
+                          default is 1 (no scaling).
+    -te TE                Scale transpositions by their size and the number of
+                          boundaries the span; True by default
+    -de, --detailed       When specifying an output TSV file, specify this to
+                          obtain a detailed error breakdown per edit
+
+There are two modes of output:
+
+* Screen output (default); and
+* TSV (Tab Separated Values) file output (enabled by specifying an output file using ``-o OUTPUT``)
+
+Screen outputis very minimal, but will often give you the quick values that you need.  The TSV output is meant for being passed into `R <http://www.r-project.org/>`_, or another statistical package, and contains detailed values per pair of coders/item.
+
+For screen output, if you have some `sample data <https://github.com/cfournie/segmentation.corpora>`_, you can run::
+
+  python -m segeval s hearst1997.json 
+
+Which produces::
+
+  S 
+    mean  = 0.7619047619047619047619047619
+    std = 0.07055015423823358837798727192
+    var = 0.004977324263038548752834467119
+    stderr  = 0.01539530581369118988034410932
+
+
+Input Data Formats
+==================
+
+SegEval reads data in JSON (JavaScript Object Notation) or TSV (Tab Separated Values) formats as specified in the `Segmentation Representation Specifcation Version 0.1 <http://nlp.chrisfournier.ca/publications/pdf/fournier_segeval_spec_2012.pdf>`_ (PDF).
+
+For mutliply-coded data examples, see the `Segmentation Corpora <https://github.com/cfournie/segmentation.corpora>`_ repository.
+
 
 Programmatic usage
 ==================
+
+Programmatic usage of the module can be done using Python.  The stable set of APIs are listed below in the modules section.
 
 Modules
 -------
