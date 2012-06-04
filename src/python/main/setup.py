@@ -5,10 +5,10 @@ Setup script for installing the segeval package.
 '''
 from distutils.core import setup
 setup(name='segeval',
-      version='1.0.0 beta',
+      version='1.0.1 beta',
       
       description='A package and utilities providing a variety of discourse \
-      segmentation evaluation metrics',
+segmentation evaluation metrics',
       
       author='Chris Fournier',
       author_email='chris.m.fournier@gmail.com',
@@ -16,8 +16,8 @@ setup(name='segeval',
       maintainer='Chris Fournier',
       maintainer_email='chris.m.fournier@gmail.com',
       
-      url='http://nlp.chrisfournier.ca/software/',
-      download_url = 'https://github.com/cfournie/segmentation.evaluation',
+      url='http://pypi.python.org/pypi/segeval/',
+      download_url = 'http://pypi.python.org/packages/source/s/segeval/segeval-1.0.1%20beta.tar.gz',
       
       classifiers=['Development Status :: 4 - Beta',
                    'Environment :: Console',
@@ -32,7 +32,7 @@ setup(name='segeval',
                    'Topic :: Text Processing',
                    'Topic :: Utilities'],
       
-      platforms = ('Any',),
+      platforms = ('Any'),
       
       keywords = ('segmentation', 'similarity', 'discourse'),
       
@@ -46,7 +46,5 @@ setup(name='segeval',
                 'segeval.agreement',
                 'segeval.similarity',
                 'segeval.similarity.distance',
-                'segeval.window'],
-      
-      requires=[])
+                'segeval.window'])
     
