@@ -34,7 +34,10 @@ from .WindowDiff import compute_window_size, create_paired_window
 from ..ml import fmeasure, precision, recall
 from ..ml.FbMeasure import parser_beta_support, DEFAULT_BETA
 from .. import SegmentationMetricError, compute_pairwise, \
-    convert_masses_to_positions
+    convert_masses_to_positions, compute_pairwise_values, create_tsv_rows
+from ..data import load_file
+from ..data.TSV import write_tsv
+from ..data.Display import render_mean_values
 
 
 def win_pr(hypothesis_positions, reference_positions, window_size=None,
@@ -198,29 +201,77 @@ def pairwise_win_pr(dataset_masses,
 
 OUTPUT_NAME = 'Mean WinPR'
 SHORT_NAME  = 'WinPR-%s'
+SHORT_NAME_F = 'f'
+SHORT_NAME_P = 'p'
+SHORT_NAME_R = 'r'
+
+
+def values_win_pr(dataset_masses, beta=DEFAULT_BETA):
+    '''
+    Produces a TSV for this metric
+    '''
+    # pylint: disable=C0103
+    # Define a fnc to retrieve F_Beta-Measure values
+    def wrapper_winpr(hypothesis_masses, reference_masses, return_parts):
+        '''
+        Wrapper to provide parameters.
+        '''
+        # pylint: disable=W0613
+        return win_pr(hypothesis_masses, reference_masses,
+                      convert_from_masses=True)
+    # Create header
+    header = list(['coder1', 'coder2',
+                   SHORT_NAME % SHORT_NAME_F + '_' + str(beta),
+                   SHORT_NAME_P, SHORT_NAME_R, 'TP', 'FP', 'FN', 'TN'])
+    # Calculate values
+    values_cf = compute_pairwise_values(dataset_masses, wrapper_winpr,
+                                       permuted=False, return_parts=True)
+    # Combine into one table
+    combined_values = dict()
+    for label, cf in values_cf.items():
+        tp, fp, fn = cf[0:3]
+        
+        row = list()
+        row.append(fmeasure(tp, fp, fn, beta))
+        row.append(precision(tp, fp))
+        row.append(recall(tp, fn))
+        row.extend(cf)
+        
+        combined_values[label] = row
+    # Return
+    return create_tsv_rows(header, combined_values)
 
 
 def parse(args):
     '''
     Parse this module's metric arguments and perform requested actions.
     '''
-    from ..data import load_file
-    from ..data.Display import render_mean_values
-    
+    output = None
     values = load_file(args)[0]
     subsubparser_name = args['subsubparser_name']
-    
-    if subsubparser_name == 'f':
-        beta = args['beta']
-        mean, std, var, stderr = pairwise_win_pr(values, wrap_win_p_f(beta))
-    elif subsubparser_name == 'p':
-        mean, std, var, stderr = pairwise_win_pr(values, win_pr_p)
-    elif subsubparser_name == 'r':
-        mean, std, var, stderr = pairwise_win_pr(values, win_pr_r)
-    
     name = SHORT_NAME % subsubparser_name
-    
-    return render_mean_values(name, mean, std, var, stderr)
+    # Is a TSV requested?
+    if args['output'] != None:
+        # Create a TSV
+        output_file = args['output'][0]
+        beta = 1
+        if 'beta' in args and args['beta'] != 1:
+            beta = args['beta']
+        header, rows = values_win_pr(values, beta)
+        write_tsv(output_file, header, rows)
+    else:
+        # Create a string to output
+        if subsubparser_name == SHORT_NAME_F:
+            beta = args['beta']
+            name += '_%s' % str(beta)
+            mean, std, var, stderr = pairwise_win_pr(values, wrap_win_p_f(beta))
+        elif subsubparser_name == SHORT_NAME_P:
+            mean, std, var, stderr = pairwise_win_pr(values, win_pr_p)
+        elif subsubparser_name == SHORT_NAME_R:
+            mean, std, var, stderr = pairwise_win_pr(values, win_pr_r)
+        output = render_mean_values(name, mean, std, var, stderr)
+    # Return
+    return output
 
     
 def create_submetric_parser(subparsers):
@@ -229,16 +280,16 @@ def create_submetric_parser(subparsers):
     '''
     from ..data import parser_add_file_support
     
-    parser_f = subparsers.add_parser('f', help='F_beta Measure')
+    parser_f = subparsers.add_parser(SHORT_NAME_F, help='F_beta Measure')
     parser_beta_support(parser_f)
     parser_add_file_support(parser_f)
     parser_f.set_defaults(func=parse)
     
-    parser_r = subparsers.add_parser('r', help='Recall')
+    parser_r = subparsers.add_parser(SHORT_NAME_R, help='Recall')
     parser_add_file_support(parser_r)
     parser_r.set_defaults(func=parse)
     
-    parser_p = subparsers.add_parser('p', help='Precision')
+    parser_p = subparsers.add_parser(SHORT_NAME_P, help='Precision')
     parser_add_file_support(parser_p)
     parser_p.set_defaults(func=parse)
     

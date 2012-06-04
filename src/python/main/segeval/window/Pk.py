@@ -34,7 +34,10 @@ Implementation of the Pk segmentation evaluation metric described in
 from decimal import Decimal
 from . import compute_window_size, parser_one_minus_support
 from .. import SegmentationMetricError, compute_pairwise, \
-    convert_masses_to_positions
+    convert_masses_to_positions, compute_pairwise_values, create_tsv_rows
+from ..data import load_file
+from ..data.TSV import write_tsv
+from ..data.Display import render_mean_values
 
 
 def pk(hypothesis_positions, reference_positions, window_size=None,
@@ -131,23 +134,46 @@ OUTPUT_NAME = 'Mean Pk'
 SHORT_NAME  = 'Pk'
 
 
+def values_pk(dataset_masses, name, one_minus):
+    '''
+    Produces a TSV for this metric
+    '''
+    # Define a fnc to pass parameters
+    def wrapper(hypothesis_masses, reference_masses):
+        '''
+        Wrapper to provide parameters.
+        '''
+        return pk(hypothesis_masses, reference_masses, one_minus=one_minus,
+                  convert_from_masses=True)
+    # Get values
+    header = list(['coder1', 'coder2', name])
+    values = compute_pairwise_values(dataset_masses, wrapper, permuted=True)
+    return create_tsv_rows(header, values)
+
+
 def parse(args):
     '''
     Parse this module's metric arguments and perform requested actions.
     '''
-    from ..data import load_file
-    from ..data.Display import render_mean_values
-    
+    output = None
     values = load_file(args)[0]
     one_minus = args['oneminus']
-    
-    mean, std, var, stderr = pairwise_pk(values, one_minus)
     name = SHORT_NAME
     
     if one_minus:
         name = '1 - %s' % name
     
-    return render_mean_values(name, mean, std, var, stderr)
+    # Is a TSV requested?
+    if args['output'] != None:
+        # Create a TSV
+        output_file = args['output'][0]
+        header, rows = values_pk(values, name, one_minus)
+        write_tsv(output_file, header, rows)
+    else:
+        # Create a string to output
+        mean, std, var, stderr = pairwise_pk(values, one_minus)
+        output = render_mean_values(name, mean, std, var, stderr)
+    return output
 
 
 def create_parser(subparsers):

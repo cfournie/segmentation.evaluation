@@ -119,7 +119,7 @@ def f_b_measure(hypothesis_masses, reference_masses, beta=DEFAULT_BETA,
         if pos not in positions_ref:
             fp += 1
     
-    tn = len(reference_masses) - 1 - len(positions_ref) - fn - fp
+    tn = sum(reference_masses) - 1 - len(positions_ref) - fn - fp
     
     if not return_parts:
         return fmeasure(tp, fp, fn, beta)
@@ -254,7 +254,7 @@ def values_f_b_measure(dataset_masses, beta=DEFAULT_BETA):
     '''
     Produces a TSV for this metric
     '''
-    # Define a dnc to retrieve F_Beta-Measure values
+    # Define a fnc to retrieve F_Beta-Measure values
     def wrapper_f(hypothesis_masses, reference_masses, return_parts=False):
         '''
         Wrapper to provide parameters.
@@ -297,7 +297,7 @@ def parse(args):
         # Create a TSV
         output_file = args['output'][0]
         beta = 1
-        if 'beta' in args:
+        if 'beta' in args and args['beta'] != 1:
             beta = args['beta']
         header, rows = values_f_b_measure(values, beta)
         write_tsv(output_file, header, rows)

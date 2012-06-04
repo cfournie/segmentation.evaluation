@@ -165,10 +165,8 @@ class TestMain(unittest.TestCase):
         '''
         Run through each metric and load from a file.
         '''
-        #metrics = ['pi', 'k', 'b', 'f', 'p', 'r', 'pr', 's']
-        metrics = ['s']
-        #filesizes = [51, 50, 49, 1544, 1542, 1542, 702, 584]
-        filesizes = [584]
+        metrics = ['pi', 'k', 'b', 'f', 'p', 'r', 'pr', 's', 'pk', 'wd']
+        filesizes = [51, 50, 49, 1524, 1524, 1524, 702, 584, 1747, 645]
         for metric, expected_filesize in zip(metrics, filesizes):
             filename = 'testfile.tsv'
             if os.path.exists(filename):
@@ -183,6 +181,65 @@ class TestMain(unittest.TestCase):
                 self.assertEqual(expected_filesize, actual_filesize, 
                                  '%(metric)s %(expected)i != %(actual)i' % \
                                  {'metric'   : metric,
+                                  'expected' : expected_filesize,
+                                  'actual'   : actual_filesize})
+            finally:
+                if os.path.exists(filename):
+                    os.remove(filename)
+            
+            self.assertFalse(os.path.exists(filename))
+
+
+    def test_file_om(self):
+        '''
+        Run through each metric and load from a file.
+        '''
+        metrics = ['pk', 'wd']
+        filesizes = [1751, 649]
+        for metric, expected_filesize in zip(metrics, filesizes):
+            filename = 'testfile.tsv'
+            if os.path.exists(filename):
+                os.remove(filename)
+            self.assertFalse(os.path.exists(filename))
+            argv = [metric, '-om', '-o', filename,
+                    os.path.join(self.test_data_dir, 'hearst1997.json')]
+            try:
+                main(argv)
+                self.assertTrue(os.path.exists(filename))
+                actual_filesize = len(open(filename).read())
+                self.assertEqual(expected_filesize, actual_filesize, 
+                                 '%(metric)s %(expected)i != %(actual)i' % \
+                                 {'metric'   : metric,
+                                  'expected' : expected_filesize,
+                                  'actual'   : actual_filesize})
+            finally:
+                if os.path.exists(filename):
+                    os.remove(filename)
+            
+            self.assertFalse(os.path.exists(filename))
+
+
+    def test_file_winpr(self):
+        '''
+        Run through each metric and load from a file.
+        '''
+        submetrics = ['f', 'p', 'r']
+        filesizes = [1741, 1741, 1741]
+        for submetric, expected_filesize in zip(submetrics, filesizes):
+            
+            filename = 'testfile.tsv'
+            if os.path.exists(filename):
+                os.remove(filename)
+            self.assertFalse(os.path.exists(filename))
+            argv = ['wpr', submetric, '-o', filename,
+                    os.path.join(self.test_data_dir, 'hearst1997.json')]
+            try:
+                main(argv)
+                self.assertTrue(os.path.exists(filename))
+                actual_filesize = len(open(filename).read())
+                self.assertEqual(expected_filesize, actual_filesize, 
+                                 '%(metric)s %(expected)i != %(actual)i' % \
+                                 {'metric'   : submetric,
                                   'expected' : expected_filesize,
                                   'actual'   : actual_filesize})
             finally:
