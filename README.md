@@ -16,9 +16,10 @@ For more details, see the manual at http://nlp.chrisfournier.ca/software/segeval
 
 If you're using this software for research, please cite:
 
-```Chris Fournier and Diana Inkpen. 2012. Segmentation Similarity and Agreement. Proceedings of Human Language Technologies: The 2012 Annual Conference of the North American Chapter of the Association for Computational Linguistics. (HLT '12), pp. 152—161. Association for Computational Linguistics, Stroudsburg, PA, USA.```
+*Chris Fournier and Diana Inkpen. 2012. Segmentation Similarity and Agreement. Proceedings of Human Language Technologies: The 2012 Annual Conference of the North American Chapter of the Association for Computational Linguistics. (HLT '12), pp. 152—161. Association for Computational Linguistics, Stroudsburg, PA, USA.*
 
-```@inproceedings{FournierInkpen2012,
+```
+@inproceedings{FournierInkpen2012,
 	author		= {Chris Fournier and Diana Inkpen},
 	title		= {Segmentation Similarity and Agreement},
 	booktitle	= {Human Language Technologies: The 2012 Annual Conference of the North American Chapter of the Association for Computational Linguistics},
@@ -29,7 +30,8 @@ If you're using this software for research, please cite:
 	numpages	= {10},
 	publisher	= {Association for Computational Linguistics},
 	address		= {Stroudsburg, PA, USA}
-}```
+}
+```
 
 Requirements
 ------------
