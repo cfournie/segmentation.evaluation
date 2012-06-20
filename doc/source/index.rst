@@ -12,7 +12,7 @@ Additionally, inter-coder agreement coefficients that are based upon S for both 
 * Kappa; and
 * Pi.
 
-If you have any problems or difficulties, please `log an issue <https://github.com/cfournie/segmentation.evaluation/issues>`_.
+If you have any suggestions, problems, or difficulties, please `log an issue <https://github.com/cfournie/segmentation.evaluation/issues>`_, or `contact me <http://nlp.chrisfournier.ca/about/>`_. For a roadmap of planned features and future work see my `page on SegEval <http://nlp.chrisfournier.ca/software/>`_.
 
 :Release: |version| (beta)
 :Date: |today|
@@ -25,17 +25,16 @@ If you would like to read the paper, `visit my website <http://nlp.chrisfournier
 
 BibTeX::
 
-  @inproceedings{FournierInkpen2012,
-    author    = {Chris Fournier and Diana Inkpen},
-    title   = {Segmentation Similarity and Agreement},
-    booktitle = {Human Language Technologies: The 2012 Annual Conference of the North American Chapter of the Association for Computational Linguistics},
-    series    = {HLT '12},
-    year    = {2012},
-    location  = {Montreal, Quebec, Canada},
-    pages   = {152--161},
-    numpages  = {10},
+  @InProceedings{FournierInkpen2012,
+    author    = {Fournier, Chris  and  Inkpen, Diana},
+    title     = {Segmentation Similarity and Agreement},
+    booktitle = {Proceedings of the 2012 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies},
+    month     = {June},
+    year      = {2012},
+    address   = {Montr\'{e}al, Canada},
     publisher = {Association for Computational Linguistics},
-    address   = {Stroudsburg, PA, USA}
+    pages     = {152--161},
+    url       = {http://www.aclweb.org/anthology/N/N12/N12-1016}
   }
 
 

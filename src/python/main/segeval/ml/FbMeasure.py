@@ -59,28 +59,22 @@ def f_b_measure(hypothesis_masses, reference_masses, beta=DEFAULT_BETA,
         FN = \\sum^{|hyp|}_{i=1}{\\text{fn}(hyp_i, ref_i)}
         
     .. math::
-        \\text{tp}(hyp_i, ref_i) = 
+        \\text{tp}(hyp_i, ref_i) = &
         \\begin{cases}
             1    & \\text{if both } hyp_i \\text{ and } ref_i \\text{ are boundaries}  \\\\
             0    & \\text{else}
-        \\end{cases}
-        
-    .. math::
-        \\text{fp}(hyp_i, ref_i) = 
+        \\end{cases} \\\\
+        \\text{fp}(hyp_i, ref_i) = &
         \\begin{cases}
             1    & \\text{if } hyp_i \\text{ is a boundary and } ref_i \\text{ is not}  \\\\
             0    & \\text{else}
-        \\end{cases}
-        
-    .. math::
-        \\text{fn}(hyp_i, ref_i) = 
+        \\end{cases} \\\\
+        \\text{fn}(hyp_i, ref_i) = &
         \\begin{cases}
             1    & \\text{if is not a boundary } hyp_i \\text{ and } ref_i \\text{ is}  \\\\
             0    & \\text{else}
-        \\end{cases}
-        
-    .. math::
-        \\text{tn}(hyp_i, ref_i) = 
+        \\end{cases} \\\\
+        \\text{tn}(hyp_i, ref_i) = &
         \\begin{cases}
             1    & \\text{if both } hyp_i \\text{ and } ref_i \\text{ are not boundaries}  \\\\
             0    & \\text{else}
