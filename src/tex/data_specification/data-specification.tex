@@ -1,0 +1,254 @@
+\documentclass{article}
+
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{natbib}
+\usepackage{listings}
+\usepackage{subfig}
+\usepackage{color}
+\usepackage{etoolbox}
+\usepackage{tikz}
+\usepackage{boxedminipage}
+\usetikzlibrary{decorations.pathreplacing,calc}
+\usetikzlibrary{positioning,shadows,arrows}
+
+\input{src/tex/metadata}
+
+% Set up hyperlinks
+\usepackage[pdfauthor={\pdfauthors},%
+pdftitle={\pdftitle},%
+pdfborder=0 0 0,
+pdftex]{hyperref}
+
+\hypersetup{ 
+colorlinks,% 
+citecolor=black,% 
+filecolor=black,% 
+linkcolor=black,% 
+urlcolor=black 
+}
+
+\input{src/tex/colours}
+\input{src/tex/figures}
+
+% Custom commands
+\def\citeapos#1{\citeauthor{#1}'s (\citeyear{#1})}
+
+\begin{document}
+
+
+
+\title{\pdftitle
+\\
+{\large \pdfversion}}
+\author{\pdfauthors}
+\date{\today}
+\maketitle
+
+
+
+\section{Introduction}
+``Segmentation is the task of splitting up an item, such as a document,
+into a sequence of segments by placing boundaries within. The purpose of
+segmenting can vary greatly, but one common objective is to denote shifts in the
+topic of a text...''~\citep{FournierInkpen2012}.  In this document, the process
+and file format for storing segmentations of varying types is detailed.
+
+
+
+\section{Representations}
+In addition to the conceptualizations presented, each segmentation
+representation is to be stored  as UTF-8 encoded text files in either the TSV
+(tab separated values) format, or in the JSON (JavaScript Object Notation)
+format.  
+
+JSON is an ideal file format because it allow for the encoding of key/value
+pairs and lists.  Sequences of internal segments, or boundaries, are easily
+stored as lists, and metadata about the type of segmentation performed can be
+stored in key/value pairs, and nested key/value pairs can be used to store
+multiple segmentations (produced under the same conditions) by coders in the
+same file.  JSON metadata common to all representations is shown in
+Figure~\ref{fig:json} with ``\verb+|+'' characters representing the available
+options for a field, and ``\verb+*+'' representing an optional field whose
+first options is assumed to be the default.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=]
+{
+	"segmentation_type" : "linear"|"multiple"|"hierarchical",
+	"codings" : {...}
+}
+\end{lstlisting}
+\vspace{-3em}
+\caption{Common JSON segmentation structure}
+\label{fig:json}
+\end{figure}
+
+
+
+\subsection{Linear Segmentation}
+The simplest case of linear segmentation is the segmentation of text by placing
+only one type boundary inside a text to split it into a number of internal
+segments whose whole is called a \emph{segmentation}.
+
+To illustrate this, let's go through a contrived example to produce a
+line-level\footnote{This is a segmentation's \emph{granularity}; common choices
+are sentence or paragraph levels.} segmentation of an excerpt of
+\citeapos{Coleridge1816} poem titled Kubla Khan \citep[pp.
+55--58]{Coleridge1816}, shown below in Figure~\ref{fig:linear:text:kublakhan}.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=]
+In Xanadu did Kubla Khan
+A stately pleasure-dome decree:
+Where Alph, the sacred river, ran
+Through caverns measureless to man
+Down to a sunless sea.
+So twice five miles of fertile ground
+With walls and towers were girdled round:
+And here were gardens bright with sinuous rills,
+Where blossomed many an incense-bearing tree;
+And here were forests ancient as the hills,
+Enfolding sunny spots of greenery.
+\end{lstlisting}
+\vspace{-3em}
+\caption{Excerpt from Kubla Khan \citep[pp. 55--58]{Coleridge1816}}
+\label{fig:linear:text:kublakhan}
+\end{figure}
+
+If a person was to topically segment the previous excerpt, they may choose
+to group the lines together (with a short description of the internal segment)
+as shown in Figure~\ref{fig:linear:segmentation:kublakhan}.
+
+\begin{figure}[h]
+\centering
+\begin{tabular}{ r l }
+\textbf{Lines}  & \textbf{Description} \\ \hline \hline
+1--2  & Kubla Khan and his decree \\
+3--5  & Waterways \\
+6--11 & Fertile ground and greenery \\
+\end{tabular}
+\caption{Hypothetical line-level segmentation of the excerpt in Figure~\ref{fig:linear:text:kublakhan}}
+\label{fig:linear:segmentation:kublakhan}
+\end{figure}
+
+The previous hypothetical segmentation is essentially a sequence of internal
+segments, each with a size (i.e., \emph{mass}) defined as:
+
+\begin{equation}\label{eqn:linear:pos}
+\text{mass}(segment) = \text{position}(segment_{end}) - \text{position}(segment_{start}) + 1
+\end{equation}
+\vspace{0.00em}
+
+If we apply this function to the positions of each internal segment, we can
+represent the segmentation as a sequence of masses:
+
+\begin{equation}\label{eqn:linear:seq}
+2,3,6
+\end{equation}
+\vspace{0.00em}
+
+We can represent this sequence of internal segment masses graphically as shown
+in Figure~\ref{fig:linear:segmentation:graphic:kublakhan}.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[node distance=0cm, outer sep=0pt, font=\footnotesize]
+  \segmentationA{$s_A$}{2,3,6}
+\end{tikzpicture}
+\caption{Hypothetical line-level segmentation of the excerpt in Figure~\ref{fig:linear:text:kublakhan}}
+\label{fig:linear:segmentation:graphic:kublakhan}
+\end{figure}
+
+To store this sequence of internal segment masses, we can simply store the
+sequence shown in Equation~\ref{eqn:linear:seq} inside a file.  We will often
+have multiple segmentation of the same text (e.g.,
+Table~\ref{table:linear:multiple_segmentations:kublakhan}), however, so it would
+be useful to store all segmentations of the same text inside the same file, with
+the name of the \emph{coder} (i.e., person who created the segmentation) to be
+able to cross-reference this person's segmentations across multiple files.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ r l }
+\textbf{Coder}  & \textbf{Segmentation} \\ \hline \hline
+A & $2,3,6$ \\
+B & $1,1,3,6$ \\
+C & $2,3,2,4$ \\
+\end{tabular}
+\caption{Hypothetical line-level segmentations of the excerpt in Figure~\ref{fig:linear:text:kublakhan}}
+\label{table:linear:multiple_segmentations:kublakhan}
+\end{table}
+
+To store the segmentations shown in
+Table~\ref{table:linear:multiple_segmentations:kublakhan}, we can store the
+sequences of internal segment masses per coder, as shown in
+Figure~\ref{fig:linear:segmentation:files}.
+
+\newsavebox{\lineartsv}
+\begin{lrbox}{\lineartsv}
+\begin{minipage}[b]{0.5\textwidth}
+\begin{lstlisting}[language=,linewidth=0.9\textwidth]
+Coder	Masses
+A	2	3	6
+B	1	1	3	6
+C	2	3	2	4
+
+\end{lstlisting}
+\vspace{-2em}
+\end{minipage}
+\end{lrbox}
+
+\newsavebox{\linearjson}
+\begin{lrbox}{\linearjson}
+\begin{minipage}[b]{0.5\textwidth}
+\begin{lstlisting}[language=,linewidth=0.9\textwidth]
+{
+	"segmentation_type" : "linear"
+	"codings" :
+	{
+		"A" : [2,3,6],
+		"B" : [1,1,3,6],
+		"C" : [2,3,2,4]
+	}
+}
+\end{lstlisting}
+\vspace{-2em}
+\end{minipage}
+\end{lrbox}
+
+\begin{figure}[h]
+\hspace{1em}
+\subfloat[TSV]{\usebox{\lineartsv}}
+\subfloat[JSON]{\usebox{\linearjson}}
+\caption{File representations of the hypothetical segmentations in Table~\ref{table:linear:multiple_segmentations:kublakhan}}
+\label{fig:linear:segmentation:files}
+\end{figure}
+
+
+\section{Future Work}
+Future versions of this specification will include additional formats as support
+for them are added to the \href{segeval}{http://nlp.chrisfournier.ca/software/}
+python package, including:
+\begin{enumerate}
+  \setlength{\itemsep}{0cm}%
+  \setlength{\parskip}{0cm}%
+  \item Linear Segmentation with Multiple Boundary Types, with:
+  \begin{itemize}
+    \item Categorical or ordinal boundaries;
+    \item Mutually exclusive or non-exclusive sets of boundary positions;
+  \end{itemize}
+  \item Hierarchical Segmentation.
+\end{enumerate}
+
+
+\addcontentsline{toc}{chapter}{References}
+\bibliographystyle{agsm} % Harvard = agsm
+\bibliography{bib/resources}
+
+\end{document}
+
+
+
+
+

@@ -1,0 +1,31 @@
+\node (L1A) [leveltag] {5} 
+	[sibling distance=5em]
+        child {
+            node (L2A) [leveltag] {3}
+			[sibling distance=2em]
+	        child {
+	            node (L3A) [leveltag] {1}
+	            child [grow=left, level distance=2.3em] {node[yshift=0.75em] (L2) {L2} edge from parent[draw=none]
+		            child [grow=up, level distance=3em] {node (L1) {L1} edge from parent[draw=none]
+		                child [grow=up, level distance=3em] {node (L0) {L0} edge from parent[draw=none]}
+		            }
+		        }
+	        }
+	        child {
+	            node (L3B) [leveltag] {1}
+	        }
+	        child {
+	            node (L3C) [leveltag] {1}
+	        }
+        }
+        child {
+			[sibling distance=2em]
+            node (L2B) [leveltag] {2}
+	        child {
+	            node (L3A) [leveltag] {1}
+	        }
+	        child {
+	            node (L3B) [leveltag] {1}
+	        }
+        }
+;

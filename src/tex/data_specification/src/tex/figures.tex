@@ -1,0 +1,95 @@
+% TikZ styles
+\tikzstyle{header}=[draw, rectangle, minimum width=1.25em, minimum height=1.25em, anchor=south west]
+\tikzstyle{block}=[draw, rectangle, minimum width=1.25em, minimum height=1.25em, fill=block_norm, anchor=south west]
+\tikzstyle{header_bound}=[draw=none, minimum width=1.25em, minimum height=1.25em, anchor=south west, xshift=-0.4em, yshift=1em]
+\tikzstyle{bound}=[draw=none, minimum width=1.25em, minimum height=1.25em, anchor=south west]
+\tikzstyle{leveltag}=[rectangle, draw=none, rounded corners=1mm, fill=gray, text centered, anchor=north, text=white]
+
+% TiKZ commands
+\newcommand{\segmentationA}[2]{
+\node[header] (a0) at (0,0) {#1};
+  \xdef\lasti{0}
+  \foreach [count=\i, remember=\i as \lasti] \x in {#2} {
+    \node[block, minimum width=\x * 1.25 em] (a\i) [right=of a\lasti] {$\x$};
+  }
+}
+\newcommand{\segmentationB}[1]{
+\node[header] (b0) [below=of a0] {$s_2$};
+  \xdef\lasti{0}
+  \foreach [count=\i, remember=\i as \lasti] \x in {#1} {
+    \node[block, minimum width=\x * 1.25 em] (b\i) [right=of b\lasti] {$\x$};
+  }
+}
+\newcommand{\segmentationLabels}[1]{
+\node[header_bound] (c0) [above=of a0] {};
+  \xdef\lasti{0} %
+  \foreach \xa/\xb/\xc/\xd/\xe [count=\i, remember=\i as \lasti] in {#1} {
+    \node[bound] (c\i) [right=of c\lasti] {
+    \begin{minipage}[b][3em]{0.5em}
+    \centering
+      \ifdefempty{\xe}{}{\xe \\}
+      \ifdefempty{\xd}{}{\xd \\}
+      \ifdefempty{\xc}{}{\xc \\}
+      \ifdefempty{\xb}{}{\xb \\}
+      \ifdefempty{\xa}{}{\xa}
+    \end{minipage}
+    };
+  }
+}
+\newcommand{\segmentationLowerLabels}[1]{
+\node[header_bound, yshift=-2em] (c0) [below=of a0] {};
+  \xdef\lasti{0} %
+  \foreach \xa/\xb/\xc/\xd/\xe [count=\i, remember=\i as \lasti] in {#1} {
+    \node[bound] (c\i) [right=of c\lasti] {
+    \begin{minipage}[t][3em]{0.5em}
+    \centering
+      \ifdefempty{\xe}{}{\xe \\}
+      \ifdefempty{\xd}{}{\xd \\}
+      \ifdefempty{\xc}{}{\xc \\}
+      \ifdefempty{\xb}{}{\xb \\}
+      \ifdefempty{\xa}{}{\xa}
+    \end{minipage}
+    };
+  }
+}
+\newcommand{\boundariesOne}[1]{
+  $
+  \foreach \xa/\xb/\xc/\xd/\xe in {#1} {
+    \{
+      \ifdefempty{\xa}{{\color{white}0}}{\xa}
+      \ifdefempty{\xb}{}{,\xb}
+      \ifdefempty{\xc}{}{,\xc}
+      \ifdefempty{\xd}{}{,\xd}
+      \ifdefempty{\xe}{}{,\xe}
+    \}
+  }
+  $
+}
+
+% listings settings
+\lstset{ %
+  language=,                % the language of the code
+  basicstyle=\footnotesize,           % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add a comment within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
