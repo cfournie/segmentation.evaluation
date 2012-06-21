@@ -159,7 +159,7 @@ def compute_pairwise_values(dataset_masses, fnc_metric, permuted=False,
                         segs_m = coder_masses[coders[m]]
                         segs_n = coder_masses[coders[n]]
                         entry_parts = list(prefix)
-                        entry_parts.extend([label, str(m), str(n)])
+                        entry_parts.extend([label, str(coders[m]), str(coders[n])])
                         entry = ','.join(entry_parts)
                         if return_parts:
                             pairs[entry] = \
