@@ -1,11 +1,5 @@
 '''
-Segmentation evaluation metric package. Provides evaluation metrics to
-evaluate the performance of both human and automatic text (i.e., discourse)
-segmenters.  This package contains a new metric called Segmentation Similarity
-(S) [FournierInkpen2012]_ which is recommended for usage along with a variety
-of inter-coder agreement coefficients that utilize S.
-
-To use S, see the :mod:`segeval.similarity` module.
+TSV output module (for general TSV writing operations).
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
@@ -37,6 +31,10 @@ To use S, see the :mod:`segeval.similarity` module.
 #===============================================================================
 import csv
 import os
+from .. import convert_positions_to_masses
+
+
+DEFAULT_DELIMITER = '\t'
 
 
 def write_tsv(filepath, header, rows):
@@ -46,9 +44,9 @@ def write_tsv(filepath, header, rows):
     :param filepath: Path and filename of a file to write to
     :param header:   List of category names
     :param rows:     Data to write for all categories
-    :type rows:   str
-    :type header: :class:`list`
-    :type rows:   :class:`list` of :class:`list`
+    :type filepath: str
+    :type header:   :class:`list`
+    :type rows:     :class:`list` of :class:`list`
     '''
     # Create a default filename if a dir is specified
     if os.path.isdir(filepath):
@@ -59,4 +57,77 @@ def write_tsv(filepath, header, rows):
     tsv.writerow(header)
     for row in rows:
         tsv.writerow(row)
+
+
+def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
+    '''
+    Load a linear segmentation mass TSV file.
+    
+    :param tsv_filename: path to the mass file containing segment mass codings.
+    :param delimiter:    the delimiter used when reading a TSV file (by default,
+                         a tab, but it can also be a comma, whitespace, etc.
+    :type tsv_filename: str
+    :type delimiter: str
+    
+    :returns: Segmentation mass codings.
+    :rtype: :func:`dict`
+    '''
+    from . import DataIOError
+    # List version of file
+    header = []
+    segment_masses = dict()
+    # Open file
+    csv_file = open(tsv_filename, 'rU')
+    # Read in file
+    try:
+        reader = csv.reader(csv_file, delimiter=delimiter)
+        for i, row in enumerate(reader):
+            # Read annotators from header
+            if i == 0:
+                for item in row[1:]:
+                    header.append(item)
+            # Read data
+            else:
+                coder = None
+                for j, col in enumerate(row):
+                    # Skip the first col
+                    if j == 0:
+                        coder = str(col)
+                        segment_masses[coder] = list()
+                    elif j > 0:
+                        segment_masses[coder].append(int(col))
+    # pylint: disable=C0103
+    except Exception as exception:
+        raise DataIOError('Error occurred processing file: %s' \
+                                      % tsv_filename, exception)
+    finally:
+        csv_file.close()
+    return segment_masses
+
+
+def input_linear_positions_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
+    '''
+    Load a segment position TSV file.
+    
+    :param csv_filename: path to the mass file containing segment position
+                         codings.
+    :param delimiter:    the delimiter used when reading a TSV file (by default,
+                         a tab, but it can also be a comma, whitespace, etc.
+    :type csv_filename: str
+    :type delimiter: str
+    
+    .. deprecated:: 1.0
+    
+    .. warning:: This i/o function is for legacy files only and will be removed
+        in later versions.
+    
+    :returns: Segmentation mass codings.
+    :rtype: :func:`dict`
+    '''
+    coder_positions = input_linear_mass_tsv(tsv_filename, delimiter)
+    # Convert each segment position to masses
+    for coder, positions in coder_positions.items():
+        coder_positions[coder] = convert_positions_to_masses(positions)
+    # Return
+    return coder_positions
 

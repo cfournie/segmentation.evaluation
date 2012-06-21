@@ -36,11 +36,11 @@ Specification <http://nlp.chrisfournier.ca/publications/#seg_spec>`_.
 import os
 import csv
 import json
-from .. import convert_positions_to_masses
+from .TSV import input_linear_mass_tsv
+from .JSON import input_linear_mass_json
 
-RESULTS             = ['summary', 'tsv']
 
-DEFAULT_DELIMITER   = '\t'
+RESULTS = ['summary', 'tsv']
 
 
 def load_tests(loader, tests, pattern):
@@ -56,6 +56,19 @@ def load_tests(loader, tests, pattern):
     return default_load_tests(__file__, loader, tests)
 
 
+def name_from_filepath(filepath):
+    '''
+    Creates a default coder name from a filename.
+    '''
+    coder = os.path.split(filepath)[1]
+    coder_basic = os.path.splitext(coder)[1]
+    coder = coder_basic if len(coder_basic) > 0 else coder
+    return coder
+
+
+def combine_item_masses():
+    pass
+
 class DataIOError(Exception):
     '''
     Indicates that an input processing error has occurred.
@@ -69,119 +82,6 @@ class DataIOError(Exception):
         :type message: str
         '''
         Exception.__init__(self, message, exception)
-    
-
-def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
-    '''
-    Load a linear segmentation mass TSV file.
-    
-    :param tsv_filename: path to the mass file containing segment mass codings.
-    :param delimiter:    the delimiter used when reading a TSV file (by default,
-                         a tab, but it can also be a comma, whitespace, etc.
-    :type tsv_filename: str
-    :type delimiter: str
-    
-    :returns: Segmentation mass codings.
-    :rtype: :func:`dict`
-    '''
-    # List version of file
-    header = []
-    segment_masses = dict()
-    # Open file
-    csv_file = open(tsv_filename, 'rU')
-    # Read in file
-    try:
-        reader = csv.reader(csv_file, delimiter=delimiter)
-        for i, row in enumerate(reader):
-            # Read annotators from header
-            if i == 0:
-                for item in row[1:]:
-                    header.append(item)
-            # Read data
-            else:
-                coder = None
-                for j, col in enumerate(row):
-                    # Skip the first col
-                    if j == 0:
-                        coder = str(col)
-                        segment_masses[coder] = list()
-                    elif j > 0:
-                        segment_masses[coder].append(int(col))
-    # pylint: disable=C0103
-    except Exception as exception:
-        raise DataIOError('Error occurred processing file: %s' \
-                                      % tsv_filename, exception)
-    finally:
-        csv_file.close()
-    return segment_masses
-
-
-def input_linear_positions_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
-    '''
-    Load a segment position TSV file.
-    
-    :param csv_filename: path to the mass file containing segment position
-                         codings.
-    :param delimiter:    the delimiter used when reading a TSV file (by default,
-                         a tab, but it can also be a comma, whitespace, etc.
-    :type csv_filename: str
-    :type delimiter: str
-    
-    .. deprecated:: 1.0
-    
-    .. warning:: This i/o function is for legacy files only and will be removed
-        in later versions.
-    
-    :returns: Segmentation mass codings.
-    :rtype: :func:`dict`
-    '''
-    coder_positions = input_linear_mass_tsv(tsv_filename, delimiter)
-    # Convert each segment position to masses
-    for coder, positions in coder_positions.items():
-        coder_positions[coder] = convert_positions_to_masses(positions)
-    # Return
-    return coder_positions
-
-
-def input_linear_mass_json(json_filename):
-    '''
-    Load a segment mass JSON file.
-    
-    :param json_filename: path to the mass file containing segment position
-                          codings.
-    :type json_filename: str
-    
-    :returns: Segmentation mass codings.
-    :rtype: :func:`dict`
-    
-    .. seealso:: `JSON (JavaScript Object Notation) <http://www.json.org/>`_.
-    '''
-    codings = dict()
-    data = dict()
-    # Open file
-    json_file = open(json_filename, 'rU')
-    # Read in file
-    try:
-        data = json.load(json_file)
-    except Exception as exception:
-        raise DataIOError('Error occurred processing file: %s' \
-                                      % json_filename, exception)
-    # Check type
-    if 'segmentation_type' in data:
-        if data['segmentation_type'] != 'linear':
-            raise DataIOError(
-                'Segmentation type \'linear\' expected, but encountered %s' % \
-                data['segmentation_type'])
-    # Remove the metadata layer
-    if 'codings' in data:
-        data = data['codings']
-    else:
-        data = data
-    # Convert coder labels into strings
-    for key, value in data.items():
-        codings[key] = value
-    # Return
-    return codings
 
 
 FILETYPE_TSV  = 'tsv'
