@@ -60,14 +60,11 @@ def name_from_filepath(filepath):
     '''
     Creates a default coder name from a filename.
     '''
-    coder = os.path.split(filepath)[1]
-    coder_basic = os.path.splitext(coder)[1]
-    coder = coder_basic if len(coder_basic) > 0 else coder
-    return coder
+    name = os.path.split(filepath)[1]
+    name_basic = os.path.splitext(name)[0]
+    name = name_basic if len(name_basic) > 0 else name
+    return name
 
-
-def combine_item_masses():
-    pass
 
 class DataIOError(Exception):
     '''
