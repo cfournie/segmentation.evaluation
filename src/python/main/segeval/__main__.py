@@ -78,9 +78,13 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
-    # pylint: disable=C0103
-    output = main()
-    if output != None:
-        print output
-    sys.exit(0)
+    # pylint: disable=C0103,W0703
+    try:
+        output = main()
+        if output != None:
+            print output
+        sys.exit(0)
+    except Exception as e:
+        print >> sys.stderr, 'Unexpected error:', e
+        sys.exit(-1)
 
