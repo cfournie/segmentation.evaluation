@@ -31,25 +31,36 @@ Display and output related utility functions.
 #===============================================================================
 
 
-def values_to_str(mean, std, var, stderr):
+def values_to_str(mean, std, var, stderr, n):
     '''
     Create a text representation of a metric's mean.
     '''
-    return ('\tmean\t= %(mean)s\n'+\
+    # pylint: disable=C0103
+    return ('\tmean\t= %(mean)s\t(macro)\n'+\
             '\tstd\t= %(std)s\n'+\
             '\tvar\t= %(var)s\n'+\
-            '\tstderr\t= %(stderr)s') % \
+            '\tstderr\t= %(stderr)s\t(n=%(n)s)') % \
             {'mean'   : mean,
              'std'    : std,
              'var'    : var,
-             'stderr' : stderr}
+             'stderr' : stderr,
+             'n'      : n}
 
 
-def render_mean_values(name, mean, std, var, stderr):
+def render_mean_values(name, mean, std, var, stderr, n):
     '''
     Render text representing means of a metric.
     '''
-    return render_value(name, values_to_str(mean, std, var, stderr),
+    # pylint: disable=C0103,R0913
+    return render_value(name, values_to_str(mean, std, var, stderr, n),
+                        operator='\n')
+
+
+def render_mean_micro_values(name, mean):
+    '''
+    Render text representing means of a metric.
+    '''
+    return render_value(name, '\tmean\t= %s\t(micro)' % mean,
                         operator='\n')
 
 

@@ -30,25 +30,22 @@ Provides a segmentation version of the F-Measure metric.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from .Percentage import find_boundary_position_freqs
-from . import fmeasure, precision as ml_precision, recall as ml_recall
+from . import fmeasure as ml_fmeasure, precision as ml_precision, \
+    recall as ml_recall, vars_to_cf, cf_to_vars
 from .. import compute_pairwise, compute_pairwise_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
-from ..data.Display import render_mean_values
+from ..data.Display import render_mean_values, render_mean_micro_values
 
 
 DEFAULT_BETA = 1.0
+DEFAULT_PERMUTED = True
 
 
-def f_b_measure(hypothesis_masses, reference_masses, beta=DEFAULT_BETA,
-                return_parts=False):
+def confusion_matrix(hypothesis_masses, reference_masses):
     '''
-    Calculates the F-Measure between a hypothesis and reference segmentation,
-    where F-Measure is calculated as:
-    
-    .. math::
-        \\text{F}_{\\beta}\\text{-measure} = \\frac{(1 + \\beta^2) \\cdot TP}\
-        {(1 + \\beta^2) \\cdot TP + \\beta^2 \\cdot FN + FP}
+    Calculates the confusion matrix (TP, FP, FN, TN) between a hypothesis
+    and reference segmentation.
     
     Counts of true positives (:math:`TP`), false positives (:math:`FP`), and
     false negatives (:math:`FN`) are calculated as:
@@ -87,16 +84,11 @@ def f_b_measure(hypothesis_masses, reference_masses, beta=DEFAULT_BETA,
     
     :param hypothesis_masses: Hypothesis segmentation masses
     :param reference_masses:  Reference segmentation masses
-    :param beta:              Scales how precision and recall are averaged
     :type hypothesis_masses: list
     :type reference_masses:  list
-    :type beta:              :func:`float` or :class:`decimal.Decimal`
     
     :returns: F-measure or the values of the confusion matrix
-    :rtype: :class:`decimal.Decimal` or :func:`int`, :func:`int`, :func:`int`, \
-        :func:`int`
-    
-    .. seealso:: :func:`segeval.ml.fmeasure`
+    :rtype: :func:`int`, :func:`int`, :func:`int`, :func:`int`
     '''
     # pylint: disable=C0103
     positions_hyp = find_boundary_position_freqs([hypothesis_masses])
@@ -115,11 +107,33 @@ def f_b_measure(hypothesis_masses, reference_masses, beta=DEFAULT_BETA,
     
     tn = sum(reference_masses) - 1 - len(positions_ref) - fn - fp
     
-    if not return_parts:
-        return fmeasure(tp, fp, fn, beta)
-    else:
-        return tp, fp, fn, tn
+    return vars_to_cf(tp, fp, fn, tn)
         
+
+def f_b_measure(hypothesis_masses, reference_masses, beta=DEFAULT_BETA):
+    '''
+    Calculates F-Measure between a hypothesis and reference segmentation,
+    calculated as:
+    
+    .. math::
+        \\text{F}_{\\beta}\\text{-measure} = \\frac{(1 + \\beta^2) \\cdot TP}\
+        {(1 + \\beta^2) \\cdot TP + \\beta^2 \\cdot FN + FP}
+    
+    :param hypothesis_masses: Hypothesis segmentation masses
+    :param reference_masses:  Reference segmentation masses
+    :param beta:              Scales how precision and recall are averaged
+    :type hypothesis_masses: list
+    :type reference_masses:  list
+    :type beta:              :func:`float` or :class:`decimal.Decimal`
+    
+    :returns: F-measure or the values of the confusion matrix
+    :rtype: :class:`decimal.Decimal`
+    
+    .. seealso:: :func:`segeval.ml.fmeasure`
+    '''
+    # pylint: disable=C0103
+    cf = confusion_matrix(hypothesis_masses, reference_masses)
+    return ml_fmeasure(cf, beta)
 
 
 def precision(hypothesis_masses, reference_masses):
@@ -144,17 +158,8 @@ def precision(hypothesis_masses, reference_masses):
     .. seealso:: :func:`segeval.ml.precision`
     '''
     # pylint: disable=C0103
-    positions_hyp = find_boundary_position_freqs([hypothesis_masses])
-    positions_ref = find_boundary_position_freqs([reference_masses])
-    tp = 0
-    fp = 0
-    for pos in positions_ref.keys():
-        if pos in positions_hyp:
-            tp += 1
-    for pos in positions_hyp.keys():
-        if pos not in positions_ref:
-            fp += 1
-    return ml_precision(tp, fp)
+    cf = confusion_matrix(hypothesis_masses, reference_masses)
+    return ml_precision(cf)
 
 
 def recall(hypothesis_masses, reference_masses):
@@ -179,40 +184,8 @@ def recall(hypothesis_masses, reference_masses):
     .. seealso:: :func:`segeval.ml.precision`
     '''
     # pylint: disable=C0103
-    positions_hyp = find_boundary_position_freqs([hypothesis_masses])
-    positions_ref = find_boundary_position_freqs([reference_masses])
-    tp = 0
-    fn = 0
-    for pos in positions_ref.keys():
-        if pos in positions_hyp:
-            tp += 1
-        else:
-            fn += 1
-    return ml_recall(tp, fn)
-
-
-def pairwise_f_b_measure(dataset_masses, beta=DEFAULT_BETA, permuted=True):
-    '''
-    Calculate mean pairwise segmentation F-Measure.
-    
-    .. seealso:: :func:`f_b_measure`
-    .. seealso:: :func:`segeval.compute_pairwise`
-    
-    :param dataset_masses: Segmentation mass dataset (including multiple \
-                           codings).
-    :type dataset_masses: dict
-        
-    :returns: Mean, standard deviation, variance, and standard error of a \
-        segmentation metric.
-    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
-        :class:`decimal.Decimal`, :class:`decimal.Decimal`
-    '''
-    def wrapper(hypothesis_masses, reference_masses):
-        '''
-        Wrapper to provide parameters.
-        '''
-        return f_b_measure(hypothesis_masses, reference_masses, beta)
-    return compute_pairwise(dataset_masses, wrapper, permuted=permuted)
+    cf = confusion_matrix(hypothesis_masses, reference_masses)
+    return ml_recall(cf)
 
 
 def pairwise_ml_measure(dataset_masses, fnc=f_b_measure):
@@ -233,12 +206,40 @@ def pairwise_ml_measure(dataset_masses, fnc=f_b_measure):
     :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
         :class:`decimal.Decimal`, :class:`decimal.Decimal`
     '''
-    return compute_pairwise(dataset_masses, fnc, permuted=False)
+    return compute_pairwise(dataset_masses, fnc, permuted=DEFAULT_PERMUTED)
 
 
-OUTPUT_NAME_F = 'Pairwise Mean F_beta Measure'
-OUTPUT_NAME_R = 'Pairwise Mean Recall'
-OUTPUT_NAME_P = 'Pairwise Mean Precision'
+def pairwise_ml_measure_micro(dataset_masses, ml_fnc=ml_fmeasure):
+    '''
+    Computes the mean (micro) of a particular ml metric.
+    
+    .. seealso:: :func:`f_b_measure`
+    
+    :param dataset_masses: Segmentation mass dataset (including multiple \
+                           codings).
+    :type dataset_masses: dict
+        
+    :returns: Mean (micro)
+    :rtype: :class:`decimal.Decimal`
+    '''
+    # pylint: disable=C0103
+    
+    pairs = compute_pairwise_values(dataset_masses, confusion_matrix)
+    
+    tp, fp, fn, tn = 0, 0, 0, 0
+    for values in pairs.values():
+        cur_tp, cur_fp, cur_fn, cur_tn =  cf_to_vars(values)
+        tp += cur_tp
+        fp += cur_fp
+        fn += cur_fn
+        tn += cur_tn
+    
+    return ml_fnc(vars_to_cf(tp, fp, fn, tn))
+
+
+OUTPUT_NAME_F = 'Pairwise Mean F_beta Measure (permuted)'
+OUTPUT_NAME_R = 'Pairwise Mean Recall (permuted)'
+OUTPUT_NAME_P = 'Pairwise Mean Precision (permuted)'
 SHORT_NAME_F  = 'F_%s'
 SHORT_NAME_P  = 'P'
 SHORT_NAME_R  = 'R'
@@ -250,11 +251,11 @@ def values_f_b_measure(dataset_masses, beta=DEFAULT_BETA):
     '''
     # Define a fnc to retrieve F_Beta-Measure values
     def wrapper_f(hypothesis_masses, reference_masses, return_parts=False):
+        # pylint: disable=W0613
         '''
         Wrapper to provide parameters.
         '''
-        return f_b_measure(hypothesis_masses, reference_masses, beta,
-                           return_parts=return_parts)
+        return f_b_measure(hypothesis_masses, reference_masses, beta)
     # Create header
     header = list(['coder1', 'coder2', SHORT_NAME_F % str(beta), SHORT_NAME_P, \
                    SHORT_NAME_R, 'TP', 'FP', 'FN', 'TN'])
@@ -284,9 +285,11 @@ def parse(args):
     '''
     Parse this module's metric arguments and perform requested actions.
     '''
+    # pylint: disable=C0103,R0914
     output = None
     values = load_file(args)[0]
     beta = 1
+    micro = args['micro']
     if 'beta' in args and args['beta'] != 1:
         beta = args['beta']
     # Is a TSV requested?
@@ -295,19 +298,45 @@ def parse(args):
         output_file = args['output'][0]
         header, rows = values_f_b_measure(values, beta)
         write_tsv(output_file, header, rows)
+    elif micro:
+        # Create a string to output
+        subparser = args['subparser_name']
+        if subparser == 'f':
+            def wrapper(cf):
+                '''
+                Wrap ``ml_fmeasure`` so that it uses beta.
+                '''
+                return ml_fmeasure(cf, beta)
+            mean = pairwise_ml_measure_micro(values, ml_fnc=wrapper)
+            name = SHORT_NAME_F % str(beta)
+        elif subparser == 'r':
+            mean = pairwise_ml_measure_micro(values, ml_fnc=ml_recall)
+            name = SHORT_NAME_R
+        elif subparser == 'p':
+            mean = pairwise_ml_measure_micro(values, ml_fnc=ml_precision)
+            name = SHORT_NAME_P
+        output = render_mean_micro_values(name, mean)
     else:
         # Create a string to output
         subparser = args['subparser_name']
         if subparser == 'f':
-            mean, std, var, stderr = pairwise_f_b_measure(values, beta)
+            def wrapper(hypothesis_masses, reference_masses):
+                '''
+                Wrap ``f_b_measure`` so that it uses beta.
+                '''
+                return f_b_measure(hypothesis_masses, reference_masses, beta)
+            mean, std, var, stderr, n = pairwise_ml_measure(values,
+                                                            fnc=wrapper)
             name = SHORT_NAME_F % str(beta)
         elif subparser == 'r':
-            mean, std, var, stderr = pairwise_ml_measure(values, fnc=recall)
+            mean, std, var, stderr, n = pairwise_ml_measure(values,
+                                                            fnc=recall)
             name = SHORT_NAME_R
         elif subparser == 'p':
-            mean, std, var, stderr = pairwise_ml_measure(values, fnc=precision)
+            mean, std, var, stderr, n = pairwise_ml_measure(values,
+                                                            fnc=precision)
             name = SHORT_NAME_P
-        output = render_mean_values(name, mean, std, var, stderr)
+        output = render_mean_values(name, mean, std, var, stderr, n)
     # Return
     return output
 
@@ -323,9 +352,9 @@ def parser_beta_support(parser):
                         type=float,
                         default=1.0,
                         help='Beta, the ratio of recall to precision in '+\
-                            'F_beta measure; default is 1 (equal weight), '+\
-                            '2 weights recall higher than precision, and '+\
-                            '0.5 weights precision more than recall.')
+                             'F_beta measure; default is 1 (equal weight), '+\
+                             '2 weights recall higher than precision, and '+\
+                             '0.5 weights precision more than recall.')
 
 
 def create_parser(subparsers):
@@ -333,18 +362,22 @@ def create_parser(subparsers):
     Setup a command line parser for this module's metric.
     '''
     from ..data import parser_add_file_support
+    from .. import parser_micro_support
     parser_f = subparsers.add_parser('f',
                                    help=OUTPUT_NAME_F)
     parser_add_file_support(parser_f)
     parser_f.set_defaults(func=parse)
     parser_beta_support(parser_f)
-    parser = subparsers.add_parser('r',
+    parser_micro_support(parser_f)
+    parser_r = subparsers.add_parser('r',
                                    help=OUTPUT_NAME_R)
-    parser_add_file_support(parser)
-    parser.set_defaults(func=parse)
+    parser_add_file_support(parser_r)
+    parser_micro_support(parser_r)
+    parser_r.set_defaults(func=parse)
 
-    parser = subparsers.add_parser('p',
+    parser_p = subparsers.add_parser('p',
                                    help=OUTPUT_NAME_P)
-    parser_add_file_support(parser)
-    parser.set_defaults(func=parse)
+    parser_add_file_support(parser_p)
+    parser_micro_support(parser_p)
+    parser_p.set_defaults(func=parse)
 

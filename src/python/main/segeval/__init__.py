@@ -117,7 +117,7 @@ def compute_pairwise(dataset_masses, fnc_metric, permuted=False):
     '''
     pairs = compute_pairwise_values(dataset_masses, fnc_metric, permuted)
     return mean(pairs.values()), std(pairs.values()), var(pairs.values()), \
-        stderr(pairs.values())
+        stderr(pairs.values()), len(pairs)
 
 
 def compute_pairwise_values(dataset_masses, fnc_metric, permuted=False,
@@ -159,15 +159,16 @@ def compute_pairwise_values(dataset_masses, fnc_metric, permuted=False,
                         segs_m = coder_masses[coders[m]]
                         segs_n = coder_masses[coders[n]]
                         entry_parts = list(prefix)
-                        entry_parts.extend([label, str(coders[m]), str(coders[n])])
+                        entry_parts.extend([label,
+                                            str(coders[m]),
+                                            str(coders[n])])
                         entry = ','.join(entry_parts)
                         if return_parts:
                             pairs[entry] = \
                                 fnc_metric(segs_m, segs_n,
                                                    return_parts=return_parts)
                         else:
-                            pairs[entry] = \
-                                Decimal(fnc_metric(segs_m, segs_n))
+                            pairs[entry] = fnc_metric(segs_m, segs_n)
                             
                         if permuted:
                             entry_parts = list(prefix)
@@ -178,8 +179,7 @@ def compute_pairwise_values(dataset_masses, fnc_metric, permuted=False,
                                     fnc_metric(segs_n, segs_m,
                                                     return_parts=return_parts)
                             else:
-                                pairs[entry] = \
-                                    Decimal(fnc_metric(segs_n, segs_m))
+                                pairs[entry] = fnc_metric(segs_n, segs_m)
             else:
                 # Else, recurse deeper
                 innter_prefix = list(prefix)
@@ -323,6 +323,20 @@ def create_tsv_rows(header, values, expand=False):
     padded_header.extend(header)
     # Return
     return padded_header, padded_rows
+
+
+def parser_micro_support(parser):
+    '''
+    Add support for the "micro" mean parameter to instead return a micro mean.
+    
+    :param parser: Argument parser
+    :type parser: argparse.ArgumentParser
+    '''
+    parser.add_argument('-m', '--micro',
+                        action='store_true',
+                        default=False,
+                        help='Specifies that a micro mean is to be returned;'+\
+                        ' default is macro mean.')
 
 
 class SegmentationMetricError(Exception):

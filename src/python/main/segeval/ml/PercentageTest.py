@@ -32,7 +32,7 @@ Tests the WindowDiff evaluation metric.
 import unittest
 from decimal import Decimal
 from .Percentage import percentage, pairwise_percentage, \
-    find_boundary_position_freqs
+    pairwise_percentage_micro, find_boundary_position_freqs
 from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
 from .. import convert_positions_to_masses
@@ -152,7 +152,8 @@ class TestPairwisePercentage(unittest.TestCase):
                          (Decimal('0.1621263635243898401793138635'),
                           Decimal('0.1788409781886208812486660585'),
                           Decimal('0.03198409547946276978304443503'),
-                          Decimal('0.03650576180519474391025947712')))
+                          Decimal('0.03650576180519474391025947712'),
+                          24))
     
     def test_kazantseva2012_g2(self):
         '''
@@ -160,10 +161,11 @@ class TestPairwisePercentage(unittest.TestCase):
         collected in Kazantseva (2012).
         '''
         self.assertEqual(pairwise_percentage(KAZANTSEVA2012_G2),
-                         (Decimal('0.3398087832646656176067940768'),
+                         (Decimal('0.3398087832646656176067940772'),
                           Decimal('0.1948481072924021072633034332'),
                           Decimal('0.03796578491543144325163024138'),
-                          Decimal('0.02515478248611697670879150623')))
+                          Decimal('0.02515478248611697670879150623'),
+                          60))
     
     def test_large_disagreement(self):
         '''
@@ -174,7 +176,8 @@ class TestPairwisePercentage(unittest.TestCase):
                          (0.0,
                           0.0,
                           0.0,
-                          0.0))
+                          0.0,
+                          4))
     
     def test_complete_agreement(self):
         '''
@@ -185,7 +188,47 @@ class TestPairwisePercentage(unittest.TestCase):
                          (1.0,
                           0.0,
                           0.0,
-                          0.0))
+                          0.0,
+                          24))
+
+
+class TestMicroPairwisePercentage(unittest.TestCase):
+    # pylint: disable=R0904
+    '''
+    Test permuted pairwise percentage.
+    '''
+    
+    def test_kazantseva2012_g5(self):
+        '''
+        Calculate permuted pairwise percentage on Group 5 from the dataset
+        collected in Kazantseva (2012).
+        '''
+        self.assertEqual(pairwise_percentage_micro(KAZANTSEVA2012_G5),
+                         Decimal('0.1879194630872483221476510067'))
+    
+    def test_kazantseva2012_g2(self):
+        '''
+        Calculate mean permuted pairwise percentage on Group 2 from the dataset
+        collected in Kazantseva (2012).
+        '''
+        self.assertEqual(pairwise_percentage_micro(KAZANTSEVA2012_G2),
+                         Decimal('0.3137254901960784313725490196'))
+    
+    def test_large_disagreement(self):
+        '''
+        Calculate mean permuted pairwise percentage on a theoretical dataset
+        containing large disagreement.
+        '''
+        self.assertEqual(pairwise_percentage_micro(LARGE_DISAGREEMENT),
+                         0.0)
+    
+    def test_complete_agreement(self):
+        '''
+        Calculate mean permuted pairwise percentage on a theoretical dataset
+        containing complete agreement.
+        '''
+        self.assertEqual(pairwise_percentage_micro(COMPLETE_AGREEMENT),
+                         1.0)
 
 
 class TestPercentageUtils(unittest.TestCase):

@@ -43,6 +43,7 @@ learning metrics that have been adapted for use in segmentation, including:
 from decimal import Decimal
 
 
+
 def load_tests(loader, tests, pattern):
     '''
     A ``load_tests()`` function utilizing the default loader
@@ -56,7 +57,7 @@ def load_tests(loader, tests, pattern):
     return default_load_tests(__file__, loader, tests)
 
 
-def precision(tp, fp):
+def precision(cf):
     '''
     Calculate precision.
     
@@ -70,13 +71,13 @@ def precision(tp, fp):
     :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
-    if tp == 0:
+    if cf['tp'] == 0:
         return Decimal(0)
     else:
-        return Decimal(tp) / Decimal(tp + fp)
+        return Decimal(cf['tp']) / Decimal(cf['tp'] + cf['fp'])
     
     
-def recall(tp, fn):
+def recall(cf):
     '''
     Calculate recall.
     
@@ -91,13 +92,13 @@ def recall(tp, fn):
     :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
-    if tp == 0:
+    if cf['tp'] == 0:
         return Decimal(0)
     else:
-        return Decimal(tp) / Decimal(tp + fn)
+        return Decimal(cf['tp']) / Decimal(cf['tp'] + cf['fn'])
 
 
-def fmeasure(tp, fp, fn, beta=1.0):
+def fmeasure(cf, beta=Decimal('1.0')):
     '''
     Calculate F-measure, also known as F-score.
     
@@ -118,13 +119,13 @@ def fmeasure(tp, fp, fn, beta=1.0):
     :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
-    if tp == 0 and fp == 0 and fn == 0:
+    if cf['tp'] == 0 and cf['fp'] == 0 and cf['fn'] == 0:
         return Decimal('0')
     else:
         # Convert to Decimal
-        tp   = Decimal(tp)
-        fp   = Decimal(fp)
-        fn   = Decimal(fn)
+        tp   = Decimal(cf['tp'])
+        fp   = Decimal(cf['fp'])
+        fn   = Decimal(cf['fn'])
         beta = Decimal(str(beta))
         # Calculate terms
         beta2   = beta ** 2
@@ -135,9 +136,9 @@ def fmeasure(tp, fp, fn, beta=1.0):
         return numerator / denomenator
 
 
-def confusionmatrix(tp, fp, fn, tn=None):
+def vars_to_cf(tp, fp, fn, tn):
     '''
-    Creates 2D tuples representing a confusion matrix.
+    Converts a set of variables to a confusion matrix dict.
     
     :param tp: Number of true positives.
     :param fp: Number of false positives.
@@ -148,20 +149,16 @@ def confusionmatrix(tp, fp, fn, tn=None):
     :type fn: int
     :type tn: int
     
-    :returns: 2D tuples containing a confusion matrix.
-    :rtype: :func:`tuple` containing a pair of :func:`tuple` objects, each \
-        containing two :func:`int` values.
+    :returns: A dict representing a confusion matrix.
+    :rtype: :func:`dict` containing tp, fp, fn, tn values.
     '''
     # pylint: disable=C0103
-    tp = Decimal(tp)
-    fp = Decimal(fp)
-    fn = Decimal(fn)
-    return ( (tp, fp), (fn, tn) )
+    return {'tp' : tp, 'fp' : fp, 'fn' : fn, 'tn' : tn}
 
 
-def cf_tostring(tp, fp, fn, tn=None):
+def cf_to_vars(cf):
     '''
-    Creates a string representation of a confusion matrix.
+    Converts a set of variables to a confusion matrix dict.
     
     :param tp: Number of true positives.
     :param fp: Number of false positives.
@@ -172,36 +169,11 @@ def cf_tostring(tp, fp, fn, tn=None):
     :type fn: int
     :type tn: int
     
-    :returns: String representation of a confusion matrix.
-    :rtype: :func:`str`
+    :returns: A dict representing a confusion matrix.
+    :rtype: :func:`dict` containing tp, fp, fn, tn values.
     '''
     # pylint: disable=C0103
-    return '[%(tp)i \t %(fp)i\n %(fn)i \t %(tn)i]' % \
-        {'tp': tp, 'fp' : fp, 'fn' : fn, 'tn' : tn}
-
-
-def prfcf(tp, fp, fn, tn=None, beta=1.0):
-    '''
-    Calculates precision, recall, F-Score, and creates a confusion matrix.
-    
-    :param tp:   Number of true positives.
-    :param fp:   Number of false positives.
-    :param fn:   Number of false negatives.
-    :param beta: Scales how precision and recall are averaged.
-    :type tp:    int
-    :type fp:    int
-    :type fn:    int
-    :type beta:  float
-    
-    :returns: Precision, recall, F-measure, and a confusion matrix.
-    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
-        :class:`decimal.Decimal`, \
-        :func:`tuple` containing a pair of :func:`tuple` objects, each \
-        containing two :func:`int` values.
-    '''
-    # pylint: disable=C0103
-    return precision(tp, fp), recall(tp, fn), fmeasure(tp, fp, fn, beta), \
-           confusionmatrix(tp, fp, fn, tn)
+    return cf['tp'], cf['fp'], cf['fn'], cf['tn']
 
 
 def find_boundary_position_freqs(masses_set):

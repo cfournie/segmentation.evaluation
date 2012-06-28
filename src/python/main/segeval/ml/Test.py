@@ -31,7 +31,7 @@ Tests the machine learning (ML) statistics functions, and ml package.
 #===============================================================================
 import unittest
 from decimal import Decimal
-from . import precision, recall, fmeasure, confusionmatrix, prfcf
+from . import precision, recall, fmeasure, vars_to_cf, cf_to_vars
 
 
 class TestML(unittest.TestCase):
@@ -44,101 +44,91 @@ class TestML(unittest.TestCase):
         '''
         Test precision.
         '''
-        tp = 1
-        fp = 1
-        self.assertEqual(precision(tp, fp), Decimal('0.5'))
-        tp = 1
-        fp = 3
-        self.assertEqual(precision(tp, fp), Decimal('0.25'))
-        tp = 6
-        fp = 2
-        self.assertEqual(precision(tp, fp), Decimal('0.75'))
-        tp = 0
-        fp = 2
-        self.assertEqual(precision(tp, fp), Decimal('0'))
-        tp = 2
-        fp = 0
-        self.assertEqual(precision(tp, fp), Decimal('1'))
-        tp = 0
-        fp = 0
-        self.assertEqual(precision(tp, fp), Decimal('0'))
+        cf = {}
+        cf['tp'] = 1
+        cf['fp'] = 1
+        self.assertEqual(precision(cf), Decimal('0.5'))
+        cf['tp'] = 1
+        cf['fp'] = 3
+        self.assertEqual(precision(cf), Decimal('0.25'))
+        cf['tp'] = 6
+        cf['fp'] = 2
+        self.assertEqual(precision(cf), Decimal('0.75'))
+        cf['tp'] = 0
+        cf['fp'] = 2
+        self.assertEqual(precision(cf), Decimal('0'))
+        cf['tp'] = 2
+        cf['fp'] = 0
+        self.assertEqual(precision(cf), Decimal('1'))
+        cf['tp'] = 0
+        cf['fp'] = 0
+        self.assertEqual(precision(cf), Decimal('0'))
         
     def test_recall(self):
         '''
         Test recall.
         '''
-        tp = 1
-        fn = 1
-        self.assertEqual(recall(tp, fn), Decimal('0.5'))
-        tp = 1
-        fn = 3
-        self.assertEqual(recall(tp, fn), Decimal('0.25'))
-        tp = 6
-        fn = 2
-        self.assertEqual(recall(tp, fn), Decimal('0.75'))
-        tp = 0
-        fn = 2
-        self.assertEqual(recall(tp, fn), Decimal('0'))
-        tp = 2
-        fn = 0
-        self.assertEqual(recall(tp, fn), Decimal('1'))
-        tp = 0
-        fn = 0
-        self.assertEqual(recall(tp, fn), Decimal('0'))
+        cf = {}
+        cf['tp'] = 1
+        cf['fn'] = 1
+        self.assertEqual(recall(cf), Decimal('0.5'))
+        cf['tp'] = 1
+        cf['fn'] = 3
+        self.assertEqual(recall(cf), Decimal('0.25'))
+        cf['tp'] = 6
+        cf['fn'] = 2
+        self.assertEqual(recall(cf), Decimal('0.75'))
+        cf['tp'] = 0
+        cf['fn'] = 2
+        self.assertEqual(recall(cf), Decimal('0'))
+        cf['tp'] = 2
+        cf['fn'] = 0
+        self.assertEqual(recall(cf), Decimal('1'))
+        cf['tp'] = 0
+        cf['fn'] = 0
+        self.assertEqual(recall(cf), Decimal('0'))
         
     def test_f1(self):
         '''
         Test F-Score with a beta of 1.0, 0.5, or 2.0.
         '''
-        tp = 2
-        fp = 1
-        fn = 1
+        cf = {}
+        cf['tp'] = 2
+        cf['fp'] = 1
+        cf['fn'] = 1
         beta = 1.0
-        self.assertEqual(fmeasure(tp, fp, fn, beta),
+        self.assertEqual(fmeasure(cf, beta),
                          Decimal('4') / Decimal('6'))
-        tp = 1
-        fp = 3
-        fn = 1
+        cf['tp'] = 1
+        cf['fp'] = 3
+        cf['fn'] = 1
         beta = 1.0
-        self.assertEqual(fmeasure(tp, fp, fn, beta),
+        self.assertEqual(fmeasure(cf, beta),
                          Decimal('1') / Decimal('3'))
         beta = 0.5
-        self.assertAlmostEqual(fmeasure(tp, fp, fn, beta),
+        self.assertAlmostEqual(fmeasure(cf, beta),
                                Decimal('0.277777777'))
         beta = 2.0
-        self.assertAlmostEqual(fmeasure(tp, fp, fn, beta),
+        self.assertAlmostEqual(fmeasure(cf, beta),
                                Decimal('0.416666666'))
-        tp = 0
-        fp = 0
-        fn = 0
+        cf['tp'] = 0
+        cf['fp'] = 0
+        cf['fn'] = 0
         beta = 1.0
-        self.assertEqual(fmeasure(tp, fp, fn, beta), Decimal('0'))
+        self.assertEqual(fmeasure(cf, beta), Decimal('0'))
         
-    def test_confusion_matrix(self):
+    def test_vars_to_cf(self):
         '''
-        Tests confusion matrix calculation.
+        Tests converting variables into a confusion matrix.
         '''
-        tp = 1
-        fp = 2
-        fn = 3
-        tn = None
+        self.assertEqual(vars_to_cf(1, 2, 3, 4),
+                         {'tp' : 1, 'fp' : 2, 'fn' : 3, 'tn' : 4})
         
-        cf = ( (tp, fp), (fn, tn) )
-        self.assertEqual(confusionmatrix(tp, fp, fn, tn), cf)
     
-    def test_prfcf(self):
+    def test_cf_to_vars(self):
         '''
-        Tests precision, recall, F1, and CF calculation.
+        Tests converting a confusion matrix into variables.
         '''
-        tp = 2
-        fp = 4
-        fn = 8
-        tn = None
-        
-        p = Decimal('1') / Decimal('3')
-        r = Decimal('0.2')
-        f = Decimal('0.25')
-        
-        cf = ( (tp, fp), (fn, tn) )
-        self.assertEqual(prfcf(tp, fp, fn, tn), (p, r, f, cf))
+        self.assertEqual(cf_to_vars({'tp' : 1, 'fp' : 2, 'fn' : 3, 'tn' : 4}),
+                         (1, 2, 3, 4))
 

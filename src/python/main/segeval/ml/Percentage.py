@@ -34,27 +34,32 @@ from . import find_boundary_position_freqs
 from .. import compute_pairwise, compute_pairwise_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
-from ..data.Display import render_mean_values
+from ..data.Display import render_mean_values, render_mean_micro_values
 
 
-def percentage(hypothesis_masses, reference_masses):
+DEFAULT_PERMUTED = False
+
+
+def percentage(hypothesis_masses, reference_masses, return_parts=False):
     '''
     Calculates the percentage agreement between a hypothesis, and reference
     segmentation.
     
     :param hypothesis_masses: Hypothesis segmentation masses.
     :param reference_masses: Reference segmentation masses.
-    :param beta: Scales how precision and recall are averaged.
+    :param return_parts: If true, return the numerator and denominator
     :type hypothesis_masses: list
     :type reference_masses: list
+    :type return_parts: bool
     
-    :returns: F-measure.
-    :rtype: :class:`decimal.Decimal`
+    :returns: Boundaries positions that agree as a percentage or numerator and \
+        denominator
+    :rtype: :class:`decimal.Decimal` or :func:`int`, :func:`int`
     '''
     positions_hyp = find_boundary_position_freqs([hypothesis_masses])
     positions_ref = find_boundary_position_freqs([reference_masses])
-    agree    = Decimal('0')
-    disagree = Decimal('0')
+    agree    = 0
+    disagree = 0
     for pos in positions_ref.keys():
         if pos in positions_hyp:
             agree += 1
@@ -63,7 +68,10 @@ def percentage(hypothesis_masses, reference_masses):
     for pos in positions_hyp.keys():
         if pos not in positions_ref:
             disagree += 1
-    return agree / (agree + disagree)
+    if return_parts:
+        return agree, (agree + disagree)
+    else:
+        return Decimal(agree) / Decimal(agree + disagree)
 
 
 def pairwise_percentage(dataset_masses):
@@ -82,7 +90,35 @@ def pairwise_percentage(dataset_masses):
     :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
         :class:`decimal.Decimal`, :class:`decimal.Decimal`
     '''
-    return compute_pairwise(dataset_masses, percentage, permuted=False)
+    return compute_pairwise(dataset_masses, percentage,
+                            permuted=DEFAULT_PERMUTED)
+
+
+def pairwise_percentage_micro(dataset_masses):
+    '''
+    Calculate mean (micro) pairwise segmentation percentage correctness.
+    
+    .. seealso:: :func:`percentage`
+    .. seealso:: :func:`segeval.compute_pairwise`
+    
+    :param dataset_masses: Segmentation mass dataset (including multiple \
+                           codings).
+    :type dataset_masses: dict
+        
+    :returns: Mean (micro)
+    :rtype: :class:`decimal.Decimal`
+    '''
+    # pylint: disable=C0103
+    pairs = compute_pairwise_values(dataset_masses, percentage,
+                                    return_parts=True)
+    
+    agree, total = 0, 0
+    for values in pairs.values():
+        cur_agree, cur_total = values
+        agree += cur_agree
+        total += cur_total
+    
+    return Decimal(agree) / Decimal(total)
 
 
 OUTPUT_NAME = 'Pairwise Mean Percentage'
@@ -104,16 +140,20 @@ def parse(args):
     '''
     output = None
     values = load_file(args)[0]
+    micro = args['micro']
+    name = SHORT_NAME
     # Is a TSV requested?
     if args['output'] != None:
         # Create a TSV
         output_file = args['output'][0]
         header, rows = values_percentage(values,)
         write_tsv(output_file, header, rows)
+    elif micro:
+        mean = pairwise_percentage_micro(values)
+        output = render_mean_micro_values(name, mean)
     else:
         # Create a string to output
         mean, std, var, stderr = pairwise_percentage(values)
-        name = SHORT_NAME
         output = render_mean_values(name, mean, std, var, stderr)
     return output
 
@@ -123,8 +163,10 @@ def create_parser(subparsers):
     Setup a command line parser for this module's metric.
     '''
     from ..data import parser_add_file_support
+    from .. import parser_micro_support
     parser = subparsers.add_parser('pr',
                                    help=OUTPUT_NAME)
     parser_add_file_support(parser)
+    parser_micro_support(parser)
     parser.set_defaults(func=parse)
 
