@@ -57,7 +57,7 @@ def write_json(filepath, data):
 def output_linear_mass_json(filepath, dataset_masses, multiple):
     pass
 
-def input_linear_mass_json(filepath):
+def input_linear_mass_json(filepath, create_item=False):
     '''
     Load a segment mass JSON file.
     
@@ -97,6 +97,9 @@ def input_linear_mass_json(filepath):
         # Convert coder labels into strings
         for coder, segment_masses in data.items():
             dataset_masses[item][coder] = segment_masses
+        # Undo item
+        if not create_item:
+            dataset_masses = dataset_masses[item]
     # If separated into multiple items for one coder per file
     elif 'items' in data:
         data = data['items']
