@@ -36,7 +36,7 @@ from .Pi import fleiss_pi
 from .. import compute_mean, compute_mean_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
-from ..data.Display import render_value, render_mean_values
+from ..data.Display import render_value, render_agreement_coefficients
 
 
 def artstein_poesio_bias(dataset_masses):
@@ -109,11 +109,11 @@ def parse(args):
         # Create a string to output
         if not args['output'] and is_file:
             # Render for one item
-            output = render_value(SHORT_NAME, str(artstein_poesio_bias(values)))
+            output = render_value(SHORT_NAME, str((values)))
         else:
             # Render for one or more items
-            mean, std, var, stderr = mean_artstein_poesio_bias(values)
-            output = render_mean_values(SHORT_NAME_MEAN, mean, std, var, stderr)
+            biases = compute_mean_values(values, artstein_poesio_bias)
+            output = render_agreement_coefficients(SHORT_NAME, biases)
     # Return
     return output
 

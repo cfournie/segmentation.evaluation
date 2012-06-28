@@ -45,10 +45,10 @@ only varies the calculation of :math:`\\text{A}_e`.
 #===============================================================================
 from decimal import Decimal
 from . import actual_agreement
-from .. import compute_mean, compute_mean_values, create_tsv_rows
+from .. import compute_mean_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
-from ..data.Display import render_value, render_mean_values
+from ..data.Display import render_value, render_agreement_coefficients
 
 
 def cohen_kappa(item_masses, return_parts=False):
@@ -166,25 +166,8 @@ def fleiss_kappa(items_masses, return_parts=False):
         return kappa
 
 
-def mean_fleiss_kappa(dataset_masses):
-    '''
-    Calculate mean segmentation Fleiss' Kappa.
-    
-    .. seealso:: :func:`fleiss_kappa`, :func:`segeval.compute_mean`
-    
-    :param dataset_masses: Segmentation mass dataset (including multiple \
-                           codings).
-    :type dataset_masses: dict
-    
-    :returns: Mean, standard deviation, and variance.
-    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, :class:`decimal.Decimal`
-    '''
-    return compute_mean(dataset_masses, fleiss_kappa)
-
-
-OUTPUT_NAME     = 'S-based Fleiss\' Multi Kappa'
-SHORT_NAME      = 'K*_s'
-SHORT_NAME_MEAN = 'Mean %s' % SHORT_NAME
+OUTPUT_NAME = 'S-based Fleiss\' Multi Kappa'
+SHORT_NAME  = 'K*_s'
 
 
 def values_kappa(dataset_masses):
@@ -215,8 +198,8 @@ def parse(args):
             output = render_value(SHORT_NAME, str(fleiss_kappa(values)))
         else:
             # Render for one or more items
-            mean, std, var, stderr = mean_fleiss_kappa(values)
-            output = render_mean_values(SHORT_NAME_MEAN, mean, std, var, stderr)
+            kappas = compute_mean_values(values, fleiss_kappa)
+            output = render_agreement_coefficients(SHORT_NAME, kappas)
     # Return
     return output
 

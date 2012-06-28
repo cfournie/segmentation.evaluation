@@ -46,6 +46,18 @@ def values_to_str(mean, std, var, stderr, n):
              'stderr' : stderr,
              'n'      : n}
 
+def pairs_to_str(pairs):
+    '''
+    Create a text representation of a metric's mean.
+    '''
+    # pylint: disable=C0103
+    values = list()
+    for name, value in pairs.items():
+        values.append('\t%(name)s\t= %(value)s' % \
+                      {'name'  : name,
+                       'value' : value})
+    return '\n'.join(values)
+
 
 def render_mean_values(name, mean, std, var, stderr, n):
     '''
@@ -61,6 +73,15 @@ def render_mean_micro_values(name, mean):
     Render text representing means of a metric.
     '''
     return render_value(name, '\tmean\t= %s\t(micro)' % mean,
+                        operator='\n')
+
+
+def render_agreement_coefficients(name, pairs):
+    '''
+    Render text representing means of a metric.
+    '''
+    # pylint: disable=C0103,R0913
+    return render_value(name, pairs_to_str(pairs),
                         operator='\n')
 
 

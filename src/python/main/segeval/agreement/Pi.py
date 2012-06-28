@@ -50,7 +50,7 @@ from . import actual_agreement
 from .. import compute_mean, compute_mean_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
-from ..data.Display import render_value, render_mean_values
+from ..data.Display import render_value, render_agreement_coefficients
 
 
 def scotts_pi(items_masses, return_parts=False):
@@ -171,7 +171,6 @@ def mean_fleiss_pi(dataset_masses):
 
 OUTPUT_NAME     = 'S-based Fleiss\' Multi Pi'
 SHORT_NAME      = 'Pi*_s'
-SHORT_NAME_MEAN = 'Mean %s' % SHORT_NAME
 
 
 def values_pi(dataset_masses):
@@ -187,6 +186,7 @@ def parse(args):
     '''
     Parse this module's metric arguments and perform requested actions.
     '''
+    # pylint: disable=C0103
     output = None
     values, is_file = load_file(args)
     # Is a TSV requested?
@@ -202,8 +202,8 @@ def parse(args):
             output = render_value(SHORT_NAME, str(fleiss_pi(values)))
         else:
             # Render for one or more items
-            mean, std, var, stderr = mean_fleiss_pi(values)
-            output = render_mean_values(SHORT_NAME_MEAN, mean, std, var, stderr)
+            pis = compute_mean_values(values, fleiss_pi)
+            output = render_agreement_coefficients(SHORT_NAME, pis)
     # Return
     return output
 
