@@ -153,8 +153,8 @@ def parse(args):
         output = render_mean_micro_values(name, mean)
     else:
         # Create a string to output
-        mean, std, var, stderr = pairwise_percentage(values)
-        output = render_mean_values(name, mean, std, var, stderr)
+        mean, std, var, stderr, n = pairwise_percentage(values)
+        output = render_mean_values(name, mean, std, var, stderr, n)
     return output
 
 
