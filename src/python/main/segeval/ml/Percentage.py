@@ -138,6 +138,7 @@ def parse(args):
     '''
     Parse this module's metric arguments and perform requested actions.
     '''
+    # pylint: disable=C0103
     output = None
     values = load_file(args)[0]
     micro = args['micro']
