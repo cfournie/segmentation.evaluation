@@ -35,12 +35,13 @@ from .. import SegmentationMetricError, compute_pairwise, \
     compute_pairwise_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
-from ..data.Display import render_mean_values
+from ..data.Display import render_mean_values, render_mean_micro_values
 
 
 DEFAULT_N      = 2
 DEFAULT_WEIGHT = (1, 1)
 DEFAULT_SCALE  = True
+DEFAULT_PERMUTED = False
 
 
 def similarity(segment_masses_a, segment_masses_b, n=DEFAULT_N,
@@ -133,7 +134,7 @@ def similarity(segment_masses_a, segment_masses_b, n=DEFAULT_N,
 def pairwise_similarity(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
                         scale_transp=DEFAULT_SCALE, return_parts=False):
     '''
-    Calculate mean pairwise segmentation F-Measure.
+    Calculate mean pairwise S.
     
     .. seealso:: :func:`similarity`
     .. seealso:: :func:`segeval.compute_pairwise`
@@ -155,7 +156,45 @@ def pairwise_similarity(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
         return similarity(segment_masses_a, segment_masses_b, n, weight,
                   scale_transp, return_parts)
     
-    return compute_pairwise(dataset_masses, wrapper, permuted=False)
+    return compute_pairwise(dataset_masses, wrapper, permuted=DEFAULT_PERMUTED)
+
+
+def pairwise_similarity_micro(dataset_masses, n=DEFAULT_N,
+                              weight=DEFAULT_WEIGHT,
+                              scale_transp=DEFAULT_SCALE):
+    '''
+    Calculate mean pairwise S.
+    
+    .. seealso:: :func:`similarity`
+    .. seealso:: :func:`segeval.compute_pairwise`
+    
+    :param dataset_masses: Segmentation mass dataset (including multiple \
+                           codings).
+    :type dataset_masses: dict
+    
+    :returns: Mean (micro)
+    :rtype: :class:`decimal.Decimal`
+    '''
+    # pylint: disable=C0103,R0913,R0914
+    def wrapper(segment_masses_a, segment_masses_b, return_parts=True):
+        '''
+        Wrapper to provide parameters.
+        '''
+        return similarity(segment_masses_a, segment_masses_b, n, weight,
+                  scale_transp, return_parts)
+    
+    pairs = compute_pairwise_values(dataset_masses, wrapper,
+                                   permuted=DEFAULT_PERMUTED,
+                                   return_parts=True)
+    
+    
+    pbs_unedited, pbs_total = 0, 0
+    for values in pairs.values():
+        cur_pbs_unedited, cur_pbs_total = values[0:2]
+        pbs_unedited += cur_pbs_unedited
+        pbs_total += cur_pbs_total
+    
+    return Decimal(pbs_unedited) / Decimal(pbs_total)
 
 
 OUTPUT_NAME = 'Mean S'
@@ -224,7 +263,7 @@ def parse(args):
     '''
     Parse this module's metric arguments and perform requested actions.
     '''
-    # pylint: disable=C0103
+    # pylint: disable=C0103,R0914
     output = None
     values = load_file(args)[0]
     # Parse args
@@ -233,6 +272,7 @@ def parse(args):
     ws = args['ws']
     te = args['te']
     weight = DEFAULT_WEIGHT
+    micro = args['micro']
     if wt != 1.0 or ws != 1.0:
         weight = (ws, wt)
     # Is a TSV requested?
@@ -244,10 +284,14 @@ def parse(args):
         else:
             header, rows = values_s(values, n, weight, te)
         write_tsv(output_file, header, rows)
+    elif micro:
+        # Create a string to output
+        mean = pairwise_similarity_micro(values, n, weight, te)
+        output = render_mean_micro_values(SHORT_NAME, mean)
     else:
         # Create a string to output
-        mean, std, var, stderr = pairwise_similarity(values, n, weight, te)
-        output = render_mean_values(SHORT_NAME, mean, std, var, stderr)
+        mean, std, var, stderr, n = pairwise_similarity(values, n, weight, te)
+        output = render_mean_values(SHORT_NAME, mean, std, var, stderr, n)
     # Return
     return output
 
@@ -289,10 +333,12 @@ def create_parser(subparsers):
     Setup a command line parser for this module's metric.
     '''
     from ..data import parser_add_file_support
+    from .. import parser_micro_support
     parser = subparsers.add_parser('s',
                                    help=OUTPUT_NAME)
     parser_add_file_support(parser)
     parser_s_support(parser)
+    parser_micro_support(parser)
     parser.add_argument('-de', '--detailed',
                         action='store_true',
                         default=False,

@@ -31,8 +31,11 @@ Tests the similarity evaluation metric functions.
 #===============================================================================
 import unittest
 from decimal import Decimal
-from .SegmentationSimilarity import similarity
+from .SegmentationSimilarity import similarity, pairwise_similarity, \
+    pairwise_similarity_micro
 from .. import SegmentationMetricError
+from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
+    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
 
 
 class TestSegmentationSimilarity(unittest.TestCase):
@@ -427,3 +430,101 @@ class TestSegmentationSimilarityFigures(unittest.TestCase):
         self.assertEqual(sim_afb_u, Decimal('7'))
         self.assertEqual(sim_fab_u, Decimal('8'))
         
+
+
+
+
+class TestPairwiseS(unittest.TestCase):
+    # pylint: disable=R0904
+    '''
+    Test permuted pairwise percentage.
+    '''
+    
+    def test_kazantseva2012_g5(self):
+        '''
+        Calculate permuted pairwise S on Group 5 from the dataset
+        collected in Kazantseva (2012).
+        '''
+        self.assertEqual(pairwise_similarity(KAZANTSEVA2012_G5),
+                         (Decimal('0.8160882473382473382473382471'),
+                          Decimal('0.06720030843553828301879219481'),
+                          Decimal('0.004515881453831477719001606533'),
+                          Decimal('0.01371720551872640852180333777'),
+                          24))
+    
+    def test_kazantseva2012_g2(self):
+        '''
+        Calculate mean permuted pairwise S on Group 2 from the dataset
+        collected in Kazantseva (2012).
+        '''
+        self.assertEqual(pairwise_similarity(KAZANTSEVA2012_G2),
+                         (Decimal('0.8838086068830613118161256798'),
+                          Decimal('0.04672823593290891559792690999'),
+                          Decimal('0.002183528033401599953629233128'),
+                          Decimal('0.006032589318860240953093878222'),
+                          60))
+    
+    def test_large_disagreement(self):
+        '''
+        Calculate mean permuted pairwise S on a theoretical dataset
+        containing large disagreement.
+        '''
+        self.assertEqual(pairwise_similarity(LARGE_DISAGREEMENT),
+                         (0.0,
+                          0.0,
+                          0.0,
+                          0.0,
+                          4))
+    
+    def test_complete_agreement(self):
+        '''
+        Calculate mean permuted pairwise S on a theoretical dataset
+        containing complete agreement.
+        '''
+        self.assertEqual(pairwise_similarity(COMPLETE_AGREEMENT),
+                         (1.0,
+                          0.0,
+                          0.0,
+                          0.0,
+                          24))
+
+
+class TestMicroPairwiseS(unittest.TestCase):
+    # pylint: disable=R0904
+    '''
+    Test permuted pairwise S.
+    '''
+    
+    def test_kazantseva2012_g5(self):
+        '''
+        Calculate permuted pairwise S on Group 5 from the dataset
+        collected in Kazantseva (2012).
+        '''
+        self.assertEqual(pairwise_similarity_micro(KAZANTSEVA2012_G5),
+                         Decimal('0.8243464052287581699346405229'))
+    
+    def test_kazantseva2012_g2(self):
+        '''
+        Calculate mean permuted pairwise S on Group 2 from the dataset
+        collected in Kazantseva (2012).
+        '''
+        self.assertEqual(pairwise_similarity_micro(KAZANTSEVA2012_G2),
+                         Decimal('0.8891428571428571428571428571'))
+    
+    def test_large_disagreement(self):
+        '''
+        Calculate mean permuted pairwise S on a theoretical dataset
+        containing large disagreement.
+        '''
+        self.assertEqual(pairwise_similarity_micro(LARGE_DISAGREEMENT),
+                         0.0)
+    
+    def test_complete_agreement(self):
+        '''
+        Calculate mean permuted pairwise S on a theoretical dataset
+        containing complete agreement.
+        '''
+        self.assertEqual(pairwise_similarity_micro(COMPLETE_AGREEMENT),
+                         1.0)
+
+    
