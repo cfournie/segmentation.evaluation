@@ -162,13 +162,13 @@ def pairwise_pk_micro(dataset_masses, one_minus=False,
     pairs = compute_pairwise_values(dataset_masses, wrapper,
                                     return_parts=True)
     
-    agree, total = 0, 0
+    windows, total = 0, 0
     for values in pairs.values():
-        cur_agree, cur_total = values
-        agree += cur_agree
+        cur_windows, cur_total = values
+        windows += cur_windows
         total += cur_total
     
-    p_k = Decimal(agree) / Decimal(total)
+    p_k = Decimal(windows) / Decimal(total)
     
     if one_minus:
         return Decimal('1.0') - p_k
