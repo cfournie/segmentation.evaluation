@@ -17,7 +17,8 @@ segmentation evaluation metrics',
       maintainer_email='chris.m.fournier@gmail.com',
       
       url='http://pypi.python.org/pypi/segeval/',
-      download_url = 'http://pypi.python.org/packages/source/s/segeval/segeval-1.0.1%20beta.tar.gz',
+      download_url = 'http://pypi.python.org/packages/source/s/segeval/segeval\
+-1.0.1%20beta.tar.gz',
       
       classifiers=['Development Status :: 4 - Beta',
                    'Environment :: Console',
