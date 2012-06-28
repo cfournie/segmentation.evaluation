@@ -31,8 +31,9 @@ Tests the data i/o functions and package.
 #===============================================================================
 import os
 import unittest
-from . import load_nested_folders_dict, input_linear_mass_tsv, \
-    input_linear_positions_tsv, input_linear_mass_json, FILETYPE_JSON
+from . import load_nested_folders_dict, FILETYPE_JSON
+from .TSV import input_linear_mass_tsv, input_linear_positions_tsv
+from .JSON import input_linear_mass_json
 from .Samples import HEARST_1997
 
 
