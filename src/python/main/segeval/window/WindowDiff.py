@@ -38,7 +38,8 @@ from .. import SegmentationMetricError, compute_pairwise, \
     convert_masses_to_positions, compute_pairwise_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
-from ..data.Display import render_mean_values, render_mean_micro_values
+from ..data.Display import render_mean_values, render_mean_micro_values, \
+    render_permuted
 
 
 DEFAULT_PERMUTED = True
@@ -224,7 +225,7 @@ def pairwise_window_diff_micro(dataset_masses, one_minus=False,
         return wd
 
 
-OUTPUT_NAME = 'Mean WindowDiff'
+OUTPUT_NAME = render_permuted('Mean WindowDiff', DEFAULT_PERMUTED)
 SHORT_NAME  = 'WindowDiff'
 
 
@@ -243,7 +244,8 @@ def values_window_diff(dataset_masses, name, one_minus,
                            lamprier_et_al_2007_fix=lamprier_et_al_2007_fix)
     # Get values
     header = list(['coder1', 'coder2', name])
-    values = compute_pairwise_values(dataset_masses, wrapper, permuted=True)
+    values = compute_pairwise_values(dataset_masses, wrapper,
+                                     permuted=DEFAULT_PERMUTED)
     return create_tsv_rows(header, values)
 
 

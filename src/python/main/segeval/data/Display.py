@@ -93,6 +93,20 @@ def render_value(name, value, operator='='):
                                                 'value' : value,
                                                 'operator' : operator}
 
+def render_permuted(name, permuted):
+    '''
+    Render text to indicate that permutation is performed.
+    
+    :param name:      Name of a method
+    :param permuted:  Whether permutation is performed or not
+    :type name:     str
+    :type permuted: bool
+    
+    '''
+    output = name
+    if permuted:
+        output = '%s (permuted)' % name
+    return output
 
 
 

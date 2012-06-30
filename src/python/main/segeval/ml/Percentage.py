@@ -34,7 +34,8 @@ from . import find_boundary_position_freqs
 from .. import compute_pairwise, compute_pairwise_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
-from ..data.Display import render_mean_values, render_mean_micro_values
+from ..data.Display import render_mean_values, render_mean_micro_values, \
+    render_permuted
 
 
 DEFAULT_PERMUTED = False
@@ -121,7 +122,7 @@ def pairwise_percentage_micro(dataset_masses):
     return Decimal(agree) / Decimal(total)
 
 
-OUTPUT_NAME = 'Pairwise Mean Percentage'
+OUTPUT_NAME = render_permuted('Pairwise Mean Percentage', DEFAULT_PERMUTED)
 SHORT_NAME  = 'Pr'
 
 

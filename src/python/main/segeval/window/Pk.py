@@ -37,7 +37,8 @@ from .. import SegmentationMetricError, compute_pairwise, \
     convert_masses_to_positions, compute_pairwise_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
-from ..data.Display import render_mean_values, render_mean_micro_values
+from ..data.Display import render_mean_values, render_mean_micro_values, \
+    render_permuted
 
 
 DEFAULT_PERMUTED = True
@@ -176,7 +177,7 @@ def pairwise_pk_micro(dataset_masses, one_minus=False,
         return p_k
 
 
-OUTPUT_NAME = 'Mean Pk'
+OUTPUT_NAME = render_permuted('Mean Pk', DEFAULT_PERMUTED)
 SHORT_NAME  = 'Pk'
 
 

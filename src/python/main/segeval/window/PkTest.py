@@ -140,10 +140,11 @@ class TestPairwisePkMeasure(unittest.TestCase):
         '''
         self.assertEqual(pairwise_pk(KAZANTSEVA2012_G5,
                                      convert_from_masses=True),
-                         (Decimal('0.3553005828239669303205984456'),
-                          Decimal('0.1100176084609921563234047475'),
-                          Decimal('0.01210387417147617290343989767'),
-                          Decimal('0.01587967396513816764352290375')))
+                         (Decimal('0.3553005828239669303205984460'),
+                          Decimal('0.1100176084609921563234047476'),
+                          Decimal('0.01210387417147617290343989768'),
+                          Decimal('0.01587967396513816764352290376'),
+                          48))
     
     def test_kazantseva2012_g2(self):
         '''
@@ -152,10 +153,11 @@ class TestPairwisePkMeasure(unittest.TestCase):
         '''
         self.assertEqual(pairwise_pk(KAZANTSEVA2012_G2,
                                      convert_from_masses=True),
-                         (Decimal('0.2882256923776327507173609772'),
-                          Decimal('0.1454395656787966169084191446'),
-                          Decimal('0.02115266726483699483402909758'),
-                          Decimal('0.01327675514600517730547602482')))
+                         (Decimal('0.2882256923776327507173609771'),
+                          Decimal('0.1454395656787966169084191444'),
+                          Decimal('0.02115266726483699483402909753'),
+                          Decimal('0.01327675514600517730547602480'),
+                          120))
     
     def test_large_disagreement(self):
         '''
@@ -167,7 +169,8 @@ class TestPairwisePkMeasure(unittest.TestCase):
                          (1.0,
                           0.0,
                           0.0,
-                          0.0))
+                          0.0,
+                          8))
     
     def test_complete_agreement(self):
         '''
@@ -179,5 +182,6 @@ class TestPairwisePkMeasure(unittest.TestCase):
                          (0.0,
                           0.0,
                           0.0,
-                          0.0))
+                          0.0,
+                          48))
 

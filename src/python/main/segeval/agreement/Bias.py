@@ -109,7 +109,7 @@ def parse(args):
         # Create a string to output
         if not args['output'] and is_file:
             # Render for one item
-            output = render_value(SHORT_NAME, str((values)))
+            output = render_value(SHORT_NAME, str(artstein_poesio_bias(values)))
         else:
             # Render for one or more items
             biases = compute_mean_values(values, artstein_poesio_bias)

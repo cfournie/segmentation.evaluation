@@ -31,7 +31,7 @@ Tests the segmentation versions of Cohen's and Fleiss' Kappa.
 #===============================================================================
 import unittest
 from decimal import Decimal
-from .Kappa import cohen_kappa, fleiss_kappa, mean_fleiss_kappa
+from .Kappa import cohen_kappa, fleiss_kappa
 from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
 
@@ -146,18 +146,4 @@ class TestKappa(unittest.TestCase):
         data_complete = COMPLETE_AGREEMENT
         kappa = fleiss_kappa(data_complete)
         self.assertEqual(kappa, 1.0)
-
-
-    def test_mean_fleiss_kappa(self):
-        '''
-        Calculate mean Fleiss' Kappa on Group 2 and 5 from the dataset
-        collected in [KazantsevaSzpakowicz2012]_.
-        '''
-        self.assertEqual(mean_fleiss_kappa(
-                                {'g2' : KAZANTSEVA2012_G2,
-                                 'g5' : KAZANTSEVA2012_G5}),
-                         (Decimal('0.8532200830551737262407422694'),
-                          Decimal('0.03337510016291759887533482579'),
-                          Decimal('0.001113897310884782334990518712'),
-                          Decimal('0.01179987982398964061050486219')))
 

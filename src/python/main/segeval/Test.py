@@ -68,25 +68,27 @@ class TestSegeval(unittest.TestCase):
         Tests computing pairwise values from dicts.  Ensures that dicts of
         arbitrary size can still be used.
         '''
-        expected = (Decimal('0.2441586812212541867438777318'),
-                    Decimal('0.2305169230001435997031211479'),
-                    Decimal('0.05313805178945413332341442162'),
-                    Decimal('0.04705406986889928477977431110'))
-        expected_variant = (Decimal('0.2441586812212541867438777318'),
-                            Decimal('0.2305169230001435997031211480'),
-                            Decimal('0.05313805178945413332341442167'),
-                            Decimal('0.04705406986889928477977431112'))
+        expected_variant1 = (Decimal('0.2441586812212541867438777318'),
+                             Decimal('0.2305169230001435997031211478'),
+                             Decimal('0.05313805178945413332341442158'),
+                             Decimal('0.04705406986889928477977431108'),
+                             24)
+        expected_variant2 = (Decimal('0.2441586812212541867438777318'),
+                             Decimal('0.2305169230001435997031211479'),
+                             Decimal('0.05313805178945413332341442162'),
+                             Decimal('0.04705406986889928477977431110'),
+                             24)
         
         self.assertEqual(compute_pairwise(KAZANTSEVA2012_G5,
                                           f_b_measure),
-                         expected)
+                         expected_variant1)
         self.assertEqual(compute_pairwise({'G5' : KAZANTSEVA2012_G5},
                                           f_b_measure),
-                         expected)
+                         expected_variant2)
         self.assertEqual(compute_pairwise({'Kazantseva' : 
                                                 {'G5' : KAZANTSEVA2012_G5}},
                                           f_b_measure),
-                         expected_variant)
+                         expected_variant2)
     
     
     def test_compute_mean(self):

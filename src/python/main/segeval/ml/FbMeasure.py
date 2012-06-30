@@ -35,7 +35,8 @@ from . import fmeasure as ml_fmeasure, precision as ml_precision, \
 from .. import compute_pairwise, compute_pairwise_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
-from ..data.Display import render_mean_values, render_mean_micro_values
+from ..data.Display import render_mean_values, render_mean_micro_values, \
+    render_permuted
 
 
 DEFAULT_BETA = 1.0
@@ -237,9 +238,10 @@ def pairwise_ml_measure_micro(dataset_masses, ml_fnc=ml_fmeasure):
     return ml_fnc(vars_to_cf(tp, fp, fn, tn))
 
 
-OUTPUT_NAME_F = 'Pairwise Mean F_beta Measure (permuted)'
-OUTPUT_NAME_R = 'Pairwise Mean Recall (permuted)'
-OUTPUT_NAME_P = 'Pairwise Mean Precision (permuted)'
+OUTPUT_NAME_F = render_permuted('Pairwise Mean F_beta Measure', 
+                                DEFAULT_PERMUTED)
+OUTPUT_NAME_R = render_permuted('Pairwise Mean Recall', DEFAULT_PERMUTED)
+OUTPUT_NAME_P = render_permuted('Pairwise Mean Precision', DEFAULT_PERMUTED)
 SHORT_NAME_F  = 'F_%s'
 SHORT_NAME_P  = 'P'
 SHORT_NAME_R  = 'R'
@@ -266,8 +268,12 @@ def values_f_b_measure(dataset_masses, beta=DEFAULT_BETA):
                                        permuted=False)
     values_r = compute_pairwise_values(dataset_masses, recall,
                                        permuted=False)
-    values_cf = compute_pairwise_values(dataset_masses, wrapper_f,
-                                        permuted=False, return_parts=True)
+    values_cf = compute_pairwise_values(dataset_masses, confusion_matrix,
+                                        permuted=False)
+    
+    for label, value in values_cf.items():
+        values_cf[label] = cf_to_vars(value)
+    
     # Combine into one table
     combined_values = dict()
     for label in values_f.keys():

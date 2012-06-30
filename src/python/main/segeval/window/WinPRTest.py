@@ -48,9 +48,9 @@ class TestWinPR(unittest.TestCase):
         '''
         segs_a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         segs_b = [1,1,1,1,1,2,2,2,3,3,3,3,3]
-        self.assertEqual(win_pr(segs_a, segs_b),
-                         (4, 0, 0, 22) )
-        self.assertEqual(win_pr_f(segs_a, segs_b),
+        self.assertEqual(win_pr(segs_a, segs_b, convert_from_masses=False),
+                         {'fp': 0, 'tn': 22, 'fn': 0, 'tp': 4} )
+        self.assertEqual(win_pr_f(segs_a, segs_b, convert_from_masses=False),
                          Decimal('1') )
 
     def test_no_boundaries(self):
@@ -59,13 +59,13 @@ class TestWinPR(unittest.TestCase):
         '''
         segs_a = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         segs_b = [1,1,1,1,1,1,1,1,1,1,1,1,1]
-        self.assertEqual(win_pr(segs_a, segs_b),
-                         (12, 12, 0, 67) )
-        self.assertEqual(win_pr_f(segs_a, segs_b),
+        self.assertEqual(win_pr(segs_a, segs_b, convert_from_masses=False),
+                         {'fp': 12, 'tn': 67, 'fn': 0, 'tp': 12} )
+        self.assertEqual(win_pr_f(segs_a, segs_b, convert_from_masses=False),
                          Decimal('0.6666666666666666666666666667') )
-        self.assertEqual(win_pr(segs_b, segs_a),
-                         (2, 0, 2, 22) )
-        self.assertEqual(win_pr_f(segs_b, segs_a),
+        self.assertEqual(win_pr(segs_b, segs_a, convert_from_masses=False),
+                         {'fp': 0, 'tn': 22, 'fn': 2, 'tp': 2} )
+        self.assertEqual(win_pr_f(segs_b, segs_a, convert_from_masses=False),
                          Decimal('0.6666666666666666666666666667') )
 
     def test_all_boundaries(self):
@@ -74,13 +74,13 @@ class TestWinPR(unittest.TestCase):
         '''
         segs_a = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         segs_b = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-        self.assertEqual(win_pr(segs_a, segs_b),
-                         (4, 0, 10, 12) )
-        self.assertEqual(win_pr_f(segs_a, segs_b),
+        self.assertEqual(win_pr(segs_a, segs_b, convert_from_masses=False),
+                          {'fp': 0, 'tn': 12, 'fn': 10, 'tp': 4} )
+        self.assertEqual(win_pr_f(segs_a, segs_b, convert_from_masses=False),
                          Decimal('0.4444444444444444444444444444') )
-        self.assertEqual(win_pr(segs_b, segs_a),
-                         (4, 10, 0, 12) )
-        self.assertEqual(win_pr_f(segs_b, segs_a),
+        self.assertEqual(win_pr(segs_b, segs_a, convert_from_masses=False),
+                         {'fp': 10, 'tn': 12, 'fn': 0, 'tp': 4} )
+        self.assertEqual(win_pr_f(segs_b, segs_a, convert_from_masses=False),
                          Decimal('0.4444444444444444444444444444') )
 
     def test_all_and_no_boundaries(self):
@@ -89,13 +89,13 @@ class TestWinPR(unittest.TestCase):
         '''
         segs_a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
         segs_b = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-        self.assertEqual(win_pr(segs_a, segs_b),
-                         (2, 0, 12, 12) )
-        self.assertEqual(win_pr_f(segs_a, segs_b),
+        self.assertEqual(win_pr(segs_a, segs_b, convert_from_masses=False),
+                         {'fp': 0, 'tn': 12, 'fn': 12, 'tp': 2} )
+        self.assertEqual(win_pr_f(segs_a, segs_b, convert_from_masses=False),
                          Decimal('0.25') )
-        self.assertEqual(win_pr(segs_b, segs_a),
-                         (12, 72, 0, 7) )
-        self.assertEqual(win_pr_f(segs_b, segs_a),
+        self.assertEqual(win_pr(segs_b, segs_a, convert_from_masses=False),
+                         {'fp': 72, 'tn': 7, 'fn': 0, 'tp': 12} )
+        self.assertEqual(win_pr_f(segs_b, segs_a, convert_from_masses=False),
                          Decimal('0.25') )
 
     def test_translated_boundary(self):
@@ -105,13 +105,13 @@ class TestWinPR(unittest.TestCase):
         '''
         segs_a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         segs_b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
-        self.assertEqual(win_pr(segs_a, segs_b),
-                         (3, 1, 1, 21) )
-        self.assertEqual(win_pr_f(segs_a, segs_b),
+        self.assertEqual(win_pr(segs_a, segs_b, convert_from_masses=False),
+                         {'fp': 1, 'tn': 21, 'fn': 1, 'tp': 3} )
+        self.assertEqual(win_pr_f(segs_a, segs_b, convert_from_masses=False),
                          Decimal('0.75') )
-        self.assertEqual(win_pr(segs_b, segs_a),
-                         (3, 1, 1, 21) )
-        self.assertEqual(win_pr_f(segs_b, segs_a),
+        self.assertEqual(win_pr(segs_b, segs_a, convert_from_masses=False),
+                         {'fp': 1, 'tn': 21, 'fn': 1, 'tp': 3} )
+        self.assertEqual(win_pr_f(segs_b, segs_a, convert_from_masses=False),
                          Decimal('0.75') )
     
     def test_extra_boundary(self):
@@ -120,13 +120,13 @@ class TestWinPR(unittest.TestCase):
         '''
         segs_a = [1,1,1,1,1,2,3,3,4,4,4,4,4]
         segs_b = [1,1,1,1,1,2,2,2,3,3,3,3,3]
-        self.assertEqual(win_pr(segs_a, segs_b),
-                         (4, 1, 0, 21) )
-        self.assertEqual(win_pr_f(segs_a, segs_b),
+        self.assertEqual(win_pr(segs_a, segs_b, convert_from_masses=False),
+                         {'fp': 1, 'tn': 21, 'fn': 0, 'tp': 4} )
+        self.assertEqual(win_pr_f(segs_a, segs_b, convert_from_masses=False),
                          Decimal('0.8888888888888888888888888889') )
-        self.assertEqual(win_pr(segs_b, segs_a),
-                         (4, 0, 1, 21) )
-        self.assertEqual(win_pr_f(segs_b, segs_a),
+        self.assertEqual(win_pr(segs_b, segs_a, convert_from_masses=False),
+                         {'fp': 0, 'tn': 21, 'fn': 1, 'tp': 4} )
+        self.assertEqual(win_pr_f(segs_b, segs_a, convert_from_masses=False),
                          Decimal('0.8888888888888888888888888889') )
     
     def test_full_miss_and_misaligned(self):
@@ -136,13 +136,13 @@ class TestWinPR(unittest.TestCase):
         '''
         segs_a = [1,1,1,1,1,2,3,3,4,4,4,4,4]
         segs_b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
-        self.assertEqual(win_pr(segs_a, segs_b),
-                         (3, 2, 1, 20) )
-        self.assertEqual(win_pr_f(segs_a, segs_b),
+        self.assertEqual(win_pr(segs_a, segs_b, convert_from_masses=False),
+                         {'fp': 2, 'tn': 20, 'fn': 1, 'tp': 3} )
+        self.assertEqual(win_pr_f(segs_a, segs_b, convert_from_masses=False),
                          Decimal('0.6666666666666666666666666667') )
-        self.assertEqual(win_pr(segs_b, segs_a),
-                         (3, 1, 2, 20) )
-        self.assertEqual(win_pr_f(segs_b, segs_a),
+        self.assertEqual(win_pr(segs_b, segs_a, convert_from_masses=False),
+                         {'fp': 1, 'tn': 20, 'fn': 2, 'tp': 3}  )
+        self.assertEqual(win_pr_f(segs_b, segs_a, convert_from_masses=False),
                          Decimal('0.6666666666666666666666666667') )
     
 
@@ -161,7 +161,8 @@ class TestPairwiseWinPR(unittest.TestCase):
                          (Decimal('0.5868367743367743367743367746'),
                           Decimal('0.1198711646320202975515773835'),
                           Decimal('0.01436909611023691387771751852'),
-                          Decimal('0.02446859901846728286113130960')))
+                          Decimal('0.02446859901846728286113130960'),
+                          24))
     
     def test_kazantseva2012_g2(self):
         '''
@@ -169,10 +170,11 @@ class TestPairwiseWinPR(unittest.TestCase):
         collected in [KazantsevaSzpakowicz2012]_.
         '''
         self.assertEqual(pairwise_win_pr(KAZANTSEVA2012_G2),
-                         (Decimal('0.6980631577775708883529586185'),
-                          Decimal('0.1121769660131793859585435575'),
-                          Decimal('0.01258367170392200306131853234'),
-                          Decimal('0.01448198403990397250690864768')))
+                         (Decimal('0.6980631577775708883529586183'),
+                          Decimal('0.1121769660131793859585435576'),
+                          Decimal('0.01258367170392200306131853235'),
+                          Decimal('0.01448198403990397250690864769'),
+                          60))
     
     def test_large_disagreement(self):
         '''
@@ -183,7 +185,8 @@ class TestPairwiseWinPR(unittest.TestCase):
                          (Decimal('0.2573671497584541062801932368'),
                           Decimal('0.1535469743040559128336768347'),
                           Decimal('0.02357667331793040677728768466'),
-                          Decimal('0.07677348715202795641683841735')))
+                          Decimal('0.07677348715202795641683841735'),
+                          4))
     
     def test_complete_agreement(self):
         '''
@@ -194,5 +197,6 @@ class TestPairwiseWinPR(unittest.TestCase):
                          (1.0,
                           0.0,
                           0.0,
-                          0.0))
+                          0.0,
+                          24))
 
