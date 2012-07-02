@@ -1,5 +1,5 @@
 '''
-Tests the data i/o functions and package.
+Tests the data merge functions and package.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
@@ -29,56 +29,27 @@ Tests the data i/o functions and package.
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
-import os
 import unittest
-from . import load_nested_folders_dict, FILETYPE_JSON
-from .TSV import input_linear_mass_tsv, input_linear_positions_tsv
-from .JSON import input_linear_mass_json
-from .Samples import HEARST_1997_STARGAZER
+import copy
+from .Samples import LARGE_DISAGREEMENT, COMPLETE_AGREEMENT
 
 
-class TestData(unittest.TestCase):
+class TestMerge(unittest.TestCase):
     '''
-    Test data i/o functions and package.
+    Test data merge functions.
     '''
     #pylint: disable=R0904,C0103
     
-    test_data_dir = os.path.split(__file__)[0]
+    def testAdd(self):
+        '''
+        Test ``Dataset.add()``.
+        '''
+        # Output complete and larege disagreement, then merge
+        large_disagreement = copy.deepcopy(LARGE_DISAGREEMENT)
+        large_disagreement.add(COMPLETE_AGREEMENT)
+        self.assertTrue(6, len(large_disagreement.coders))
+        self.assertTrue(4, len(large_disagreement))
+        self.assertTrue(2, len(large_disagreement['item1']))
+        
 
-    def test_load_nested_folders_dict(self):
-        '''
-        Test nested folder dict construction.
-        '''
-        dataset = load_nested_folders_dict(
-                        os.path.abspath(os.path.join(self.test_data_dir,
-                                                     '../')),
-                                           FILETYPE_JSON)
-        self.assertEqual(dataset['data,stargazer'],
-                         HEARST_1997_STARGAZER['stargazer'])
-    
-    def test_input_linear_mass_tsv(self):
-        '''
-        Test mass TSV file input.
-        '''
-        tsv_file = os.path.join(self.test_data_dir, 'hearst1997.tsv')
-        dataset = input_linear_mass_tsv(tsv_file)
-        self.assertEqual(dataset['hearst1997'],
-                         HEARST_1997_STARGAZER['stargazer'])
-      
-    def test_input_linear_positions_tsv(self):
-        '''
-        Test position TSV file input.
-        '''
-        tsv_file = os.path.join(self.test_data_dir, 'hearst1997_positions.csv')
-        dataset = input_linear_positions_tsv(tsv_file, delimiter=',')
-        self.assertEqual(dataset['hearst1997_positions'],
-                         HEARST_1997_STARGAZER['stargazer'])
-    
-    def test_input_linear_mass_json(self):
-        '''
-        Test mass JSON file input.
-        '''
-        json_file = os.path.join(self.test_data_dir, 'hearst1997.json')
-        dataset = input_linear_mass_json(json_file)
-        self.assertEqual(dataset, HEARST_1997_STARGAZER)
 

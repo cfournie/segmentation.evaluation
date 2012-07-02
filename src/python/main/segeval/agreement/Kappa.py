@@ -45,10 +45,10 @@ only varies the calculation of :math:`\\text{A}_e`.
 #===============================================================================
 from decimal import Decimal
 from . import actual_agreement
-from .. import compute_mean_values, create_tsv_rows
+from .. import compute_multiple_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
-from ..data.Display import render_value, render_agreement_coefficients
+from ..data.Display import render_agreement_coefficients
 
 
 def cohen_kappa(item_masses, return_parts=False):
@@ -166,7 +166,7 @@ def fleiss_kappa(items_masses, return_parts=False):
         return kappa
 
 
-OUTPUT_NAME = 'S-based Fleiss\' Multi Kappa'
+OUTPUT_NAME = 'S-based Fleiss\' Multi Kappa coefficient'
 SHORT_NAME  = 'K*_s'
 
 
@@ -175,7 +175,7 @@ def values_kappa(dataset_masses):
     Produces a TSV for this metric
     '''
     header = list([SHORT_NAME])
-    values = compute_mean_values(dataset_masses, fleiss_kappa)
+    values = compute_multiple_values(dataset_masses, fleiss_kappa)
     return create_tsv_rows(header, values)
 
 
@@ -184,7 +184,7 @@ def parse(args):
     Parse this module's metric arguments and perform requested actions.
     '''
     output = None
-    values, is_file = load_file(args)
+    values = load_file(args)
     # Is a TSV requested?
     if args['output'] != None:
         # Create a TSV
@@ -192,14 +192,9 @@ def parse(args):
         header, rows = values_kappa(values)
         write_tsv(output_file, header, rows)
     else:
-        # Create a string to output
-        if not args['output'] and is_file:
-            # Render for one item
-            output = render_value(SHORT_NAME, str(fleiss_kappa(values)))
-        else:
-            # Render for one or more items
-            kappas = compute_mean_values(values, fleiss_kappa)
-            output = render_agreement_coefficients(SHORT_NAME, kappas)
+        # Create a string to output and render for one or more items
+        kappas = compute_multiple_values(values, fleiss_kappa)
+        output = render_agreement_coefficients(SHORT_NAME, kappas)
     # Return
     return output
 

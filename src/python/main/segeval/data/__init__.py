@@ -43,6 +43,50 @@ from .JSON import input_linear_mass_json
 RESULTS = ['summary', 'tsv']
 
 
+FIELD_SINGLE_FILE = 'single_file'
+
+
+class Dataset(dict):
+    '''
+    Represents a set of segmentations produced by coders.
+    '''
+    # pylint: disable=R0903
+    
+    def __init__(self, masses=dict(), properties=dict()):
+        '''
+        Initialize.
+        '''
+        self.update(masses)
+        self.properties = properties
+        self.coders = set()
+        # Populate coders
+        for coder_masses in self.values():
+            for coder in coder_masses.keys():
+                self.coders.add(coder)
+        
+    def add(self, other, prepend_item=None):
+        '''
+        Add one dataset's data to this dataset
+        '''
+        # Combine item codings
+        for item, codings in other.items():
+            if prepend_item is not None:
+                item_parts = list()
+                item_parts.extend(prepend_item)
+                item_parts.append(item)
+                item = ','.join(item_parts)
+            if item not in self:
+                self[item] = dict()
+            # For each coder, add ttheir coding
+            for coder, item_masses in codings.items():
+                self.coders.add(coder)
+                if coder not in self[item]:
+                    self[item][coder] = item_masses
+                else:
+                    raise DataIOError('Duplicate coders of same name \
+%(coder)s found for item %(item)s' % {'coder' : coder, 'item' : item})
+
+
 def load_tests(loader, tests, pattern):
     '''
     A ``load_tests()`` function utilizing the default loader
@@ -71,7 +115,7 @@ class DataIOError(Exception):
     Indicates that an input processing error has occurred.
     '''
     
-    def __init__(self, message, exception):
+    def __init__(self, message, exception=None):
         '''
         Initializer.
         
@@ -93,7 +137,8 @@ FILETYPES           = {FILETYPE_TSV  : {EXT : ['.tsv', '.csv'],
 FILETYPES_DEFAULT   = FILETYPE_JSON
 
 
-def load_nested_folders_dict(containing_dir, filetype):
+def load_nested_folders_dict(containing_dir, filetype, dataset=Dataset(),
+                             prepend_item=list()):
     '''
     Loads TSV files from a file directory structure, which reflects the
     directory structure in nested :func:`dict` with each directory name
@@ -108,9 +153,9 @@ def load_nested_folders_dict(containing_dir, filetype):
     :returns: Segmentation mass codings.
     :rtype: :func:`dict`
     '''
+    # pylint: disable=R0914
     allowable_extensions = list(FILETYPES[filetype][EXT])
     fnc_load = FILETYPES[filetype][FNC]
-    data = dict()
     datafile_found = False
     # List of entries
     files = dict()
@@ -131,12 +176,18 @@ def load_nested_folders_dict(containing_dir, filetype):
     if datafile_found:
         # If TSV files were found, load
         for name, filepath in files.items():
-            data[name] = fnc_load(filepath)
-    else:
-        # If only dirs were found, recurse
-        for name, dirpath in dirs.items():
-            data[name] = load_nested_folders_dict(dirpath, filetype)
-    return data
+            other = fnc_load(filepath)
+            dataset.add(other, prepend_item=prepend_item)
+    # If only dirs were found, recurse
+    for name, dirpath in dirs.items():
+        new_prepend_item = list(prepend_item)
+        new_prepend_item.append(name)
+        # Recurse
+        load_nested_folders_dict(dirpath,
+                                 filetype,
+                                 dataset=dataset,
+                                 prepend_item=new_prepend_item)
+    return dataset
 
 
 def load_file(args):
@@ -149,43 +200,59 @@ def load_file(args):
     :returns: The loaded values and whether a file was loaded or not.
     :rtype: :func:`dict`, :func:`bool`
     '''
-    values = None
-    
     input_path = args['input'][0]
-    is_file = os.path.isfile(input_path)
-    
     filetype = args['format']
+    return __load_file__(input_path, filetype)
+    
+    
+def __load_file__(input_path, filetype):
+    dataset = None
+    
+    is_file = os.path.isfile(input_path)
     
     # Load file or dir
     if is_file:
-        values = FILETYPES[filetype][FNC](input_path)
-        values = {'item' : values}
+        dataset = FILETYPES[filetype][FNC](input_path)
+        dataset.properties[FIELD_SINGLE_FILE] = True
     else:
-        values = load_nested_folders_dict(input_path, filetype)
+        dataset = load_nested_folders_dict(input_path, filetype,
+                                           dataset=Dataset())
+        dataset.properties[FIELD_SINGLE_FILE] = False
     
-    return values, is_file
+    return dataset
 
 
-def parser_add_file_support(parser):
+def load_files(args):
     '''
-    Add support for file input and output parameters to an argument parser.
+    Load a file or set of directories from command line arguments.
+    
+    :param args: Command line arguments
+    :type args: dict
+    
+    :returns: The loaded values and whether a file was loaded or not.
+    :rtype: :func:`dict`, :func:`bool`
+    '''
+    datasets = list()
+    # Parse args
+    filetype = args['format']
+    input_paths = args['input']
+    # For each path
+    for input_path in input_paths:
+        # Read
+        dataset = __load_file__(input_path, filetype)
+        #add
+        datasets.append(dataset)
+    # Return
+    return datasets
+
+
+def parser_add_format_support(parser):
+    '''
+    Add support for file input format and output parameters to an argument parser.
     
     :param parser: Argument parser
     :type parser: argparse.ArgumentParser
     '''
-    
-    parser.add_argument('-o', '--output',
-                        type=str,
-                        nargs=1,
-                        required=False,
-                        help='Output file or directory. If not specified, a '+\
-                        'summary or results is printed to the console.')
-    
-    parser.add_argument('input',
-                        type=str,
-                        nargs=1,
-                        action='store',
-                        help='Input file or directory')
     
     parser.add_argument('-f', '--format',
                         type=str,
@@ -200,4 +267,28 @@ def parser_add_file_support(parser):
                         help='Delimiting character for input TSV files; '+\
                         'ignored if JSON is specified, default is a tab '+\
                         'character')
+    
+    parser.add_argument('-o', '--output',
+                        type=str,
+                        nargs=1,
+                        required=False,
+                        help='Output file or directory. If not specified, a '+\
+                        'summary or results is printed to the console.')
+
+
+def parser_add_file_support(parser):
+    '''
+    Add support for file input and output parameters to an argument parser.
+    
+    :param parser: Argument parser
+    :type parser: argparse.ArgumentParser
+    '''
+    
+    parser.add_argument('input',
+                        type=str,
+                        nargs=1,
+                        action='store',
+                        help='Input file or directory')
+    
+    parser_add_format_support(parser)
 

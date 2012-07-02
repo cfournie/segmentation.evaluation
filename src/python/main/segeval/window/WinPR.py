@@ -80,7 +80,9 @@ def win_pr(hypothesis_positions, reference_positions, window_size=None,
     # Check for input errors
     if len(reference_positions) != len(hypothesis_positions):
         raise SegmentationMetricError(
-                    'Reference and hypothesis segmentations differ in length.')
+                    'Reference and hypothesis segmentations differ in position \
+length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
+                                 'hyp' : len(hypothesis_positions)})
     # Compute window size to use if unspecified
     if window_size is None:
         window_size = compute_window_size(reference_positions)
@@ -229,7 +231,7 @@ def pairwise_win_pr_micro(dataset_masses, ml_fnc=fmeasure):
     return ml_fnc(vars_to_cf(tp, fp, fn, tn))
 
 
-OUTPUT_NAME = render_permuted('Mean WinPR', DEFAULT_PERMUTED)
+OUTPUT_NAME = render_permuted('Mean WinPR value', DEFAULT_PERMUTED)
 SHORT_NAME  = 'WinPR-%s'
 SHORT_NAME_F  = 'F_%s'
 SHORT_NAME_P  = 'P'
@@ -279,7 +281,7 @@ def parse(args):
     '''
     # pylint: disable=C0103,R0914
     output = None
-    values = load_file(args)[0]
+    values = load_file(args)
     subsubparser_name = args['subsubparser_name']
     name = SHORT_NAME % subsubparser_name
     beta = 1

@@ -31,11 +31,16 @@ evaluated.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 import csv
-from .. import DataIOError, name_from_filepath
+from .. import Dataset, DataIOError, name_from_filepath
+from ..JSON import FIELD_IS_REFERENCE_CODER
 from ..TSV import DEFAULT_DELIMITER
-    
 
-def input_morphemes(tsv_filename, delimiter=DEFAULT_DELIMITER):
+
+CODER_REFERENCE = 'reference'
+
+
+def input_morphemes(tsv_filename, reference_coder=False,
+                    delimiter=DEFAULT_DELIMITER):
     '''
     Load a morphological segmentation TSV file for a single coder representing
     many items.
@@ -52,9 +57,12 @@ def input_morphemes(tsv_filename, delimiter=DEFAULT_DELIMITER):
     '''
     # pylint: disable=R0914
     # List version of file
-    item_masses = dict()
-    coder = name_from_filepath(tsv_filename)
-    item_masses[coder] = dict()
+    dataset = Dataset()
+    coder = CODER_REFERENCE if reference_coder else \
+        name_from_filepath(tsv_filename)
+    if reference_coder:
+        dataset.properties[FIELD_IS_REFERENCE_CODER] = True
+        
     # Open file
     csv_file = open(tsv_filename, 'rU')
     # Read in file
@@ -64,18 +72,19 @@ def input_morphemes(tsv_filename, delimiter=DEFAULT_DELIMITER):
             # Read data
             item = None
             for j, col in enumerate(row):
-                # Skip the first col
                 if j == 0:
+                    # First col is the word (i.e., item)
                     item = str(col)
                 elif j == 1:
+                    # First col is the morphological segmentation (i.e., masses)
                     options = [option.strip() for option in col.split(',')]
                     for i, option in enumerate(options):
                         current_coder = coder if i == 0 else coder + str(i + 1)
                         # Create coder if it does not exist
-                        if current_coder not in item_masses:
-                            item_masses[current_coder] = dict()
+                        if item not in dataset:
+                            dataset[item] = dict()
                         # Convert into segment mass
-                        item_masses[current_coder][item] = \
+                        dataset[item][current_coder] = \
                             [len(morpheme) for morpheme in option.split(' ')]
     # pylint: disable=C0103
     except Exception as exception:
@@ -83,5 +92,5 @@ def input_morphemes(tsv_filename, delimiter=DEFAULT_DELIMITER):
                                       % tsv_filename, exception)
     finally:
         csv_file.close()
-    return item_masses
+    return dataset
 

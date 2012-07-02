@@ -72,10 +72,12 @@ def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
     :returns: Segmentation mass codings.
     :rtype: :func:`dict`
     '''
-    from . import DataIOError
+    from . import Dataset, DataIOError, name_from_filepath
     # List version of file
     header = []
-    segment_masses = dict()
+    dataset = Dataset()
+    item = name_from_filepath(tsv_filename)
+    dataset[item] = dict()
     # Open file
     csv_file = open(tsv_filename, 'rU')
     # Read in file
@@ -84,8 +86,8 @@ def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
         for i, row in enumerate(reader):
             # Read annotators from header
             if i == 0:
-                for item in row[1:]:
-                    header.append(item)
+                for col_name in row[1:]:
+                    header.append(col_name)
             # Read data
             else:
                 coder = None
@@ -93,16 +95,16 @@ def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
                     # Skip the first col
                     if j == 0:
                         coder = str(col)
-                        segment_masses[coder] = list()
+                        dataset[item][coder] = list()
                     elif j > 0:
-                        segment_masses[coder].append(int(col))
+                        dataset[item][coder].append(int(col))
     # pylint: disable=C0103
     except Exception as exception:
         raise DataIOError('Error occurred processing file: %s' \
                                       % tsv_filename, exception)
     finally:
         csv_file.close()
-    return segment_masses
+    return dataset
 
 
 def input_linear_positions_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
@@ -124,10 +126,11 @@ def input_linear_positions_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
     :returns: Segmentation mass codings.
     :rtype: :func:`dict`
     '''
-    coder_positions = input_linear_mass_tsv(tsv_filename, delimiter)
+    dataset = input_linear_mass_tsv(tsv_filename, delimiter)
     # Convert each segment position to masses
-    for coder, positions in coder_positions.items():
-        coder_positions[coder] = convert_positions_to_masses(positions)
+    for item, coder_positions in dataset.items():
+        for coder, positions in coder_positions.items():
+            dataset[item][coder] = convert_positions_to_masses(positions)
     # Return
-    return coder_positions
+    return dataset
 

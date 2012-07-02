@@ -40,6 +40,7 @@ from decimal import Decimal
 from collections import Counter
 from .Math import mean, std, var, stderr
 
+
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                         os.sep.join(['..'] * 1)))
 
@@ -191,10 +192,12 @@ def compute_pairwise_values(dataset_masses, fnc_metric, permuted=False,
     return pairs
 
 
-def compute_mean(dataset_masses, fnc_metric):
+def compute_multiple_values(dataset_masses, fnc_metric):
     '''
-    Calculate mean segmentation metric values for functions that take
-    dicts of items and their segmentations per coder (``items_masses``).
+    Calculate segmentation metric values for functions that take
+    dicts of items and their segmentations per coder (``items_masses``) while
+    ensuring that all coders code all items in each group (dividing data as
+    necessary into subgroups groups).
     
     .. seealso:: :func:`segeval.agreement.observed_agreement` for an example of\
      ``items_masses``.
@@ -211,66 +214,23 @@ def compute_mean(dataset_masses, fnc_metric):
         :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
         :class:`decimal.Decimal`
         
-    :returns: |compute_mean_return|
-    :rtype: |compute_mean_return_type|
+    :returns: List of values produced by the specified metric
+    :rtype: :class:`list` of :class:`decimal.Decimal`
     '''
-    # pylint: disable=C0103
-    values = compute_mean_values(dataset_masses, fnc_metric)
-    # Return mean, std dev, and variance
-    return mean(values.values()), std(values.values()), var(values.values()), \
-                stderr(values.values())
-
-
-def compute_mean_values(dataset_masses, fnc_metric):
-    '''
-    Calculate mean segmentation metric values for functions that take
-    dicts of items and their segmentations per coder (``items_masses``).
-    
-    .. seealso:: :func:`segeval.agreement.observed_agreement` for an example of\
-     ``items_masses``.
-    
-    :param dataset_masses: Segmentation mass dataset (including multiple \
-                           codings).
-    :param fnc_metric:     Metric function to call on segmentation mass pairs.
-    :type dataset_masses: dict
-    :type fnc_metric:     func
-    
-    .. |compute_mean_return| replace:: Mean, standard deviation, variance, and \
-        standard error of a segmentation metric.
-    .. |compute_mean_return_type| replace:: :class:`decimal.Decimal`, \
-        :class:`decimal.Decimal`, :class:`decimal.Decimal`, \
-        :class:`decimal.Decimal`
-        
-    :returns: |compute_mean_return|
-    :rtype: |compute_mean_return_type|
-    '''
-    # pylint: disable=C0103
+    from .data import Dataset
+    datasets = dict()
     values = dict()
+    # pylint: disable=C0103
+    for item, coder_masses in dataset_masses.items():
+        coders = coder_masses.keys()
+        coders.sort()
+        coders = '+'.join(coders)
+        if coders not in datasets:
+            datasets[coders] = Dataset()
+        datasets[coders][item] = coder_masses
     # Define fnc per group
-    def __per_group__(prefix, inner_dataset_masses):
-        '''
-        Recurse through a dict to find levels where a metric can be calculated.
-        
-        
-        :param inner_dataset_masses: Segmentation mass dataset (including \
-                                     multiple codings).
-        :type inner_dataset_masses: dict
-        '''
-        for label, coder_masses in inner_dataset_masses.items():
-            if isinstance(coder_masses, dict) and \
-                len(coder_masses.values()) > 0 and \
-                isinstance(coder_masses.values()[0], list):
-                # If is a group
-                entry_parts = list(prefix)
-                entry_parts.append(label)
-                values[','.join(entry_parts)] = fnc_metric(inner_dataset_masses)
-            else:
-                # Else, recurse deeper
-                inner_prefix = list(prefix)
-                inner_prefix.append(label)
-                __per_group__(inner_prefix, coder_masses)
-    # Parse
-    __per_group__(list(), dataset_masses)
+    for coders, dataset in datasets.items():
+        values[coders] = fnc_metric(dataset)
     # Return mean, std dev, and variance
     return values
 
@@ -319,7 +279,8 @@ def create_tsv_rows(header, values, expand=False):
             padded_rows.append(row)
     # Pad headers to match the depth/number of labels
     labels = max_len - len(header)
-    padded_header = ['label%i' % i for i in xrange(1, labels + 1)]
+    padded_header = ['label%i' % i if i > 1 else 'label' \
+                     for i in xrange(1, labels + 1)]
     padded_header.extend(header)
     # Return
     return padded_header, padded_rows
@@ -344,6 +305,24 @@ class SegmentationMetricError(Exception):
     Indicates that a runtime check has failed, and the algorithm is performing
     incorrectly, or input validation has failed.  Generation of this exception
     is tested.
+        
+    :param message: Explanation for the exception.
+    :type message: str
+    '''
+    
+    def __init__(self, message):
+        '''
+        Initializer.
+        
+        :param message: Explanation for the exception.
+        :type message: str
+        '''
+        Exception.__init__(self, message)
+
+
+class InputError(Exception):
+    '''
+    Indicates that an input parameter is invalid.
         
     :param message: Explanation for the exception.
     :type message: str

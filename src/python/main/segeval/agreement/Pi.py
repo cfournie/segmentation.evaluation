@@ -47,10 +47,10 @@ only varies the calculation of :math:`\\text{A}_e`.
 #===============================================================================
 from decimal import Decimal
 from . import actual_agreement
-from .. import compute_mean, compute_mean_values, create_tsv_rows
+from .. import compute_multiple_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
-from ..data.Display import render_value, render_agreement_coefficients
+from ..data.Display import render_agreement_coefficients
 
 
 def scotts_pi(items_masses, return_parts=False):
@@ -153,23 +153,7 @@ def fleiss_pi(items_masses, return_parts=False):
         return pi
 
 
-def mean_fleiss_pi(dataset_masses):
-    '''
-    Calculate mean segmentation Fleiss' Pi.
-    
-    .. seealso:: :func:`fleiss_pi`, :func:`segeval.compute_mean`
-    
-    :param dataset_masses: Segmentation mass dataset (including multiple \
-                           codings).
-    :type dataset_masses: dict
-    
-    :returns: Mean, standard deviation, and variance.
-    :rtype: :class:`decimal.Decimal`, :class:`decimal.Decimal`, :class:`decimal.Decimal`
-    '''
-    return compute_mean(dataset_masses, fleiss_pi)
-
-
-OUTPUT_NAME     = 'S-based Fleiss\' Multi Pi'
+OUTPUT_NAME     = 'S-based Fleiss\' Multi Pi coefficient'
 SHORT_NAME      = 'Pi*_s'
 
 
@@ -178,7 +162,7 @@ def values_pi(dataset_masses):
     Produces a TSV for this metric
     '''
     header = list([SHORT_NAME])
-    values = compute_mean_values(dataset_masses, fleiss_pi)
+    values = compute_multiple_values(dataset_masses, fleiss_pi)
     return create_tsv_rows(header, values)
 
 
@@ -188,7 +172,7 @@ def parse(args):
     '''
     # pylint: disable=C0103
     output = None
-    values, is_file = load_file(args)
+    values = load_file(args)
     # Is a TSV requested?
     if args['output'] != None:
         # Create a TSV
@@ -196,14 +180,9 @@ def parse(args):
         header, rows = values_pi(values)
         write_tsv(output_file, header, rows)
     else:
-        # Create a string to output
-        if not args['output'] and is_file:
-            # Render for one item
-            output = render_value(SHORT_NAME, str(fleiss_pi(values)))
-        else:
-            # Render for one or more items
-            pis = compute_mean_values(values, fleiss_pi)
-            output = render_agreement_coefficients(SHORT_NAME, pis)
+        # Create a string to output and render for one or more items
+        pis = compute_multiple_values(values, fleiss_pi)
+        output = render_agreement_coefficients(SHORT_NAME, pis)
     # Return
     return output
 

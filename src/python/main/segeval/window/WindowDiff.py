@@ -105,7 +105,9 @@ def window_diff(hypothesis_positions, reference_positions, window_size=None,
     # Check for input errors
     if len(reference_positions) != len(hypothesis_positions):
         raise SegmentationMetricError(
-                    'Reference and hypothesis segmentations differ in length.')
+                    'Reference and hypothesis segmentations differ in position \
+length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
+                                 'hyp' : len(hypothesis_positions)})
     # Compute window size to use if unspecified
     if window_size is None:
         window_size = compute_window_size(reference_positions)
@@ -225,7 +227,7 @@ def pairwise_window_diff_micro(dataset_masses, one_minus=False,
         return wd
 
 
-OUTPUT_NAME = render_permuted('Mean WindowDiff', DEFAULT_PERMUTED)
+OUTPUT_NAME = render_permuted('Mean WindowDiff value', DEFAULT_PERMUTED)
 SHORT_NAME  = 'WindowDiff'
 
 
@@ -255,7 +257,7 @@ def parse(args):
     '''
     # pylint: disable=C0103
     output = None
-    values = load_file(args)[0]
+    values = load_file(args)
     one_minus = args['oneminus']
     lamprier_et_al_2007_fix = args['lamprier_et_al_2007']
     micro = args['micro']

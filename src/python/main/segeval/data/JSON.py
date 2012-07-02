@@ -34,6 +34,13 @@ import os
 import codecs
 
 
+FIELD_SEGMENTATION_TYPE  = 'segmentation_type'
+TYPE_LINEAR              = 'linear'
+FIELD_ITEMS              = 'items'
+FIELD_CODINGS            = 'codings'
+FIELD_IS_REFERENCE_CODER = 'is_reference_coder'
+
+
 def write_json(filepath, data):
     '''
     Write a JSON file using the given data.
@@ -54,8 +61,22 @@ def write_json(filepath, data):
         json_file.close()
         
 
-def output_linear_mass_json(filepath, dataset_masses, multiple):
-    pass
+def output_linear_mass_json(filepath, dataset):
+    '''
+    Compose an output file's fields and output a JSON file.
+    '''
+    data = {FIELD_SEGMENTATION_TYPE : TYPE_LINEAR}
+    
+    if len(dataset) > 0:
+        data[FIELD_ITEMS] = dataset
+    else:
+        data[FIELD_CODINGS] = dataset
+    
+    data.update(dataset.properties)
+    
+    write_json(filepath, data)
+    
+    
 
 def input_linear_mass_json(filepath, create_item=False):
     '''
@@ -70,9 +91,9 @@ def input_linear_mass_json(filepath, create_item=False):
     
     .. seealso:: `JSON (JavaScript Object Notation) <http://www.json.org/>`_.
     '''
-    from . import DataIOError, name_from_filepath
-    dataset_masses = dict()
-    data           = dict()
+    from . import Dataset, DataIOError, name_from_filepath
+    dataset = Dataset()
+    data = dict()
     name = name_from_filepath(filepath)
     # Open file
     json_file = open(filepath, 'rU')
@@ -83,30 +104,36 @@ def input_linear_mass_json(filepath, create_item=False):
         raise DataIOError('Error occurred processing file: %s' \
                                       % filepath, exception)
     # Check type
-    if 'segmentation_type' in data:
-        if data['segmentation_type'] != 'linear':
+    if FIELD_SEGMENTATION_TYPE in data:
+        if data[FIELD_SEGMENTATION_TYPE] != TYPE_LINEAR:
             raise DataIOError(
-                'Segmentation type \'linear\' expected, but encountered %s' % \
-                data['segmentation_type'])
+                'Segmentation type \'%(type)s\' expected, but encountered \
+%(type_found)s' % {'type'       : TYPE_LINEAR,
+                   'type_found' : data[FIELD_SEGMENTATION_TYPE]})
+    # Duplicate to store other properties
+    dataset.properties = data
     # Remove the metadata layer
     # If separated into multiple codings of one item per file
-    if 'codings' in data:
-        data = data['codings']
+    if FIELD_CODINGS in data:
+        data = data[FIELD_CODINGS]
         item = name
-        dataset_masses[item] = dict()
+        dataset[item] = dict()
         # Convert coder labels into strings
         for coder, segment_masses in data.items():
-            dataset_masses[item][coder] = segment_masses
+            dataset[item][coder] = segment_masses
         # Undo item
         if not create_item:
-            dataset_masses = dataset_masses[item]
+            dataset = dataset[item]
+        # Remove from properties
+        del dataset.properties[FIELD_CODINGS]
     # If separated into multiple items for one coder per file
-    elif 'items' in data:
-        data = data['items']
-        coder = name
+    elif FIELD_ITEMS in data:
+        data = data[FIELD_ITEMS]
         # Convert item labels into strings
         for item, segment_masses in data.items():
-            dataset_masses[item] = {coder : segment_masses}
+            dataset[item] = segment_masses
+        # Remove from properties
+        del dataset.properties[FIELD_ITEMS]
     # Return
-    return dataset_masses
+    return dataset
 

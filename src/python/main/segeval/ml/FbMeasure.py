@@ -238,10 +238,10 @@ def pairwise_ml_measure_micro(dataset_masses, ml_fnc=ml_fmeasure):
     return ml_fnc(vars_to_cf(tp, fp, fn, tn))
 
 
-OUTPUT_NAME_F = render_permuted('Pairwise Mean F_beta Measure', 
+OUTPUT_NAME_F = render_permuted('Pairwise Mean F_beta measure', 
                                 DEFAULT_PERMUTED)
-OUTPUT_NAME_R = render_permuted('Pairwise Mean Recall', DEFAULT_PERMUTED)
-OUTPUT_NAME_P = render_permuted('Pairwise Mean Precision', DEFAULT_PERMUTED)
+OUTPUT_NAME_R = render_permuted('Pairwise Mean Recall value', DEFAULT_PERMUTED)
+OUTPUT_NAME_P = render_permuted('Pairwise Mean Precision value', DEFAULT_PERMUTED)
 SHORT_NAME_F  = 'F_%s'
 SHORT_NAME_P  = 'P'
 SHORT_NAME_R  = 'R'
@@ -293,7 +293,7 @@ def parse(args):
     '''
     # pylint: disable=C0103,R0914
     output = None
-    values = load_file(args)[0]
+    values = load_file(args)
     beta = 1
     micro = args['micro']
     if 'beta' in args and args['beta'] != 1:

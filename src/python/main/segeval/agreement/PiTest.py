@@ -49,7 +49,7 @@ References:
 #===============================================================================
 import unittest
 from decimal import Decimal
-from .Pi import scotts_pi, fleiss_pi, mean_fleiss_pi
+from .Pi import scotts_pi, fleiss_pi
 from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
 
@@ -165,18 +165,4 @@ class TestPi(unittest.TestCase):
         data_complete = COMPLETE_AGREEMENT
         pi = fleiss_pi(data_complete)
         self.assertEqual(pi, 1.0)
-
-
-    def test_mean_fleiss_pi(self):
-        '''
-        Calculate mean Fleiss' Pi on Group 2 and 5 from the dataset
-        collected in [KazantsevaSzpakowicz2012]_.
-        '''
-        self.assertEqual(mean_fleiss_pi(
-                                {'g2' : KAZANTSEVA2012_G2,
-                                 'g5' : KAZANTSEVA2012_G5}),
-                         (Decimal('0.851955262400372364030859621'),
-                          Decimal('0.03367858284947582194299185120'),
-                          Decimal('0.001134246942749006974258072838'),
-                          Decimal('0.01190717715680865612366829138')))
 

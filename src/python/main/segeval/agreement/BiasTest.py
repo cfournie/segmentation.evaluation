@@ -31,7 +31,7 @@ Tests the segmentation version of Arstein and Poesio's bias.
 #===============================================================================
 import unittest
 from decimal import Decimal
-from .Bias import artstein_poesio_bias, mean_artstein_poesio_bias
+from .Bias import artstein_poesio_bias
 from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT
 
@@ -90,17 +90,4 @@ class TestBias(unittest.TestCase):
         self.assertTrue(bias >= 0)
         self.assertEqual(bias,
                          Decimal('0.01455229356727327645713789012'))
-
-    def test_mean_bias(self):
-        '''
-        Calculate mean bias on Group 2 and 5 from the dataset
-        collected in [KazantsevaSzpakowicz2012]_.
-        '''
-        self.assertEqual(mean_artstein_poesio_bias(
-                                {'g2' : KAZANTSEVA2012_G2,
-                                 'g5' : KAZANTSEVA2012_G5}),
-                         (Decimal('0.008315743203764067584323758745'),
-                          Decimal('0.00009879109452847717326893449501'),
-                          Decimal('9.759680358134512481819312619E-9'),
-                          Decimal('0.00003492792643096372046965636775')))
 

@@ -204,7 +204,7 @@ class TestPairwiseWindowDiff(unittest.TestCase):
                           8))
         self.assertEqual(pairwise_window_diff(LARGE_DISAGREEMENT,
                                               lamprier_et_al_2007_fix=True),
-                          (Decimal('0.8583107329225146711972779545'),
+                          (Decimal('0.8583107329225146711972779546'),
                            Decimal('0.1040894435363239488284336823'),
                            Decimal('0.01083461225570157148986770720'),
                            Decimal('0.03680117568723445601862258284'),
@@ -224,7 +224,7 @@ class TestPairwiseWindowDiff(unittest.TestCase):
                           48))
         self.assertEqual(pairwise_window_diff(LARGE_DISAGREEMENT,
                                               lamprier_et_al_2007_fix=True),
-                          (Decimal('0.8583107329225146711972779545'),
+                          (Decimal('0.8583107329225146711972779546'),
                            Decimal('0.1040894435363239488284336823'),
                            Decimal('0.01083461225570157148986770720'),
                            Decimal('0.03680117568723445601862258284'),

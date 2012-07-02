@@ -46,54 +46,54 @@ class TestMain(unittest.TestCase):
     test_help    = False
     
     EXPECTED_FILE_STRINGS = [
-'Pi*_s = 0.7165532879818594104308390023',
-'K*_s = 0.7170345217883418222976796831',
-'B_s = 0.0014285714285714285714285714',
-'F_1 \n \tmean\t= 0.5486480036131738918116627095\t(macro)\n\tstd\t= 0.1579255315223177090093893588\n\tvar\t= 0.0249404735066065643648383861\n\tstderr\t= 0.02497021901516212390630353805\t(n=40)',
-'P \n \tmean\t= 0.5692361111111111111111111108\t(macro)\n\tstd\t= 0.1958928076552311369113250287\n\tvar\t= 0.0383739920910493827160493827\n\tstderr\t= 0.03097337247178993532437300488\t(n=40)',
-'R \n \tmean\t= 0.56812500000000000000000000\t(macro)\n\tstd\t= 0.1967217706661170373652606882\n\tvar\t= 0.03869945505401234567901234565\n\tstderr\t= 0.03110444303231145532699747261\t(n=40)',
+'Pi*_s \n \t1+2+3+4+5+6+7\t= 0.7165532879818594104308390023',
+'K*_s \n \t1+2+3+4+5+6+7\t= 0.7170345217883418222976796831',
+'B_s \n \t1+2+3+4+5+6+7\t= 0.0014285714285714285714285714',
+'F_1 \n \tmean\t= 0.5486480036131738918116627098\t(macro)\n\tstd\t= 0.1579255315223177090093893588\n\tvar\t= 0.0249404735066065643648383861\n\tstderr\t= 0.02497021901516212390630353805\t(n=40)',
+'P \n \tmean\t= 0.569236111111111111111111111\t(macro)\n\tstd\t= 0.1958928076552311369113250286\n\tvar\t= 0.03837399209104938271604938268\n\tstderr\t= 0.03097337247178993532437300487\t(n=40)',
+'R \n \tmean\t= 0.56812500000000000000000000\t(macro)\n\tstd\t= 0.1967217706661170373652606881\n\tvar\t= 0.03869945505401234567901234562\n\tstderr\t= 0.03110444303231145532699747260\t(n=40)',
 'Pr \n \tmean\t= 0.3933140933140933140933140933\t(macro)\n\tstd\t= 0.1432599301657948205815072907\n\tvar\t= 0.02052340759110840880922651004\n\tstderr\t= 0.03126187971613534798006584564\t(n=21)',
-'S \n \tmean\t= 0.7619047619047619047619047619\t(macro)\n\tstd\t= 0.07055015423823358837798727195\n\tvar\t= 0.004977324263038548752834467124\n\tstderr\t= 0.01539530581369118988034410932\t(n=21)',
+'S \n \tmean\t= 0.7619047619047619047619047619\t(macro)\n\tstd\t= 0.07055015423823358837798727192\n\tvar\t= 0.004977324263038548752834467119\n\tstderr\t= 0.01539530581369118988034410932\t(n=21)',
 'Pk \n \tmean\t= 0.3223684210526315789473684208\t(macro)\n\tstd\t= 0.08899835038466238748306496600\n\tvar\t= 0.007920706371191135734072022178\n\tstderr\t= 0.01407187476066278786833664467\t(n=40)',
 'WindowDiff \n \tmean\t= 0.30375\t(macro)\n\tstd\t= 0.08615937267645348867219388312\n\tvar\t= 0.0074234375\n\tstderr\t= 0.01362299297144353664369233694\t(n=40)']
 
     EXPECTED_FOLDER_STRINGS = [
-'Pi*_s \n \tdata,hearst1997\t= 0.7165532879818594104308390023',
-'K*_s \n \tdata,hearst1997\t= 0.7170345217883418222976796831',
-'B_s \n \tdata,hearst1997\t= 0.0014285714285714285714285714',
-'F_1 \n \tmean\t= 0.5486480036131738918116627092\t(macro)\n\tstd\t= 0.1579255315223177090093893588\n\tvar\t= 0.02494047350660656436483838610\n\tstderr\t= 0.02497021901516212390630353805\t(n=40)',
-'P \n \tmean\t= 0.5692361111111111111111111108\t(macro)\n\tstd\t= 0.1958928076552311369113250287\n\tvar\t= 0.03837399209104938271604938272\n\tstderr\t= 0.03097337247178993532437300488\t(n=40)',
-'R \n \tmean\t= 0.56812500000000000000000000\t(macro)\n\tstd\t= 0.1967217706661170373652606881\n\tvar\t= 0.03869945505401234567901234562\n\tstderr\t= 0.03110444303231145532699747260\t(n=40)',
-'Pr \n \tmean\t= 0.3933140933140933140933140933\t(macro)\n\tstd\t= 0.1432599301657948205815072907\n\tvar\t= 0.02052340759110840880922651004\n\tstderr\t= 0.03126187971613534798006584564\t(n=21)',
-'S \n \tmean\t= 0.7619047619047619047619047619\t(macro)\n\tstd\t= 0.07055015423823358837798727192\n\tvar\t= 0.004977324263038548752834467119\n\tstderr\t= 0.01539530581369118988034410932\t(n=21)',
-'Pk \n \tmean\t= 0.322368421052631578947368421\t(macro)\n\tstd\t= 0.08899835038466238748306496600\n\tvar\t= 0.007920706371191135734072022178\n\tstderr\t= 0.01407187476066278786833664467\t(n=40)',
-'WindowDiff \n \tmean\t= 0.30375\t(macro)\n\tstd\t= 0.08615937267645348867219388312\n\tvar\t= 0.0074234375\n\tstderr\t= 0.01362299297144353664369233694\t(n=40)']
+'Pi*_s \n \t1+2+3+4+5+6+7\t= 0.7165532879818594104308390023\n\tan1+an2+an3+an4\t= 1\n\tan5+an6\t= -0.5757942099675148626179719687',
+'K*_s \n \t1+2+3+4+5+6+7\t= 0.7170345217883418222976796831\n\tan1+an2+an3+an4\t= 1\n\tan5+an6\t= -0.05952156715012243360331512524',
+'B_s \n \t1+2+3+4+5+6+7\t= 0.0014285714285714285714285714\n\tan1+an2+an3+an4\t= 0.01455229356727327645713789012\n\tan5+an6\t= 0.3092215912041560442272265692',
+'F_1 \n \tmean\t= 0.7286033348388224549215261291\t(macro)\n\tstd\t= 0.3239626640547745286898970139\n\tvar\t= 0.1049518077014667004704471820\n\tstderr\t= 0.03306430094362011655292214134\t(n=96)',
+'P \n \tmean\t= 0.7371817129629629629629629628\t(macro)\n\tstd\t= 0.3279705495284159011523508245\n\tvar\t= 0.1075646813579711076817558297\n\tstderr\t= 0.03347335404186737660944801052\t(n=96)',
+'R \n \tmean\t= 0.7367187499999999999999999999\t(macro)\n\tstd\t= 0.3284145188345961520541514860\n\tvar\t= 0.1078560961813593106995884774\n\tstderr\t= 0.03351866646943400531044047662\t(n=96)',
+'Pr \n \tmean\t= 0.6583591012162440733869305296\t(macro)\n\tstd\t= 0.3625647993833832786266975493\n\tvar\t= 0.1314532337519129638574819243\n\tstderr\t= 0.0517949713404833255180996499\t(n=49)',
+'S \n \tmean\t= 0.8163265306122448979591836735\t(macro)\n\tstd\t= 0.2726266332053075620573546388\n\tvar\t= 0.07432528113286130778842149114\n\tstderr\t= 0.03894666188647250886533637697\t(n=49)',
+'Pk \n \tmean\t= 0.2176535087719298245614035085\t(macro)\n\tstd\t= 0.2873345796203152023025212293\n\tvar\t= 0.08256116064558325638658048630\n\tstderr\t= 0.02932596273028660385250146212\t(n=96)',
+'WindowDiff \n \tmean\t= 0.2098958333333333333333333333\t(macro)\n\tstd\t= 0.2842772076969453810915086095\n\tvar\t= 0.08081353081597222222222222207\n\tstderr\t= 0.02901392101502961827511912967\t(n=96)']
     
     EXPECTED_OM_STRINGS = [
-'1 - Pk \n \tmean\t= 0.6776315789473684210526315805\t(macro)\n\tstd\t= 0.08899835038466238748306496590\n\tvar\t= 0.00792070637119113573407202216\n\tstderr\t= 0.01407187476066278786833664466\t(n=40)',
+'1 - Pk \n \tmean\t= 0.6776315789473684210526315805\t(macro)\n\tstd\t= 0.08899835038466238748306496587\n\tvar\t= 0.007920706371191135734072022155\n\tstderr\t= 0.01407187476066278786833664465\t(n=40)',
 '1 - WindowDiff \n \tmean\t= 0.69625\t(macro)\n\tstd\t= 0.08615937267645348867219388312\n\tvar\t= 0.0074234375\n\tstderr\t= 0.01362299297144353664369233694\t(n=40)']
- 
     EXPECTED_WPR_STRINGS = [
 'WinPR-f_1 \n \tmean\t= 0.6537078835417392808312562938\t(macro)\n\tstd\t= 0.1104334172259618258006709431\n\tvar\t= 0.01219553964020336212051245300\n\tstderr\t= 0.02409854731860048794927717470\t(n=21)',
-'WinPR-p \n \tmean\t= 0.6700319521748093176664605238\t(macro)\n\tstd\t= 0.1469987063321598074606894023\n\tvar\t= 0.02160861966332855987419111369\n\tstderr\t= 0.03207774756322412707724005526\t(n=21)',
-'WinPR-r \n \tmean\t= 0.6683725005153576582148010719\t(macro)\n\tstd\t= 0.1570297604076544084333187669\n\tvar\t= 0.02465834565368534800463416066\n\tstderr\t= 0.03426670302042171194576414586\t(n=21)']
-    
+'WinPR-p \n \tmean\t= 0.6700319521748093176664605238\t(macro)\n\tstd\t= 0.1469987063321598074606894023\n\tvar\t= 0.02160861966332855987419111370\n\tstderr\t= 0.03207774756322412707724005526\t(n=21)',
+'WinPR-r \n \tmean\t= 0.6683725005153576582148010719\t(macro)\n\tstd\t= 0.1570297604076544084333187669\n\tvar\t= 0.02465834565368534800463416065\n\tstderr\t= 0.03426670302042171194576414586\t(n=21)']
+
     def test_load_files(self):
         '''
         Test the different ways to load files.
         '''
         metric = 'pi'
+        result = 'Pi*_s \n \t1+2+3+4+5+6+7\t= 0.7165532879818594104308390023'
         argv = [metric, os.path.join(self.test_data_dir,
                                      'hearst1997.json')]
-        self.assertEqual('Pi*_s = 0.7165532879818594104308390023', main(argv))
+        self.assertEqual(result, main(argv))
         
         argv = [metric, '-f', 'json', os.path.join(self.test_data_dir,
                                                    'hearst1997.json')]
-        self.assertEqual('Pi*_s = 0.7165532879818594104308390023', main(argv))
+        self.assertEqual(result, main(argv))
         
         argv = [metric, '-f', 'tsv', os.path.join(self.test_data_dir,
                                                   'hearst1997.tsv')]
-        self.assertEqual('Pi*_s = 0.7165532879818594104308390023', main(argv))
+        self.assertEqual(result, main(argv))
 
 
     def test_all_but_winpr_folder(self):
@@ -102,8 +102,8 @@ class TestMain(unittest.TestCase):
         '''
         metrics = ['pi', 'k', 'b', 'f', 'p', 'r', 'pr', 's', 'pk', 'wd']
         for metric, expected in zip(metrics, self.EXPECTED_FOLDER_STRINGS):
-            argv = [metric, os.path.join(self.test_data_dir,
-                                         '..')]
+            argv = [metric, os.path.abspath(os.path.join(self.test_data_dir,
+                                                         '..'))]
             actual = main(argv)
             self.assertEqual(expected, actual)
 
@@ -149,7 +149,7 @@ class TestMain(unittest.TestCase):
         Run through each metric and load from a file.
         '''
         metrics = ['pi', 'k', 'b', 'f', 'p', 'r', 'pr', 's', 'pk', 'wd']
-        filesizes = [51, 50, 49, 1524, 1524, 1524, 702, 584, 1665, 616]
+        filesizes = [59, 58, 57, 1628, 1628, 1628, 806, 688, 1864, 815]
         for metric, expected_filesize in zip(metrics, filesizes):
             filename = 'testfile.tsv'
             if os.path.exists(filename):
@@ -178,7 +178,7 @@ class TestMain(unittest.TestCase):
         Run through each metric and load from a file.
         '''
         metrics = ['pk', 'wd']
-        filesizes = [1669, 620]
+        filesizes = [1868, 819]
         for metric, expected_filesize in zip(metrics, filesizes):
             filename = 'testfile.tsv'
             if os.path.exists(filename):
@@ -207,7 +207,7 @@ class TestMain(unittest.TestCase):
         Run through each metric and load from a file.
         '''
         submetrics = ['f', 'p', 'r']
-        filesizes = [1744, 1744, 1744]
+        filesizes = [1848, 1848, 1848]
         for submetric, expected_filesize in zip(submetrics, filesizes):
             
             filename = 'testfile.tsv'
@@ -236,7 +236,7 @@ class TestMain(unittest.TestCase):
         '''
         Test detailed S output.
         '''
-        expected_filesize = 2131
+        expected_filesize = 2630
         filename = 'testfile.tsv'
         if os.path.exists(filename):
             os.remove(filename)

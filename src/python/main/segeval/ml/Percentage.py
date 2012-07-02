@@ -122,7 +122,8 @@ def pairwise_percentage_micro(dataset_masses):
     return Decimal(agree) / Decimal(total)
 
 
-OUTPUT_NAME = render_permuted('Pairwise Mean Percentage', DEFAULT_PERMUTED)
+OUTPUT_NAME = render_permuted('Pairwise Mean Percentage metric',
+                              DEFAULT_PERMUTED)
 SHORT_NAME  = 'Pr'
 
 
@@ -141,7 +142,7 @@ def parse(args):
     '''
     # pylint: disable=C0103
     output = None
-    values = load_file(args)[0]
+    values = load_file(args)
     micro = args['micro']
     name = SHORT_NAME
     # Is a TSV requested?

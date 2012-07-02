@@ -87,7 +87,7 @@ def similarity(segment_masses_a, segment_masses_b, n=DEFAULT_N,
         else:
             return Decimal('1.0')
     elif sum(segment_masses_a) != sum(segment_masses_b):
-        raise SegmentationMetricError('Unequal segmentation masses (%i != %i)' \
+        raise SegmentationMetricError('Segmentation masses differ (%i != %i)' \
                                       % (sum(segment_masses_a),
                                          sum(segment_masses_b)))
     elif 0 in segment_masses_a or 0 in segment_masses_b:
@@ -197,7 +197,7 @@ def pairwise_similarity_micro(dataset_masses, n=DEFAULT_N,
     return Decimal(pbs_unedited) / Decimal(pbs_total)
 
 
-OUTPUT_NAME = 'Mean S'
+OUTPUT_NAME = 'Mean S metric'
 SHORT_NAME  = 'S'
 
 
@@ -265,7 +265,7 @@ def parse(args):
     '''
     # pylint: disable=C0103,R0914
     output = None
-    values = load_file(args)[0]
+    values = load_file(args)
     # Parse args
     n  = args['n']
     wt = args['wt']
