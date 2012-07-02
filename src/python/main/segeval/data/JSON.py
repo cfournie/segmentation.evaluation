@@ -34,11 +34,11 @@ import os
 import codecs
 
 
-FIELD_SEGMENTATION_TYPE  = 'segmentation_type'
-TYPE_LINEAR              = 'linear'
-FIELD_ITEMS              = 'items'
-FIELD_CODINGS            = 'codings'
-FIELD_IS_REFERENCE_CODER = 'is_reference_coder'
+FIELD_SEGMENTATION_TYPE   = 'segmentation_type'
+TYPE_LINEAR               = 'linear'
+FIELD_ITEMS               = 'items'
+FIELD_CODINGS             = 'codings'
+FIELD_HAS_REFERENCE_CODER = 'has_reference_coder'
 
 
 def write_json(filepath, data):

@@ -154,9 +154,9 @@ class TestPairwisePkMeasure(unittest.TestCase):
         self.assertEqual(pairwise_pk(KAZANTSEVA2012_G2,
                                      convert_from_masses=True),
                          (Decimal('0.2882256923776327507173609771'),
-                          Decimal('0.1454395656787966169084191444'),
-                          Decimal('0.02115266726483699483402909753'),
-                          Decimal('0.01327675514600517730547602480'),
+                          Decimal('0.1454395656787966169084191445'),
+                          Decimal('0.02115266726483699483402909754'),
+                          Decimal('0.01327675514600517730547602481'),
                           120))
     
     def test_large_disagreement(self):

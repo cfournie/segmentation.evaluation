@@ -172,6 +172,9 @@ class TestPairwisePercentage(unittest.TestCase):
         Calculate mean permuted pairwise percentage on a theoretical dataset
         containing large disagreement.
         '''
+        from ..data.JSON import FIELD_HAS_REFERENCE_CODER
+        if FIELD_HAS_REFERENCE_CODER in LARGE_DISAGREEMENT:
+            pass
         self.assertEqual(pairwise_percentage(LARGE_DISAGREEMENT),
                          (0.0,
                           0.0,

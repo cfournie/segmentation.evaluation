@@ -138,8 +138,16 @@ def compute_pairwise_values(dataset_masses, fnc_metric, permuted=False,
     :returns: List of values
     :rtype: :func:`list`
     '''
-    # pylint: disable=C0103
+    # pylint: disable=C0103,R0912
+    from .data.JSON import FIELD_HAS_REFERENCE_CODER
     pairs = dict()
+    reference_coder_exists = False
+    # Determine whether a reference coder is designated
+    if FIELD_HAS_REFERENCE_CODER in dataset_masses.properties:
+        reference_coder_exists = \
+            dataset_masses.properties[FIELD_HAS_REFERENCE_CODER]
+    if reference_coder_exists:
+        permuted = False
     # Define fnc per group
     def __per_group__(prefix, inner_dataset_masses):
         '''
@@ -150,13 +158,21 @@ def compute_pairwise_values(dataset_masses, fnc_metric, permuted=False,
                                      multiple codings).
         :type inner_dataset_masses: dict
         '''
+        # pylint: disable=R0912,R0914
         for label, coder_masses in inner_dataset_masses.items():
+            label_pairs = dict()
+            
             if len(coder_masses.values()) > 0 and \
                 isinstance(coder_masses.values()[0], list):
                 # If is a group
                 coders = coder_masses.keys()
                 for m in range(0, len(coders)):
                     for n in range(m+1, len(coders)):
+                        if reference_coder_exists and \
+                            'reference' in coders[m] and \
+                            'reference' in coders[n]:
+                            continue
+                        
                         segs_m = coder_masses[coders[m]]
                         segs_n = coder_masses[coders[n]]
                         entry_parts = list(prefix)
@@ -165,22 +181,47 @@ def compute_pairwise_values(dataset_masses, fnc_metric, permuted=False,
                                             str(coders[n])])
                         entry = ','.join(entry_parts)
                         if return_parts:
-                            pairs[entry] = \
+                            label_pairs[entry] = \
                                 fnc_metric(segs_m, segs_n,
                                                    return_parts=return_parts)
                         else:
-                            pairs[entry] = fnc_metric(segs_m, segs_n)
-                            
+                            label_pairs[entry] = fnc_metric(segs_m, segs_n)
+                        # Handle permutation
                         if permuted:
                             entry_parts = list(prefix)
                             entry_parts.extend([label, str(n), str(m)])
                             entry = ','.join(entry_parts)
                             if return_parts:
-                                pairs[entry] = \
+                                label_pairs[entry] = \
                                     fnc_metric(segs_n, segs_m,
                                                     return_parts=return_parts)
                             else:
-                                pairs[entry] = fnc_metric(segs_n, segs_m)
+                                label_pairs[entry] = fnc_metric(segs_n, segs_m)
+                # Add to main set
+                if reference_coder_exists:
+                    max_reference_entry = None
+                    max_reference_pair  = 0
+                    # Perform reference exclusion
+                    for entry, pair in label_pairs.items():
+                        coder_parts = entry.split(',')
+                        coders_string = coder_parts.pop()
+                        coders_string += coder_parts.pop()
+                        if 'reference' in coders_string:
+                            if pair > max_reference_pair:
+                                max_reference_entry = entry
+                                max_reference_pair  = pair 
+                        else:
+                            pairs[entry] = pair
+                    # Add only if there is a max
+                    if max_reference_entry != None:
+                        pairs[max_reference_entry] = max_reference_pair
+                            
+                else:
+                    # Add all
+                    for entry, pair in label_pairs.items():
+                        pairs[entry] = pair
+                # Erase
+                label_pairs = dict()
             else:
                 # Else, recurse deeper
                 innter_prefix = list(prefix)

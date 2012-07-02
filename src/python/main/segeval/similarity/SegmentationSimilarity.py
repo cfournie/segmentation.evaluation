@@ -250,12 +250,15 @@ def values_s(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
     adjusted_values = dict()
     for label, value in values.items():
         # Get values
-        pbs_unedited, pbs_total, total_set_errors, \
-                total_set_transpositions = value[0:4]
-        s = Decimal(pbs_unedited) / Decimal(pbs_total)
-        # Store values
-        adjusted_values[label] = [pbs_unedited, pbs_total, total_set_errors, \
-                total_set_transpositions, s]
+        try:
+            pbs_unedited, pbs_total, total_set_errors, \
+                    total_set_transpositions = value[0:4]
+            s = Decimal(pbs_unedited) / Decimal(pbs_total)
+            # Store values
+            adjusted_values[label] = [pbs_unedited, pbs_total, total_set_errors, \
+                    total_set_transpositions, s]
+        except:
+            pass
     return create_tsv_rows(header, adjusted_values)
 
 

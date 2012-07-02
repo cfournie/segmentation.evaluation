@@ -177,17 +177,17 @@ class TestPairwiseWindowDiff(unittest.TestCase):
         '''
         self.assertEqual(pairwise_window_diff(KAZANTSEVA2012_G2,
                                               lamprier_et_al_2007_fix=False),
-                         (Decimal('0.2545512423455600226641754513'),
-                          Decimal('0.1227764444488944596833784806'),
-                          Decimal('0.01507405531151246718395938744'),
-                          Decimal('0.01120790469248990475787117304'),
+                         (Decimal('0.2545512423455600226641754512'),
+                          Decimal('0.1227764444488944596833784807'),
+                          Decimal('0.01507405531151246718395938746'),
+                          Decimal('0.01120790469248990475787117305'),
                           120))
         self.assertEqual(pairwise_window_diff(KAZANTSEVA2012_G2,
                                               lamprier_et_al_2007_fix=True),
                          (Decimal('0.2282101219734164495559781365'),
-                          Decimal('0.09824964933538713480770055137'),
-                          Decimal('0.009652993594526537660429053533'),
-                          Decimal('0.008968924867993997594174187071'),
+                          Decimal('0.09824964933538713480770055133'),
+                          Decimal('0.009652993594526537660429053525'),
+                          Decimal('0.008968924867993997594174187067'),
                           120))
     
     def test_large_disagreement(self):

@@ -32,7 +32,7 @@ evaluated.
 #===============================================================================
 import csv
 from .. import Dataset, DataIOError, name_from_filepath
-from ..JSON import FIELD_IS_REFERENCE_CODER
+from ..JSON import FIELD_HAS_REFERENCE_CODER
 from ..TSV import DEFAULT_DELIMITER
 
 
@@ -61,7 +61,7 @@ def input_morphemes(tsv_filename, reference_coder=False,
     coder = CODER_REFERENCE if reference_coder else \
         name_from_filepath(tsv_filename)
     if reference_coder:
-        dataset.properties[FIELD_IS_REFERENCE_CODER] = True
+        dataset.properties[FIELD_HAS_REFERENCE_CODER] = True
         
     # Open file
     csv_file = open(tsv_filename, 'rU')

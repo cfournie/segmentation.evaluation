@@ -52,12 +52,21 @@ class Dataset(dict):
     '''
     # pylint: disable=R0903
     
-    def __init__(self, masses=dict(), properties=dict()):
+    def __init__(self, masses=None, properties=None):
         '''
         Initialize.
         '''
-        self.update(masses)
-        self.properties = properties
+        dict.__init__(self)
+        # Masses
+        if masses is not None:
+            self.update(masses)
+        # Properties
+        if properties is not None:
+            self.properties = dict()
+            self.properties.update(properties)
+        else:
+            self.properties = dict()
+        # Coders
         self.coders = set()
         # Populate coders
         for coder_masses in self.values():
@@ -137,7 +146,7 @@ FILETYPES           = {FILETYPE_TSV  : {EXT : ['.tsv', '.csv'],
 FILETYPES_DEFAULT   = FILETYPE_JSON
 
 
-def load_nested_folders_dict(containing_dir, filetype, dataset=Dataset(),
+def load_nested_folders_dict(containing_dir, filetype, dataset=None,
                              prepend_item=list()):
     '''
     Loads TSV files from a file directory structure, which reflects the
@@ -154,6 +163,10 @@ def load_nested_folders_dict(containing_dir, filetype, dataset=Dataset(),
     :rtype: :func:`dict`
     '''
     # pylint: disable=R0914
+    # Create empty dataset
+    if dataset is None:
+        dataset = Dataset()
+    # Vars
     allowable_extensions = list(FILETYPES[filetype][EXT])
     fnc_load = FILETYPES[filetype][FNC]
     datafile_found = False

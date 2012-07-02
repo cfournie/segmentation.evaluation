@@ -31,7 +31,7 @@ Tests the data i/o functions and package.
 #===============================================================================
 import os
 import unittest
-from . import load_nested_folders_dict, FILETYPE_JSON
+from . import Dataset, load_nested_folders_dict, FILETYPE_JSON
 from .TSV import input_linear_mass_tsv, input_linear_positions_tsv
 from .JSON import input_linear_mass_json
 from .Samples import HEARST_1997_STARGAZER
@@ -81,4 +81,19 @@ class TestData(unittest.TestCase):
         json_file = os.path.join(self.test_data_dir, 'hearst1997.json')
         dataset = input_linear_mass_json(json_file)
         self.assertEqual(dataset, HEARST_1997_STARGAZER)
-
+    
+    def test_dataset(self):
+        prop = 'test'
+        
+        dataset_a = Dataset()
+        dataset_a.properties[prop] = False
+        
+        dataset_b = Dataset()
+        
+        self.assertFalse(prop in dataset_b)
+        
+        
+        
+        
+        
+        
