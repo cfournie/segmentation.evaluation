@@ -38,6 +38,7 @@ from segeval.ml.FbMeasure import create_parser as create_parser_fmeasure
 from segeval.ml.Percentage import create_parser as create_parser_percentage
 from segeval.similarity.SegmentationSimilarity import create_parser as \
     create_parser_similarity
+from segeval.similarity.ML import create_parser as create_parser_ml_similarity
 from segeval.window.Pk import create_parser as create_parser_pk
 from segeval.window.WindowDiff import create_parser as create_parser_windowdiff
 from segeval.window.WinPR import create_parser as create_parser_winpr
@@ -65,6 +66,7 @@ def main(argv=None):
     create_parser_fmeasure(subparsers)
     create_parser_percentage(subparsers)
     create_parser_similarity(subparsers)
+    create_parser_ml_similarity(subparsers)
     create_parser_pk(subparsers)
     create_parser_windowdiff(subparsers)
     create_parser_winpr(subparsers)    

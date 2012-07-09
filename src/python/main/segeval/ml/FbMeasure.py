@@ -240,8 +240,10 @@ def pairwise_ml_measure_micro(dataset_masses, ml_fnc=ml_fmeasure):
 
 OUTPUT_NAME_F = render_permuted('Pairwise Mean F_beta measure', 
                                 DEFAULT_PERMUTED)
-OUTPUT_NAME_R = render_permuted('Pairwise Mean Recall value', DEFAULT_PERMUTED)
-OUTPUT_NAME_P = render_permuted('Pairwise Mean Precision value', DEFAULT_PERMUTED)
+OUTPUT_NAME_R = render_permuted('Pairwise Mean Recall value',
+                                DEFAULT_PERMUTED)
+OUTPUT_NAME_P = render_permuted('Pairwise Mean Precision value',
+                                DEFAULT_PERMUTED)
 SHORT_NAME_F  = 'F_%s'
 SHORT_NAME_P  = 'P'
 SHORT_NAME_R  = 'R'
@@ -315,12 +317,12 @@ def parse(args):
                 return ml_fmeasure(cf, beta)
             mean = pairwise_ml_measure_micro(values, ml_fnc=wrapper)
             name = SHORT_NAME_F % str(beta)
-        elif subparser == 'r':
-            mean = pairwise_ml_measure_micro(values, ml_fnc=ml_recall)
-            name = SHORT_NAME_R
         elif subparser == 'p':
             mean = pairwise_ml_measure_micro(values, ml_fnc=ml_precision)
             name = SHORT_NAME_P
+        elif subparser == 'r':
+            mean = pairwise_ml_measure_micro(values, ml_fnc=ml_recall)
+            name = SHORT_NAME_R
         output = render_mean_micro_values(name, mean)
     else:
         # Create a string to output

@@ -83,6 +83,9 @@ class TestData(unittest.TestCase):
         self.assertEqual(dataset, HEARST_1997_STARGAZER)
     
     def test_dataset(self):
+        '''
+        Test dataset property creation and independence.
+        '''
         prop = 'test'
         
         dataset_a = Dataset()

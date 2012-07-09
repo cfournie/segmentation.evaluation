@@ -233,7 +233,7 @@ def compute_pairwise_values(dataset_masses, fnc_metric, permuted=False,
     return pairs
 
 
-def compute_multiple_values(dataset_masses, fnc_metric):
+def compute_multiple_values(dataset, fnc_metric):
     '''
     Calculate segmentation metric values for functions that take
     dicts of items and their segmentations per coder (``items_masses``) while
@@ -243,10 +243,10 @@ def compute_multiple_values(dataset_masses, fnc_metric):
     .. seealso:: :func:`segeval.agreement.observed_agreement` for an example of\
      ``items_masses``.
     
-    :param dataset_masses: Segmentation mass dataset (including multiple \
+    :param dataset: Segmentation mass dataset (including multiple \
                            codings).
     :param fnc_metric:     Metric function to call on segmentation mass pairs.
-    :type dataset_masses: dict
+    :type dataset: dict
     :type fnc_metric:     func
     
     .. |compute_mean_return| replace:: Mean, standard deviation, variance, and \
@@ -262,16 +262,23 @@ def compute_multiple_values(dataset_masses, fnc_metric):
     datasets = dict()
     values = dict()
     # pylint: disable=C0103
-    for item, coder_masses in dataset_masses.items():
-        coders = coder_masses.keys()
-        coders.sort()
-        coders = '+'.join(coders)
-        if coders not in datasets:
-            datasets[coders] = Dataset()
-        datasets[coders][item] = coder_masses
+    if len(datasets) > 1:
+        # Filter items by identical coders
+        for item, coder_masses in dataset.items():
+            coders = coder_masses.keys()
+            coders.sort()
+            coders = '+'.join(coders)
+            if coders not in datasets:
+                datasets[coders] = Dataset()
+            datasets[coders][item] = coder_masses
+        # If in the end there's only one set
+        if len(values) == 1:
+            values = {'all' : values.values()[0]}
+    else:
+        datasets['all'] = dataset
     # Define fnc per group
-    for coders, dataset in datasets.items():
-        values[coders] = fnc_metric(dataset)
+    for coders, cur_dataset in datasets.items():
+        values[coders] = fnc_metric(cur_dataset)
     # Return mean, std dev, and variance
     return values
 
