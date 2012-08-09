@@ -262,7 +262,7 @@ def compute_multiple_values(dataset, fnc_metric):
     datasets = dict()
     values = dict()
     # pylint: disable=C0103
-    if len(datasets) > 1:
+    if len(dataset) > 1:
         # Filter items by identical coders
         for item, coder_masses in dataset.items():
             coders = coder_masses.keys()
