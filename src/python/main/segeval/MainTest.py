@@ -378,11 +378,30 @@ class TestMain(unittest.TestCase):
         
         self.assertFalse(os.path.exists(filename))
 
+
     def test_help_output(self):
         '''
         Test the help output.
         '''
-        argv = ['wd', '-h']
-        if self.print_output and self.test_help:
-            main(argv)
+        argv = ['-h']
+        if self.print_output:
+            print main(argv)
+
+
+    def test_help_s_output(self):
+        '''
+        Test the help output.
+        '''
+        argv = ['s', '-h']
+        if self.print_output :
+            print main(argv)
+
+
+    def test_s_output(self):
+        '''
+        Test the help output.
+        '''
+        argv = ['s', os.path.join(self.test_data_dir, 'hearst1997.json')]
+        if self.print_output:
+            print main(argv)
 
