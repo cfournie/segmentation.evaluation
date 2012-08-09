@@ -1,4 +1,5 @@
 {
+    "segmentation_type": "linear",
     "items": {
         "item1": {
             "an5": [
@@ -107,6 +108,5 @@
                 1
             ]
         }
-    }, 
-    "segmentation_type": "linear"
+    }
 }
