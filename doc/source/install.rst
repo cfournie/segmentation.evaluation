@@ -43,7 +43,7 @@ After installing the required packages, open up your terminal and enter::
 
 Or, if you are using pip, open up your terminal and enter::
   
-  user@host$ sudo pip segeval
+  user@host$ sudo pip install segeval
 
 To verify that it worked, type::
 
@@ -79,7 +79,7 @@ Open up a command prompt (with administrator rights) and run::
 
 Or, if you are using pip, open up your command prompt and enter::
   
-  C:\>pip segeval
+  C:\>pip install segeval
 
 To verify that it worked, type::
 

@@ -20,7 +20,7 @@ Additional manual entries include:
 Installation
 ============
 
-Install for `Python 2.7 <http://www.python.org/download/>`_ using `distutils <http://pypi.python.org/pypi/setuptools>`_ (``easy_install segeval``) `pip <http://pypi.python.org/pypi/pip>`_ (``pip segeval``). Alternatively, clone the repository from::
+Install for `Python 2.7 <http://www.python.org/download/>`_ using `distutils <http://pypi.python.org/pypi/setuptools>`_ (``easy_install segeval``) `pip <http://pypi.python.org/pypi/pip>`_ (``pip install segeval``). Alternatively, clone the repository from::
 
   git clone git://github.com/cfournie/segmentation.evaluation.git
 
