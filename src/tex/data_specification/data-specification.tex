@@ -76,7 +76,8 @@ first options is assumed to be the default.
 \begin{lstlisting}[language=]
 {
 	"segmentation_type" : "linear"|"multiple"|"hierarchical",
-	"codings" : {...}
+	"items" : {...},
+	"*has_reference_coder": "false"|"true"
 }
 \end{lstlisting}
 \vspace{-3em}
@@ -84,6 +85,12 @@ first options is assumed to be the default.
 \label{fig:json}
 \end{figure}
 
+The \verb+has_reference_coder+ property indicates that the file contains a coder
+named \verb+reference+ who represents a single, authoritative, reference coder,
+to which all other coders can be compared against to compute S-based precision,
+recall, and $\text{F}_{\beta}\text{-measure}$.  If more than one reference 
+coding is possible for a single item, it can be denoted as coder
+\verb+reference+, \verb+reference2+, \verb+reference3+, etc.
 
 
 \subsection{Linear Segmentation}
@@ -205,11 +212,13 @@ C	2	3	2	4
 \begin{lstlisting}[language=,linewidth=0.9\textwidth]
 {
 	"segmentation_type" : "linear"
-	"codings" :
+	"items" :
 	{
-		"A" : [2,3,6],
-		"B" : [1,1,3,6],
-		"C" : [2,3,2,4]
+		"Kubla Khan" : {
+			"A" : [2,3,6],
+			"B" : [1,1,3,6],
+			"C" : [2,3,2,4]
+		}
 	}
 }
 \end{lstlisting}
@@ -225,10 +234,15 @@ C	2	3	2	4
 \label{fig:linear:segmentation:files}
 \end{figure}
 
+In JSON files, multiple items can be added to the same file to represent a
+data set.  In this case, all of the coder names across items are assumed to
+refer to the same coder, so that overall statistics can be calculated for a
+data set.
+
 
 \section{Future Work}
 Future versions of this specification will include additional formats as support
-for them are added to the \href{segeval}{http://nlp.chrisfournier.ca/software/}
+for them are added to the \texttt{\href{http://nlp.chrisfournier.ca/software/}{segeval}}
 python package, including:
 \begin{enumerate}
   \setlength{\itemsep}{0cm}%
