@@ -1,24 +1,43 @@
-SegEval v1.0 beta
+SegEval v1.1 beta
 =================
 
-This package is a collection of metrics and a [command-line interface](http://packages.python.org/segeval/#commandline-usage) for evaluating segmentation. A variety of metrics are provided, including:
+This package is a collection of metrics and a [command-line interface](http://packages.python.org/segeval/#commandline-usage) for evaluating segmentation. A variety of metrics are provided, including: **Segmentation Similarity (S)** [(Fournier and Inkpen, 2012)](http://nlp.chrisfournier.ca/publications/#segmentation); **WindowDiff**; **Pk**; and others.
 
-- Segmentation Similarity (S) [(Fournier and Inkpen, 2012)](http://nlp.chrisfournier.ca/publications/#segmentation);
-- WindowDiff;
-- Pk; and others.
+Additionally, inter-coder agreement coefficients that are based upon S for both 2 and more coders are provided, including: **Kappa**; and **Pi**.
 
-Additionally, inter-coder agreement coefficients that are based upon S for both 2 and more coders are provided, including:
+For more details, see the [manual](http://packages.python.org/segeval/).
 
-- Kappa; and
-- Pi.
 
-For more details, see the manual at http://packages.python.org/segeval/
+Installation from Source
+------------------------
+From source, install for [Python 2.7+](http://www.python.org/) using: `python setup.py install`
 
-If you're using this software for research, please cite:
+
+Directories
+-----------
+- /doc/  - Sphinx auto-documentation code
+- /src/  - Source code (Python 2.7)
+
+
+Support
+-------
+
+If you have any suggestions, problems, or difficulties, please [log an issue](https://github.com/cfournie/segmentation.evaluation/issues), or [contact me](http://nlp.chrisfournier.ca/about/).
+
+
+Roadmap
+-------
+
+For a roadmap of planned features and future work see the [SegEval overview page](http://nlp.chrisfournier.ca/software/segeval/).
+
+
+Publications
+------------
+If you're using this software for research, please cite [the paper](http://nlp.chrisfournier.ca/publications/#segmentation):
 
 *Chris Fournier and Diana Inkpen. 2012. Segmentation Similarity and Agreement. Proceedings of Human Language Technologies: The 2012 Annual Conference of the North American Chapter of the Association for Computational Linguistics. (HLT '12), pp. 152—161. Association for Computational Linguistics, Stroudsburg, PA, USA.*
 
-If you would like to read the paper, [visit my website](http://nlp.chrisfournier.ca/publications/#segmentation).
+BibTeX:
 
 ```
 @inproceedings{FournierInkpen2012,
@@ -34,13 +53,3 @@ If you would like to read the paper, [visit my website](http://nlp.chrisfournier
 	address		= {Stroudsburg, PA, USA}
 }
 ```
-
-Requirements
-------------
-- [Python 2.7+](http://www.python.org/)
-
-
-Directories
------------
-- /doc/  - Sphinx auto-documentation code
-- /src/  - Source code (Python 2.7)

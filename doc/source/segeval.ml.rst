@@ -8,9 +8,12 @@ FbMeasure
 =========
 
 .. automodule:: segeval.ml.FbMeasure
+.. autofunction:: confusion_matrix
 .. autofunction:: f_b_measure
-.. autofunction:: pairwise_f_b_measure
-
+.. autofunction:: precision
+.. autofunction:: recall
+.. autofunction:: pairwise_ml_measure
+.. autofunction:: pairwise_ml_measure_micro
 
 
 Percentage
@@ -19,7 +22,7 @@ Percentage
 .. automodule:: segeval.ml.Percentage
 .. autofunction:: percentage
 .. autofunction:: pairwise_percentage
-.. autofunction:: find_boundary_position_freqs
+.. autofunction:: pairwise_percentage_micro
 
 
 Utility functions
