@@ -5,7 +5,7 @@ Setup script for installing the segeval package.
 '''
 from distutils.core import setup
 setup(name='segeval',
-      version='1.0.1 beta',
+      version='1.1 beta',
       
       description='A package and utilities providing a variety of discourse \
 segmentation evaluation metrics',
@@ -18,7 +18,7 @@ segmentation evaluation metrics',
       
       url='http://pypi.python.org/pypi/segeval/',
       download_url = 'http://pypi.python.org/packages/source/s/segeval/segeval\
--1.0.1%20beta.tar.gz',
+-1.1%20beta.tar.gz',
       
       classifiers=['Development Status :: 4 - Beta',
                    'Environment :: Console',
@@ -37,14 +37,16 @@ segmentation evaluation metrics',
       
       keywords = ('segmentation', 'similarity', 'discourse'),
       
-      data_files=[('segeval/data', ['segeval/data/hearst1997.tsv',
+      data_files=[('segeval/data', ['segeval/data/complete_agreement.json',
+                                    'segeval/data/hearst1997_positions.csv',
                                     'segeval/data/hearst1997.json',
-                                    'segeval/data/hearst1997_positions.csv'])],
+                                    'segeval/data/hearst1997.tsv',
+                                    'segeval/data/large_disagreement.json'])],
       
       packages=['segeval',
+                'segeval.agreement',
                 'segeval.data',
                 'segeval.ml',
-                'segeval.agreement',
                 'segeval.similarity',
                 'segeval.similarity.distance',
                 'segeval.window'])
