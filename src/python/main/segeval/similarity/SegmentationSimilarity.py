@@ -193,14 +193,27 @@ def pairwise_similarity_micro(dataset_masses, n=DEFAULT_N,
                                    permuted=DEFAULT_PERMUTED,
                                    return_parts=True)
     
-    pbs_unedited, pbs_total = 0, 0
+    pbs_unedited, pbs_total, set_errors_total, set_transpositions_total = \
+        0, 0, 0, 0
+    set_errors = list()
+    transpostions = list()
     for values in pairs.values():
-        cur_pbs_unedited, cur_pbs_total = values[0:2]
-        pbs_unedited += cur_pbs_unedited
-        pbs_total += cur_pbs_total
+        # get
+        pair_pbs_unedited, pair_pbs_total, pair_set_errors_total, \
+            pair_set_transpositions_total, pair_set_errors, \
+            pair_set_transpositions = values
+        # sum
+        pbs_unedited             += pair_pbs_unedited
+        pbs_total                += pair_pbs_total
+        set_errors_total         += pair_set_errors_total
+        set_transpositions_total += pair_set_transpositions_total
+        # extend
+        set_errors.extend(pair_set_errors)
+        transpostions.extend(pair_set_transpositions)
     
     if return_parts:
-        return pbs_unedited, pbs_total
+        return pbs_unedited, pbs_total, set_errors_total, \
+            set_transpositions_total, set_errors, transpostions
     else:
         return Decimal(pbs_unedited) / Decimal(pbs_total)
 
