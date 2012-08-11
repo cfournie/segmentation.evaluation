@@ -66,7 +66,9 @@ def similarity(segment_masses_a, segment_masses_b, n=DEFAULT_N,
                                   operations
     :param scale_transp:      If true, scales transpositions by their size \
                                   and the number of boundaries
-    :param return_parts:      Scales how precision and recall are averaged.
+    :param return_parts:      If false, returns a :class:`decimal.Decimal`, \
+                                  else, return the statistics used to create \
+                                  the decimal
     :type segment_masses_a: list
     :type segment_masses_b: list
     :type n: int
@@ -161,7 +163,8 @@ def pairwise_similarity(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
 
 def pairwise_similarity_micro(dataset_masses, n=DEFAULT_N,
                               weight=DEFAULT_WEIGHT,
-                              scale_transp=DEFAULT_SCALE):
+                              scale_transp=DEFAULT_SCALE,
+                              return_parts=False):
     '''
     Calculate mean pairwise S.
     
@@ -170,10 +173,13 @@ def pairwise_similarity_micro(dataset_masses, n=DEFAULT_N,
     
     :param dataset_masses: Segmentation mass dataset (including multiple \
                            codings).
+    :param return_parts:   If false, returns a :class:`decimal.Decimal`, \
+                                else, return the statistics used to create \
+                                the decimal
     :type dataset_masses: dict
     
     :returns: Mean (micro)
-    :rtype: :class:`decimal.Decimal`
+    :rtype: :class:`decimal.Decimal`, or :func:`int`, :func:`int`
     '''
     # pylint: disable=C0103,R0913,R0914
     def wrapper(segment_masses_a, segment_masses_b, return_parts=True):
@@ -187,14 +193,16 @@ def pairwise_similarity_micro(dataset_masses, n=DEFAULT_N,
                                    permuted=DEFAULT_PERMUTED,
                                    return_parts=True)
     
-    
     pbs_unedited, pbs_total = 0, 0
     for values in pairs.values():
         cur_pbs_unedited, cur_pbs_total = values[0:2]
         pbs_unedited += cur_pbs_unedited
         pbs_total += cur_pbs_total
     
-    return Decimal(pbs_unedited) / Decimal(pbs_total)
+    if return_parts:
+        return pbs_unedited, pbs_total
+    else:
+        return Decimal(pbs_unedited) / Decimal(pbs_total)
 
 
 OUTPUT_NAME = 'Mean S metric'
