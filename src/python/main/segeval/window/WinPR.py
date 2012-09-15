@@ -30,7 +30,7 @@ and Inkpen (2012).
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
-from .WindowDiff import compute_window_size, create_paired_window
+from .WindowDiff import compute_window_size
 from ..ml import fmeasure, precision, recall, cf_to_vars, vars_to_cf
 from ..ml.FbMeasure import parser_beta_support, DEFAULT_BETA
 from .. import SegmentationMetricError, compute_pairwise, \
@@ -42,6 +42,28 @@ from ..data.Display import render_mean_values, render_mean_micro_values, \
 
 
 DEFAULT_PERMUTED = False
+
+
+def create_paired_window(hypothesis_positions, reference_positions, window_size,
+                  lamprier_et_al_2007_fix):
+    '''
+    Create a set of pairs of units from each segmentation to go over using a
+    window.
+    '''
+    phantom_size = 0
+    if lamprier_et_al_2007_fix == False:
+        units_ref_hyp = zip(reference_positions, hypothesis_positions)
+    else:
+        phantom_size = window_size
+        phantom_size = 1 if phantom_size <= 0 else phantom_size
+        phantom_hyp_start = [int(hypothesis_positions[0])]  * phantom_size
+        phantom_hyp_end   = [int(hypothesis_positions[-1])] * phantom_size
+        phantom_ref_start = [int(reference_positions[0])]   * phantom_size
+        phantom_ref_end   = [int(reference_positions[-1])]  * phantom_size
+        units_ref_hyp = \
+            zip(phantom_ref_start + reference_positions  + phantom_ref_end,
+                phantom_hyp_start + hypothesis_positions + phantom_hyp_end)
+    return units_ref_hyp, phantom_size
 
 
 def win_pr(hypothesis_positions, reference_positions, window_size=None,
@@ -89,17 +111,21 @@ length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
     # Create a set of pairs of units from each segmentation to go over using a
     # window
     tp, fp, fn = [0] * 3
-    tn = (-1 * window_size) * (window_size - 1)
+    tn = (-1 * window_size) * (window_size * 2 + 1)
     # Create and append phantom boundaries at the beginning and end of the
     # segmentation to properly count boundaries at the beginning and end
     units_ref_hyp = create_paired_window(hypothesis_positions,
                                          reference_positions, window_size,
-                                         True)[0]
+                                         lamprier_et_al_2007_fix = True)[0]
     # Slide window over and calculate TP, TN, FP, FN
-    for i in xrange(0, len(units_ref_hyp) - window_size + 1):
-        window = units_ref_hyp[i:i + window_size]
+    measurements = len(units_ref_hyp) - (window_size + 1)
+    for i in xrange(0, measurements):
+        window = units_ref_hyp[i:i + window_size + 1]
         ref_boundaries = 0
         hyp_boundaries = 0
+        # Check that the number of loops is correct
+        if len(window) != window_size + 1:
+            raise SegmentationMetricError('Incorrect actual window size')
         # For pair in window
         for j in xrange(0, len(window) - 1):
             ref_part, hyp_part = zip(*window[j:j + 2])

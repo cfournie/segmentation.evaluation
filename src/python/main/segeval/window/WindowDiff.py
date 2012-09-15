@@ -51,11 +51,12 @@ def create_paired_window(hypothesis_positions, reference_positions, window_size,
     Create a set of pairs of units from each segmentation to go over using a
     window.
     '''
-    phantom_size = window_size - 1
-    phantom_size = 1 if phantom_size <= 0 else phantom_size
+    phantom_size = 0
     if lamprier_et_al_2007_fix == False:
         units_ref_hyp = zip(reference_positions, hypothesis_positions)
     else:
+        phantom_size = window_size
+        phantom_size = 1 if phantom_size <= 0 else phantom_size
         phantom = [0] * phantom_size
         units_ref_hyp = zip(phantom + reference_positions + phantom,
                             phantom + hypothesis_positions + phantom)
@@ -113,16 +114,20 @@ length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
         window_size = compute_window_size(reference_positions)
     # Create a set of pairs of units from each segmentation to go over using a
     # window
-    units_ref_hyp, phantom_size = create_paired_window(hypothesis_positions,
-                                                       reference_positions,
-                                                       window_size,
-                                                       lamprier_et_al_2007_fix)
+    units_ref_hyp = create_paired_window(hypothesis_positions,
+                                         reference_positions,
+                                         window_size,
+                                         lamprier_et_al_2007_fix)[0]
     # Slide window over and sum the number of varying windows
     sum_differences = 0
-    for i in xrange(0, len(units_ref_hyp) - window_size + 1):
-        window = units_ref_hyp[i:i+window_size]
+    measurements = len(units_ref_hyp) - (window_size + 1)
+    for i in xrange(0, measurements):
+        window = units_ref_hyp[i: i + window_size + 1]
         ref_boundaries = 0
         hyp_boundaries = 0
+        # Check that the number of loops is correct
+        if len(window) != window_size + 1:
+            raise SegmentationMetricError('Incorrect actual window size.')
         # For pair in window
         for j in xrange(0, len(window)-1):
             ref_part, hyp_part = zip(*window[j:j+2])
@@ -136,12 +141,13 @@ length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
         if ref_boundaries != hyp_boundaries:
             sum_differences += 1
     # Perform final division
-    n = len(reference_positions) + 1
-    if lamprier_et_al_2007_fix:
-        n += (phantom_size * 2)
+    n = len(reference_positions)
     win_diff = Decimal(sum_differences) / (n - window_size)
     if win_diff > 1:
-        raise SegmentationMetricError('Incorrect value calculated.')
+        if lamprier_et_al_2007_fix:
+            win_diff = Decimal('1.0')
+        else:
+            raise SegmentationMetricError('Incorrect value calculated.')
     if not one_minus:
         if return_parts:
             return sum_differences, n - window_size

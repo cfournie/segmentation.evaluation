@@ -34,7 +34,7 @@ import re
 import unittest
 from decimal import Decimal
 from .__main__ import main
-
+from . import DECIMAL_PLACES
 
 class TestMain(unittest.TestCase):
     '''
@@ -48,7 +48,6 @@ class TestMain(unittest.TestCase):
     test_help    = False
     
     REGEX_TEST_OUTPUT = re.compile('([^\s]+)\t= ([\-]?[0-1]{1}[\.]?[0-9]{0,})')
-    DECIMAL_PLACES = 4
 
     
     @classmethod
@@ -75,7 +74,7 @@ class TestMain(unittest.TestCase):
             self.assertEqual(len(expected_values), len(actual_values))
             for key, value in expected_values.items():
                 self.assertAlmostEqual(value, actual_values[key],
-                                       TestMain.DECIMAL_PLACES)
+                                       DECIMAL_PLACES)
     
     
     def test_perform_comparison(self):
@@ -156,14 +155,14 @@ class TestMain(unittest.TestCase):
                  'var': Decimal('0.07432528113286130778842149112'),
                  'stderr': Decimal('0.03894666188647250886533637696'),
                  'mean': Decimal('0.8163265306122448979591836735')},
-         'pk':  {'std': Decimal('0.2873345796203152023025212293'),
-                 'var': Decimal('0.08256116064558325638658048630'),
-                 'stderr': Decimal('0.02932596273028660385250146212'),
-                 'mean': Decimal('0.2176535087719298245614035085')},
-         'wd':  {'std': Decimal('0.2842772076969453810915086095'),
-                 'var': Decimal('0.08081353081597222222222222207'),
-                 'stderr': Decimal('0.02901392101502961827511912967'),
-                 'mean': Decimal('0.2098958333333333333333333333')},
+         'pk':  {'std': Decimal('0.2861761390187296559346246595'),
+                 'var': Decimal('0.08189678254366728224068944295'),
+                 'stderr': Decimal('0.02920772988148629676621594996'),
+                 'mean': Decimal('0.2148574561403508771929824560')},
+         'wd':  {'std': Decimal('0.2606392427999016685892492029'),
+                 'var': Decimal('0.06793281488730609379111692261'),
+                 'stderr': Decimal('0.02660138132521389342956902872'),
+                 'mean': Decimal('0.2078058574929563376289948819')},
         }
         for metric in metrics:
             argv = [metric, os.path.abspath(os.path.join(self.test_data_dir,
@@ -200,14 +199,14 @@ class TestMain(unittest.TestCase):
                  'var': Decimal('0.004977324263038548752834467119'),
                  'stderr': Decimal('0.01539530581369118988034410932'),
                  'mean': Decimal('0.7619047619047619047619047619')},
-         'pk':  {'std': Decimal('0.08899835038466238748306496601'),
-                 'var': Decimal('0.00792070637119113573407202218'),
-                 'stderr': Decimal('0.01407187476066278786833664467'),
-                 'mean': Decimal('0.3223684210526315789473684208')},
-         'wd':  {'std': Decimal('0.08615937267645348867219388312'),
-                 'var': Decimal('0.0074234375'),
-                 'stderr': Decimal('0.01362299297144353664369233694'),
-                 'mean': Decimal('0.30375')}
+         'pk':  {'std': Decimal('0.08777992422503512612187275157'),
+                 'var': Decimal('0.00770531509695290858725761773'),
+                 'stderr': Decimal('0.01387922466940508585272027736'),
+                 'mean': Decimal('0.3156578947368421052631578948')},
+         'wd':  {'std': Decimal('0.1029019507162951530657009250'),
+                 'var': Decimal('0.01058881146121883656509695291'),
+                 'stderr': Decimal('0.01627022699689438611144696952'),
+                 'mean': Decimal('0.3295394736842105263157894738')}
         }
         metrics = ['pi', 'k', 'b', 'f', 'p', 'r', 'pr', 's', 'pk', 'wd']
         for metric in metrics:
@@ -222,18 +221,18 @@ class TestMain(unittest.TestCase):
         '''
         expected = \
         {
-         'f':   {'std': Decimal('0.1104334172259618258006709431'),
-                 'var': Decimal('0.01219553964020336212051245300'),
-                 'stderr': Decimal('0.02409854731860048794927717470'),
-                 'mean': Decimal('0.6537078835417392808312562938')},
-         'p':   {'std': Decimal('0.1469987063321598074606894023'),
-                 'var': Decimal('0.02160861966332855987419111370'),
-                 'stderr': Decimal('0.03207774756322412707724005526'),
-                 'mean': Decimal('0.6700319521748093176664605238')},
-         'r':   {'std': Decimal('0.1570297604076544084333187669'),
-                 'var': Decimal('0.02465834565368534800463416065'),
-                 'stderr': Decimal('0.03426670302042171194576414586'),
-                 'mean': Decimal('0.6683725005153576582148010719')}
+         'f':   {'std': Decimal('0.1236455519317746814817957631'),
+                 'var': Decimal('0.01528822251251318966753632424'),
+                 'stderr': Decimal('0.02698167147961670318171997192'),
+                 'mean': Decimal('0.6456795045749048402741458914')},
+         'p':   {'std': Decimal('0.1507757229665850876837615814'),
+                 'var': Decimal('0.02273331863609641387419165197'),
+                 'stderr': Decimal('0.03290196016457466023981727858'),
+                 'mean': Decimal('0.6652777777777777777777777776')},
+         'r':   {'std': Decimal('0.1967985488316959486974703074'),
+                 'var': Decimal('0.03872966882226141485400744661'),
+                 'stderr': Decimal('0.04294496412755761321481451299'),
+                 'mean': Decimal('0.6740740740740740740740740743')}
         }
         submetrics = ['f', 'p', 'r']
         for submetric in submetrics:
@@ -248,14 +247,14 @@ class TestMain(unittest.TestCase):
         '''
         expected = \
         {
-         'pk':  {'std': Decimal('0.08899835038466238748306496589'),
-                 'var': Decimal('0.007920706371191135734072022158'),
-                 'stderr': Decimal('0.01407187476066278786833664465'),
-                 'mean': Decimal('0.6776315789473684210526315805')},
-         'wd':  {'std': Decimal('0.08615937267645348867219388312'),
-                 'var': Decimal('0.0074234375'),
-                 'stderr': Decimal('0.01362299297144353664369233694'),
-                 'mean': Decimal('0.69625')},
+         'pk':  {'std': Decimal('0.08777992422503512612187275150'),
+                 'var': Decimal('0.007705315096952908587257617718'),
+                 'stderr': Decimal('0.01387922466940508585272027735'),
+                 'mean': Decimal('0.684342105263157894736842106')},
+         'wd':  {'std': Decimal('0.1029019507162951530657009249'),
+                 'var': Decimal('0.01058881146121883656509695289'),
+                 'stderr': Decimal('0.01627022699689438611144696950'),
+                 'mean': Decimal('0.670460526315789473684210527')},
         }
         metrics = ['pk', 'wd']
         for metric in metrics:
@@ -269,7 +268,7 @@ class TestMain(unittest.TestCase):
         Run through each metric and load from a file.
         '''
         metrics = ['pi', 'k', 'b', 'f', 'p', 'r', 'pr', 's', 'pk', 'wd']
-        filesizes = [49, 48, 47, 1628, 1628, 1628, 806, 688, 1864, 815]
+        filesizes = [49, 48, 47, 1628, 1628, 1628, 806, 688, 1415, 1422]
         for metric, expected_filesize in zip(metrics, filesizes):
             filename = 'testfile.tsv'
             if os.path.exists(filename):
@@ -298,7 +297,7 @@ class TestMain(unittest.TestCase):
         Run through each metric and load from a file.
         '''
         metrics = ['pk', 'wd']
-        filesizes = [1868, 819]
+        filesizes = [1419, 1426]
         for metric, expected_filesize in zip(metrics, filesizes):
             filename = 'testfile.tsv'
             if os.path.exists(filename):
@@ -327,7 +326,7 @@ class TestMain(unittest.TestCase):
         Run through each metric and load from a file.
         '''
         submetrics = ['f', 'p', 'r']
-        filesizes = [1848, 1848, 1848]
+        filesizes = [1734, 1734, 1734]
         for submetric, expected_filesize in zip(submetrics, filesizes):
             
             filename = 'testfile.tsv'

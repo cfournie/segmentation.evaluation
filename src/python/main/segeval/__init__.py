@@ -47,6 +47,8 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),
 DEBUG_MODE  = False
 EXPERIMENTS = False
 
+DECIMAL_PLACES = 4 # Decimal places to round to when testing floats
+
 
 def load_tests(loader, tests, pattern):
     '''
@@ -269,7 +271,8 @@ def compute_multiple_values(dataset, fnc_metric):
             coders.sort()
             coders = '+'.join(coders)
             if coders not in datasets:
-                datasets[coders] = Dataset()
+                datasets[coders] = Dataset(properties=dataset.properties,
+                                        boundary_types=dataset.boundary_types)
             datasets[coders][item] = coder_masses
         # If in the end there's only one set
         if len(values) == 1:

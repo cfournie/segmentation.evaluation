@@ -188,10 +188,8 @@ def actual_agreement(items_masses):
                     coders_boundaries[coders[n]] = list()
                 # Add per-coder values to dicts
                 coders_boundaries[coders[m]].append(
-                    [Decimal(len(segs_a)),
-                     total_pbs])
+                    [Decimal(len(segs_a)), total_pbs])
                 coders_boundaries[coders[n]].append(
-                    [Decimal(len(segs_b)),
-                     total_pbs])
+                    [Decimal(len(segs_b)), total_pbs])
     return all_pbs_unedited, all_pbs, coders_boundaries
 

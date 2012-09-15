@@ -111,7 +111,7 @@ def compute_window_size(reference_segments, fnc_round=round):
     masses = [Decimal(mass) for mass in masses]
     avg = mean(masses) / Decimal(2)
     window_size = int(fnc_round(avg))
-    return window_size if window_size > 1 else 2
+    return window_size if window_size > 0 else 1
 
 
 def parser_one_minus_support(parser):

@@ -52,7 +52,7 @@ class Dataset(dict):
     '''
     # pylint: disable=R0903
     
-    def __init__(self, masses=None, properties=None):
+    def __init__(self, masses=None, properties=None, boundary_types=None):
         '''
         Initialize.
         '''
@@ -66,6 +66,11 @@ class Dataset(dict):
             self.properties.update(properties)
         else:
             self.properties = dict()
+        # Boundary types
+        if boundary_types is not None:
+            self.boundary_types = set(boundary_types)
+        else:
+            self.boundary_types = set([1])
         # Coders
         self.coders = set()
         # Populate coders

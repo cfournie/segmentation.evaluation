@@ -35,6 +35,7 @@ from decimal import Decimal
 from ..window.Pk import pk, pairwise_pk
 from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
+from ..Utils import AlmostTestCase
 
 
 class TestPk(unittest.TestCase):
@@ -76,7 +77,7 @@ class TestPk(unittest.TestCase):
         self.assertEqual(pk(a, b),
                          Decimal('0.6363636363636363636363636364'))
         self.assertEqual(pk(b, a),
-                         Decimal('0.6363636363636363636363636364'))
+                         Decimal('0.8333333333333333333333333333'))
 
     def test_all_and_no_boundaries(self):
         '''
@@ -127,8 +128,8 @@ class TestPk(unittest.TestCase):
                          Decimal('0.2727272727272727272727272727'))
 
 
-class TestPairwisePkMeasure(unittest.TestCase):
-    # pylint: disable=R0904
+class TestPairwisePkMeasure(AlmostTestCase):
+    # pylint: disable=R0904,E1101,W0232
     '''
     Test pairwise Pk.
     '''
@@ -138,12 +139,12 @@ class TestPairwisePkMeasure(unittest.TestCase):
         Calculate permuted pairwise Pk on Group 5 from the dataset
         collected in [KazantsevaSzpakowicz2012]_.
         '''
-        self.assertEqual(pairwise_pk(KAZANTSEVA2012_G5,
+        self.assertAlmostEquals(pairwise_pk(KAZANTSEVA2012_G5,
                                      convert_from_masses=True),
-                         (Decimal('0.3553005828239669303205984460'),
-                          Decimal('0.1100176084609921563234047476'),
-                          Decimal('0.01210387417147617290343989768'),
-                          Decimal('0.01587967396513816764352290376'),
+                         (Decimal('0.3535644717128558192094873348'),
+                          Decimal('0.1076460428373522560756592115'),
+                          Decimal('0.01158767053854107695378913407'),
+                          Decimal('0.01553736795233582786561405771'),
                           48))
     
     def test_kazantseva2012_g2(self):
@@ -151,7 +152,7 @@ class TestPairwisePkMeasure(unittest.TestCase):
         Calculate mean permuted pairwise Pk on Group 2 from the dataset
         collected in [KazantsevaSzpakowicz2012]_.
         '''
-        self.assertEqual(pairwise_pk(KAZANTSEVA2012_G2,
+        self.assertAlmostEquals(pairwise_pk(KAZANTSEVA2012_G2,
                                      convert_from_masses=True),
                          (Decimal('0.2882256923776327507173609771'),
                           Decimal('0.1454395656787966169084191445'),
@@ -164,7 +165,7 @@ class TestPairwisePkMeasure(unittest.TestCase):
         Calculate mean permuted pairwise Pk on a theoretical dataset
         containing large disagreement.
         '''
-        self.assertEqual(pairwise_pk(LARGE_DISAGREEMENT,
+        self.assertAlmostEquals(pairwise_pk(LARGE_DISAGREEMENT,
                                      convert_from_masses=True),
                          (1.0,
                           0.0,
@@ -177,7 +178,7 @@ class TestPairwisePkMeasure(unittest.TestCase):
         Calculate mean permuted pairwise Pk on a theoretical dataset
         containing complete agreement.
         '''
-        self.assertEqual(pairwise_pk(COMPLETE_AGREEMENT,
+        self.assertAlmostEquals(pairwise_pk(COMPLETE_AGREEMENT,
                                      convert_from_masses=True),
                          (0.0,
                           0.0,
