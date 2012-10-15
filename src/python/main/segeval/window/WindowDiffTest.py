@@ -35,6 +35,7 @@ from .WindowDiff import window_diff, pairwise_window_diff
 from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
 from ..Utils import AlmostTestCase
+from .. import DECIMAL_PLACES
 
 
 class TestWindowDiff(unittest.TestCase):
@@ -142,6 +143,17 @@ class TestWindowDiff(unittest.TestCase):
         self.assertAlmostEqual(window_diff(b,a),
                          Decimal('0.1818181818181818181818181818'))
     
+    def test_thesis_all_and_none(self):
+        '''
+        Test paper example A vs B
+        '''
+        reference = [11]
+        hypothesis = [1,1,1,1,1,1,1,1,1,1,1]
+        # Test normal
+        actual = window_diff(hypothesis, reference, convert_from_masses=True,
+                             lamprier_et_al_2007_fix=False)
+        self.assertAlmostEqual(0.8, float(actual))
+    
     def test_scaiano_paper_b(self):
         '''
         Test paper example A vs B
@@ -155,7 +167,7 @@ class TestWindowDiff(unittest.TestCase):
         # Test fix
         actual = window_diff(hyp_b, reference, convert_from_masses=True,
                              lamprier_et_al_2007_fix=True)
-        self.assertAlmostEqual(3.0/9.0, float(actual))
+        self.assertAlmostEqual(0.2, float(actual))
     
     def test_scaiano_paper_c(self):
         '''
@@ -170,7 +182,7 @@ class TestWindowDiff(unittest.TestCase):
         # Test fix
         actual = window_diff(hyp_b, reference, convert_from_masses=True,
                              lamprier_et_al_2007_fix=True)
-        self.assertAlmostEquals(2.0/9.0, float(actual))
+        self.assertAlmostEquals(0.13333333, float(actual))
     
     def test_scaiano_paper_d(self):
         '''
@@ -185,7 +197,7 @@ class TestWindowDiff(unittest.TestCase):
         # Test fix
         actual = window_diff(hyp_b, reference, convert_from_masses=True,
                              lamprier_et_al_2007_fix=True)
-        self.assertAlmostEquals(3.0/9.0, float(actual))
+        self.assertAlmostEquals(0.2, float(actual))
     
     def test_scaiano_paper_e(self):
         '''
@@ -200,7 +212,7 @@ class TestWindowDiff(unittest.TestCase):
         # Test fix
         actual = window_diff(hyp_b, reference, convert_from_masses=True,
                              lamprier_et_al_2007_fix=True)
-        self.assertAlmostEquals(5.0/9.0, float(actual))
+        self.assertAlmostEquals(0.3333333, float(actual))
 
 
 class TestPairwiseWindowDiff(AlmostTestCase):
@@ -220,17 +232,24 @@ class TestPairwiseWindowDiff(AlmostTestCase):
                           Decimal('0.1532459549229588475788075613'),
                           Decimal('0.02348432270024953505176294415'),
                           Decimal('0.02211914833174788657143879197'),
-                          48)
-
-)
+                          48))
         self.assertAlmostEquals(pairwise_window_diff(KAZANTSEVA2012_G5,
                                               lamprier_et_al_2007_fix=True),
-                         (Decimal('0.5050519674147423890139467544'),
-                          Decimal('0.2083536565181746643262726936'),
-                          Decimal('0.04341124618449350778640836788'),
-                          Decimal('0.03007325991935274181082342604'),
-                          48)
-)
+                         (Decimal('0.4055388183445663901030162627'),
+                          Decimal('0.1535312887745595141383548652'),
+                          Decimal('0.02357185663277718427657410625'),
+                          Decimal('0.02216033272575552596355980618'),
+                          48))
+    def test_pair_g5(self):
+        '''
+        Test a comparison that is troublesome when using lamprier_et_al_2007_fix 
+        '''
+        # pylint: disable=C0103
+        wd = window_diff(hypothesis_positions=KAZANTSEVA2012_G5['ch4']['an2'],
+                         reference_positions=KAZANTSEVA2012_G5['ch4']['an1'],
+                         lamprier_et_al_2007_fix=True,
+                         convert_from_masses=True)
+        self.assertAlmostEqual(0.77777, float(wd), DECIMAL_PLACES)
     
     def test_kazantseva2012_g2(self):
         '''
@@ -246,10 +265,10 @@ class TestPairwiseWindowDiff(AlmostTestCase):
                           120))
         self.assertAlmostEquals(pairwise_window_diff(KAZANTSEVA2012_G2,
                                               lamprier_et_al_2007_fix=True),
-                         (Decimal('0.3510380674724445543899241432'),
-                          Decimal('0.1660721071574854077325131729'),
-                          Decimal('0.02757994477572731599258676371'),
-                          Decimal('0.01516023987709498502329933401'),
+                         (Decimal('0.2817926783930319582863530541'),
+                          Decimal('0.1120719500838827897623106274'),
+                          Decimal('0.01256012199560431564724069945'),
+                          Decimal('0.01023072252075593292472079776'),
                           120))
     
     def test_large_disagreement(self):
@@ -264,14 +283,6 @@ class TestPairwiseWindowDiff(AlmostTestCase):
                          Decimal('0.02179750676003117367307268181'),
                          Decimal('0.05219854734572502170997494041'),
                          8))
-                         
-        self.assertAlmostEquals(pairwise_window_diff(LARGE_DISAGREEMENT,
-                                              lamprier_et_al_2007_fix=True),
-                          (1.0,
-                           0.0,
-                           0.0,
-                           0.0,
-                           8))
     
     def test_complete_agreement(self):
         '''

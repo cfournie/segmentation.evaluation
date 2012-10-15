@@ -35,7 +35,8 @@ counting at the beginning and end of segmentations provided by
 from decimal import Decimal
 from . import compute_window_size, parser_one_minus_support
 from .. import SegmentationMetricError, compute_pairwise, \
-    convert_masses_to_positions, compute_pairwise_values, create_tsv_rows
+    convert_masses_to_positions, compute_pairwise_values, create_tsv_rows, \
+    convert_positions_to_masses
 from ..data import load_file
 from ..data.TSV import write_tsv
 from ..data.Display import render_mean_values, render_mean_micro_values, \
@@ -129,7 +130,7 @@ length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
         if len(window) != window_size + 1:
             raise SegmentationMetricError('Incorrect actual window size.')
         # For pair in window
-        for j in xrange(0, len(window)-1):
+        for j in xrange(0, len(window) - 1):
             ref_part, hyp_part = zip(*window[j:j+2])
             # Boundary exists in the reference segmentation
             if ref_part[0] != ref_part[1]:
@@ -141,16 +142,20 @@ length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
         if ref_boundaries != hyp_boundaries:
             sum_differences += 1
     # Perform final division
-    n = len(reference_positions)
-    win_diff = Decimal(sum_differences) / (n - window_size)
+    n = sum(convert_positions_to_masses(reference_positions))
+    denominator = n - window_size
+    if lamprier_et_al_2007_fix:
+        denominator = measurements + 1
+    win_diff = Decimal(sum_differences) / denominator
+    # Check normalization
+    if denominator != (measurements + 1) and not lamprier_et_al_2007_fix:
+        raise SegmentationMetricError('Normalization mismatch.')
+    # Check value
     if win_diff > 1:
-        if lamprier_et_al_2007_fix:
-            win_diff = Decimal('1.0')
-        else:
-            raise SegmentationMetricError('Incorrect value calculated.')
+        raise SegmentationMetricError('Incorrect value calculated: WD > 1')
     if not one_minus:
         if return_parts:
-            return sum_differences, n - window_size
+            return sum_differences, denominator
         else:
             return win_diff
     else:
