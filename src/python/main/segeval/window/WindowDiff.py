@@ -121,7 +121,7 @@ length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
                                          lamprier_et_al_2007_fix)[0]
     # Slide window over and sum the number of varying windows
     sum_differences = 0
-    measurements = len(units_ref_hyp) - (window_size + 1)
+    measurements = len(units_ref_hyp) - window_size
     for i in xrange(0, measurements):
         window = units_ref_hyp[i: i + window_size + 1]
         ref_boundaries = 0
@@ -148,7 +148,7 @@ length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
         denominator = measurements + 1
     win_diff = Decimal(sum_differences) / denominator
     # Check normalization
-    if denominator != (measurements + 1) and not lamprier_et_al_2007_fix:
+    if denominator != measurements and not lamprier_et_al_2007_fix:
         raise SegmentationMetricError('Normalization mismatch.')
     # Check value
     if win_diff > 1:

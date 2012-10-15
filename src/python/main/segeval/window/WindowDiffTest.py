@@ -63,7 +63,7 @@ class TestWindowDiff(unittest.TestCase):
         self.assertAlmostEqual(window_diff(a,b),
                          Decimal('0.3636363636363636363636363636'))
         self.assertAlmostEqual(window_diff(b,a),
-                         Decimal('0.8333333333333333333333333333'))
+                         Decimal('1'))
 
     def test_all_boundaries(self):
         '''
@@ -74,9 +74,9 @@ class TestWindowDiff(unittest.TestCase):
         a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         self.assertAlmostEqual(window_diff(a,b),
-                         Decimal('0.9090909090909090909090909091'))
+                         Decimal('1.0'))
         self.assertAlmostEqual(window_diff(b,a),
-                         Decimal('0.75'))
+                         Decimal('0.8333333'))
 
     def test_all_and_no_boundaries(self):
         '''
@@ -85,8 +85,8 @@ class TestWindowDiff(unittest.TestCase):
         # pylint: disable=C0324,C0103
         a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
         b = [1,1,1,1,1,1,1,1,1,1,1,1,1]
-        self.assertAlmostEqual(window_diff(a,b), Decimal('0.83333333333333333'))
-        self.assertAlmostEqual(window_diff(b,a), Decimal('0.91666666666666666'))
+        self.assertAlmostEqual(window_diff(a,b), Decimal('1'))
+        self.assertAlmostEqual(window_diff(b,a), Decimal('1'))
 
     def test_translated_boundary(self):
         '''
@@ -152,7 +152,7 @@ class TestWindowDiff(unittest.TestCase):
         # Test normal
         actual = window_diff(hypothesis, reference, convert_from_masses=True,
                              lamprier_et_al_2007_fix=False)
-        self.assertAlmostEqual(0.8, float(actual))
+        self.assertAlmostEqual(1.0, float(actual))
     
     def test_scaiano_paper_b(self):
         '''
@@ -164,10 +164,6 @@ class TestWindowDiff(unittest.TestCase):
         actual = window_diff(hyp_b, reference, convert_from_masses=True,
                              lamprier_et_al_2007_fix=False)
         self.assertAlmostEqual(3.0/9.0, float(actual))
-        # Test fix
-        actual = window_diff(hyp_b, reference, convert_from_masses=True,
-                             lamprier_et_al_2007_fix=True)
-        self.assertAlmostEqual(0.2, float(actual))
     
     def test_scaiano_paper_c(self):
         '''
@@ -179,10 +175,6 @@ class TestWindowDiff(unittest.TestCase):
         actual = window_diff(hyp_b, reference, convert_from_masses=True,
                              lamprier_et_al_2007_fix=False)
         self.assertAlmostEquals(2.0/9.0, float(actual))
-        # Test fix
-        actual = window_diff(hyp_b, reference, convert_from_masses=True,
-                             lamprier_et_al_2007_fix=True)
-        self.assertAlmostEquals(0.13333333, float(actual))
     
     def test_scaiano_paper_d(self):
         '''
@@ -194,10 +186,6 @@ class TestWindowDiff(unittest.TestCase):
         actual = window_diff(hyp_b, reference, convert_from_masses=True,
                              lamprier_et_al_2007_fix=False)
         self.assertAlmostEquals(1.0/9.0, float(actual))
-        # Test fix
-        actual = window_diff(hyp_b, reference, convert_from_masses=True,
-                             lamprier_et_al_2007_fix=True)
-        self.assertAlmostEquals(0.2, float(actual))
     
     def test_scaiano_paper_e(self):
         '''
@@ -209,10 +197,6 @@ class TestWindowDiff(unittest.TestCase):
         actual = window_diff(hyp_b, reference, convert_from_masses=True,
                              lamprier_et_al_2007_fix=False)
         self.assertAlmostEquals(5.0/9.0, float(actual))
-        # Test fix
-        actual = window_diff(hyp_b, reference, convert_from_masses=True,
-                             lamprier_et_al_2007_fix=True)
-        self.assertAlmostEquals(0.3333333, float(actual))
 
 
 class TestPairwiseWindowDiff(AlmostTestCase):
@@ -228,17 +212,17 @@ class TestPairwiseWindowDiff(AlmostTestCase):
         '''
         self.assertAlmostEquals(pairwise_window_diff(KAZANTSEVA2012_G5,
                                               lamprier_et_al_2007_fix=False),
-                         (Decimal('0.39074292557364606400383060'),
-                          Decimal('0.1532459549229588475788075613'),
-                          Decimal('0.02348432270024953505176294415'),
-                          Decimal('0.02211914833174788657143879197'),
+                         (Decimal('0.4215197218221608460881561408'),
+                          Decimal('0.1522881979827439906255778603'),
+                          Decimal('0.02319169524483143085569405996'),
+                          Decimal('0.02198090802493506657850232356'),
                           48))
         self.assertAlmostEquals(pairwise_window_diff(KAZANTSEVA2012_G5,
                                               lamprier_et_al_2007_fix=True),
-                         (Decimal('0.4055388183445663901030162627'),
-                          Decimal('0.1535312887745595141383548652'),
-                          Decimal('0.02357185663277718427657410625'),
-                          Decimal('0.02216033272575552596355980618'),
+                         (Decimal('0.3952110599948305983597918327'),
+                          Decimal('0.1523051777509460032954989660'),
+                          Decimal('0.02319686716974725746264700652'),
+                          Decimal('0.02198335884337061894421403691'),
                           48))
     def test_pair_g5(self):
         '''
@@ -249,7 +233,7 @@ class TestPairwiseWindowDiff(AlmostTestCase):
                          reference_positions=KAZANTSEVA2012_G5['ch4']['an1'],
                          lamprier_et_al_2007_fix=True,
                          convert_from_masses=True)
-        self.assertAlmostEqual(0.77777, float(wd), DECIMAL_PLACES)
+        self.assertAlmostEqual(0.76363636, float(wd), DECIMAL_PLACES)
     
     def test_kazantseva2012_g2(self):
         '''
@@ -258,17 +242,17 @@ class TestPairwiseWindowDiff(AlmostTestCase):
         '''
         self.assertAlmostEquals(pairwise_window_diff(KAZANTSEVA2012_G2,
                                               lamprier_et_al_2007_fix=False),
-                         (Decimal('0.3127768830224693'),
-                          Decimal('0.1476337375818111'),
-                          Decimal('0.02179572047237506'),
-                          Decimal('0.013477054720392689'),
+                         (Decimal('0.3257163091933661553914718469'),
+                          Decimal('0.1586420969856167116081811670'),
+                          Decimal('0.02516731493599381893573908435'),
+                          Decimal('0.01448197584815743151147537110'),
                           120))
         self.assertAlmostEquals(pairwise_window_diff(KAZANTSEVA2012_G2,
                                               lamprier_et_al_2007_fix=True),
-                         (Decimal('0.2817926783930319582863530541'),
-                          Decimal('0.1120719500838827897623106274'),
-                          Decimal('0.01256012199560431564724069945'),
-                          Decimal('0.01023072252075593292472079776'),
+                         (Decimal('0.2745037663246318112728760428'),
+                          Decimal('0.1093940158628282748721971010'),
+                          Decimal('0.01196705070659672423205913742'),
+                          Decimal('0.009986261690691502298962284136'),
                           120))
     
     def test_large_disagreement(self):
@@ -278,10 +262,10 @@ class TestPairwiseWindowDiff(AlmostTestCase):
         '''
         self.assertAlmostEquals(pairwise_window_diff(LARGE_DISAGREEMENT,
                                               lamprier_et_al_2007_fix=False),
-                        (Decimal('0.8459729214944234199689912141'),
-                         Decimal('0.1476397871849968959886430556'),
-                         Decimal('0.02179750676003117367307268181'),
-                         Decimal('0.05219854734572502170997494041'),
+                        (Decimal('1'),
+                         Decimal('0'),
+                         Decimal('0'),
+                         Decimal('0'),
                          8))
     
     def test_complete_agreement(self):
