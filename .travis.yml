@@ -10,3 +10,4 @@ install:
     - python src/python/main/setup.py install
 
 script: python -m unittest segeval
+
