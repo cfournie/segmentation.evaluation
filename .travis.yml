@@ -1,0 +1,12 @@
+language: python
+python:
+  - "2.7"
+
+notifications:
+  email:
+    - chris.m.fournier@gmail.com
+
+install:
+    - python src/python/main/setup.py install
+
+script: python -m unittest segeval
