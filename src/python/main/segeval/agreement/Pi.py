@@ -1,23 +1,8 @@
 '''
-This module contains implementations of Scott's and Fleiss' Pi, adapted in
-[FournierInkpen2012]_ for segmentation (in as similar a manner as [Hearst1997]_)
-using the formulation of Kappa provided in [ArtsteinPoesio2008]_.
+Inter-coder agreement statistic Fleiss' Pi.
 
-Pi's general form could be described, as it is in [ArtsteinPoesio2008]_, in 
-terms of actual agreement (:math:`\\text{A}_a`) and expected agreement 
-(:math:`\\text{A}_e`) as:
-
-.. math::
-    \pi,\pi^* = \\frac{\\text{A}_a-\\text{A}_e}{1 \
-    - \\text{A}_e}
-
-:math:`\pi` represents Scott's Pi (for 2 coders), whereas :math:`\pi^*`
-represents its generalization to more than 2 coders.  Each metric calculates
-:math:`\\text{A}_a` using :func:`segeval.agreement.actual_agreement` and
-only varies the calculation of :math:`\\text{A}_e`.
-
-
-.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+@author: Chris Fournier
+@contact: chris.m.fournier@gmail.com
 '''
 #===============================================================================
 # Copyright (c) 2011-2012, Chris Fournier
@@ -46,14 +31,15 @@ only varies the calculation of :math:`\\text{A}_e`.
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #===============================================================================
 from decimal import Decimal
-from . import actual_agreement
 from .. import compute_multiple_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
 from ..data.Display import render_agreement_coefficients
+from . import actual_agreement_linear, DEFAULT_T_N
+from ..similarity.Linear import boundary_similarity
 
 
-def scotts_pi(items_masses, return_parts=False):
+def scotts_pi_linear(items_masses, return_parts=False, t_n=DEFAULT_T_N):
     '''
     Calculates Scott's Pi, originally proposed in [Scott1955]_, for
     segmentations.  Adapted in [FournierInkpen2012]_ from the formulations
@@ -95,10 +81,11 @@ def scotts_pi(items_masses, return_parts=False):
             if len(coder_segs.values()) != num_items]) > 0:
         raise Exception('Unequal number of items contained.')
     # Return
-    return fleiss_pi(items_masses, return_parts)
+    return fleiss_pi_linear(items_masses, return_parts, t_n)
 
 
-def fleiss_pi(items_masses, return_parts=False):
+def fleiss_pi_linear(items_masses, fnc_compare=boundary_similarity,
+                     return_parts=False, t_n=DEFAULT_T_N):
     '''
     Calculates Fleiss' Pi (or multi-Pi), originally proposed in [Fleiss1971]_,
     for segmentations (and described in [SiegelCastellan1988]_ as K).
@@ -130,22 +117,22 @@ def fleiss_pi(items_masses, return_parts=False):
             if len(coder_segs.values()) != num_items]) > 0:
         raise Exception('Unequal number of items contained.')
     # Initialize totals
-    unmoved_masses, total_masses, coders_boundaries_totalboundaries = \
-        actual_agreement(items_masses)
+    all_numerators, all_denominators, _, coders_boundaries = \
+        actual_agreement_linear(items_masses, fnc_compare=fnc_compare, t_n=t_n)
     # Calculate Aa
-    A_a = Decimal(sum(unmoved_masses)) / sum(total_masses)
+    A_a = Decimal(sum(all_numerators)) / sum(all_denominators)
     # Calculate Ae
     p_e_segs = list()
-    for boundaries_info in coders_boundaries_totalboundaries.values():
+    for boundaries_info in coders_boundaries.values():
         for item in boundaries_info:
             boundaries, total_boundaries = item
-            p_e_seg = boundaries / total_boundaries
+            p_e_seg = Decimal(boundaries) / total_boundaries
             p_e_segs.append(p_e_seg)
     # Calculate P_e_seg
     P_e_seg = Decimal(sum(p_e_segs)) / len(p_e_segs)
     A_e = (P_e_seg ** 2)
     # Calculate pi
-    pi = (A_a - A_e) / (Decimal('1.0') - A_e)
+    pi = (A_a - A_e) / (Decimal('1') - A_e)
     # Return
     if return_parts:
         return A_a, A_e
@@ -153,8 +140,9 @@ def fleiss_pi(items_masses, return_parts=False):
         return pi
 
 
-OUTPUT_NAME     = 'S-based Fleiss\' Multi Pi coefficient'
-SHORT_NAME      = 'Pi*_s'
+
+OUTPUT_NAME     = 'B-based Fleiss\' Multi Pi coefficient'
+SHORT_NAME      = 'Pi*_B'
 
 
 def values_pi(dataset_masses):
@@ -162,7 +150,7 @@ def values_pi(dataset_masses):
     Produces a TSV for this metric
     '''
     header = list([SHORT_NAME])
-    values = compute_multiple_values(dataset_masses, fleiss_pi)
+    values = compute_multiple_values(dataset_masses, fleiss_pi_linear)
     return create_tsv_rows(header, values)
 
 
@@ -181,7 +169,7 @@ def parse(args):
         write_tsv(output_file, header, rows)
     else:
         # Create a string to output and render for one or more items
-        pis = compute_multiple_values(values, fleiss_pi)
+        pis = compute_multiple_values(values, fleiss_pi_linear)
         output = render_agreement_coefficients(SHORT_NAME, pis)
     # Return
     return output
@@ -196,4 +184,3 @@ def create_parser(subparsers):
                                    help=OUTPUT_NAME)
     parser_add_file_support(parser)
     parser.set_defaults(func=parse)
-

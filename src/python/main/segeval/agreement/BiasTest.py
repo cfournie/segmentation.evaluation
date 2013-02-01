@@ -31,7 +31,7 @@ Tests the segmentation version of Arstein and Poesio's bias.
 #===============================================================================
 import unittest
 from decimal import Decimal
-from .Bias import artstein_poesio_bias
+from .Bias import artstein_poesio_bias_linear
 from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT
 
@@ -46,7 +46,7 @@ class TestBias(unittest.TestCase):
         '''
         Test bias upon Group 5 of Kazantseva (2012) data.
         '''
-        bias = artstein_poesio_bias(KAZANTSEVA2012_G5)
+        bias = artstein_poesio_bias_linear(KAZANTSEVA2012_G5)
         self.assertTrue(bias > 0)
         self.assertEqual(bias,
                          Decimal('0.00841453429829254475759269324'))
@@ -57,7 +57,7 @@ class TestBias(unittest.TestCase):
         '''
         data = KAZANTSEVA2012_G5['ch1']
         data = {'ch1' : data}
-        bias = artstein_poesio_bias(data)
+        bias = artstein_poesio_bias_linear(data)
         self.assertTrue(bias > 0)
         self.assertEqual(bias,
                          Decimal('0.00390625000000000000000000011'))
@@ -66,7 +66,7 @@ class TestBias(unittest.TestCase):
         '''
         Test bias upon Group 2 of Kazantseva (2012) data.
         '''
-        bias = artstein_poesio_bias(KAZANTSEVA2012_G2)
+        bias = artstein_poesio_bias_linear(KAZANTSEVA2012_G2)
         self.assertTrue(bias > 0)
         self.assertEqual(bias,
                          Decimal('0.00821695210923559041105482425'))
@@ -77,7 +77,7 @@ class TestBias(unittest.TestCase):
         '''
         data = KAZANTSEVA2012_G2['ch2']
         data = {'ch2' : data}
-        bias = artstein_poesio_bias(data)
+        bias = artstein_poesio_bias_linear(data)
         self.assertTrue(bias > 0)
         self.assertEqual(bias,
                          Decimal('0.00090702947845804988662131528'))
@@ -86,7 +86,7 @@ class TestBias(unittest.TestCase):
         '''
         Test bias upon a hypothetical dataset containing complete agreement.
         '''
-        bias = artstein_poesio_bias(COMPLETE_AGREEMENT)
+        bias = artstein_poesio_bias_linear(COMPLETE_AGREEMENT)
         self.assertTrue(bias >= 0)
         self.assertEqual(bias,
                          Decimal('0.01455229356727327645713789012'))

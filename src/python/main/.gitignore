@@ -1,2 +1,4 @@
 MANIFEST
 build/**
+segeval.egg-info/**
+dist/**

@@ -72,6 +72,7 @@ def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
     :returns: Segmentation mass codings.
     :rtype: :func:`dict`
     '''
+    # pylint: disable=R0914
     from . import Dataset, DataIOError, name_from_filepath
     # List version of file
     header = []

@@ -49,7 +49,7 @@ References:
 #===============================================================================
 import unittest
 from decimal import Decimal
-from .Pi import scotts_pi, fleiss_pi
+from .Pi import fleiss_pi_linear
 from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
 
@@ -69,7 +69,7 @@ class TestPi(unittest.TestCase):
         if TestPi.SKIP:
             return
         # Test
-        self.assertEqual(fleiss_pi(KAZANTSEVA2012_G5),
+        self.assertEqual(fleiss_pi_linear(KAZANTSEVA2012_G5),
                          Decimal('0.8182766795508965420878677699'))
 
 
@@ -80,7 +80,7 @@ class TestPi(unittest.TestCase):
         if TestPi.SKIP:
             return
         data = {'ch1' : KAZANTSEVA2012_G5['ch1']}
-        self.assertEqual(fleiss_pi(data),
+        self.assertEqual(fleiss_pi_linear(data),
                          Decimal('0.7451990632318501170960187353'))
 
 
@@ -91,7 +91,7 @@ class TestPi(unittest.TestCase):
         if TestPi.SKIP:
             return
         # Test
-        self.assertEqual(fleiss_pi(KAZANTSEVA2012_G2),
+        self.assertEqual(fleiss_pi_linear(KAZANTSEVA2012_G2),
                          Decimal('0.8856338452498481859738514723'))
 
 
@@ -103,7 +103,7 @@ class TestPi(unittest.TestCase):
             return
         data = {'ch2' : KAZANTSEVA2012_G2['ch2']}
         # Test
-        self.assertEqual(fleiss_pi(data),
+        self.assertEqual(fleiss_pi_linear(data),
                          Decimal('0.8838942307692307692307692308'))
         
 
@@ -114,7 +114,7 @@ class TestPi(unittest.TestCase):
         if TestPi.SKIP:
             return
         data = LARGE_DISAGREEMENT
-        self.assertEqual(fleiss_pi(data),
+        self.assertEqual(fleiss_pi_linear(data),
                          Decimal('-0.5757942099675148626179719687'))
 
 
@@ -127,15 +127,15 @@ class TestPi(unittest.TestCase):
             return
         data1 = {'i1': {'c1' : [2,8,2,1],
                         'c2' : [2,1,7,2,1]}}
-        pi1  = scotts_pi(data1)
-        pi1f = fleiss_pi(data1)
+        pi1  = fleiss_pi_linear(data1)
+        pi1f = fleiss_pi_linear(data1)
         self.assertEqual(pi1,
                          Decimal('0.9030303030303030303030303031'))
         self.assertEqual(pi1,pi1f)
         data2 = {'i1': {'c1' : [2, 8, 2, 1],
                         'c2' : [11, 2]}}
-        pi2  = scotts_pi(data2)
-        pi2f = fleiss_pi(data2)
+        pi2  = fleiss_pi_linear(data2)
+        pi2f = fleiss_pi_linear(data2)
         self.assertEqual(pi2,
                          Decimal('0.7333333333333333333333333333'))
         self.assertEqual(pi2,pi2f)
@@ -151,7 +151,7 @@ class TestPi(unittest.TestCase):
             return
         data_complete = {'i1': {'c1' : [2,8,2,1],
                                 'c2' : [2,8,2,1]}}
-        pi = scotts_pi(data_complete)
+        pi = fleiss_pi_linear(data_complete)
         self.assertEqual(pi, 1.0)
     
     
@@ -163,6 +163,6 @@ class TestPi(unittest.TestCase):
         if TestPi.SKIP:
             return
         data_complete = COMPLETE_AGREEMENT
-        pi = fleiss_pi(data_complete)
+        pi = fleiss_pi_linear(data_complete)
         self.assertEqual(pi, 1.0)
 

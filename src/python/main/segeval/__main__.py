@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 '''
 Console interface to the overall segeval package.
 

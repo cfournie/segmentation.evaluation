@@ -40,6 +40,7 @@ from decimal import Decimal
 from collections import Counter
 from .Math import mean, std, var, stderr
 
+__version__ = '1.2-alpha'
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                         os.sep.join(['..'] * 1)))

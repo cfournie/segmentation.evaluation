@@ -31,7 +31,7 @@ Tests the segmentation versions of Cohen's and Fleiss' Kappa.
 #===============================================================================
 import unittest
 from decimal import Decimal
-from .Kappa import cohen_kappa, fleiss_kappa
+from .Kappa import fleiss_kappa_linear
 from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
 
@@ -44,18 +44,18 @@ class TestKappa(unittest.TestCase):
     
     SKIP = False
 
-    def test_fleiss_kappa_g5(self):
+    def test_fleiss_kappa_linear_g5(self):
         '''
         Test Kappa upon Group 5 of Kazantseva (2012) data.
         '''
         if TestKappa.SKIP:
             return
         data = KAZANTSEVA2012_G5
-        self.assertEqual(fleiss_kappa(data),
+        self.assertEqual(fleiss_kappa_linear(data),
                          Decimal('0.8198449828922561273654074436'))
 
 
-    def test_fleiss_kappa_g5_ch1(self):
+    def test_fleiss_kappa_linear_g5_ch1(self):
         '''
         Test Kappa upon Group 5, Chapter 1, of Kazantseva (2012) data.
         '''
@@ -63,22 +63,22 @@ class TestKappa(unittest.TestCase):
             return
         data = KAZANTSEVA2012_G5['ch1']
         data = {'ch1' : data}
-        self.assertEqual(fleiss_kappa(data),
+        self.assertEqual(fleiss_kappa_linear(data),
                          Decimal('0.7462686567164179104477611940'))
 
 
-    def test_fleiss_kappa_g2(self):
+    def test_fleiss_kappa_linear_g2(self):
         '''
         Test Kappa upon Group 2 of Kazantseva (2012) data.
         '''
         if TestKappa.SKIP:
             return
         data = KAZANTSEVA2012_G2
-        self.assertEqual(fleiss_kappa(data),
+        self.assertEqual(fleiss_kappa_linear(data),
                          Decimal('0.8865951832180913251160770952'))
 
 
-    def test_fleiss_kappa_g2_ch2(self):
+    def test_fleiss_kappa_linear_g2_ch2(self):
         '''
         Test Kappa upon Group 2, Chapter 2, of Kazantseva (2012) data.
         '''
@@ -86,7 +86,7 @@ class TestKappa(unittest.TestCase):
             return
         data = KAZANTSEVA2012_G2['ch2']
         data = {'ch2' : data}
-        self.assertEqual(fleiss_kappa(data),
+        self.assertEqual(fleiss_kappa_linear(data),
                          Decimal('0.8840057636887608069164265130'))
         
 
@@ -97,11 +97,11 @@ class TestKappa(unittest.TestCase):
         if TestKappa.SKIP:
             return
         data = LARGE_DISAGREEMENT
-        self.assertEqual(fleiss_kappa(data),
+        self.assertEqual(fleiss_kappa_linear(data),
                          Decimal('-0.05952156715012243360331512524'))
     
     
-    def test_cohen_kappa(self):
+    def test_fleiss_kappa(self):
         '''
         Test Cohen's and Fleiss' Kappa.
         '''
@@ -109,32 +109,19 @@ class TestKappa(unittest.TestCase):
             return
         data1 = {'i1' : {'c1' : [2, 8, 2, 1],
                          'c2' : [2, 1, 7, 2, 1]}}
-        kappa1  = cohen_kappa(data1)
-        kappa1f = fleiss_kappa(data1)
+        kappa1  = fleiss_kappa_linear(data1)
+        kappa1f = fleiss_kappa_linear(data1)
         self.assertEqual(kappa1,
                          Decimal('0.9032258064516129032258064517'))
         self.assertEqual(kappa1, kappa1f)
         data2 = {'i1' : {'c1' : [2, 8, 2, 1],
                          'c2' : [11, 2]}}
-        kappa2  = cohen_kappa(data2)
-        kappa2f = fleiss_kappa(data2)
+        kappa2  = fleiss_kappa_linear(data2)
+        kappa2f = fleiss_kappa_linear(data2)
         self.assertEqual(kappa2,
                          Decimal('0.7352941176470588235294117647'))
         self.assertEqual(kappa2, kappa2f)
         self.assertTrue(kappa2 < kappa1)
-    
-    
-    def test_cohen_kappa_complete(self):
-        '''
-        Test Kappa upon a hypothetical dataset containing complete agreement.
-        '''
-        if TestKappa.SKIP:
-            return
-        # pylint: disable=C0324
-        data_complete = {'i1' : {'c1' : [2,8,2,1],
-                                 'c2' : [2,8,2,1]}}
-        kappa = cohen_kappa(data_complete)
-        self.assertEqual(kappa, 1.0)
     
     
     def test_fleiss_kappa_complete(self):
@@ -144,6 +131,6 @@ class TestKappa(unittest.TestCase):
         if TestKappa.SKIP:
             return
         data_complete = COMPLETE_AGREEMENT
-        kappa = fleiss_kappa(data_complete)
+        kappa = fleiss_kappa_linear(data_complete)
         self.assertEqual(kappa, 1.0)
 
