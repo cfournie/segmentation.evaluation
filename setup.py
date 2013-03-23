@@ -33,7 +33,7 @@ packages=['segeval',
 setup(
     name='segeval',
     version=__version__,
-    long_description=open("./README", "r").read(),
+    long_description=open("./README.rst", "r").read(),
     description='A package and utilities providing a variety of discourse segmentation evaluation metrics',
     license=open('LICENSE').read(),
     author='Chris Fournier',

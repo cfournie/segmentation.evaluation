@@ -1,47 +1,19 @@
 '''
 Inter-coder agreement statistic Fleiss' Kappa.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-#===============================================================================
-# Copyright (c) 2011-2012, Chris Fournier
-# All rights reserved.
-# 
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#     * Redistributions of source code must retain the above copyright
-#       notice, this list of conditions and the following disclaimer.
-#     * Redistributions in binary form must reproduce the above copyright
-#       notice, this list of conditions and the following disclaimer in the
-#       documentation and/or other materials provided with the distribution.
-#     * Neither the name of the author nor the names of its contributors may
-#       be used to endorse or promote products derived from this software
-#       without specific prior written permission.
-#       
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#===============================================================================
 from decimal import Decimal
-from . import actual_agreement
+from . import actual_agreement_linear, DEFAULT_N_T
 from .. import compute_multiple_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
 from ..data.Display import render_agreement_coefficients
-from . import actual_agreement_linear, DEFAULT_T_N
 from ..similarity.Linear import boundary_similarity
 
 
 def fleiss_kappa_linear(dataset, fnc_compare=boundary_similarity,
-                        return_parts=False, t_n=DEFAULT_T_N):
+                        return_parts=False, n_t=DEFAULT_N_T):
     '''
     Calculates Fleiss' Kappa (or multi-Kappa), originally proposed in
     [DaviesFleiss1982]_, for segmentations.  Adapted in [FournierInkpen2012]_ 
@@ -81,7 +53,7 @@ def fleiss_kappa_linear(dataset, fnc_compare=boundary_similarity,
         raise Exception('Unequal number of items contained.')
     # Initialize totals
     all_numerators, all_denominators, _, coders_boundaries = \
-            actual_agreement_linear(dataset, fnc_compare=fnc_compare, t_n=t_n)
+            actual_agreement_linear(dataset, fnc_compare=fnc_compare, n_t=n_t)
     # Calculate Aa
     A_a = Decimal(sum(all_numerators)) / sum(all_denominators)
     # Calculate Ae
@@ -118,7 +90,7 @@ def values_kappa(dataset_masses):
     Produces a TSV for this metric
     '''
     header = list([SHORT_NAME])
-    values = compute_multiple_values(dataset_masses, fleiss_kappa)
+    values = compute_multiple_values(dataset_masses, fleiss_kappa_linear)
     return create_tsv_rows(header, values)
 
 
@@ -136,7 +108,7 @@ def parse(args):
         write_tsv(output_file, header, rows)
     else:
         # Create a string to output and render for one or more items
-        kappas = compute_multiple_values(values, fleiss_kappa)
+        kappas = compute_multiple_values(values, fleiss_kappa_linear)
         output = render_agreement_coefficients(SHORT_NAME, kappas)
     # Return
     return output

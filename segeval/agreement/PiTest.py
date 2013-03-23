@@ -18,35 +18,8 @@ References:
     Joseph L. Fleiss. 1971. Measuring nominal scale agreement among many raters.
     Psychological Bulletin, 76(5):378-382.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-#===============================================================================
-# Copyright (c) 2011-2012, Chris Fournier
-# All rights reserved.
-# 
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#     * Redistributions of source code must retain the above copyright
-#       notice, this list of conditions and the following disclaimer.
-#     * Redistributions in binary form must reproduce the above copyright
-#       notice, this list of conditions and the following disclaimer in the
-#       documentation and/or other materials provided with the distribution.
-#     * Neither the name of the author nor the names of its contributors may
-#       be used to endorse or promote products derived from this software
-#       without specific prior written permission.
-#       
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#===============================================================================
 import unittest
 from decimal import Decimal
 from .Pi import fleiss_pi_linear
@@ -70,7 +43,7 @@ class TestPi(unittest.TestCase):
             return
         # Test
         self.assertEqual(fleiss_pi_linear(KAZANTSEVA2012_G5),
-                         Decimal('0.8182766795508965420878677699'))
+                         Decimal('0.2307643892167668335086819753'))
 
 
     def test_fliess_pi_g5_ch1(self):
@@ -81,7 +54,7 @@ class TestPi(unittest.TestCase):
             return
         data = {'ch1' : KAZANTSEVA2012_G5['ch1']}
         self.assertEqual(fleiss_pi_linear(data),
-                         Decimal('0.7451990632318501170960187353'))
+                         Decimal('0.1906323185011709601873536298'))
 
 
     def test_fleiss_pi_g2(self):
@@ -92,7 +65,7 @@ class TestPi(unittest.TestCase):
             return
         # Test
         self.assertEqual(fleiss_pi_linear(KAZANTSEVA2012_G2),
-                         Decimal('0.8856338452498481859738514723'))
+                         Decimal('0.4018239928733601859131343866'))
 
 
     def test_fleiss_pi_g2_ch2(self):
@@ -104,7 +77,7 @@ class TestPi(unittest.TestCase):
         data = {'ch2' : KAZANTSEVA2012_G2['ch2']}
         # Test
         self.assertEqual(fleiss_pi_linear(data),
-                         Decimal('0.8838942307692307692307692308'))
+                         Decimal('0.5192587209302325581395348837'))
         
 
     def test_fleiss_pi_large_disagree(self):
@@ -130,14 +103,14 @@ class TestPi(unittest.TestCase):
         pi1  = fleiss_pi_linear(data1)
         pi1f = fleiss_pi_linear(data1)
         self.assertEqual(pi1,
-                         Decimal('0.9030303030303030303030303031'))
+                         Decimal('0.7090909090909090909090909091'))
         self.assertEqual(pi1,pi1f)
         data2 = {'i1': {'c1' : [2, 8, 2, 1],
                         'c2' : [11, 2]}}
         pi2  = fleiss_pi_linear(data2)
         pi2f = fleiss_pi_linear(data2)
         self.assertEqual(pi2,
-                         Decimal('0.7333333333333333333333333333'))
+                         Decimal('0.1111111111111111111111111111'))
         self.assertEqual(pi2,pi2f)
         self.assertTrue(pi2 < pi1)
     

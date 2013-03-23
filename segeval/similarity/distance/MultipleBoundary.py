@@ -1,49 +1,29 @@
 '''
 Multiple-boundary edit distance.
 
-.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-#===============================================================================
-# Copyright (c) 2011-2012, Chris Fournier
-# All rights reserved.
-# 
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#     * Redistributions of source code must retain the above copyright
-#       notice, this list of conditions and the following disclaimer.
-#     * Redistributions in binary form must reproduce the above copyright
-#       notice, this list of conditions and the following disclaimer in the
-#       documentation and/or other materials provided with the distribution.
-#     * Neither the name of the author nor the names of its contributors may
-#       be used to endorse or promote products derived from this software
-#       without specific prior written permission.
-#       
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#===============================================================================
 from itertools import permutations
 
+
+# Addition/deletion tuple indices
 A_TYPE = 0
 A_SIDE = 1 # a = from a, b = from b
 
+# Substitution tuple indices
 S_TYPE1 = 0
 S_TYPE2 = 1
 
+# n-wise transposition tuple indices
 T_POS1 = 0
 T_POS2 = 1
 T_TYPE = 2
 
+
 def boundary_string_from_masses(segment_masses):
     '''
-    Creates a "boundary string", or sequence of boundary type sets.
+    Creates a "boundary string", or sequence of boundary type sets from a
+    sequence of boundary masses.
     
     :param segment_masses: Segmentation masses.
     :type segment_masses:  list
@@ -226,14 +206,14 @@ def __optional_set_edits__(boundary_string_a, boundary_string_b):
     return options_set
 
 
-def __boundary_edit_distance__(boundary_string_a, boundary_string_b, n):
+def __boundary_edit_distance__(boundary_string_a, boundary_string_b, n_t):
     '''
     Identify the minimum set of additions, substitutions, and transpositions
     that could be applied between two boundary strings for a given set
-    of transpositions spanning lengths 'n'.
+    of transpositions spanning lengths 'n_t'.
     
-    :param n: transposition spanning sizes allowed
-    :type n:  list or set
+    :param t_n: transposition spanning sizes allowed
+    :type t_n:  list or set
     
     '''
     # pylint: disable=C0103
@@ -243,7 +223,7 @@ def __boundary_edit_distance__(boundary_string_a, boundary_string_b, n):
                                          boundary_string_b)
     # Find transpositions
     transpositions = __transpositions__(boundary_string_a,
-                                        boundary_string_b, n, options_set)
+                                        boundary_string_b, n_t, options_set)
     # Construct additions and substitions
     additions     = list()
     substitutions = list()
@@ -256,11 +236,14 @@ def __boundary_edit_distance__(boundary_string_a, boundary_string_b, n):
     return additions, substitutions, transpositions
     
 
-def boundary_edit_distance(boundary_string_a, boundary_string_b, n=2):
+def boundary_edit_distance(boundary_string_a, boundary_string_b, n_t=2):
     '''
-    Convenience function to create spanning lengths given a maximum 'n'.
+    Convenience function to create spanning lengths given a maximum 'n_t'.
     '''
     # pylint: disable=C0103
-    n = range(2, n + 1)
-    return __boundary_edit_distance__(boundary_string_a, boundary_string_b, n)
+    try:
+        n_t = range(2, n_t + 1)
+    except:
+        pass
+    return __boundary_edit_distance__(boundary_string_a, boundary_string_b, n_t)
 

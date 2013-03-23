@@ -1,7 +1,7 @@
 '''
 Created on Sep 4, 2012
 
-@author: cfournie
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from decimal import Decimal
 from .distance.MultipleBoundary import boundary_edit_distance
@@ -86,36 +86,40 @@ def weight_t_scale(transpositions, max_n):
 
 
 DEFAULT_PERMUTED = False
-DEFAULT_N = 2
+DEFAULT_N_T = 2
 DEFAULT_BOUNDARY_TYPES = set([1])
-DEFAULT_WEIGHT = (weight_a, weight_s, weight_t)
+DEFAULT_WEIGHT = (weight_a, weight_s_scale, weight_t_scale)
 DEFAULT_CONVERT_TO_BOUNDARY_STRINGS = True
-
-DEFAULT_BS_N = 5
-DEFAULT_BS_WEIGHT = (weight_a, weight_s_scale, weight_t_scale)
 
 
 def __boundary_similarity__(segs_a, segs_b,
                             boundary_types=DEFAULT_BOUNDARY_TYPES,
-                            n=DEFAULT_BS_N, weight=DEFAULT_BS_WEIGHT,
+                            n_t=DEFAULT_N_T, weight=DEFAULT_WEIGHT,
                             convert_to_boundary_strings=\
                                 DEFAULT_CONVERT_TO_BOUNDARY_STRINGS):
     '''
     Compute boundary similarity applying the weighting functions specified.
     '''
     # pylint: disable=C0103,R0913,R0914
-    # Compute similarity
-    pbs, count_edits, additions, substitutions, transpositions = \
-        similarity(segs_a, segs_b, boundary_types=boundary_types, n=n,
-                   weight=weight,
-                   convert_to_boundary_strings=convert_to_boundary_strings,
-                   return_values=True)
     # Count boundaries
     bs_a = segs_a
     bs_b = segs_b
     if convert_to_boundary_strings:
         bs_a = boundary_string_from_masses(segs_a)
         bs_b = boundary_string_from_masses(segs_b)
+    # Compute edits
+    additions, substitutions, transpositions = \
+        boundary_edit_distance(bs_a, bs_b, n_t=n_t)
+    # Calculate the total pbs
+    pbs = len(bs_b) * len(boundary_types)
+    # Apply weighting functions
+    fnc_weight_a, fnc_weight_s, fnc_weight_t = weight
+    count_additions      = fnc_weight_a(additions)
+    count_substitutions  = fnc_weight_s(substitutions,
+                                        max(boundary_types),
+                                        min(boundary_types))
+    count_transpositions = fnc_weight_t(transpositions, n_t)
+    count_edits = count_additions + count_substitutions + count_transpositions
     # Compute
     full_misses = 0
     boundaries_all = 0
@@ -130,7 +134,7 @@ def __boundary_similarity__(segs_a, segs_b,
 
 def boundary_similarity(segs_a, segs_b,
                         boundary_types=DEFAULT_BOUNDARY_TYPES,
-                        n=DEFAULT_BS_N, weight=DEFAULT_BS_WEIGHT,
+                        n_t=DEFAULT_N_T, weight=DEFAULT_WEIGHT,
                         convert_to_boundary_strings=\
                         DEFAULT_CONVERT_TO_BOUNDARY_STRINGS,
                         return_parts=False):
@@ -138,8 +142,11 @@ def boundary_similarity(segs_a, segs_b,
     BS type b.
     '''
     # pylint: disable=C0103,R0913,R0914
-    values = __boundary_similarity__(segs_a, segs_b, boundary_types, n, weight,
-                                     convert_to_boundary_strings)
+    values = __boundary_similarity__(segs_a, segs_b,
+                                     boundary_types=boundary_types, n_t=n_t,
+                                     weight=weight,
+                                     convert_to_boundary_strings=\
+                                        convert_to_boundary_strings)
     matches        = values[7]
     count_edits    = values[1] # Weighted
     additions      = values[2]
@@ -150,15 +157,54 @@ def boundary_similarity(segs_a, segs_b,
     denominator = count_unweighted + matches
     numerator   = denominator - count_edits
     if return_parts:
-        return numerator, denominator
+        return numerator, denominator, additions, substitutions, transpositions
     else:
         return numerator / denominator if denominator > 0 else 1
+
+
+def confusion_matrix(segs_a, segs_b,
+                        boundary_types=DEFAULT_BOUNDARY_TYPES,
+                        n_t=DEFAULT_N_T, weight=DEFAULT_WEIGHT,
+                        convert_to_boundary_strings=\
+                        DEFAULT_CONVERT_TO_BOUNDARY_STRINGS,
+                        return_parts=False):
+    '''
+    Create a confusion matrix using boundary edit distance.
+    '''
+    # pylint: disable=C0103,R0913,R0914
+    # Count boundaries
+    bs_a = segs_a
+    bs_b = segs_b
+    if convert_to_boundary_strings:
+        bs_a = boundary_string_from_masses(segs_a)
+        bs_b = boundary_string_from_masses(segs_b)
+    # Compute edits
+    additions, substitutions, transpositions = \
+        boundary_edit_distance(bs_a, bs_b, n_t=n_t)
+    # Calculate the total pbs
+    pbs = len(bs_b) * len(boundary_types)
+    # Apply weighting functions
+    fnc_weight_a, fnc_weight_s, fnc_weight_t = weight
+    count_additions      = fnc_weight_a(additions)
+    count_substitutions  = fnc_weight_s(substitutions,
+                                        max(boundary_types),
+                                        min(boundary_types))
+    count_transpositions = fnc_weight_t(transpositions, n_t)
+    count_edits = count_additions + count_substitutions + count_transpositions
+    # Compute
+    full_misses = 0
+    boundaries_all = 0
+    matches = 0
+    for set_a, set_b in zip(bs_a, bs_b):
+        matches += len(set_a.intersection(set_b))
+        full_misses += len(set_a.symmetric_difference(set_b))
+        boundaries_all += len(set_a) + len(set_b)
     
     
-def pairwise_similarity(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
+def pairwise_similarity(dataset_masses, n=DEFAULT_N_T, weight=DEFAULT_WEIGHT,
             convert_to_boundary_strings=DEFAULT_CONVERT_TO_BOUNDARY_STRINGS):
     '''
-    Calculate mean pairwise S.
+    Calculate mean pairwise boundary similarity (B).
     
     .. seealso:: :func:`similarity`
     .. seealso:: :func:`segeval.compute_pairwise`
@@ -177,23 +223,23 @@ def pairwise_similarity(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
         '''
         Wrapper to provide parameters.
         '''
-        return similarity(segment_masses_a, segment_masses_b,
-                          dataset_masses.boundary_types, n,
-                          weight,
-                          convert_to_boundary_strings,
-                          return_parts)
+        return boundary_similarity(segment_masses_a, segment_masses_b,
+                                   dataset_masses.boundary_types, n,
+                                   weight,
+                                   convert_to_boundary_strings,
+                                   return_parts)
     # Compute values for pairs and return mean ,etc.
     return compute_pairwise(dataset_masses, wrapper, permuted=DEFAULT_PERMUTED)
 
 
-def pairwise_similarity_micro(dataset_masses, n=DEFAULT_N,
+def pairwise_similarity_micro(dataset_masses, n=DEFAULT_N_T,
                               weight=DEFAULT_WEIGHT,
                               return_parts=False,
-                              fnc_similarity=similarity):
+                              fnc_similarity=boundary_similarity):
     '''
-    Calculate mean pairwise S.
+    Calculate mean pairwise boundary similarity (B).
     
-    .. seealso:: :func:`similarity`
+    .. seealso:: :func:`boundary_similarity`
     .. seealso:: :func:`segeval.compute_pairwise`
     
     :param dataset_masses: Segmentation mass dataset (including multiple \
@@ -241,8 +287,8 @@ def pairwise_similarity_micro(dataset_masses, n=DEFAULT_N,
 
 
 
-def pairwise_b(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
-                        scale_transp=DEFAULT_SCALE, return_parts=False):
+def pairwise_b(dataset_masses, n_t=DEFAULT_N_T, weight=DEFAULT_WEIGHT,
+               return_parts=False):
     '''
     Calculate mean pairwise S.
     
@@ -263,15 +309,14 @@ def pairwise_b(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
         '''
         Wrapper to provide parameters.
         '''
-        return similarity(segment_masses_a, segment_masses_b, n, weight,
-                  scale_transp, return_parts)
+        return boundary_similarity(segment_masses_a, segment_masses_b, n_t,
+                                   weight, return_parts)
     
     return compute_pairwise(dataset_masses, wrapper, permuted=DEFAULT_PERMUTED)
 
 
-def pairwise_b_micro(dataset_masses, n=DEFAULT_N,
+def pairwise_b_micro(dataset_masses, n_t=DEFAULT_N_T,
                               weight=DEFAULT_WEIGHT,
-                              scale_transp=DEFAULT_SCALE,
                               return_parts=False):
     '''
     Calculate mean pairwise B.
@@ -294,8 +339,8 @@ def pairwise_b_micro(dataset_masses, n=DEFAULT_N,
         '''
         Wrapper to provide parameters.
         '''
-        return similarity(segment_masses_a, segment_masses_b, n, weight,
-                  scale_transp, return_parts)
+        return boundary_similarity(segment_masses_a, segment_masses_b, n_t,
+                                   weight, return_parts)
     
     pairs = compute_pairwise_values(dataset_masses, wrapper,
                                    permuted=DEFAULT_PERMUTED,
@@ -330,8 +375,7 @@ OUTPUT_NAME = 'Mean B metric'
 SHORT_NAME  = 'B'
 
 
-def values_b_detailed(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
-                      scale_transp=DEFAULT_SCALE):
+def values_b_detailed(dataset_masses, n_t=DEFAULT_N_T, weight=DEFAULT_WEIGHT):
     '''
     Produces a TSV for this metric
     '''
@@ -341,50 +385,53 @@ def values_b_detailed(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
         '''
         Wrapper to provide parameters.
         '''
-        return similarity(segment_masses_a, segment_masses_b, n, weight,
-                  scale_transp, return_parts)
+        return boundary_similarity(segment_masses_a, segment_masses_b, n_t=n_t,
+                                   weight=weight, return_parts=return_parts)
     # Get values
     values = compute_pairwise_values(dataset_masses, wrapper, return_parts=True)
     adjusted_values = dict()
     for label, value in values.items():
         subvalues = list()
-        set_errors, set_transpositions = value[4:6]
-        # For set errors
-        for _ in set_errors:
-            subvalues.append(['sub', 1, 1, 1])
+        additions, substitutions, transpositions = value[2:5]
+        # For addition errors
+        for addition in additions:
+            subvalues.append(['a', 1, addition[2], 1])
+        # For addition errors
+        for substitution in substitutions:
+            # TODO: Fix
+            subvalues.append(['s', None, None, None])
         # For transposition errors
-        for set_transposition in set_transpositions:
-            subvalues.append(['transp', 1, set_transposition.boundaries,
-                             set_transposition.n])
+        for transposition in transpositions:
+            subvalues.append(['t', 1, transposition[2],
+                             abs(transposition[1] - transposition[0])])
         adjusted_values[label] = subvalues
     return create_tsv_rows(header, adjusted_values, expand=True)
 
 
-def values_b(dataset_masses, n=DEFAULT_N, weight=DEFAULT_WEIGHT,
-                      scale_transp=DEFAULT_SCALE):
+def values_b(dataset_masses, n_t=DEFAULT_N_T, weight=DEFAULT_WEIGHT):
     '''
     Produces a TSV for this metric
     '''
     # pylint: disable=C0103
-    header = list(['coder1', 'coder2', 'pbs_unedited', 'pbs_total', \
-                   'sub_edits', 'transp_edits', SHORT_NAME])
+    header = list(['coder1', 'coder2', 'numerator', 'denominator', \
+                   'additions', 'substitutions', 'transpositions', SHORT_NAME])
     def wrapper(segment_masses_a, segment_masses_b, return_parts):
         '''
         Wrapper to provide parameters.
         '''
-        return similarity(segment_masses_a, segment_masses_b, n, weight,
-                  scale_transp, return_parts)
+        return boundary_similarity(segment_masses_a, segment_masses_b, n_t=n_t,
+                                   weight=weight, return_parts=return_parts)
     # Get values
     values = compute_pairwise_values(dataset_masses, wrapper, return_parts=True)
     adjusted_values = dict()
     for label, value in values.items():
         # Get values
-        pbs_unedited, pbs_total, total_set_errors, \
-                total_set_transpositions = value[0:4]
-        s = Decimal(pbs_unedited) / Decimal(pbs_total)
+        numerator, denominator, additions, substitutions, transpositions = value
+        similarity = Decimal(numerator) / Decimal(denominator)
         # Store values
-        adjusted_values[label] = [pbs_unedited, pbs_total, total_set_errors, \
-                total_set_transpositions, s]
+        adjusted_values[label] = [numerator, denominator, len(additions), 
+                                  len(substitutions), len(transpositions),
+                                  similarity]
     return create_tsv_rows(header, adjusted_values)
 
 
@@ -396,10 +443,9 @@ def parse(args):
     output = None
     values = load_file(args)
     # Parse args
-    n  = args['n']
+    n_t  = args['nt']
     wt = args['wt']
     ws = args['ws']
-    te = args['te']
     weight = DEFAULT_WEIGHT
     micro = args['micro']
     if wt != 1.0 or ws != 1.0:
@@ -409,17 +455,17 @@ def parse(args):
         # Create a TSV
         output_file = args['output'][0]
         if args['detailed']:
-            header, rows = values_b_detailed(values, n, weight, te)
+            header, rows = values_b_detailed(values, n_t, weight)
         else:
-            header, rows = values_b(values, n, weight, te)
+            header, rows = values_b(values, n_t, weight)
         write_tsv(output_file, header, rows)
     elif micro:
         # Create a string to output
-        mean = pairwise_similarity_micro(values, n, weight, te)
+        mean = pairwise_similarity_micro(values, n_t, weight)
         output = render_mean_micro_values(SHORT_NAME, mean)
     else:
         # Create a string to output
-        mean, std, var, stderr, n = pairwise_similarity(values, n, weight, te)
+        mean, std, var, stderr, n = pairwise_similarity(values, n_t, weight)
         output = render_mean_values(SHORT_NAME, mean, std, var, stderr, n)
     # Return
     return output
@@ -434,11 +480,11 @@ def parser_b_support(parser):
     '''
     parser.add_argument('-nt',
                         type=int,
-                        default=DEFAULT_N,
+                        default=DEFAULT_N_T,
                         help='The maximum number of PBs that boundaries can '+\
                               'span to be considered transpositions (nt<2 '+\
                               ('means no transpositions); default is %i.' \
-                                    % DEFAULT_N))
+                                    % DEFAULT_N_T))
 
 
 def create_parser(subparsers):

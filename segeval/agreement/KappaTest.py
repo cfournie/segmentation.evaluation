@@ -1,34 +1,8 @@
 '''
 Tests the segmentation versions of Cohen's and Fleiss' Kappa.
 
-.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-#===============================================================================
-# Copyright (c) 2011-2012, Chris Fournier
-# All rights reserved.
-# 
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#     * Redistributions of source code must retain the above copyright
-#       notice, this list of conditions and the following disclaimer.
-#     * Redistributions in binary form must reproduce the above copyright
-#       notice, this list of conditions and the following disclaimer in the
-#       documentation and/or other materials provided with the distribution.
-#     * Neither the name of the author nor the names of its contributors may
-#       be used to endorse or promote products derived from this software
-#       without specific prior written permission.
-#       
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#===============================================================================
 import unittest
 from decimal import Decimal
 from .Kappa import fleiss_kappa_linear
@@ -52,7 +26,7 @@ class TestKappa(unittest.TestCase):
             return
         data = KAZANTSEVA2012_G5
         self.assertEqual(fleiss_kappa_linear(data),
-                         Decimal('0.8198449828922561273654074436'))
+                         Decimal('0.2374030241245084051985691283'))
 
 
     def test_fleiss_kappa_linear_g5_ch1(self):
@@ -64,7 +38,7 @@ class TestKappa(unittest.TestCase):
         data = KAZANTSEVA2012_G5['ch1']
         data = {'ch1' : data}
         self.assertEqual(fleiss_kappa_linear(data),
-                         Decimal('0.7462686567164179104477611940'))
+                         Decimal('0.1940298507462686567164179104'))
 
 
     def test_fleiss_kappa_linear_g2(self):
@@ -75,7 +49,7 @@ class TestKappa(unittest.TestCase):
             return
         data = KAZANTSEVA2012_G2
         self.assertEqual(fleiss_kappa_linear(data),
-                         Decimal('0.8865951832180913251160770952'))
+                         Decimal('0.4068521352341765453201908783'))
 
 
     def test_fleiss_kappa_linear_g2_ch2(self):
@@ -87,7 +61,7 @@ class TestKappa(unittest.TestCase):
         data = KAZANTSEVA2012_G2['ch2']
         data = {'ch2' : data}
         self.assertEqual(fleiss_kappa_linear(data),
-                         Decimal('0.8840057636887608069164265130'))
+                         Decimal('0.5197205281147376181221097781'))
         
 
     def test_fleiss_kappa_disagree(self):
@@ -112,14 +86,14 @@ class TestKappa(unittest.TestCase):
         kappa1  = fleiss_kappa_linear(data1)
         kappa1f = fleiss_kappa_linear(data1)
         self.assertEqual(kappa1,
-                         Decimal('0.9032258064516129032258064517'))
+                         Decimal('0.7096774193548387096774193548'))
         self.assertEqual(kappa1, kappa1f)
         data2 = {'i1' : {'c1' : [2, 8, 2, 1],
                          'c2' : [11, 2]}}
         kappa2  = fleiss_kappa_linear(data2)
         kappa2f = fleiss_kappa_linear(data2)
         self.assertEqual(kappa2,
-                         Decimal('0.7352941176470588235294117647'))
+                         Decimal('0.1176470588235294117647058823'))
         self.assertEqual(kappa2, kappa2f)
         self.assertTrue(kappa2 < kappa1)
     

@@ -1,11 +1,10 @@
 '''
 Created on Sep 16, 2012
 
-@author: cfournie
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import unittest
-from .Linear import boundary_string_from_masses, weight_s_scale, \
-    weight_t_scale
+from .Linear import boundary_string_from_masses, weight_s_scale, weight_t_scale
 
 class TestLinear(unittest.TestCase):
     '''

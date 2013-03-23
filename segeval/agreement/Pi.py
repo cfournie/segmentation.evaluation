@@ -1,45 +1,18 @@
 '''
 Inter-coder agreement statistic Fleiss' Pi.
 
-@author: Chris Fournier
-@contact: chris.m.fournier@gmail.com
+.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-#===============================================================================
-# Copyright (c) 2011-2012, Chris Fournier
-# All rights reserved.
-# 
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#     * Redistributions of source code must retain the above copyright
-#       notice, this list of conditions and the following disclaimer.
-#     * Redistributions in binary form must reproduce the above copyright
-#       notice, this list of conditions and the following disclaimer in the
-#       documentation and/or other materials provided with the distribution.
-#     * Neither the name of the author nor the names of its contributors may
-#       be used to endorse or promote products derived from this software
-#       without specific prior written permission.
-#       
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#===============================================================================
 from decimal import Decimal
 from .. import compute_multiple_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv
 from ..data.Display import render_agreement_coefficients
-from . import actual_agreement_linear, DEFAULT_T_N
+from . import actual_agreement_linear, DEFAULT_N_T
 from ..similarity.Linear import boundary_similarity
 
 
-def scotts_pi_linear(items_masses, return_parts=False, t_n=DEFAULT_T_N):
+def scotts_pi_linear(items_masses, return_parts=False, n_t=DEFAULT_N_T):
     '''
     Calculates Scott's Pi, originally proposed in [Scott1955]_, for
     segmentations.  Adapted in [FournierInkpen2012]_ from the formulations
@@ -81,11 +54,11 @@ def scotts_pi_linear(items_masses, return_parts=False, t_n=DEFAULT_T_N):
             if len(coder_segs.values()) != num_items]) > 0:
         raise Exception('Unequal number of items contained.')
     # Return
-    return fleiss_pi_linear(items_masses, return_parts, t_n)
+    return fleiss_pi_linear(items_masses, return_parts, n_t)
 
 
 def fleiss_pi_linear(items_masses, fnc_compare=boundary_similarity,
-                     return_parts=False, t_n=DEFAULT_T_N):
+                     return_parts=False, n_t=DEFAULT_N_T):
     '''
     Calculates Fleiss' Pi (or multi-Pi), originally proposed in [Fleiss1971]_,
     for segmentations (and described in [SiegelCastellan1988]_ as K).
@@ -118,7 +91,7 @@ def fleiss_pi_linear(items_masses, fnc_compare=boundary_similarity,
         raise Exception('Unequal number of items contained.')
     # Initialize totals
     all_numerators, all_denominators, _, coders_boundaries = \
-        actual_agreement_linear(items_masses, fnc_compare=fnc_compare, t_n=t_n)
+        actual_agreement_linear(items_masses, fnc_compare=fnc_compare, n_t=n_t)
     # Calculate Aa
     A_a = Decimal(sum(all_numerators)) / sum(all_denominators)
     # Calculate Ae
