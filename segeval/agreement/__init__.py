@@ -4,7 +4,7 @@ Inter-coder agreement statistics.
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 
-from ..similarity.Linear import DEFAULT_N_T, boundary_similarity
+from ..similarity.Boundary import DEFAULT_N_T, boundary_similarity
 
 def load_tests(loader, tests, pattern):
     '''

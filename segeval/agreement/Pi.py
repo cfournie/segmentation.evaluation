@@ -9,7 +9,7 @@ from ..data import load_file
 from ..data.TSV import write_tsv
 from ..data.Display import render_agreement_coefficients
 from . import actual_agreement_linear, DEFAULT_N_T
-from ..similarity.Linear import boundary_similarity
+from ..similarity.Boundary import boundary_similarity
 
 
 def scotts_pi_linear(items_masses, return_parts=False, n_t=DEFAULT_N_T):

@@ -12,7 +12,7 @@ References:
 from .Kappa import fleiss_kappa_linear
 from .Pi import fleiss_pi_linear
 from . import DEFAULT_N_T
-from ..similarity.Linear import boundary_similarity
+from ..similarity.Boundary import boundary_similarity
 from .. import compute_multiple_values, create_tsv_rows
 from ..data import load_file
 from ..data.TSV import write_tsv

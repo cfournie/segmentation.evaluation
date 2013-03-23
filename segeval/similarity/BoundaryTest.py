@@ -4,9 +4,9 @@ Created on Sep 16, 2012
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import unittest
-from .Linear import boundary_string_from_masses, weight_s_scale, weight_t_scale
+from .Boundary import boundary_string_from_masses, weight_s_scale, weight_t_scale
 
-class TestLinear(unittest.TestCase):
+class TestBoundary(unittest.TestCase):
     '''
     Test linear similarity.
     '''
