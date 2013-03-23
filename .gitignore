@@ -4,3 +4,6 @@
 *.brf
 *.gz
 doc/build/**
+build/**
+dist/**
+segeval.egg-info/**
