@@ -287,10 +287,10 @@ def parse(args):
     ws = args['ws']
     weight = DEFAULT_WEIGHT
     micro = args['micro']
-    if wt != 1.0 or ws != 1.0:
+    if wt is not 1.0 or ws is not 1.0:
         weight = (ws, wt)
     # Is a TSV requested?
-    if args['output'] != None:
+    if args['output'] is not None:
         # Create a TSV
         output_file = args['output'][0]
         if args['detailed']:

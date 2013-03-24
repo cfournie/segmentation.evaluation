@@ -45,7 +45,7 @@ def precision(cf):
     :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
-    if cf['tp'] == 0:
+    if cf['tp'] is 0:
         return Decimal(0)
     else:
         return Decimal(cf['tp']) / Decimal(cf['tp'] + cf['fp'])
@@ -66,7 +66,7 @@ def recall(cf):
     :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
-    if cf['tp'] == 0:
+    if cf['tp'] is 0:
         return Decimal(0)
     else:
         return Decimal(cf['tp']) / Decimal(cf['tp'] + cf['fn'])
@@ -93,7 +93,7 @@ def fmeasure(cf, beta=Decimal('1.0')):
     :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
-    if cf['tp'] == 0 and cf['fp'] == 0 and cf['fn'] == 0:
+    if cf['tp'] is 0 and cf['fp'] is 0 and cf['fn'] is 0:
         return Decimal('0')
     else:
         # Convert to Decimal

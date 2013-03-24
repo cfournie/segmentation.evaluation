@@ -82,7 +82,7 @@ def input_linear_mass_json(filepath, create_item=False):
         if data[FIELD_SEGMENTATION_TYPE] != TYPE_LINEAR:
             raise DataIOError(
                 'Segmentation type \'%(type)s\' expected, but encountered \
-%(type_found)s' % {'type'       : TYPE_LINEAR,
+\'%(type_found)s\'' % {'type'       : TYPE_LINEAR,
                    'type_found' : data[FIELD_SEGMENTATION_TYPE]})
     # Duplicate to store other properties
     dataset.properties = data

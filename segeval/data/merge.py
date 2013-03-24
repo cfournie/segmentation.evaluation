@@ -23,7 +23,7 @@ def parse(args):
     output = None
         
     # Is a TSV requested?
-    if args['output'] != None:
+    if args['output'] is not None:
         # Create a TSV
         output_file = args['output'][0]
         values = load_files(args)

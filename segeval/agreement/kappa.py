@@ -49,7 +49,7 @@ def fleiss_kappa_linear(dataset, fnc_compare=boundary_similarity,
     # Check that there are an identical number of items
     num_items = len(dataset.values()[0].keys())
     if len([True for coder_segs in dataset.values() \
-            if len(coder_segs.values()) != num_items]) > 0:
+            if len(coder_segs.values()) is not num_items]) > 0:
         raise Exception('Unequal number of items contained.')
     # Initialize totals
     all_numerators, all_denominators, _, coders_boundaries = \
@@ -101,7 +101,7 @@ def parse(args):
     output = None
     values = load_file(args)
     # Is a TSV requested?
-    if args['output'] != None:
+    if args['output'] is not None:
         # Create a TSV
         output_file = args['output'][0]
         header, rows = values_kappa(values)

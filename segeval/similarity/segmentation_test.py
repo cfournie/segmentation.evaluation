@@ -16,7 +16,7 @@ class TestSegmentation(unittest.TestCase):
     pass
 
 
-if __name__ == "__main__":
+if __name__ is "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
 

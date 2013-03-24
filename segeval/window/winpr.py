@@ -25,7 +25,7 @@ def create_paired_window(hypothesis_positions, reference_positions, window_size,
     window.
     '''
     phantom_size = 0
-    if lamprier_et_al_2007_fix == False:
+    if lamprier_et_al_2007_fix is False:
         units_ref_hyp = zip(reference_positions, hypothesis_positions)
     else:
         phantom_size = window_size
@@ -74,10 +74,10 @@ def win_pr(hypothesis_positions, reference_positions, window_size=None,
         reference_positions  = convert_masses_to_positions(reference_positions)
         hypothesis_positions = convert_masses_to_positions(hypothesis_positions)
     # Check for input errors
-    if len(reference_positions) != len(hypothesis_positions):
+    if len(reference_positions) is not len(hypothesis_positions):
         raise SegmentationMetricError(
                     'Reference and hypothesis segmentations differ in position \
-length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
+length (%(ref)i is not %(hyp)i).' % {'ref' : len(reference_positions),
                                  'hyp' : len(hypothesis_positions)})
     # Compute window size to use if unspecified
     if window_size is None:
@@ -98,16 +98,16 @@ length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
         ref_boundaries = 0
         hyp_boundaries = 0
         # Check that the number of loops is correct
-        if len(window) != window_size + 1:
+        if len(window) is not window_size + 1:
             raise SegmentationMetricError('Incorrect actual window size')
         # For pair in window
         for j in xrange(0, len(window) - 1):
             ref_part, hyp_part = zip(*window[j:j + 2])
             # Boundary exists in the reference segmentation
-            if ref_part[0] != ref_part[1]:
+            if ref_part[0] is not ref_part[1]:
                 ref_boundaries += 1
             # Boundary exists in the hypothesis segmentation
-            if hyp_part[0] != hyp_part[1]:
+            if hyp_part[0] is not hyp_part[1]:
                 hyp_boundaries += 1
         # If the number of boundaries per segmentation in the window differs
         tp += min(ref_boundaries, hyp_boundaries)
@@ -287,17 +287,17 @@ def parse(args):
     beta = 1
     mean = None
     micro = args['micro']
-    if 'beta' in args and args['beta'] != 1:
+    if 'beta' in args and args['beta'] is not 1:
         beta = args['beta']
     # Is a TSV requested?
-    if args['output'] != None:
+    if args['output'] is not None:
         # Create a TSV
         output_file = args['output'][0]
         header, rows = values_win_pr(values, beta)
         write_tsv(output_file, header, rows)
     elif micro:
         # Create a string to output
-        if subsubparser_name == SUBSUBPARSER_NAME_F:
+        if subsubparser_name is SUBSUBPARSER_NAME_F:
             def wrapper(cf):
                 '''
                 Wrap ``ml_fmeasure`` so that it uses beta.
@@ -305,22 +305,22 @@ def parse(args):
                 return fmeasure(cf, beta)
             mean = pairwise_win_pr_micro(values, ml_fnc=wrapper)
             name = SHORT_NAME_F % str(beta)
-        elif subsubparser_name == SUBSUBPARSER_NAME_P:
+        elif subsubparser_name is SUBSUBPARSER_NAME_P:
             mean = pairwise_win_pr_micro(values, ml_fnc=precision)
             name = SHORT_NAME_P
-        elif subsubparser_name == SUBSUBPARSER_NAME_R:
+        elif subsubparser_name is SUBSUBPARSER_NAME_R:
             mean = pairwise_win_pr_micro(values, ml_fnc=recall)
             name = SHORT_NAME_R
         output = render_mean_micro_values(name, mean)
     else:
         # Create a string to output
-        if subsubparser_name == SUBSUBPARSER_NAME_F:
+        if subsubparser_name is SUBSUBPARSER_NAME_F:
             name += '_%s' % str(beta)
             mean, std, var, stderr, n = pairwise_win_pr(values,
                                                         wrap_win_p_f(beta))
-        elif subsubparser_name == SUBSUBPARSER_NAME_P:
+        elif subsubparser_name is SUBSUBPARSER_NAME_P:
             mean, std, var, stderr, n = pairwise_win_pr(values, win_pr_p)
-        elif subsubparser_name == SUBSUBPARSER_NAME_R:
+        elif subsubparser_name is SUBSUBPARSER_NAME_R:
             mean, std, var, stderr, n = pairwise_win_pr(values, win_pr_r)
         output = render_mean_values(name, mean, std, var, stderr, n)
     # Return

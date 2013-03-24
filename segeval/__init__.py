@@ -190,7 +190,7 @@ def compute_pairwise_values(dataset_masses, fnc_metric, permuted=False,
                         else:
                             pairs[entry] = pair
                     # Add only if there is a max
-                    if max_reference_entry != None:
+                    if max_reference_entry is not None:
                         pairs[max_reference_entry] = max_reference_pair
                             
                 else:
@@ -250,7 +250,7 @@ def compute_multiple_values(dataset, fnc_metric):
                                         boundary_types=dataset.boundary_types)
             datasets[coders][item] = coder_masses
         # If in the end there's only one set
-        if len(values) == 1:
+        if len(values) is 1:
             values = {'all' : values.values()[0]}
     else:
         datasets['all'] = dataset

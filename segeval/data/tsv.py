@@ -60,7 +60,7 @@ def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
         reader = csv.reader(csv_file, delimiter=delimiter)
         for i, row in enumerate(reader):
             # Read annotators from header
-            if i == 0:
+            if i is 0:
                 for col_name in row[1:]:
                     header.append(col_name)
             # Read data
@@ -68,7 +68,7 @@ def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
                 coder = None
                 for j, col in enumerate(row):
                     # Skip the first col
-                    if j == 0:
+                    if j is 0:
                         coder = str(col)
                         dataset[item][coder] = list()
                     elif j > 0:

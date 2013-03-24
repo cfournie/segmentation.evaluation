@@ -63,7 +63,7 @@ def parse(args):
     output = None
     values = load_file(args)
     # Is a TSV requested?
-    if args['output'] != None:
+    if args['output'] is not None:
         # Create a TSV
         output_file = args['output'][0]
         header, rows = values_artstein_poesio_bias(values)

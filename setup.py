@@ -14,7 +14,7 @@ except ImportError:
     from distutils.core import setup
     extra = {}
 
-if sys.argv[-1] == 'publish':
+if sys.argv[-1] is 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 

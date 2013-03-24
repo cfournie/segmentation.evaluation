@@ -27,7 +27,7 @@ def create_paired_window(hypothesis_positions, reference_positions, window_size,
     window.
     '''
     phantom_size = 0
-    if lamprier_et_al_2007_fix == False:
+    if lamprier_et_al_2007_fix is False:
         units_ref_hyp = zip(reference_positions, hypothesis_positions)
     else:
         phantom_size = window_size
@@ -79,10 +79,10 @@ def window_diff(hypothesis_positions, reference_positions, window_size=None,
         reference_positions  = convert_masses_to_positions(reference_positions)
         hypothesis_positions = convert_masses_to_positions(hypothesis_positions)
     # Check for input errors
-    if len(reference_positions) != len(hypothesis_positions):
+    if len(reference_positions) is not len(hypothesis_positions):
         raise SegmentationMetricError(
                     'Reference and hypothesis segmentations differ in position \
-length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
+length (%(ref)i is not %(hyp)i).' % {'ref' : len(reference_positions),
                                  'hyp' : len(hypothesis_positions)})
     # Compute window size to use if unspecified
     if window_size is None:
@@ -101,19 +101,19 @@ length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
         ref_boundaries = 0
         hyp_boundaries = 0
         # Check that the number of loops is correct
-        if len(window) != window_size + 1:
+        if len(window) is not window_size + 1:
             raise SegmentationMetricError('Incorrect actual window size.')
         # For pair in window
         for j in xrange(0, len(window) - 1):
             ref_part, hyp_part = zip(*window[j:j+2])
             # Boundary exists in the reference segmentation
-            if ref_part[0] != ref_part[1]:
+            if ref_part[0] is not ref_part[1]:
                 ref_boundaries += 1
             # Boundary exists in the hypothesis segmentation
-            if hyp_part[0] != hyp_part[1]:
+            if hyp_part[0] is not hyp_part[1]:
                 hyp_boundaries += 1
         # If the number of boundaries per segmentation in the window differs
-        if ref_boundaries != hyp_boundaries:
+        if ref_boundaries is not hyp_boundaries:
             sum_differences += 1
     # Perform final division
     n = sum(convert_positions_to_masses(reference_positions))
@@ -122,7 +122,7 @@ length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
         denominator = measurements + 1
     win_diff = Decimal(sum_differences) / denominator
     # Check normalization
-    if denominator != measurements and not lamprier_et_al_2007_fix:
+    if denominator is not measurements and not lamprier_et_al_2007_fix:
         raise SegmentationMetricError('Normalization mismatch.')
     # Check value
     if win_diff > 1:
@@ -252,7 +252,7 @@ def parse(args):
         name = '1 - %s' % name
     
     # Is a TSV requested?
-    if args['output'] != None:
+    if args['output'] is not None:
         # Create a TSV
         output_file = args['output'][0]
         header, rows = values_window_diff(values, name, one_minus,

@@ -272,10 +272,10 @@ def parse(args):
     values = load_file(args)
     beta = 1
     micro = args['micro']
-    if 'beta' in args and args['beta'] != 1:
+    if 'beta' in args and args['beta'] is not 1:
         beta = args['beta']
     # Is a TSV requested?
-    if args['output'] != None:
+    if args['output'] is not None:
         # Create a TSV
         output_file = args['output'][0]
         header, rows = values_f_b_measure(values, beta)
@@ -283,7 +283,7 @@ def parse(args):
     elif micro:
         # Create a string to output
         subparser = args['subparser_name']
-        if subparser == 'f':
+        if subparser is 'f':
             def wrapper(cf):
                 '''
                 Wrap ``ml_fmeasure`` so that it uses beta.
@@ -291,17 +291,17 @@ def parse(args):
                 return ml_fmeasure(cf, beta)
             mean = pairwise_ml_measure_micro(values, ml_fnc=wrapper)
             name = SHORT_NAME_F % str(beta)
-        elif subparser == 'p':
+        elif subparser is 'p':
             mean = pairwise_ml_measure_micro(values, ml_fnc=ml_precision)
             name = SHORT_NAME_P
-        elif subparser == 'r':
+        elif subparser is 'r':
             mean = pairwise_ml_measure_micro(values, ml_fnc=ml_recall)
             name = SHORT_NAME_R
         output = render_mean_micro_values(name, mean)
     else:
         # Create a string to output
         subparser = args['subparser_name']
-        if subparser == 'f':
+        if subparser is 'f':
             def wrapper(hypothesis_masses, reference_masses):
                 '''
                 Wrap ``f_b_measure`` so that it uses beta.
@@ -310,11 +310,11 @@ def parse(args):
             mean, std, var, stderr, n = pairwise_ml_measure(values,
                                                             fnc=wrapper)
             name = SHORT_NAME_F % str(beta)
-        elif subparser == 'r':
+        elif subparser is 'r':
             mean, std, var, stderr, n = pairwise_ml_measure(values,
                                                             fnc=recall)
             name = SHORT_NAME_R
-        elif subparser == 'p':
+        elif subparser is 'p':
             mean, std, var, stderr, n = pairwise_ml_measure(values,
                                                             fnc=precision)
             name = SHORT_NAME_P

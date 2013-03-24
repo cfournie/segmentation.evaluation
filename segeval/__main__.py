@@ -55,11 +55,11 @@ def main(argv=None):
     return args.func(vars(args))
 
 
-if __name__ == '__main__':
+if __name__ is '__main__':
     # pylint: disable=C0103,W0703
     
     output = main()
-    if output != None:
+    if output is not None:
         print output
     sys.exit(0)
 

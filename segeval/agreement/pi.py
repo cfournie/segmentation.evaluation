@@ -51,7 +51,7 @@ def scotts_pi_linear(items_masses, return_parts=False, n_t=DEFAULT_N_T):
     # Check that there are an identical number of items
     num_items = len(items_masses.values()[0].keys())
     if len([True for coder_segs in items_masses.values() \
-            if len(coder_segs.values()) != num_items]) > 0:
+            if len(coder_segs.values()) is not num_items]) > 0:
         raise Exception('Unequal number of items contained.')
     # Return
     return fleiss_pi_linear(items_masses, return_parts, n_t)
@@ -87,7 +87,7 @@ def fleiss_pi_linear(items_masses, fnc_compare=boundary_similarity,
     # Check that there are an equal number of items for each coder
     num_items = len(items_masses.values()[0].keys())
     if len([True for coder_segs in items_masses.values() \
-            if len(coder_segs.values()) != num_items]) > 0:
+            if len(coder_segs.values()) is not num_items]) > 0:
         raise Exception('Unequal number of items contained.')
     # Initialize totals
     all_numerators, all_denominators, _, coders_boundaries = \
@@ -135,7 +135,7 @@ def parse(args):
     output = None
     values = load_file(args)
     # Is a TSV requested?
-    if args['output'] != None:
+    if args['output'] is not None:
         # Create a TSV
         output_file = args['output'][0]
         header, rows = values_pi(values)

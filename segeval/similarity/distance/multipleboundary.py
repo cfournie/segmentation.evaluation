@@ -96,7 +96,7 @@ def __additions_substitutions_sets__(d, a, b):
     # Add from b
     for addition in b - set(substituted):
         added.append((addition, 'b'))
-    assert len(added) == len(additions)
+    assert len(added) is len(additions)
     return added, set(substitutions)
 
 
@@ -131,7 +131,7 @@ def __overlaps_existing__(i, j, d, options_transp):
         if position in options_transp:
             for t in options_transp[position]:
                 # If the transposition 't' is of the boundary type 'd'
-                if t[2] == d:
+                if t[2] is d:
                     return True
     return check_position(i) or check_position(j)
 

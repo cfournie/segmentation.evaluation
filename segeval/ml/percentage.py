@@ -120,7 +120,7 @@ def parse(args):
     micro = args['micro']
     name = SHORT_NAME
     # Is a TSV requested?
-    if args['output'] != None:
+    if args['output'] is not None:
         # Create a TSV
         output_file = args['output'][0]
         header, rows = values_percentage(values,)

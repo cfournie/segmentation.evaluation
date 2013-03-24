@@ -46,14 +46,14 @@ def input_morphemes(tsv_filename, reference_coder=False,
             # Read data
             item = None
             for j, col in enumerate(row):
-                if j == 0:
+                if j is 0:
                     # First col is the word (i.e., item)
                     item = str(col)
-                elif j == 1:
+                elif j is 1:
                     # First col is the morphological segmentation (i.e., masses)
                     options = [option.strip() for option in col.split(',')]
                     for i, option in enumerate(options):
-                        current_coder = coder if i == 0 else coder + str(i + 1)
+                        current_coder = coder if i is 0 else coder + str(i + 1)
                         # Create coder if it does not exist
                         if item not in dataset:
                             dataset[item] = dict()

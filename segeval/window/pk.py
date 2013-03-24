@@ -51,10 +51,10 @@ def pk(hypothesis_positions, reference_positions, window_size=None,
         reference_positions  = convert_masses_to_positions(reference_positions)
         hypothesis_positions = convert_masses_to_positions(hypothesis_positions)
     # Check for input errors
-    if len(reference_positions) != len(hypothesis_positions):
+    if len(reference_positions) is not len(hypothesis_positions):
         raise SegmentationMetricError(
                     'Reference and hypothesis segmentations differ in position \
-length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
+length (%(ref)i is not %(hyp)i).' % {'ref' : len(reference_positions),
                                  'hyp' : len(hypothesis_positions)})
     # Compute window size to use if unspecified
     if window_size is None:
@@ -69,10 +69,10 @@ length (%(ref)i != %(hyp)i).' % {'ref' : len(reference_positions),
         window_ref = reference_positions[i:i+window_size+1]
         window_hyp = hypothesis_positions[i:i+window_size+1]
         # Probe agreement
-        agree_ref = window_ref[0] == window_ref[-1]
-        agree_hyp = window_hyp[0] == window_hyp[-1]
+        agree_ref = window_ref[0] is window_ref[-1]
+        agree_hyp = window_hyp[0] is window_hyp[-1]
         # If the windows agreements agree
-        if agree_ref != agree_hyp:
+        if agree_ref is not agree_hyp:
             sum_differences += 1
         measurements += 1
     # Perform final division
@@ -189,7 +189,7 @@ def parse(args):
         name = '1 - %s' % name
     
     # Is a TSV requested?
-    if args['output'] != None:
+    if args['output'] is not None:
         # Create a TSV
         output_file = args['output'][0]
         header, rows = values_pk(values, name, one_minus)
