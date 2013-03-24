@@ -3,6 +3,7 @@ Created on Sep 4, 2012
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import division
 from decimal import Decimal
 from . import (descriptive_statistics, DEFAULT_N_T, DEFAULT_WEIGHT, 
     DEFAULT_BOUNDARY_TYPES, DEFAULT_CONVERT_TO_BOUNDARY_STRINGS)

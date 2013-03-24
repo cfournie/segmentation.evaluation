@@ -3,6 +3,7 @@ Inter-coder agreement statistic Fleiss' Pi.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import division
 from decimal import Decimal
 from .. import compute_multiple_values, create_tsv_rows
 from ..data import load_file

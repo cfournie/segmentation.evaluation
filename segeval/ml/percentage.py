@@ -3,6 +3,7 @@ Provides a segmentation version of the  percentage agreement metric.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import division
 from decimal import Decimal
 from . import find_boundary_position_freqs
 from .. import compute_pairwise, compute_pairwise_values, create_tsv_rows

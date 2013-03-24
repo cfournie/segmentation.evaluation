@@ -3,6 +3,7 @@ Inter-coder agreement statistic Fleiss' Kappa.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import division
 from decimal import Decimal
 from . import actual_agreement_linear, DEFAULT_N_T
 from .. import compute_multiple_values, create_tsv_rows

@@ -14,6 +14,7 @@ learning metrics that have been adapted for use in segmentation, including:
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import division
 from decimal import Decimal
 from collections import defaultdict
 

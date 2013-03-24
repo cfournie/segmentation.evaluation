@@ -3,6 +3,7 @@ Tests the machine learning (ML) statistics functions, and ml package.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import division
 import unittest
 from decimal import Decimal
 from . import precision, recall, fmeasure, vars_to_cf, cf_to_vars, ConfusionMatrix

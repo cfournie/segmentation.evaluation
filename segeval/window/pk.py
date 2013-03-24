@@ -4,6 +4,7 @@ Implementation of the Pk segmentation evaluation metric described in
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import division
 from decimal import Decimal
 from . import compute_window_size, parser_one_minus_support
 from .. import (SegmentationMetricError, compute_pairwise, 

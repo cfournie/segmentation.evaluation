@@ -15,6 +15,7 @@ evaluation metrics including:
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import division
 from decimal import Decimal
 from .. import convert_positions_to_masses
 from ..math import mean, std, var

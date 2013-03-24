@@ -3,6 +3,7 @@ Multiple-boundary edit distance.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import division
 from itertools import permutations
 
 

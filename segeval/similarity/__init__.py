@@ -3,6 +3,7 @@ Similarity utility functions based upon boundary edit distance.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import division
 from decimal import Decimal
 from .distance.multipleboundary import boundary_edit_distance
 
