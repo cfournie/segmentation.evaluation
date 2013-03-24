@@ -9,7 +9,7 @@ segeval.data
 JSON input/output
 =================
 
-.. automodule:: segeval.data.JSON
+.. automodule:: segeval.data.jsonutils
 .. autofunction:: input_linear_mass_json
 .. autofunction:: output_linear_mass_json
 
@@ -17,20 +17,14 @@ JSON input/output
 TSV input/output
 =================
 
-.. automodule:: segeval.data.TSV
+.. automodule:: segeval.data.tsv
 .. autofunction:: input_linear_mass_tsv
 .. autofunction:: input_linear_positions_tsv
 
 
-Exceptions
-==========
-
-.. autoclass:: segeval.data.DataIOError
-
-
 Samples
 =======
-.. automodule:: segeval.data.Samples
+.. automodule:: segeval.data.samples
    :members:
 
 

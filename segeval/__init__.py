@@ -18,11 +18,12 @@ from .math import mean, std, var, stderr
 # Package description
 __version_number__ = '2.0'
 __release__ = 'alpha'
-__version__ = '-'.join(__version_number__, __release__)
-__package_name__ = 'segeval'
+__version__ = '-'.join((__version_number__, __release__))
 __project_name__ = 'SegEval'
+__package_name__ = 'segeval'
 __author__ = 'Chris Fournier'
-__author_email__ = 'Chris Fournier'
+__author_email__ = 'chris.m.fournier@gmail.com'
+__copyright__ = '2012-2013, ' + __author__
 
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__),

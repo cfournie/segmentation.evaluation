@@ -11,20 +11,20 @@ Agreement
 
 Kappa
 =====
-.. automodule:: segeval.agreement.Kappa
+.. automodule:: segeval.agreement.kappa
 .. autofunction:: cohen_kappa
 .. autofunction:: fleiss_kappa
 
 
 Pi
 ==
-.. automodule:: segeval.agreement.Pi
+.. automodule:: segeval.agreement.pi
 .. autofunction:: scotts_pi
 .. autofunction:: fleiss_pi
 
 
 Bias
 ====
-.. automodule:: segeval.agreement.Bias
+.. automodule:: segeval.agreement.bias
 .. autofunction:: artstein_poesio_bias
 

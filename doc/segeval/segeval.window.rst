@@ -9,7 +9,7 @@ segeval.window
 Pk
 ==
 
-.. automodule:: segeval.window.Pk
+.. automodule:: segeval.window.pk
 .. autofunction:: pk
 .. autofunction:: pairwise_pk
 
@@ -17,7 +17,7 @@ Pk
 WindowDiff
 ==========
 
-.. automodule:: segeval.window.WindowDiff
+.. automodule:: segeval.window.windowdiff
 .. autofunction:: window_diff
 .. autofunction:: pairwise_window_diff
 
@@ -25,7 +25,7 @@ WindowDiff
 WinPR
 =====
 
-.. automodule:: segeval.window.WinPR
+.. automodule:: segeval.window.winpr
 .. autofunction:: win_pr
 .. autofunction:: pairwise_win_pr
 
