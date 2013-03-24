@@ -12,7 +12,7 @@ To use S, see the :mod:`segeval.similarity` module.
 import os
 from decimal import Decimal
 from collections import Counter
-from .Math import mean, std, var, stderr
+from .math import mean, std, var, stderr
 
 __version__ = '1.2-alpha'
 
@@ -34,7 +34,7 @@ def load_tests(loader, tests, pattern):
     unittest.html#load-tests-protocol>`_.
     '''
     #pylint: disable=W0613
-    from Utils import default_load_tests
+    from utils import default_load_tests
     return default_load_tests(__file__, loader, tests)
 
 
@@ -116,7 +116,7 @@ def compute_pairwise_values(dataset_masses, fnc_metric, permuted=False,
     :rtype: :func:`list`
     '''
     # pylint: disable=C0103,R0912
-    from .data.JSON import FIELD_HAS_REFERENCE_CODER
+    from .data.jsonutils import FIELD_HAS_REFERENCE_CODER
     pairs = dict()
     reference_coder_exists = False
     # Determine whether a reference coder is designated

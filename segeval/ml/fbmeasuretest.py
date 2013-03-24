@@ -5,11 +5,11 @@ Tests the WindowDiff evaluation metric.
 '''
 import unittest
 from decimal import Decimal
-from .FbMeasure import f_b_measure, pairwise_ml_measure, \
+from .fbmeasure import f_b_measure, pairwise_ml_measure, \
     pairwise_ml_measure_micro, ml_fmeasure
-from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
-    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
 from .. import convert_positions_to_masses
+from ..data.samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
+    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
 
 
 class TestFbMeasure(unittest.TestCase):

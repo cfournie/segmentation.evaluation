@@ -7,8 +7,8 @@ import unittest
 from decimal import Decimal
 from . import convert_positions_to_masses, convert_masses_to_positions, \
     compute_pairwise
-from .data.Samples import KAZANTSEVA2012_G5
-from .ml.FbMeasure import f_b_measure
+from .data.samples import KAZANTSEVA2012_G5
+from .ml.fbmeasure import f_b_measure
 
 
 class TestSegeval(unittest.TestCase):

@@ -3,13 +3,13 @@ Provides a segmentation version of the F-Measure metric.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from .Percentage import find_boundary_position_freqs
 from . import fmeasure as ml_fmeasure, precision as ml_precision, \
     recall as ml_recall, vars_to_cf, cf_to_vars
+from .percentage import find_boundary_position_freqs
 from .. import compute_pairwise, compute_pairwise_values, create_tsv_rows
 from ..data import load_file
-from ..data.TSV import write_tsv
-from ..data.Display import render_mean_values, render_mean_micro_values, \
+from ..data.tsv import write_tsv
+from ..data.display import render_mean_values, render_mean_micro_values, \
     render_permuted
 
 

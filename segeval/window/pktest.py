@@ -5,10 +5,10 @@ Tests the WindowDiff evaluation metric.
 '''
 import unittest
 from decimal import Decimal
-from ..window.Pk import pk, pairwise_pk
-from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
+from ..utils import AlmostTestCase
+from ..window.pk import pk, pairwise_pk
+from ..data.samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
-from ..Utils import AlmostTestCase
 
 
 class TestPk(unittest.TestCase):

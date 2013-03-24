@@ -6,17 +6,17 @@ Console interface to the overall segeval package.
 '''
 import argparse
 import sys
-from segeval.agreement.Pi import create_parser as create_parser_pi
-from segeval.agreement.Kappa import create_parser as create_parser_kappa
-from segeval.agreement.Bias import create_parser as create_parser_bias
-from segeval.ml.FbMeasure import create_parser as create_parser_fmeasure
-from segeval.ml.Percentage import create_parser as create_parser_percentage
+from segeval.agreement.pi import create_parser as create_parser_pi
+from segeval.agreement.kappa import create_parser as create_parser_kappa
+from segeval.agreement.bias import create_parser as create_parser_bias
+from segeval.ml.fbmeasure import create_parser as create_parser_fmeasure
+from segeval.ml.percentage import create_parser as create_parser_percentage
 from segeval.similarity.Linear import create_parser as \
     create_parser_similarity
-from segeval.window.Pk import create_parser as create_parser_pk
-from segeval.window.WindowDiff import create_parser as create_parser_windowdiff
-from segeval.window.WinPR import create_parser as create_parser_winpr
-from segeval.data.Merge import create_parser as create_parser_merge
+from segeval.window.pk import create_parser as create_parser_pk
+from segeval.window.windowdiff import create_parser as create_parser_windowdiff
+from segeval.window.winpr import create_parser as create_parser_winpr
+from segeval.data.merge import create_parser as create_parser_merge
 
 
 def main(argv=None):

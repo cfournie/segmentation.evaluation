@@ -16,8 +16,8 @@ evaluation metrics including:
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from decimal import Decimal
-from ..Math import mean, std, var
 from .. import convert_positions_to_masses
+from ..math import mean, std, var
 
 
 def load_tests(loader, tests, pattern):
@@ -29,7 +29,7 @@ def load_tests(loader, tests, pattern):
     unittest.html#load-tests-protocol>`_.
     '''
     #pylint: disable=W0613
-    from ..Utils import default_load_tests
+    from ..utils import default_load_tests
     return default_load_tests(__file__, loader, tests)
 
 

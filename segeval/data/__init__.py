@@ -10,8 +10,8 @@ Specification <http://nlp.chrisfournier.ca/publications/#seg_spec>`_.
 import os
 import csv
 import json
-from .TSV import input_linear_mass_tsv
-from .JSON import input_linear_mass_json
+from .tsv import input_linear_mass_tsv
+from .jsonutils import input_linear_mass_json
 
 
 RESULTS = ['summary', 'tsv']
@@ -84,7 +84,7 @@ def load_tests(loader, tests, pattern):
     unittest.html#load-tests-protocol>`_.
     '''
     #pylint: disable=W0613
-    from ..Utils import default_load_tests
+    from ..utils import default_load_tests
     return default_load_tests(__file__, loader, tests)
 
 

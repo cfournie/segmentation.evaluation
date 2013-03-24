@@ -5,10 +5,10 @@ Tests the WinPR evaluation metric.
 '''
 import unittest
 from decimal import Decimal
-from .WinPR import pairwise_win_pr, win_pr, win_pr_f
-from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
+from .winpr import pairwise_win_pr, win_pr, win_pr_f
+from ..data.samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
-from ..Utils import AlmostTestCase
+from ..utils import AlmostTestCase
 
 
 class TestWinPR(unittest.TestCase):

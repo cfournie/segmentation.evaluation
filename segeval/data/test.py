@@ -6,9 +6,9 @@ Tests the data i/o functions and package.
 import os
 import unittest
 from . import Dataset, load_nested_folders_dict, FILETYPE_JSON
-from .TSV import input_linear_mass_tsv, input_linear_positions_tsv
-from .JSON import input_linear_mass_json
-from .Samples import HEARST_1997_STARGAZER
+from .tsv import input_linear_mass_tsv, input_linear_positions_tsv
+from .jsonutils import input_linear_mass_json
+from .samples import HEARST_1997_STARGAZER
 
 
 class TestData(unittest.TestCase):

@@ -5,8 +5,8 @@ Tests the segmentation version of Arstein and Poesio's bias.
 '''
 import unittest
 from decimal import Decimal
-from .Bias import artstein_poesio_bias_linear
-from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
+from .bias import artstein_poesio_bias_linear
+from ..data.samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT
 
 

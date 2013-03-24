@@ -6,7 +6,7 @@ evaluated.
 '''
 import csv
 from .. import Dataset, DataIOError, name_from_filepath
-from ..JSON import FIELD_HAS_REFERENCE_CODER
+from ..jsonutils import FIELD_HAS_REFERENCE_CODER
 from ..TSV import DEFAULT_DELIMITER
 
 

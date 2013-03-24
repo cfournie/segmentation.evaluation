@@ -30,7 +30,7 @@ def default_load_tests(cur_file, loader, tests):
     .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
     unittest.html#load-tests-protocol>`_.
     '''
-    pattern = '*Test.py'
+    pattern = '*test.py'
     cur_dir = os.path.split(cur_file)[0]
     discovered_tests = loader.discover(cur_dir,
                                        pattern=pattern,

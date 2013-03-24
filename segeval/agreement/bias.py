@@ -9,14 +9,14 @@ References:
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from .Kappa import fleiss_kappa_linear
-from .Pi import fleiss_pi_linear
 from . import DEFAULT_N_T
-from ..similarity.Boundary import boundary_similarity
+from .kappa import fleiss_kappa_linear
+from .pi import fleiss_pi_linear
+from ..similarity.boundary import boundary_similarity
 from .. import compute_multiple_values, create_tsv_rows
 from ..data import load_file
-from ..data.TSV import write_tsv
-from ..data.Display import render_agreement_coefficients
+from ..data.tsv import write_tsv
+from ..data.display import render_agreement_coefficients
 
 
 def artstein_poesio_bias_linear(dataset, fnc_compare=boundary_similarity,

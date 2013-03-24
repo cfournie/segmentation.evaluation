@@ -7,9 +7,9 @@ from decimal import Decimal
 from . import actual_agreement_linear, DEFAULT_N_T
 from .. import compute_multiple_values, create_tsv_rows
 from ..data import load_file
-from ..data.TSV import write_tsv
-from ..data.Display import render_agreement_coefficients
-from ..similarity.Boundary import boundary_similarity
+from ..data.tsv import write_tsv
+from ..data.display import render_agreement_coefficients
+from ..similarity.boundary import boundary_similarity
 
 
 def fleiss_kappa_linear(dataset, fnc_compare=boundary_similarity,

@@ -7,7 +7,7 @@ Specification <http://nlp.chrisfournier.ca/publications/#seg_spec>`_.
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from . import load_files, Dataset, DataIOError
-from .JSON import output_linear_mass_json
+from .jsonutils import output_linear_mass_json
 from .. import InputError
 
 

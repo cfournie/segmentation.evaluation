@@ -5,7 +5,7 @@ Tests some math related utility functions.
 '''
 import unittest
 from decimal import Decimal
-from .Math import mean, std, var, stderr
+from .math import mean, std, var, stderr
 
 
 class TestMath(unittest.TestCase):

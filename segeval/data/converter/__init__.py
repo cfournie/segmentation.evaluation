@@ -18,6 +18,6 @@ def load_tests(loader, tests, pattern):
     unittest.html#load-tests-protocol>`_.
     '''
     #pylint: disable=W0613
-    from ...Utils import default_load_tests
+    from ...utils import default_load_tests
     return default_load_tests(__file__, loader, tests)
 

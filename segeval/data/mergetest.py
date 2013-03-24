@@ -5,7 +5,7 @@ Tests the data merge functions and package.
 '''
 import unittest
 import copy
-from .Samples import LARGE_DISAGREEMENT, COMPLETE_AGREEMENT
+from .samples import LARGE_DISAGREEMENT, COMPLETE_AGREEMENT
 
 
 class TestMerge(unittest.TestCase):

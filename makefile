@@ -7,5 +7,5 @@ install:
 upload:
 	python setup.py sdist upload --formats=gztar,zip
 clean:
-	rm -r dist build segeval.egg-info
 	find . -name '*.pyc' -delete
+	rm -r dist build segeval.egg-info

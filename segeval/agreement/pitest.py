@@ -22,8 +22,8 @@ References:
 '''
 import unittest
 from decimal import Decimal
-from .Pi import fleiss_pi_linear
-from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
+from .pi import fleiss_pi_linear
+from ..data.samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
 
 

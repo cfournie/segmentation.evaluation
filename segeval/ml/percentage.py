@@ -7,8 +7,8 @@ from decimal import Decimal
 from . import find_boundary_position_freqs
 from .. import compute_pairwise, compute_pairwise_values, create_tsv_rows
 from ..data import load_file
-from ..data.TSV import write_tsv
-from ..data.Display import render_mean_values, render_mean_micro_values, \
+from ..data.tsv import write_tsv
+from ..data.display import render_mean_values, render_mean_micro_values, \
     render_permuted
 
 

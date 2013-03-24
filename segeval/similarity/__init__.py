@@ -4,7 +4,7 @@ Similarity utility functions based upon boundary edit distance.
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from decimal import Decimal
-from .distance.MultipleBoundary import boundary_edit_distance
+from .distance.multipleboundary import boundary_edit_distance
 
 
 DEFAULT_N_T = 2
@@ -17,7 +17,7 @@ def load_tests(loader, tests, pattern):
     A load_tests functions utilizing the default loader.
     '''
     #pylint: disable=W0613
-    from ..Utils import default_load_tests
+    from ..utils import default_load_tests
     return default_load_tests(__file__, loader, tests)
 
 

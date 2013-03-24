@@ -5,9 +5,9 @@ Tests the WindowDiff evaluation metric.
 '''
 import unittest
 from decimal import Decimal
-from .Percentage import percentage, pairwise_percentage, \
+from .percentage import percentage, pairwise_percentage, \
     pairwise_percentage_micro, find_boundary_position_freqs
-from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
+from ..data.samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
 from .. import convert_positions_to_masses
 
@@ -146,7 +146,7 @@ class TestPairwisePercentage(unittest.TestCase):
         Calculate mean permuted pairwise percentage on a theoretical dataset
         containing large disagreement.
         '''
-        from ..data.JSON import FIELD_HAS_REFERENCE_CODER
+        from ..data.jsonutils import FIELD_HAS_REFERENCE_CODER
         if FIELD_HAS_REFERENCE_CODER in LARGE_DISAGREEMENT:
             pass
         self.assertEqual(pairwise_percentage(LARGE_DISAGREEMENT),

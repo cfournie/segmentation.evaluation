@@ -8,8 +8,8 @@ from . import descriptive_statistics, DEFAULT_N_T, DEFAULT_WEIGHT, \
     DEFAULT_BOUNDARY_TYPES, DEFAULT_CONVERT_TO_BOUNDARY_STRINGS
 from .. import create_tsv_rows, compute_pairwise, compute_pairwise_values
 from ..data import load_file
-from ..data.TSV import write_tsv
-from ..data.Display import render_mean_values, render_mean_micro_values
+from ..data.tsv import write_tsv
+from ..data.display import render_mean_values, render_mean_micro_values
 
 
 DEFAULT_PERMUTED = False

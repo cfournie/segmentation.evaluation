@@ -5,11 +5,11 @@ Tests the WindowDiff evaluation metric.
 '''
 import unittest
 from decimal import Decimal
-from .WindowDiff import window_diff, pairwise_window_diff
-from ..data.Samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
-    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
-from ..Utils import AlmostTestCase
+from .windowdiff import window_diff, pairwise_window_diff
 from .. import DECIMAL_PLACES
+from ..data.samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
+    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
+from ..utils import AlmostTestCase
 
 
 class TestWindowDiff(unittest.TestCase):
