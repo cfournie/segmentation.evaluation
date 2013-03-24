@@ -4,61 +4,15 @@ Created on Sep 4, 2012
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from decimal import Decimal
-from .distance.MultipleBoundary import boundary_edit_distance
-from segeval import compute_pairwise, compute_pairwise_values
-from . import boundary_string_from_masses, weight_a, weight_s_scale, weight_t_scale
-from .. import SegmentationMetricError, compute_pairwise, \
-    compute_pairwise_values, create_tsv_rows
+from . import descriptive_statistics, DEFAULT_N_T, DEFAULT_WEIGHT, \
+    DEFAULT_BOUNDARY_TYPES, DEFAULT_CONVERT_TO_BOUNDARY_STRINGS
+from .. import create_tsv_rows, compute_pairwise, compute_pairwise_values
 from ..data import load_file
 from ..data.TSV import write_tsv
 from ..data.Display import render_mean_values, render_mean_micro_values
 
 
 DEFAULT_PERMUTED = False
-DEFAULT_N_T = 2
-DEFAULT_BOUNDARY_TYPES = set([1])
-DEFAULT_WEIGHT = (weight_a, weight_s_scale, weight_t_scale)
-DEFAULT_CONVERT_TO_BOUNDARY_STRINGS = True
-
-
-def __boundary_similarity__(segs_a, segs_b,
-                            boundary_types=DEFAULT_BOUNDARY_TYPES,
-                            n_t=DEFAULT_N_T, weight=DEFAULT_WEIGHT,
-                            convert_to_boundary_strings=\
-                                DEFAULT_CONVERT_TO_BOUNDARY_STRINGS):
-    '''
-    Compute boundary similarity applying the weighting functions specified.
-    '''
-    # pylint: disable=C0103,R0913,R0914
-    # Count boundaries
-    bs_a = segs_a
-    bs_b = segs_b
-    if convert_to_boundary_strings:
-        bs_a = boundary_string_from_masses(segs_a)
-        bs_b = boundary_string_from_masses(segs_b)
-    # Compute edits
-    additions, substitutions, transpositions = \
-        boundary_edit_distance(bs_a, bs_b, n_t=n_t)
-    # Calculate the total pbs
-    pbs = len(bs_b) * len(boundary_types)
-    # Apply weighting functions
-    fnc_weight_a, fnc_weight_s, fnc_weight_t = weight
-    count_additions      = fnc_weight_a(additions)
-    count_substitutions  = fnc_weight_s(substitutions,
-                                        max(boundary_types),
-                                        min(boundary_types))
-    count_transpositions = fnc_weight_t(transpositions, n_t)
-    count_edits = count_additions + count_substitutions + count_transpositions
-    # Compute
-    full_misses = 0
-    boundaries_all = 0
-    matches = 0
-    for set_a, set_b in zip(bs_a, bs_b):
-        matches += len(set_a.intersection(set_b))
-        full_misses += len(set_a.symmetric_difference(set_b))
-        boundaries_all += len(set_a) + len(set_b)
-    return pbs, count_edits, additions, substitutions, transpositions, \
-            full_misses, boundaries_all, matches
 
 
 def boundary_similarity(segs_a, segs_b,
@@ -68,19 +22,16 @@ def boundary_similarity(segs_a, segs_b,
                         DEFAULT_CONVERT_TO_BOUNDARY_STRINGS,
                         return_parts=False):
     '''
-    BS type b.
+    Boundary Similarity.
     '''
     # pylint: disable=C0103,R0913,R0914
-    values = __boundary_similarity__(segs_a, segs_b,
-                                     boundary_types=boundary_types, n_t=n_t,
-                                     weight=weight,
-                                     convert_to_boundary_strings=\
+    values = descriptive_statistics(segs_a, segs_b,
+                                    boundary_types=boundary_types, n_t=n_t,
+                                    weight=weight,
+                                    convert_to_boundary_strings=\
                                         convert_to_boundary_strings)
-    matches        = values[7]
-    count_edits    = values[1] # Weighted
-    additions      = values[2]
-    substitutions  = values[3]
-    transpositions = values[4]
+    count_edits, additions, substitutions, transpositions = values[0:4]
+    matches = values[6]
     count_unweighted = len(additions) + len(substitutions) + len(transpositions)
     # Fraction
     denominator = count_unweighted + matches
@@ -89,45 +40,6 @@ def boundary_similarity(segs_a, segs_b,
         return numerator, denominator, additions, substitutions, transpositions
     else:
         return numerator / denominator if denominator > 0 else 1
-
-
-def confusion_matrix(segs_a, segs_b,
-                        boundary_types=DEFAULT_BOUNDARY_TYPES,
-                        n_t=DEFAULT_N_T, weight=DEFAULT_WEIGHT,
-                        convert_to_boundary_strings=\
-                        DEFAULT_CONVERT_TO_BOUNDARY_STRINGS,
-                        return_parts=False):
-    '''
-    Create a confusion matrix using boundary edit distance.
-    '''
-    # pylint: disable=C0103,R0913,R0914
-    # Count boundaries
-    bs_a = segs_a
-    bs_b = segs_b
-    if convert_to_boundary_strings:
-        bs_a = boundary_string_from_masses(segs_a)
-        bs_b = boundary_string_from_masses(segs_b)
-    # Compute edits
-    additions, substitutions, transpositions = \
-        boundary_edit_distance(bs_a, bs_b, n_t=n_t)
-    # Calculate the total pbs
-    pbs = len(bs_b) * len(boundary_types)
-    # Apply weighting functions
-    fnc_weight_a, fnc_weight_s, fnc_weight_t = weight
-    count_additions      = fnc_weight_a(additions)
-    count_substitutions  = fnc_weight_s(substitutions,
-                                        max(boundary_types),
-                                        min(boundary_types))
-    count_transpositions = fnc_weight_t(transpositions, n_t)
-    count_edits = count_additions + count_substitutions + count_transpositions
-    # Compute
-    full_misses = 0
-    boundaries_all = 0
-    matches = 0
-    for set_a, set_b in zip(bs_a, bs_b):
-        matches += len(set_a.intersection(set_b))
-        full_misses += len(set_a.symmetric_difference(set_b))
-        boundaries_all += len(set_a) + len(set_b)
     
     
 def pairwise_similarity(dataset_masses, n=DEFAULT_N_T, weight=DEFAULT_WEIGHT,
@@ -432,3 +344,4 @@ def create_parser(subparsers):
                             'this to obtain a detailed error breakdown per '+\
                             'edit')
     parser.set_defaults(func=parse)
+

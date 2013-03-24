@@ -6,7 +6,7 @@
 import unittest
 
 
-class TestBoundary(unittest.TestCase):
+class TestSegmentation(unittest.TestCase):
     '''
     Test.
     '''
