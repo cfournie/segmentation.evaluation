@@ -7,12 +7,12 @@ and Inkpen (2012).
 from .windowdiff import compute_window_size
 from ..ml import fmeasure, precision, recall, cf_to_vars, vars_to_cf
 from ..ml.fbmeasure import parser_beta_support, DEFAULT_BETA
-from .. import SegmentationMetricError, compute_pairwise, \
-    convert_masses_to_positions, compute_pairwise_values, create_tsv_rows
+from .. import (SegmentationMetricError, compute_pairwise, 
+    convert_masses_to_positions, compute_pairwise_values, create_tsv_rows)
 from ..data import load_file
 from ..data.tsv import write_tsv
-from ..data.display import render_mean_values, render_mean_micro_values, \
-     render_permuted
+from ..data.display import (render_mean_values, render_mean_micro_values, 
+     render_permuted)
 
 
 DEFAULT_PERMUTED = False

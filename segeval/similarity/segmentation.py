@@ -4,8 +4,8 @@ Similarity package
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from decimal import Decimal
-from . import descriptive_statistics, DEFAULT_N_T, DEFAULT_BOUNDARY_TYPES, \
-    DEFAULT_WEIGHT, DEFAULT_CONVERT_TO_BOUNDARY_STRINGS
+from . import (descriptive_statistics, DEFAULT_N_T, DEFAULT_BOUNDARY_TYPES, 
+    DEFAULT_WEIGHT, DEFAULT_CONVERT_TO_BOUNDARY_STRINGS)
 from .. import compute_pairwise, compute_pairwise_values
 
 

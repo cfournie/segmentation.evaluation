@@ -4,8 +4,8 @@ Tests similarity functions.
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import unittest
-from . import boundary_string_from_masses, weight_s_scale, weight_t_scale, \
-    confusion_matrix
+from . import (boundary_string_from_masses, weight_s_scale, weight_t_scale, 
+    confusion_matrix)
 
 
 class TestSimilarity(unittest.TestCase):

@@ -5,10 +5,10 @@ Tests the WindowDiff evaluation metric.
 '''
 import unittest
 from decimal import Decimal
-from .percentage import percentage, pairwise_percentage, \
-    pairwise_percentage_micro, find_boundary_position_freqs
-from ..data.samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
-    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
+from .percentage import (percentage, pairwise_percentage, 
+    pairwise_percentage_micro, find_boundary_position_freqs)
+from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, 
+    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
 from .. import convert_positions_to_masses
 
 

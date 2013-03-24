@@ -7,8 +7,8 @@ import unittest
 from decimal import Decimal
 from .windowdiff import window_diff, pairwise_window_diff
 from .. import DECIMAL_PLACES
-from ..data.samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
-    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
+from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, 
+    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
 from ..utils import AlmostTestCase
 
 

@@ -5,8 +5,8 @@ Tests some general segeval utility functions.
 '''
 import unittest
 from decimal import Decimal
-from . import convert_positions_to_masses, convert_masses_to_positions, \
-    compute_pairwise
+from . import (convert_positions_to_masses, convert_masses_to_positions, 
+    compute_pairwise)
 from .data.samples import KAZANTSEVA2012_G5
 from .ml.fbmeasure import f_b_measure
 

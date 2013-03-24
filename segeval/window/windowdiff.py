@@ -8,13 +8,13 @@ counting at the beginning and end of segmentations provided by
 '''
 from decimal import Decimal
 from . import compute_window_size, parser_one_minus_support
-from .. import SegmentationMetricError, compute_pairwise, \
-    convert_masses_to_positions, compute_pairwise_values, create_tsv_rows, \
-    convert_positions_to_masses
+from .. import (SegmentationMetricError, compute_pairwise, 
+    convert_masses_to_positions, compute_pairwise_values, create_tsv_rows, 
+    convert_positions_to_masses)
 from ..data import load_file
 from ..data.tsv import write_tsv
-from ..data.display import render_mean_values, render_mean_micro_values, \
-    render_permuted
+from ..data.display import (render_mean_values, render_mean_micro_values, 
+    render_permuted)
 
 
 DEFAULT_PERMUTED = True

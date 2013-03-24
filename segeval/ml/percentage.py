@@ -8,8 +8,8 @@ from . import find_boundary_position_freqs
 from .. import compute_pairwise, compute_pairwise_values, create_tsv_rows
 from ..data import load_file
 from ..data.tsv import write_tsv
-from ..data.display import render_mean_values, render_mean_micro_values, \
-    render_permuted
+from ..data.display import (render_mean_values, render_mean_micro_values, 
+    render_permuted)
 
 
 DEFAULT_PERMUTED = False

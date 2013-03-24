@@ -4,8 +4,8 @@ Created on Sep 4, 2012
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from decimal import Decimal
-from . import descriptive_statistics, DEFAULT_N_T, DEFAULT_WEIGHT, \
-    DEFAULT_BOUNDARY_TYPES, DEFAULT_CONVERT_TO_BOUNDARY_STRINGS
+from . import (descriptive_statistics, DEFAULT_N_T, DEFAULT_WEIGHT, 
+    DEFAULT_BOUNDARY_TYPES, DEFAULT_CONVERT_TO_BOUNDARY_STRINGS)
 from .. import create_tsv_rows, compute_pairwise, compute_pairwise_values
 from ..data import load_file
 from ..data.tsv import write_tsv

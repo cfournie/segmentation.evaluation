@@ -3,6 +3,7 @@ Utility functions and classes for the package.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import print_function
 import os
 import unittest
 from . import DECIMAL_PLACES
@@ -59,8 +60,8 @@ class AlmostTestCase(unittest.TestCase):
                     self.assertAlmostEquals(first[item], second[item], places,
                                             msg, delta)
                 except Exception as e:
-                    print first
-                    print second
+                    print(first)
+                    print(second)
                     raise e
         elif isinstance(first, list) or isinstance(first, tuple):
             for item in zip(first, second):
@@ -68,8 +69,8 @@ class AlmostTestCase(unittest.TestCase):
                     self.assertAlmostEquals(item[0], item[1], places, msg,
                                             delta)
                 except Exception as e:
-                    print first
-                    print second
+                    print(first)
+                    print(second)
                     raise e
         else:
             return unittest.TestCase.assertAlmostEquals(self,

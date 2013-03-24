@@ -4,8 +4,8 @@ Tests multiple-boundary edit distance.
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import unittest
-from .multipleboundary import boundary_edit_distance, \
-    __additions_substitutions__, __additions_substitutions_sets__
+from .multipleboundary import (boundary_edit_distance, 
+    __additions_substitutions__, __additions_substitutions_sets__)
 
 
 class TestMultipleBoundaries(unittest.TestCase):

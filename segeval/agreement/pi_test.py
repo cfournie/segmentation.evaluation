@@ -23,8 +23,8 @@ References:
 import unittest
 from decimal import Decimal
 from .pi import fleiss_pi_linear
-from ..data.samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
-    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
+from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, 
+    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
 
 
 class TestPi(unittest.TestCase):

@@ -6,8 +6,8 @@ Tests the segmentation versions of Cohen's and Fleiss' Kappa.
 import unittest
 from decimal import Decimal
 from .kappa import fleiss_kappa_linear
-from ..data.samples import KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, \
-    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT
+from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, 
+    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
 
 
 class TestKappa(unittest.TestCase):

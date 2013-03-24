@@ -4,6 +4,7 @@ Console interface to the overall segeval package.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import print_function
 import argparse
 import sys
 from segeval.agreement.pi import create_parser as create_parser_pi
@@ -11,8 +12,8 @@ from segeval.agreement.kappa import create_parser as create_parser_kappa
 from segeval.agreement.bias import create_parser as create_parser_bias
 from segeval.ml.fbmeasure import create_parser as create_parser_fmeasure
 from segeval.ml.percentage import create_parser as create_parser_percentage
-from segeval.similarity.Linear import create_parser as \
-    create_parser_similarity
+from segeval.similarity.Linear import (
+    create_parser as create_parser_similarity)
 from segeval.window.pk import create_parser as create_parser_pk
 from segeval.window.windowdiff import create_parser as create_parser_windowdiff
 from segeval.window.winpr import create_parser as create_parser_winpr
@@ -60,6 +61,6 @@ if __name__ is '__main__':
     
     output = main()
     if output is not None:
-        print output
+        print(output)
     sys.exit(0)
 
