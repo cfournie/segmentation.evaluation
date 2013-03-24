@@ -14,13 +14,9 @@ except ImportError:
     from distutils.core import setup
     extra = {}
 
-if sys.argv[-1] is 'publish':
-    os.system('python setup.py sdist upload')
-    sys.exit()
+from segeval import __package_name__, __version__, __author__, __author_email__
 
-from segeval import __version__
-
-requires = ['numpy>=1.6.0']
+requires=['numpy>=1.6.0']
 
 packages=['segeval',
           'segeval.agreement',
@@ -31,13 +27,13 @@ packages=['segeval',
           'segeval.window']
 
 setup(
-    name='segeval',
+    name=__package_name__,
     version=__version__,
     long_description=open("./README.rst", "r").read(),
     description='A package and utilities providing a variety of discourse segmentation evaluation metrics',
     license=open('LICENSE').read(),
-    author='Chris Fournier',
-    author_email='chris.m.fournier@gmail.com',
+    author=__author__,
+    author_email=__author_email__,
     url='http://pypi.python.org/pypi/segeval/',
     install_requires = requires,
     zip_safe=True,
