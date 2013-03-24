@@ -18,7 +18,7 @@ References:
     Joseph L. Fleiss. 1971. Measuring nominal scale agreement among many raters.
     Psychological Bulletin, 76(5):378-382.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import unittest
 from decimal import Decimal

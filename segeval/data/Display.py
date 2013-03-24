@@ -1,7 +1,7 @@
 '''
 Display and output related utility functions.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 
 

@@ -2,7 +2,7 @@
 Converts morphological segmentation input into segmentation masses to be
 evaluated.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import csv
 from .. import Dataset, DataIOError, name_from_filepath

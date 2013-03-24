@@ -1,7 +1,7 @@
 '''
 Tests the segmentation versions of Cohen's and Fleiss' Kappa.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import unittest
 from decimal import Decimal

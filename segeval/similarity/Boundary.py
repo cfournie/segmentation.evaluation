@@ -214,8 +214,6 @@ def pairwise_similarity_micro(dataset_masses, n=DEFAULT_N_T,
         return (Decimal(count_edits) / Decimal(pbs))
 
 
-
-
 def pairwise_b(dataset_masses, n_t=DEFAULT_N_T, weight=DEFAULT_WEIGHT,
                return_parts=False):
     '''

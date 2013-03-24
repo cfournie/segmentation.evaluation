@@ -1,7 +1,7 @@
 '''
 Multiple-boundary edit distance.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from itertools import permutations
 

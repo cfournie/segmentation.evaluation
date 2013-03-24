@@ -1,7 +1,7 @@
 '''
 Tests the segmentation version of Arstein and Poesio's bias.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import unittest
 from decimal import Decimal

@@ -1,7 +1,7 @@
 '''
 Inter-coder agreement statistic Fleiss' Kappa.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from decimal import Decimal
 from . import actual_agreement_linear, DEFAULT_N_T

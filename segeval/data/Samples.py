@@ -2,7 +2,7 @@
 Test data for unit tests that has been selected from
 [KazantsevaSzpakowicz2012]_, [Hearst1997]_, or contrived.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from . import Dataset
 #pylint: disable=W0105

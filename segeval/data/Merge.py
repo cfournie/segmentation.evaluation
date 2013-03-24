@@ -4,7 +4,7 @@ Data merge tools.  Used to merge multiple files into one.
 .. seealso:: File format documentation in: `Segmentation Representation \
 Specification <http://nlp.chrisfournier.ca/publications/#seg_spec>`_.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from . import load_files, Dataset, DataIOError
 from .JSON import output_linear_mass_json

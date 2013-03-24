@@ -1,7 +1,7 @@
 '''
 Inter-coder agreement statistic Fleiss' Pi.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from decimal import Decimal
 from .. import compute_multiple_values, create_tsv_rows

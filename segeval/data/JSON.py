@@ -1,7 +1,7 @@
 '''
 JSON output module (for general JSON writing operations).
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import json
 import os

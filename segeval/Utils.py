@@ -1,7 +1,7 @@
 '''
 Utility functions and classes for the package.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import os
 import unittest

@@ -2,7 +2,7 @@
 '''
 Setup script for installing the segeval package.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import sys
 import os

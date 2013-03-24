@@ -7,7 +7,7 @@ References:
     computational linguistics. Computational Linguistics, 34(4):555-596. MIT
     Press.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from .Kappa import fleiss_kappa_linear
 from .Pi import fleiss_pi_linear

@@ -1,7 +1,7 @@
 '''
 Tests the data merge functions and package.
 
-.. codeauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import unittest
 import copy
