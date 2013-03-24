@@ -5,7 +5,7 @@ Tests the machine learning (ML) statistics functions, and ml package.
 '''
 import unittest
 from decimal import Decimal
-from . import precision, recall, fmeasure, vars_to_cf, cf_to_vars
+from . import precision, recall, fmeasure, vars_to_cf, cf_to_vars, ConfusionMatrix
 
 
 class TestML(unittest.TestCase):
@@ -105,4 +105,12 @@ class TestML(unittest.TestCase):
         '''
         self.assertEqual(cf_to_vars({'tp' : 1, 'fp' : 2, 'fn' : 3, 'tn' : 4}),
                          (1, 2, 3, 4))
+
+
+    def test_cf(self):
+        cf = ConfusionMatrix()
+        cf.add('a', 'b')
+        self.assertEqual(cf.get('a', 'b'), 1)
+        self.assertEqual(cf.get('a', 'd'), 0)
+        self.assertEqual(cf.get('c', 'd'), 0)
 

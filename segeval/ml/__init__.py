@@ -15,6 +15,7 @@ learning metrics that have been adapted for use in segmentation, including:
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from decimal import Decimal
+from collections import defaultdict
 
 
 def load_tests(loader, tests, pattern):
@@ -172,4 +173,19 @@ def find_boundary_position_freqs(masses_set):
             except KeyError:
                 seg_positions[position] = 1
     return seg_positions
+
+
+class ConfusionMatrix(dict):
+    
+    def add(self, predicted, actual, value=1):
+        self.__check__(predicted)
+        self[predicted][actual] += value
+
+    def get(self, predicted, actual):
+        self.__check__(predicted)
+        return self[predicted][actual]
+    
+    def __check__(self, predicted):
+        if predicted not in self:
+            self[predicted] = defaultdict(int)
 
