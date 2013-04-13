@@ -20,7 +20,10 @@ def mean(values):
     summation = Decimal(0)
     for value in values:
         summation += value
-    return summation / len(values)
+    if len(values) > 0:
+        return summation / len(values)
+    else:
+        return 0
     
     
 def var(values):
@@ -65,4 +68,7 @@ def stderr(values):
     :rtype: :class:`decimal.Decimal`
     '''
     return std(values) / Decimal(len(values)).sqrt()
+
+
+__all__ = []
 

@@ -17,6 +17,7 @@ learning metrics that have been adapted for use in segmentation, including:
 from __future__ import division
 from decimal import Decimal
 from collections import defaultdict
+from ..math import mean
 
 
 def load_tests(loader, tests, pattern):
@@ -32,48 +33,72 @@ def load_tests(loader, tests, pattern):
     return default_load_tests(__file__, loader, tests)
 
 
-def precision(cf):
-    '''
-    Calculate precision.
-    
-    .. math::
-        \\text{Precision} = \\frac{TP}{TP + FP}
-    
-    :param tp: Number of true positives
-    :param fp: Number of false positives
-    
-    :returns: Precision.
-    :rtype: :class:`decimal.Decimal`
-    '''
-    # pylint: disable=C0103
-    if cf['tp'] is 0:
-        return Decimal(0)
-    else:
-        return Decimal(cf['tp']) / Decimal(cf['tp'] + cf['fp'])
-    
-    
-def recall(cf):
-    '''
-    Calculate recall.
-    
-    .. math::
-        \\text{Recall} = \\frac{TP}{TP + FN}
-    
-    Arguments:
-    :param tp: Number of true positives
-    :param fn: Number of false negatives
-    
-    :returns: Recall.
-    :rtype: :class:`decimal.Decimal`
-    '''
-    # pylint: disable=C0103
-    if cf['tp'] is 0:
-        return Decimal(0)
-    else:
-        return Decimal(cf['tp']) / Decimal(cf['tp'] + cf['fn'])
+MICRO, MACRO = range(2)
 
 
-def fmeasure(cf, beta=Decimal('1.0')):
+def __value_micro_macro__(fnc, classes, arguments, classification=None,
+                          version=MICRO):
+    # pylint: disable=W0142
+    if classification is None:
+        if version is MICRO:
+            # Micro-average
+            numerator, denominator = 0, 0
+            for classification in classes:
+                arguments['classification'] = classification
+                arguments['return_parts'] = True
+                class_numerator, class_denominator = fnc(**arguments)
+                numerator += class_numerator
+                denominator += class_denominator
+            if numerator == 0:
+                return 0
+            else:
+                return Decimal(numerator) / denominator
+        elif version is MACRO:
+            # Macro-average
+            values = list()
+            for classification in classes:
+                arguments['classification'] = classification
+                value = fnc(**arguments)
+                values.append(value)
+            return mean(values)
+    else:
+        return fnc(**arguments)
+
+    
+def __precision__(matrix, classification, return_parts=False):
+    # pylint: disable=C0103
+    predicted = classification
+    denominator = 0
+    for actual in matrix.classes():
+        denominator += matrix[predicted][actual]
+    numerator = matrix[classification][classification]
+    if return_parts:
+        return numerator, denominator
+    else:
+        if numerator is 0:
+            return Decimal(0)
+        else:
+            return Decimal(numerator) / Decimal(denominator)
+
+
+def __recall__(matrix, classification, return_parts=False):
+    # pylint: disable=C0103
+    actual = classification
+    denominator = 0
+    for predicted in matrix.classes():
+        denominator += matrix[predicted][actual]
+    numerator = matrix[classification][classification]
+    if return_parts:
+        return numerator, denominator
+    else:
+        if numerator is 0:
+            return Decimal(0)
+        else:
+            return Decimal(numerator) / Decimal(denominator)
+
+
+def __fmeasure__(matrix, classification=None, beta=Decimal('1.0'),
+                 return_parts=False):
     '''
     Calculate F-measure, also known as F-score.
     
@@ -81,112 +106,164 @@ def fmeasure(cf, beta=Decimal('1.0')):
         \\text{F}_{\\beta}\\text{-measure} = \\frac{(1 + \\beta^2) \\cdot TP}\
         {(1 + \\beta^2) \\cdot TP + \\beta^2 \\cdot FN + FP}
     
-    :param tp: Number of true positives.
-    :type tp: int
-    :param fp: Number of false positives.
-    :type fp: int
-    :param fn: Number of false negatives.
-    :type fn: int
-    :param beta: Scales how precision and recall are averaged.
-    :type beta: double
+    :param matrix: Confusion matrix
+    :param predicted: Precision for this classification label
+    
+    :type matrix: :class:`ConfusionMatrix`
     
     :returns: F-measure.
     :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
-    if cf['tp'] is 0 and cf['fp'] is 0 and cf['fn'] is 0:
-        return Decimal('0')
+    class_precision = __precision__(matrix, classification)
+    class_recall = __recall__(matrix, classification)
+    if not return_parts and (class_precision == 0 or class_recall == 0):
+        return 0
     else:
         # Convert to Decimal
-        tp   = Decimal(cf['tp'])
-        fp   = Decimal(cf['fp'])
-        fn   = Decimal(cf['fn'])
         beta = Decimal(str(beta))
         # Calculate terms
         beta2   = beta ** 2
         beta2_1 = Decimal('1.0') + beta2
-        numerator   = beta2_1 * tp
-        denomenator = (beta2_1 * tp) + (beta2 * fn) + fp
-        # Perform division
-        return numerator / denomenator
+        numerator   = beta2_1 * class_precision * class_recall
+        denominator = (beta2 * class_precision) + class_recall
+        if return_parts:
+            return numerator, denominator
+        else:
+            return Decimal(numerator) / Decimal(denominator)
 
 
-def vars_to_cf(tp, fp, fn, tn):
+def precision(matrix, classification=None, version=MICRO):
     '''
-    Converts a set of variables to a confusion matrix dict.
+    Calculate precision.
     
-    :param tp: Number of true positives.
-    :param fp: Number of false positives.
-    :param fn: Number of false negatives.
-    :param tn: Number of true negatives.
-    :type tp: int
-    :type fp: int
-    :type fn: int
-    :type tn: int
-    
-    :returns: A dict representing a confusion matrix.
-    :rtype: :func:`dict` containing tp, fp, fn, tn values.
-    '''
-    # pylint: disable=C0103
-    return {'tp' : tp, 'fp' : fp, 'fn' : fn, 'tn' : tn}
+    :param matrix: Confusion matrix
+    :param classification: Precision for this classification label
+    :param version: MICRO or MACRO precision
 
-
-def cf_to_vars(cf):
-    '''
-    Converts a set of variables to a confusion matrix dict.
+    :type matrix: :class:`ConfusionMatrix`
     
-    :param tp: Number of true positives.
-    :param fp: Number of false positives.
-    :param fn: Number of false negatives.
-    :param tn: Number of true negatives.
-    :type tp: int
-    :type fp: int
-    :type fn: int
-    :type tn: int
-    
-    :returns: A dict representing a confusion matrix.
-    :rtype: :func:`dict` containing tp, fp, fn, tn values.
-    '''
-    # pylint: disable=C0103
-    return cf['tp'], cf['fp'], cf['fn'], cf['tn']
-
-
-def find_boundary_position_freqs(masses_set):
-    '''
-    Converts a list of segmentation mass sets into a dict of boundary positions,
-    and the frequency of the whether boundaries were chosen at that location or,
-    or not,
-    
-    :param masses_set: List of segmentation masses
-    :type masses_set: list
-    
-    :returns: :func:`dict` of boundary position frequencies.
+    :returns: Precision.
     :rtype: :class:`decimal.Decimal`
     '''
-    seg_positions = dict()
-    for masses in masses_set:
-        # Iterate over boundary positions that precede the index, excluding the
-        # first position so that the start is not counted as a boundary
-        for i in xrange(1, len(masses)):
-            position = sum(masses[0:i])
-            try:
-                seg_positions[position] += 1
-            except KeyError:
-                seg_positions[position] = 1
-    return seg_positions
+    # pylint: disable=C0103
+    classes = matrix.classes()
+    arguments = dict()
+    arguments['matrix'] = matrix
+    arguments['classification'] = classification
+    return __value_micro_macro__(__precision__, classes, arguments,
+                                 classification, version)
+
+
+def recall(matrix, classification=None, version=MICRO):
+    '''
+    Calculate recall.
+    
+    :param matrix: Confusion matrix
+    :param classification: Recall for this classification label
+    :param version: MICRO or MACRO recall
+
+    :type matrix: :class:`ConfusionMatrix`
+    
+    :returns: Precision.
+    :rtype: :class:`decimal.Decimal`
+    '''
+    # pylint: disable=C0103
+    classes = matrix.classes()
+    arguments = dict()
+    arguments['matrix'] = matrix
+    arguments['classification'] = classification
+    return __value_micro_macro__(__recall__, classes, arguments, classification,
+                                 version)
+
+
+def fmeasure(matrix, classification=None, beta=Decimal('1.0'), version=MICRO):
+    '''
+    Calculate FMeasure.
+    
+    :param matrix: Confusion matrix
+    :param classification: FMeasure for this classification label
+    :param version: MICRO or MACRO FMeasure
+
+    :type matrix: :class:`ConfusionMatrix`
+    
+    :returns: Precision.
+    :rtype: :class:`decimal.Decimal`
+    '''
+    # pylint: disable=C0103
+    classes = matrix.classes()
+    arguments = dict()
+    arguments['matrix'] = matrix
+    arguments['classification'] = classification
+    arguments['beta'] = beta
+    return __value_micro_macro__(__fmeasure__, classes, arguments,
+                                 classification, version)
+
+
+class _InnerConfusionMatrix(defaultdict):
+    '''
+    Inner dict of the confusion matrix; used to determine when the classes list
+    is dirty.
+    '''
+    # pylint: disable=R0903
+    
+    def __init__(self, parent):
+        self.__parent__ = parent
+        defaultdict.__init__(self, int)
+
+    def __setitem__(self, key, value):
+        self.__parent__.__dirty_classes__ = True
+        defaultdict.__setitem__(self, key, value)
 
 
 class ConfusionMatrix(dict):
+    '''
+    Dict representation of a confusion matrix:
     
-    def add(self, predicted, actual, value=1):
-        self.__check__(predicted)
-        self[predicted][actual] += value
+    matrix[predicted][actual]
+    '''
+    __classes__ = set()
+    __dirty_classes__ = False
+    
+    def __setitem__(self, key, value):
+        raise AttributeError('no such method')
+        
+    def __getitem__(self, key):
+        '''
+        Return default dicts and store them so that the following is possible:
+        
+        >>> matrix = ConfusionMatrix()
+        >>> matrix['a']['b'] += 1
+        >>> matrix['a']['b']
+        1
+        >>> matrix['a']['a'] = 1
+        >>> matrix['a']['a']
+        1
+        >>> matrix['c']['d']
+        0
+        
+        '''
+        value = None
+        if key not in self:
+            value = _InnerConfusionMatrix(self)
+            dict.__setitem__(self, key, value)
+        else:
+            value = dict.__getitem__(self, key)
+        return value
 
-    def get(self, predicted, actual):
-        self.__check__(predicted)
-        return self[predicted][actual]
-    
-    def __check__(self, predicted):
-        if predicted not in self:
-            self[predicted] = defaultdict(int)
+    def classes(self):
+        '''
+        Retrieve the set of all classes.
+        '''
+        if self.__dirty_classes__:
+            self.__classes__ = set()
+            for predicted, values in self.items():
+                self.__classes__.add(predicted)
+                for actual in values.keys():
+                    self.__classes__.add(actual)
+            self.__dirty_classes__ = False
+        return self.__classes__
+
+
+__all__ = [MICRO, MACRO, precision, recall, fmeasure, ConfusionMatrix]
 
