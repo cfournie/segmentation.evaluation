@@ -1,10 +1,11 @@
 '''
-
+Tests segmentation similarity (S).
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import unittest
-
+from decimal import Decimal
+from .segmentation import segmentation_similarity
 
 class TestSegmentation(unittest.TestCase):
     '''
@@ -12,11 +13,31 @@ class TestSegmentation(unittest.TestCase):
     '''
     # pylint: disable=R0904,C0103,C0324
     
-    # TODO: Implement tests
-    pass
-
-
-if __name__ is "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
-    unittest.main()
+    def test_fn(self):
+        '''
+        Test false negative.
+        '''
+        value = segmentation_similarity([2, 3, 6], [5, 6])
+        self.assertEqual(Decimal('0.9'), value)
+    
+    def test_fp(self):
+        '''
+        Test false negative.
+        '''
+        value = segmentation_similarity([2, 3, 6], [2, 3, 3, 3])
+        self.assertEqual(Decimal('0.9'), value)
+    
+    def test_near_miss(self):
+        '''
+        Test near miss.
+        '''
+        value = segmentation_similarity([2, 3, 6], [2, 2, 7])
+        self.assertEqual(Decimal('0.95'), value)
+    
+    def test_clustered_fps(self):
+        '''
+        Test near miss.
+        '''
+        value = segmentation_similarity([2, 3, 6], [1, 1, 3, 1, 5])
+        self.assertEqual(Decimal('0.8'), value)
 
