@@ -6,6 +6,7 @@ Similarity utility functions based upon boundary edit distance.
 from __future__ import division
 from decimal import Decimal
 from .distance.multipleboundary import boundary_edit_distance
+from ..ml import ConfusionMatrix as cm
 
 
 DEFAULT_N_T = 2
@@ -22,19 +23,19 @@ def load_tests(loader, tests, pattern):
     return default_load_tests(__file__, loader, tests)
 
 
-def boundary_string_from_masses(segment_masses):
+def boundary_string_from_masses(masses):
     '''
     Creates a "boundary string", or sequence of boundary type sets.
     
-    :param segment_masses: Segmentation masses.
-    :type segment_masses:  list
+    :param masses: Segmentation masses.
+    :type masses:  list
     :returns: A sequence of boundary type sets
     :rtype: :func:`list` of :func:`set` objects containing :func:`int` values.
     '''
-    string = [set() for _ in xrange(0, sum(segment_masses) - 1)]
+    string = [set() for _ in xrange(0, sum(masses) - 1)]
     # Iterate over each position
     pos = 0
-    for mass in segment_masses:
+    for mass in masses:
         cur_pos = pos + mass - 1
         if cur_pos < len(string):
             string[cur_pos].add(1)
@@ -120,18 +121,20 @@ def descriptive_statistics(segs_a, segs_b,
     count_transpositions = fnc_weight_t(transpositions, n_t)
     count_edits = count_additions + count_substitutions + count_transpositions
     # Compute
-    full_misses = 0
+    matches = list()
+    full_misses = list()
     boundaries_all = 0
-    matches = 0
     for set_a, set_b in zip(bs_a, bs_b):
-        matches += len(set_a.intersection(set_b))
-        full_misses += len(set_a.symmetric_difference(set_b))
+        matches.extend(set_a.intersection(set_b))
+        full_misses.extend(set_a.symmetric_difference(set_b))
         boundaries_all += len(set_a) + len(set_b)
-    return count_edits, additions, substitutions, transpositions, full_misses, \
-        boundaries_all, matches, pbs
+    return {'count_edits' : count_edits, 'additions' : additions,
+            'substitutions' : substitutions, 'transpositions' : transpositions, 
+            'full_misses' : full_misses, 'boundaries_all' : boundaries_all, 
+            'matches' : matches, 'pbs' : pbs}
 
 
-def confusion_matrix(segs_a, segs_b,
+def confusion_matrix(hypothesis, reference,
                      boundary_types=DEFAULT_BOUNDARY_TYPES,
                      n_t=DEFAULT_N_T, weight=DEFAULT_WEIGHT,
                      convert_to_boundary_strings=\
@@ -140,32 +143,35 @@ def confusion_matrix(segs_a, segs_b,
     Create a confusion matrix using boundary edit distance.
     '''
     # pylint: disable=C0103,R0913,R0914
-    # Count boundaries
-    bs_a = segs_a
-    bs_b = segs_b
-    if convert_to_boundary_strings:
-        bs_a = boundary_string_from_masses(segs_a)
-        bs_b = boundary_string_from_masses(segs_b)
-    # Compute edits
-    additions, substitutions, transpositions = \
-        boundary_edit_distance(bs_a, bs_b, n_t=n_t)
-    # Apply weighting functions
-    fnc_weight_a, fnc_weight_s, fnc_weight_t = weight
-    count_additions      = fnc_weight_a(additions)
-    count_substitutions  = fnc_weight_s(substitutions,
-                                        max(boundary_types),
-                                        min(boundary_types))
-    count_transpositions = fnc_weight_t(transpositions, n_t)
-    count_edits = count_additions + count_substitutions + count_transpositions
-    # Compute
-    full_misses = 0
-    boundaries_all = 0
-    matches = 0
-    for set_a, set_b in zip(bs_a, bs_b):
-        matches += len(set_a.intersection(set_b))
-        full_misses += len(set_a.symmetric_difference(set_b))
-        boundaries_all += len(set_a) + len(set_b)
-    return count_edits, additions, substitutions, transpositions, \
-            full_misses, boundaries_all, matches
-    
+    statistics = descriptive_statistics(\
+                           hypothesis, reference,
+                           boundary_types=boundary_types,
+                           n_t=n_t, weight=weight,
+                           convert_to_boundary_strings=\
+                            convert_to_boundary_strings)
+    matrix = cm()
+    fnc_weight_t = weight[2]
+    # Add matches
+    for match in statistics['matches']:
+        matrix[match][match] += 1
+    # Add weighted near misses
+    for transposition in statistics['transpositions']:
+        match = transposition[2]
+        matrix[match][match] += fnc_weight_t([transposition], n_t)
+    # Add confusion errors
+    for substitution in statistics['substitutions']:
+        hyp, ref = substitution
+        matrix[hyp][ref] += 1
+    # Add full misses
+    for addition in statistics['additions']:
+        hyp, ref = None, None
+        boundary_type, side = addition
+        if side == 'a':
+            hyp = None
+            ref = boundary_type
+        else:
+            hyp = boundary_type
+            ref = None
+        matrix[hyp][ref] += 1
+    return matrix
 

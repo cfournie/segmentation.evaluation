@@ -64,12 +64,16 @@ class TestSimilarity(unittest.TestCase):
         '''
         Test confusion matrix.
         '''
-        cm = confusion_matrix([set([ ]), set([2]), set([]), set([ ]), set([1])],
-                              [set([1]), set([1]), set([]), set([1]), set([ ])],
-                              convert_to_boundary_strings=False)
-
-
-if __name__ is "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
-    unittest.main()
+        cm = confusion_matrix(
+            [set([ ]), set([2]), set([]), set([ ]), set([1]), set([1])],
+            [set([1]), set([1]), set([]), set([1]), set([ ]), set([1])],
+            convert_to_boundary_strings=False)
+        self.assertEqual(cm[None][1], 0)
+        self.assertEqual(cm[1][None], 1)
+        self.assertEqual(cm[None][2], 0)
+        self.assertEqual(cm[2][None], 0)
+        self.assertEqual(cm[2][1], 1)
+        self.assertEqual(cm[1][2], 0)
+        self.assertEqual(cm[1][1], 1.5)
+        self.assertEqual(cm[2][2], 0)
 
