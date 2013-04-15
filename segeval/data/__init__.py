@@ -10,6 +10,8 @@ Specification <http://nlp.chrisfournier.ca/publications/#seg_spec>`_.
 import os
 import csv
 import json
+import copy
+from collections import defaultdict
 from .tsv import input_linear_mass_tsv
 from .jsonutils import input_linear_mass_json
 
@@ -20,20 +22,34 @@ RESULTS = ['summary', 'tsv']
 FIELD_SINGLE_FILE = 'single_file'
 
 
-class Dataset(dict):
+def load_tests(loader, tests, pattern):
+    '''
+    A ``load_tests()`` function utilizing the default loader
+    :func:`segeval.Utils.default_load_tests`.
+    
+    .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
+    unittest.html#load-tests-protocol>`_.
+    '''
+    #pylint: disable=W0613
+    from ..utils import default_load_tests
+    return default_load_tests(__file__, loader, tests)
+
+
+class Dataset(defaultdict):
     '''
     Represents a set of segmentations produced by coders.
     '''
     # pylint: disable=R0903
     
-    def __init__(self, masses=None, properties=None, boundary_types=None):
+    def __init__(self, item_coder_data=None, properties=None,
+                 boundary_types=None):
         '''
         Initialize.
         '''
-        dict.__init__(self)
+        defaultdict.__init__(self, dict)
         # Masses
-        if masses is not None:
-            self.update(masses)
+        if item_coder_data is not None and item_coder_data is not dict:
+            defaultdict.update(self, item_coder_data)
         # Properties
         if properties is not None:
             self.properties = dict()
@@ -48,11 +64,11 @@ class Dataset(dict):
         # Coders
         self.coders = set()
         # Populate coders
-        for coder_masses in self.values():
+        for coder_masses in defaultdict.values(self):
             for coder in coder_masses.keys():
                 self.coders.add(coder)
-        
-    def add(self, other, prepend_item=None):
+    
+    def __iadd__(self, other, prepend_item=None):
         '''
         Add one dataset's data to this dataset
         '''
@@ -73,19 +89,12 @@ class Dataset(dict):
                 else:
                     raise DataIOError('Duplicate coders of same name \
 %(coder)s found for item %(item)s' % {'coder' : coder, 'item' : item})
-
-
-def load_tests(loader, tests, pattern):
-    '''
-    A ``load_tests()`` function utilizing the default loader
-    :func:`segeval.Utils.default_load_tests`.
+        return self
     
-    .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
-    unittest.html#load-tests-protocol>`_.
-    '''
-    #pylint: disable=W0613
-    from ..utils import default_load_tests
-    return default_load_tests(__file__, loader, tests)
+    def __add__(self, other):
+        dataset = copy.deepcopy(self)
+        dataset += other
+        return dataset
 
 
 def name_from_filepath(filepath):
@@ -169,7 +178,7 @@ def load_nested_folders_dict(containing_dir, filetype, dataset=None,
         # If TSV files were found, load
         for name, filepath in files.items():
             other = fnc_load(filepath)
-            dataset.add(other, prepend_item=prepend_item)
+            dataset.__iadd__(other, prepend_item=prepend_item)
     # If only dirs were found, recurse
     for name, dirpath in dirs.items():
         new_prepend_item = list(prepend_item)
