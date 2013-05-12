@@ -204,7 +204,7 @@ def __boundary_edit_distance__(boundary_string_a, boundary_string_b, n_t):
     # Find transpositions
     transpositions = __transpositions__(boundary_string_a,
                                         boundary_string_b, n_t, options_set)
-    # Construct additions and substitions
+    # Construct additions and substitutions
     additions     = list()
     substitutions = list()
     for d, a, b in options_set.values():
