@@ -12,6 +12,7 @@ To use S, see the :mod:`segeval.similarity` module.
 import os
 from decimal import Decimal
 from collections import Counter
+from .format import BoundaryFormat
 
 
 # Package description
@@ -24,3 +25,10 @@ __author__ = 'Chris Fournier'
 __author_email__ = 'chris.m.fournier@gmail.com'
 __copyright__ = '2012-2013, ' + __author__
 
+
+METRIC_DEFAULTS = {
+    'boundary_format' : BoundaryFormat.mass,
+    'permuted' : False,
+    'one_minus' : False,
+    'return_parts' : False
+}

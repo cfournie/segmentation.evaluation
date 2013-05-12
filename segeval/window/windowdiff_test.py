@@ -8,7 +8,7 @@ from .windowdiff import window_diff
 from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, 
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
 from ..compute import summarize
-from ..util import BoundaryFormat
+from ..format import BoundaryFormat
 from ..util.test import TestCase
 
 

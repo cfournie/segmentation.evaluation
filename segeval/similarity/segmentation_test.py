@@ -7,6 +7,7 @@ import unittest
 from decimal import Decimal
 from .segmentation import segmentation_similarity
 
+
 class TestSegmentation(unittest.TestCase):
     '''
     Test.

@@ -7,6 +7,7 @@ import unittest
 from decimal import Decimal
 from .boundary import boundary_similarity
 
+
 class TestBoundary(unittest.TestCase):
     '''
     Test.

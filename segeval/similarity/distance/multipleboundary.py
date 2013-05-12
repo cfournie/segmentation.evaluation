@@ -21,27 +21,6 @@ T_POS2 = 1
 T_TYPE = 2
 
 
-def boundary_string_from_masses(segment_masses):
-    '''
-    Creates a "boundary string", or sequence of boundary type sets from a
-    sequence of boundary masses.
-    
-    :param segment_masses: Segmentation masses.
-    :type segment_masses:  list
-    :returns: A sequence of boundary type sets
-    :rtype: :func:`list` of :func:`set` objects containing :func:`int` values.
-    '''
-    string = [set() for _ in xrange(0, sum(segment_masses) + 1)]
-    # Iterate over each position
-    pos = 0
-    for mass in segment_masses:
-        string[pos].add(1)
-        string[pos + mass].add(1)
-        pos += mass
-    # Return
-    return [set(pb) for pb in string]
-
-
 def __additions_substitutions__(d, a, b):
     '''
     Compute the number of additions and substitutions for a given pair of
@@ -242,9 +221,6 @@ def boundary_edit_distance(boundary_string_a, boundary_string_b, n_t=2):
     Convenience function to create spanning lengths given a maximum 'n_t'.
     '''
     # pylint: disable=C0103
-    try:
-        n_t = range(2, n_t + 1)
-    except:
-        pass
+    n_t = range(2, n_t + 1)
     return __boundary_edit_distance__(boundary_string_a, boundary_string_b, n_t)
 

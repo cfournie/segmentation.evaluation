@@ -5,12 +5,10 @@ Inter-coder agreement statistic Fleiss' Kappa.
 '''
 from __future__ import division
 from decimal import Decimal
-from . import actual_agreement_linear, DEFAULT_N_T
-from ..similarity.boundary import boundary_similarity
+from . import __fnc_metric__, __actual_agreement_linear__
 
 
-def fleiss_kappa_linear(dataset, fnc_compare=boundary_similarity,
-                        return_parts=False, n_t=DEFAULT_N_T):
+def __fleiss_kappa_linear__(dataset, **kwargs):
     '''
     Calculates Fleiss' Kappa (or multi-Kappa), originally proposed in
     [DaviesFleiss1982]_, for segmentations.  Adapted in [FournierInkpen2012]_ 
@@ -38,7 +36,11 @@ def fleiss_kappa_linear(dataset, fnc_compare=boundary_similarity,
     
     .. note:: Applicable for more than 2 coders.
     '''
-    # pylint: disable=C0103,R0914
+    # pylint: disable=C0103,R0914,W0142
+    metric_kwargs = dict(kwargs)
+    metric_kwargs['return_parts'] = True
+    # Arguments
+    return_parts = kwargs['return_parts']
     # Check that there are more than 2 coders
     if len([True for coder_segs in dataset.values() \
             if len(coder_segs.keys()) < 2]) > 0:
@@ -50,7 +52,7 @@ def fleiss_kappa_linear(dataset, fnc_compare=boundary_similarity,
         raise Exception('Unequal number of items contained.')
     # Initialize totals
     all_numerators, all_denominators, _, coders_boundaries = \
-            actual_agreement_linear(dataset, fnc_compare=fnc_compare, n_t=n_t)
+            __actual_agreement_linear__(dataset, **metric_kwargs)
     # Calculate Aa
     A_a = Decimal(sum(all_numerators)) / sum(all_denominators)
     # Calculate Ae
@@ -77,4 +79,9 @@ def fleiss_kappa_linear(dataset, fnc_compare=boundary_similarity,
         return A_a, A_e
     else:
         return kappa
+
+
+def fleiss_kappa_linear(dataset, **kwargs):
+    # pylint: disable=W0142
+    return __fnc_metric__(__fleiss_kappa_linear__, dataset, **kwargs)
 

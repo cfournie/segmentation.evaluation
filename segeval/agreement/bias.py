@@ -9,14 +9,12 @@ References:
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from . import DEFAULT_N_T
-from .kappa import fleiss_kappa_linear
-from .pi import fleiss_pi_linear
-from ..similarity.boundary import boundary_similarity
+from . import __fnc_metric__
+from .kappa import __fleiss_kappa_linear__
+from .pi import __fleiss_pi_linear__
 
 
-def artstein_poesio_bias_linear(dataset, fnc_compare=boundary_similarity,
-                                n_t=DEFAULT_N_T):
+def __artstein_poesio_bias_linear__(dataset, **kwargs):
     '''
     Artstein and Poesio's annotator bias, or B (Artstein and Poesio, 2008,
     pp. 572).
@@ -29,10 +27,23 @@ def artstein_poesio_bias_linear(dataset, fnc_compare=boundary_similarity,
     Returns:
     B as a Decimal object.
     '''
-    # pylint: disable=C0103
-    A_pi_e     =    fleiss_pi_linear(dataset, fnc_compare=fnc_compare,
-                                     return_parts=True, n_t=n_t)[1]
-    A_fleiss_e = fleiss_kappa_linear(dataset, fnc_compare=fnc_compare,
-                                     return_parts=True, n_t=n_t)[1]
-    return A_pi_e - A_fleiss_e
+    # pylint: disable=C0103,W0142
+    metric_kwargs = dict(kwargs)
+    metric_kwargs['return_parts'] = True
+    # Arguments
+    return_parts = kwargs['return_parts']
+    # Compute
+    A_pi_e = __fleiss_pi_linear__(dataset, **metric_kwargs)[1]
+    A_fleiss_e = __fleiss_kappa_linear__(dataset, **metric_kwargs)[1]
+    bias = A_pi_e - A_fleiss_e
+    # Return
+    if return_parts:
+        return A_pi_e, A_fleiss_e
+    else:
+        return bias
+
+
+def artstein_poesio_bias_linear(dataset, **kwargs):
+    # pylint: disable=W0142
+    return __fnc_metric__(__artstein_poesio_bias_linear__, dataset, **kwargs)
 

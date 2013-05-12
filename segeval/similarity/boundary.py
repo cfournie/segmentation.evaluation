@@ -4,25 +4,22 @@ Created on Sep 4, 2012
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from __future__ import division
-from . import (descriptive_statistics, DEFAULT_N_T, DEFAULT_WEIGHT, 
-    DEFAULT_BOUNDARY_TYPES, DEFAULT_CONVERT_TO_BOUNDARY_STRINGS)
+from . import __descriptive_statistics__, SIMILARITY_METRIC_DEFAULTS
+from ..util import __fnc_metric__
 
 
-def boundary_similarity(segs_a, segs_b,
-                        boundary_types=DEFAULT_BOUNDARY_TYPES,
-                        n_t=DEFAULT_N_T, weight=DEFAULT_WEIGHT,
-                        convert_to_boundary_strings=\
-                        DEFAULT_CONVERT_TO_BOUNDARY_STRINGS,
-                        return_parts=False):
+def __boundary_similarity__(*args, **kwargs):
     '''
     Boundary Similarity.
     '''
     # pylint: disable=C0103,R0913,R0914
-    statistics = descriptive_statistics(segs_a, segs_b,
-                                        boundary_types=boundary_types, n_t=n_t,
-                                        weight=weight,
-                                        convert_to_boundary_strings=\
-                                            convert_to_boundary_strings)
+    metric_kwargs = dict(kwargs)
+    del metric_kwargs['return_parts']
+    del metric_kwargs['one_minus']
+    # Arguments
+    return_parts = kwargs['return_parts']
+    # Compute
+    statistics = __descriptive_statistics__(*args, **metric_kwargs)
     additions = statistics['additions']
     substitutions = statistics['substitutions']
     transpositions = statistics['transpositions']
@@ -34,4 +31,10 @@ def boundary_similarity(segs_a, segs_b,
         return numerator, denominator, additions, substitutions, transpositions
     else:
         return numerator / denominator if denominator > 0 else 1
+
+
+def boundary_similarity(*args, **kwargs):
+    # pylint: disable=W0142
+    return __fnc_metric__(__boundary_similarity__, args, kwargs,
+                          SIMILARITY_METRIC_DEFAULTS)
 

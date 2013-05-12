@@ -6,6 +6,7 @@ Tests similarity functions.
 import unittest
 from . import (boundary_string_from_masses, weight_s_scale, weight_t_scale, 
     confusion_matrix)
+from ..format import BoundaryFormat
 
 
 class TestSimilarity(unittest.TestCase):
@@ -67,7 +68,7 @@ class TestSimilarity(unittest.TestCase):
         cm = confusion_matrix(
             [set([ ]), set([2]), set([]), set([ ]), set([1]), set([1])],
             [set([1]), set([1]), set([]), set([1]), set([ ]), set([1])],
-            convert_to_boundary_strings=False)
+            boundary_format=BoundaryFormat.sets)
         self.assertEqual(cm[None][1], 0)
         self.assertEqual(cm[1][None], 1)
         self.assertEqual(cm[None][2], 0)

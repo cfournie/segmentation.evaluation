@@ -4,11 +4,11 @@ Tests the WindowDiff evaluation metric.
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from decimal import Decimal
+from ..compute import summarize
+from ..format import BoundaryFormat
 from ..window.pk import pk
 from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, 
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
-from ..compute import summarize
-from ..util import BoundaryFormat
 from ..util.test import TestCase
 
 

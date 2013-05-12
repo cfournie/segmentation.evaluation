@@ -17,8 +17,8 @@ evaluation metrics including:
 '''
 from __future__ import division
 from decimal import Decimal
-from ..format import convert_positions_to_masses
-from ..util import METRIC_DEFAULTS, BoundaryFormat
+from .. import METRIC_DEFAULTS
+from ..format import BoundaryFormat, convert_positions_to_masses
 from ..util.math import mean
 
 

@@ -4,6 +4,12 @@ Created on Apr 13, 2013
 @author: cfournie
 '''
 from collections import Counter
+from .util.lang import enum
+# pylint: disable=C0103
+
+
+BoundaryFormat = enum(position='position', mass='mass',
+                      sets='boundary_sets')
 
 
 def convert_positions_to_masses(positions):
@@ -43,3 +49,25 @@ def convert_masses_to_positions(masses):
     for i, mass in enumerate(masses):
         sequence.extend([i + 1] * mass)
     return sequence
+
+
+def boundary_string_from_masses(masses):
+    '''
+    Creates a "boundary string", or sequence of boundary type sets.
+    
+    :param masses: Segmentation masses.
+    :type masses:  list
+    :returns: A sequence of boundary type sets
+    :rtype: :func:`list` of :func:`set` objects containing :func:`int` values.
+    '''
+    string = [set() for _ in xrange(0, sum(masses) - 1)]
+    # Iterate over each position
+    pos = 0
+    for mass in masses:
+        cur_pos = pos + mass - 1
+        if cur_pos < len(string):
+            string[cur_pos].add(1)
+        pos += mass
+    # Return
+    return [set(pb) for pb in string]
+

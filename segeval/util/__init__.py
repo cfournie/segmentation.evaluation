@@ -3,28 +3,7 @@ Utility functions and classes for the package.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-# pylint: disable=C0103
 from ..compute import compute_pairwise_values
-
-
-def enum(*sequential, **named):
-    '''
-    http://stackoverflow.com/a/1695250/2134
-    '''
-    enums = dict(zip(sequential, range(len(sequential))), **named)
-    return type('Enum', (), enums)
-
-
-BoundaryFormat = enum(position='position', mass='mass',
-                      boundary_sets='boundary_sets')
-
-
-METRIC_DEFAULTS = {
-    'boundary_format' : BoundaryFormat.mass,
-    'permuted' : False,
-	'one_minus' : False,
-	'return_parts' : False
-}
 
 
 def __fnc_metric__(fnc_metric, args, kwargs, kw_defaults):

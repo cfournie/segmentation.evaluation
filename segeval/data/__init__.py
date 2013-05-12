@@ -15,7 +15,8 @@ import copy
 from collections import defaultdict
 from .tsv import input_linear_mass_tsv
 from .jsonutils import input_linear_mass_json
-from ..util import enum, BoundaryFormat
+from ..format import BoundaryFormat
+from ..util.lang import enum
 
 
 Field = enum(single_file='single_file')

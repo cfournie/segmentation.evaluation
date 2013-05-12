@@ -10,8 +10,8 @@ from __future__ import division
 from decimal import Decimal
 from . import compute_window_size, WINDOW_METRIC_DEFAULTS
 from ..compute import SegmentationMetricError
-from ..format import convert_masses_to_positions, convert_positions_to_masses
-from ..util import __fnc_metric__, BoundaryFormat
+from ..format import BoundaryFormat, convert_masses_to_positions, convert_positions_to_masses
+from ..util import __fnc_metric__
 
 
 WINDOWDIFF_METRIC_DEFAULTS = dict(WINDOW_METRIC_DEFAULTS)

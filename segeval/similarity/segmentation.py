@@ -4,25 +4,24 @@ Similarity package
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from __future__ import division
-from . import (descriptive_statistics, DEFAULT_N_T, DEFAULT_BOUNDARY_TYPES, 
-    DEFAULT_WEIGHT, DEFAULT_CONVERT_TO_BOUNDARY_STRINGS)
+from . import __descriptive_statistics__, SIMILARITY_METRIC_DEFAULTS
+from ..util import __fnc_metric__
 
 
-def segmentation_similarity(segs_a, segs_b,
-                            boundary_types=DEFAULT_BOUNDARY_TYPES,
-                            n_t=DEFAULT_N_T, weight=DEFAULT_WEIGHT,
-                            convert_to_boundary_strings=\
-                            DEFAULT_CONVERT_TO_BOUNDARY_STRINGS,
-                            return_parts=False):
+def __segmentation_similarity__(*args, **kwargs):
     '''
     S
     '''
     # pylint: disable=C0103,R0913,R0914
-    statistics = descriptive_statistics(segs_a, segs_b,
-                                        boundary_types=boundary_types, n_t=n_t,
-                                        weight=weight,
-                                        convert_to_boundary_strings=\
-                                            convert_to_boundary_strings)
+    metric_kwargs = dict(kwargs)
+    del metric_kwargs['return_parts']
+    del metric_kwargs['one_minus']
+    # Arguments
+    boundary_types = kwargs['boundary_types']
+    return_parts = kwargs['return_parts']
+    # Compute
+    statistics = __descriptive_statistics__(*args, **metric_kwargs)
+    # Process
     pbs = statistics['pbs'] * len(boundary_types)
     # Fraction
     denominator = pbs
@@ -31,4 +30,10 @@ def segmentation_similarity(segs_a, segs_b,
         return numerator, denominator
     else:
         return numerator / denominator if denominator > 0 else 1
+
+
+def segmentation_similarity(*args, **kwargs):
+    # pylint: disable=W0142
+    return __fnc_metric__(__segmentation_similarity__, args, kwargs,
+                          SIMILARITY_METRIC_DEFAULTS)
 

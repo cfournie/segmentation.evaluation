@@ -3,12 +3,25 @@ Inter-coder agreement statistics.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from ..similarity import SIMILARITY_METRIC_DEFAULTS
+from ..similarity.boundary import boundary_similarity
 
-from ..similarity.boundary import DEFAULT_N_T, boundary_similarity
+
+AGREEMENT_METRIC_DEFAULTS = dict(SIMILARITY_METRIC_DEFAULTS)
+AGREEMENT_METRIC_DEFAULTS.update({
+    'fnc_compare' : boundary_similarity,
+    'return_parts' : False
+})
 
 
-def actual_agreement_linear(dataset, fnc_compare=boundary_similarity,
-                            n_t=DEFAULT_N_T):
+def __fnc_metric__(fnc_metric, dataset, **kwargs):
+    # pylint: disable=W0142
+    metric_kwargs = dict(AGREEMENT_METRIC_DEFAULTS)
+    metric_kwargs.update(kwargs)
+    return fnc_metric(dataset, **metric_kwargs)
+
+
+def __actual_agreement_linear__(dataset, **kwargs):
     '''
     Calculate actual (i.e., observed or :math:`\\text{A}_a`), segmentation
     agreement without accounting for chance, using [ArtsteinPoesio2008]_'s
@@ -64,7 +77,13 @@ def actual_agreement_linear(dataset, fnc_compare=boundary_similarity,
     :mod:`segeval.data.Samples`.
     
     '''
-    # pylint: disable=C0103, R0914
+    # pylint: disable=C0103,R0914,W0142
+    metric_kwargs = dict(kwargs)
+    del metric_kwargs['fnc_compare']
+    metric_kwargs['return_parts'] = True
+    # Arguments
+    fnc_compare = kwargs['fnc_compare']
+    # Initialize
     all_numerators    = list()
     all_denominators  = list()
     all_pbs           = list()
@@ -78,7 +97,7 @@ def actual_agreement_linear(dataset, fnc_compare=boundary_similarity,
                 segs_b = dataset[item][coders[n]]
                 # Compute similarity
                 numerator, denominator = \
-                    fnc_compare(segs_a, segs_b, n_t=n_t, return_parts=True)[0:2]
+                    fnc_compare(segs_a, segs_b, **metric_kwargs)[0:2]
                 # Obtain necessary values
                 pbs = sum(segs_a) - 1
                 # Add all pbs
@@ -94,4 +113,9 @@ def actual_agreement_linear(dataset, fnc_compare=boundary_similarity,
                 coders_boundaries[coders[m]].append([len(segs_a), pbs])
                 coders_boundaries[coders[n]].append([len(segs_b), pbs])
     return all_numerators, all_denominators, all_pbs, coders_boundaries
+
+
+def actual_agreement_linear(dataset, **kwargs):
+    # pylint: disable=W0142
+    return __fnc_metric__(__actual_agreement_linear__, dataset, **kwargs)
 
