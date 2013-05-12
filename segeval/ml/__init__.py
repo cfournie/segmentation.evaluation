@@ -17,20 +17,7 @@ learning metrics that have been adapted for use in segmentation, including:
 from __future__ import division
 from decimal import Decimal
 from collections import defaultdict
-from ..math import mean
-
-
-def load_tests(loader, tests, pattern):
-    '''
-    A ``load_tests()`` function utilizing the default loader
-    :func:`segeval.Utils.default_load_tests`.
-    
-    .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
-    unittest.html#load-tests-protocol>`_.
-    '''
-    #pylint: disable=W0613
-    from ..utils import default_load_tests
-    return default_load_tests(__file__, loader, tests)
+from ..util.math import mean
 
 
 MICRO, MACRO = range(2)

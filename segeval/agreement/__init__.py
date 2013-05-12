@@ -6,14 +6,6 @@ Inter-coder agreement statistics.
 
 from ..similarity.boundary import DEFAULT_N_T, boundary_similarity
 
-def load_tests(loader, tests, pattern):
-    '''
-    A load_tests functions utilizing the default loader.
-    '''
-    #pylint: disable=W0613
-    from ..utils import default_load_tests
-    return default_load_tests(__file__, loader, tests)
-
 
 def actual_agreement_linear(dataset, fnc_compare=boundary_similarity,
                             n_t=DEFAULT_N_T):

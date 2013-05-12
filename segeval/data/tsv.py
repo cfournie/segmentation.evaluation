@@ -5,7 +5,7 @@ TSV output module (for general TSV writing operations).
 '''
 import csv
 import os
-from .. import convert_positions_to_masses
+from ..format import convert_positions_to_masses
 
 
 DEFAULT_DELIMITER = '\t'

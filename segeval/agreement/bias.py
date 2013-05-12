@@ -13,10 +13,6 @@ from . import DEFAULT_N_T
 from .kappa import fleiss_kappa_linear
 from .pi import fleiss_pi_linear
 from ..similarity.boundary import boundary_similarity
-from .. import compute_multiple_values, create_tsv_rows
-from ..data import load_file
-from ..data.tsv import write_tsv
-from ..data.display import render_agreement_coefficients
 
 
 def artstein_poesio_bias_linear(dataset, fnc_compare=boundary_similarity,
@@ -40,49 +36,3 @@ def artstein_poesio_bias_linear(dataset, fnc_compare=boundary_similarity,
                                      return_parts=True, n_t=n_t)[1]
     return A_pi_e - A_fleiss_e
 
-
-OUTPUT_NAME     = 'B-based Artstein and Poesio\'s (2008) Bias value'
-SHORT_NAME      = 'Bias_B'
-SHORT_NAME_MEAN = 'Mean %s' % SHORT_NAME
-
-
-def values_artstein_poesio_bias(dataset_masses):
-    '''
-    Produces a TSV for this metric
-    '''
-    header = list([SHORT_NAME])
-    values = compute_multiple_values(dataset_masses,
-                                     artstein_poesio_bias_linear)
-    return create_tsv_rows(header, values)
-
-
-def parse(args):
-    '''
-    Parse this module's metric arguments and perform requested actions.
-    '''
-    output = None
-    values = load_file(args)
-    # Is a TSV requested?
-    if args['output'] is not None:
-        # Create a TSV
-        output_file = args['output'][0]
-        header, rows = values_artstein_poesio_bias(values)
-        write_tsv(output_file, header, rows)
-    else:
-        # Create a string to output and render for one or more items
-        biases = compute_multiple_values(values,
-                                         artstein_poesio_bias_linear)
-        output = render_agreement_coefficients(SHORT_NAME, biases)
-    # Return
-    return output
-
-
-def create_parser(subparsers):
-    '''
-    Setup a command line parser for this module's metric.
-    '''
-    from ..data import parser_add_file_support
-    parser = subparsers.add_parser('b',
-                                   help=OUTPUT_NAME)
-    parser_add_file_support(parser)
-    parser.set_defaults(func=parse)

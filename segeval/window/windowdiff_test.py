@@ -3,20 +3,22 @@ Tests the WindowDiff evaluation metric.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-import unittest
 from decimal import Decimal
-from .windowdiff import window_diff, pairwise_window_diff
-from .. import DECIMAL_PLACES
+from .windowdiff import window_diff
 from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, 
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
-from ..utils import AlmostTestCase
+from ..compute import summarize
+from ..util import BoundaryFormat
+from ..util.test import TestCase
 
 
-class TestWindowDiff(unittest.TestCase):
+class TestWindowDiffPositions(TestCase):
     '''
     Test WindowDiff.
     '''
     # pylint: disable=R0904,C0324
+    kwargs = {'boundary_format' : BoundaryFormat.position,
+              'lamprier_et_al_2007_fix' : False}
 
     def test_identical(self):
         '''
@@ -25,7 +27,7 @@ class TestWindowDiff(unittest.TestCase):
         # pylint: disable=C0324,C0103
         a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,1,2,2,2,3,3,3,3,3]
-        self.assertEqual(window_diff(a,b), 0.0)
+        self.assertEqual(window_diff(a, b, **self.kwargs), 0.0)
 
     def test_no_boundaries(self):
         '''
@@ -34,9 +36,9 @@ class TestWindowDiff(unittest.TestCase):
         # pylint: disable=C0324,C0103
         a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
-        self.assertAlmostEqual(window_diff(a,b),
+        self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
                          Decimal('0.3636363636363636363636363636'))
-        self.assertAlmostEqual(window_diff(b,a),
+        self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
                          Decimal('1'))
 
     def test_all_boundaries(self):
@@ -47,9 +49,9 @@ class TestWindowDiff(unittest.TestCase):
         # pylint: disable=C0324,C0103
         a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
-        self.assertAlmostEqual(window_diff(a,b),
+        self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
                          Decimal('1.0'))
-        self.assertAlmostEqual(window_diff(b,a),
+        self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
                          Decimal('0.8333333'))
 
     def test_all_and_no_boundaries(self):
@@ -59,8 +61,8 @@ class TestWindowDiff(unittest.TestCase):
         # pylint: disable=C0324,C0103
         a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
         b = [1,1,1,1,1,1,1,1,1,1,1,1,1]
-        self.assertAlmostEqual(window_diff(a,b), Decimal('1'))
-        self.assertAlmostEqual(window_diff(b,a), Decimal('1'))
+        self.assertAlmostEqual(window_diff(a, b, **self.kwargs), Decimal('1'))
+        self.assertAlmostEqual(window_diff(b, a, **self.kwargs), Decimal('1'))
 
     def test_translated_boundary(self):
         '''
@@ -69,9 +71,9 @@ class TestWindowDiff(unittest.TestCase):
         # pylint: disable=C0324,C0103
         a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
-        self.assertAlmostEqual(window_diff(a,b), # k = 2
+        self.assertAlmostEqual(window_diff(a, b, **self.kwargs), # k = 2
                                Decimal(2.0/11.0))
-        self.assertAlmostEqual(window_diff(b,a),
+        self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
                                Decimal(2.0/11.0))
     
     def test_extra_boundary(self):
@@ -81,9 +83,9 @@ class TestWindowDiff(unittest.TestCase):
         # pylint: disable=C0324,C0103
         a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
-        self.assertAlmostEqual(window_diff(a,b),
+        self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
                                Decimal(2.0/11.0))
-        self.assertAlmostEqual(window_diff(b,a),
+        self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
                                Decimal(2.0/11.0))
     
     def test_full_miss_and_misaligned(self):
@@ -94,9 +96,9 @@ class TestWindowDiff(unittest.TestCase):
         # pylint: disable=C0324,C0103
         a = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
-        self.assertAlmostEqual(window_diff(a,b),
+        self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
                          Decimal('0.2727272727272727272727272727'))
-        self.assertAlmostEqual(window_diff(b,a),
+        self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
                          Decimal('0.2727272727272727272727272727'))
     
     def test_fn_vs_fp(self):
@@ -106,17 +108,27 @@ class TestWindowDiff(unittest.TestCase):
         # pylint: disable=C0324,C0103
         a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
-        self.assertAlmostEqual(window_diff(a,b),
+        self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
                          Decimal('0.1818181818181818181818181818'))
-        self.assertAlmostEqual(window_diff(b,a),
+        self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
                          Decimal('0.1818181818181818181818181818'))
         a = [1,1,1,1,1,2,3,3,4,4,4,4,4]
         b = [1,1,1,1,1,2,2,2,3,3,3,3,3]
-        self.assertAlmostEqual(window_diff(a,b),
+        self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
                          Decimal('0.1818181818181818181818181818'))
-        self.assertAlmostEqual(window_diff(b,a),
+        self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
                          Decimal('0.1818181818181818181818181818'))
     
+
+
+class TestWindowDiffPositions(TestCase):
+    '''
+    Test WindowDiff.
+    '''
+    # pylint: disable=R0904,C0324
+    kwargs = {'boundary_format' : BoundaryFormat.mass,
+              'lamprier_et_al_2007_fix' : False}
+
     def test_thesis_all_and_none(self):
         '''
         Test paper example A vs B
@@ -124,8 +136,7 @@ class TestWindowDiff(unittest.TestCase):
         reference = [11]
         hypothesis = [1,1,1,1,1,1,1,1,1,1,1]
         # Test normal
-        actual = window_diff(hypothesis, reference, convert_from_masses=True,
-                             lamprier_et_al_2007_fix=False)
+        actual = window_diff(hypothesis, reference, **self.kwargs)
         self.assertAlmostEqual(1.0, float(actual))
     
     def test_scaiano_paper_b(self):
@@ -133,10 +144,9 @@ class TestWindowDiff(unittest.TestCase):
         Test paper example A vs B
         '''
         reference = [6,6]
-        hyp_b = [12]
+        hypothesis = [12]
         # Test normal
-        actual = window_diff(hyp_b, reference, convert_from_masses=True,
-                             lamprier_et_al_2007_fix=False)
+        actual = window_diff(hypothesis, reference, **self.kwargs)
         self.assertAlmostEqual(3.0/9.0, float(actual))
     
     def test_scaiano_paper_c(self):
@@ -144,10 +154,9 @@ class TestWindowDiff(unittest.TestCase):
         Test paper example A vs C
         '''
         reference = [6,6]
-        hyp_b = [5,7]
+        hypothesis = [5,7]
         # Test normal
-        actual = window_diff(hyp_b, reference, convert_from_masses=True,
-                             lamprier_et_al_2007_fix=False)
+        actual = window_diff(hypothesis, reference, **self.kwargs)
         self.assertAlmostEquals(2.0/9.0, float(actual))
     
     def test_scaiano_paper_d(self):
@@ -155,10 +164,9 @@ class TestWindowDiff(unittest.TestCase):
         Test paper example A vs D
         '''
         reference = [6,6]
-        hyp_b = [1,5,6]
+        hypothesis = [1,5,6]
         # Test normal
-        actual = window_diff(hyp_b, reference, convert_from_masses=True,
-                             lamprier_et_al_2007_fix=False)
+        actual = window_diff(hypothesis, reference, **self.kwargs)
         self.assertAlmostEquals(1.0/9.0, float(actual))
     
     def test_scaiano_paper_e(self):
@@ -166,14 +174,13 @@ class TestWindowDiff(unittest.TestCase):
         Test paper example A vs E
         '''
         reference = [6,6]
-        hyp_b = [5,1,1,5]
+        hypothesis = [5,1,1,5]
         # Test normal
-        actual = window_diff(hyp_b, reference, convert_from_masses=True,
-                             lamprier_et_al_2007_fix=False)
+        actual = window_diff(hypothesis, reference, **self.kwargs)
         self.assertAlmostEquals(5.0/9.0, float(actual))
 
 
-class TestPairwiseWindowDiff(AlmostTestCase):
+class TestPairwiseWindowDiff(TestCase):
     # pylint: disable=R0904,E1101,W0232
     '''
     Test pairwise WindowDiff.
@@ -184,45 +191,44 @@ class TestPairwiseWindowDiff(AlmostTestCase):
         Calculate permuted pairwise WindowDiff on Group 5 from the dataset
         collected in [KazantsevaSzpakowicz2012]_.
         '''
-        self.assertAlmostEquals(pairwise_window_diff(KAZANTSEVA2012_G5,
-                                              lamprier_et_al_2007_fix=False),
-                         (Decimal('0.4215197218221608460881561408'),
-                          Decimal('0.1522881979827439906255778603'),
-                          Decimal('0.02319169524483143085569405996'),
-                          Decimal('0.02198090802493506657850232356'),
+        self.assertAlmostEquals(summarize(window_diff(KAZANTSEVA2012_G5,
+                                              lamprier_et_al_2007_fix=False)),
+                         (Decimal('0.42514977232721135'),
+                          Decimal('0.14960495739111837'),
+                          Decimal('0.02238164327599834'),
+                          Decimal('0.02159361560546617'),
                           48))
-        self.assertAlmostEquals(pairwise_window_diff(KAZANTSEVA2012_G5,
-                                              lamprier_et_al_2007_fix=True),
-                         (Decimal('0.3952110599948305983597918327'),
-                          Decimal('0.1523051777509460032954989660'),
-                          Decimal('0.02319686716974725746264700652'),
-                          Decimal('0.02198335884337061894421403691'),
+        self.assertAlmostEquals(summarize(window_diff(KAZANTSEVA2012_G5,
+                                              lamprier_et_al_2007_fix=True)),
+                         (Decimal('0.3981624488837195'),
+                          Decimal('0.1499358110615409'),
+                          Decimal('0.022480747438682093'),
+                          Decimal('0.021641370219386377'),
                           48))
     def test_pair_g5(self):
         '''
         Test a comparison that is troublesome when using lamprier_et_al_2007_fix 
         '''
         # pylint: disable=C0103
-        wd = window_diff(hypothesis_positions=KAZANTSEVA2012_G5['ch4']['an2'],
-                         reference_positions=KAZANTSEVA2012_G5['ch4']['an1'],
-                         lamprier_et_al_2007_fix=True,
-                         convert_from_masses=True)
-        self.assertAlmostEqual(0.76363636, float(wd), DECIMAL_PLACES)
+        wd = window_diff(KAZANTSEVA2012_G5['ch4']['an2'],
+                         KAZANTSEVA2012_G5['ch4']['an1'],
+                         lamprier_et_al_2007_fix=True)
+        self.assertAlmostEqual(0.76363636, float(wd))
     
     def test_kazantseva2012_g2(self):
         '''
         Calculate mean permuted pairwise WindowDiff on Group 2 from the dataset
         collected in [KazantsevaSzpakowicz2012]_.
         '''
-        self.assertAlmostEquals(pairwise_window_diff(KAZANTSEVA2012_G2,
-                                              lamprier_et_al_2007_fix=False),
+        self.assertAlmostEquals(summarize(window_diff(KAZANTSEVA2012_G2,
+                                              lamprier_et_al_2007_fix=False)),
                          (Decimal('0.3257163091933661553914718469'),
                           Decimal('0.1586420969856167116081811670'),
                           Decimal('0.02516731493599381893573908435'),
                           Decimal('0.01448197584815743151147537110'),
                           120))
-        self.assertAlmostEquals(pairwise_window_diff(KAZANTSEVA2012_G2,
-                                              lamprier_et_al_2007_fix=True),
+        self.assertAlmostEquals(summarize(window_diff(KAZANTSEVA2012_G2,
+                                              lamprier_et_al_2007_fix=True)),
                          (Decimal('0.2745037663246318112728760428'),
                           Decimal('0.1093940158628282748721971010'),
                           Decimal('0.01196705070659672423205913742'),
@@ -234,8 +240,9 @@ class TestPairwiseWindowDiff(AlmostTestCase):
         Calculate mean permuted pairwise WindowDiff on a theoretical dataset
         containing large disagreement.
         '''
-        self.assertAlmostEquals(pairwise_window_diff(LARGE_DISAGREEMENT,
-                                              lamprier_et_al_2007_fix=False),
+        val = summarize(window_diff(LARGE_DISAGREEMENT,
+                                    lamprier_et_al_2007_fix=False))
+        self.assertAlmostEquals(val,
                         (Decimal('1'),
                          Decimal('0'),
                          Decimal('0'),
@@ -247,15 +254,15 @@ class TestPairwiseWindowDiff(AlmostTestCase):
         Calculate mean permuted pairwise WindowDiff on a theoretical dataset
         containing complete agreement.
         '''
-        self.assertAlmostEquals(pairwise_window_diff(COMPLETE_AGREEMENT,
-                                                lamprier_et_al_2007_fix=False),
+        self.assertAlmostEquals(summarize(window_diff(COMPLETE_AGREEMENT,
+                                                lamprier_et_al_2007_fix=False)),
                          (0.0,
                           0.0,
                           0.0,
                           0.0,
                           48))
-        self.assertAlmostEquals(pairwise_window_diff(COMPLETE_AGREEMENT,
-                                                lamprier_et_al_2007_fix=True),
+        self.assertAlmostEquals(summarize(window_diff(COMPLETE_AGREEMENT,
+                                                lamprier_et_al_2007_fix=True)),
                           (0.0,
                            0.0,
                            0.0,

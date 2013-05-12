@@ -1,5 +1,5 @@
 test:
-	python -m unittest segeval
+	python -m unittest discover -s . -p '*est.py'
 build:
 	python setup.py sdist --formats=gztar,zip
 install:

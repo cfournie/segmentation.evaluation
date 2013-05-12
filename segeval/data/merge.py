@@ -8,7 +8,6 @@ Specification <http://nlp.chrisfournier.ca/publications/#seg_spec>`_.
 '''
 from . import load_files, Dataset, DataIOError
 from .jsonutils import output_linear_mass_json
-from .. import InputError
 
 
 OUTPUT_NAME = 'Merge segmentations operation'
@@ -40,7 +39,7 @@ Items:\t%(items)i' % {'files'  : len(values),
         output_linear_mass_json(output_file,
                                 dataset)
     else:
-        raise InputError('No output file specified.')
+        raise DataIOError('No output file specified.')
     return output
 
 

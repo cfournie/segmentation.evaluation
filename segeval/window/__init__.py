@@ -17,31 +17,27 @@ evaluation metrics including:
 '''
 from __future__ import division
 from decimal import Decimal
-from .. import convert_positions_to_masses
-from ..math import mean, std, var
+from ..format import convert_positions_to_masses
+from ..util import METRIC_DEFAULTS, BoundaryFormat
+from ..util.math import mean
 
 
-def load_tests(loader, tests, pattern):
-    '''
-    A ``load_tests()`` function utilizing the default loader
-    :func:`segeval.Utils.default_load_tests`.
-    
-    .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
-    unittest.html#load-tests-protocol>`_.
-    '''
-    #pylint: disable=W0613
-    from ..utils import default_load_tests
-    return default_load_tests(__file__, loader, tests)
+WINDOW_METRIC_DEFAULTS = dict(METRIC_DEFAULTS)
+WINDOW_METRIC_DEFAULTS.update({
+    'window_size' : None,
+    'fnc_round' : round,
+    'permuted' : True
+})
 
 
-def compute_window_size_from_masses(coder_masses, fnc_round=round):
+def compute_window_size(reference, fnc_round, boundary_format):
     '''
     Compute a window size from a dict of segment masses.
     
-    :param coder_masses: A dict of segment masses.
-    :type coder_masses: dict
+    :param masses: A dict of segment masses.
+    :type masses: dict
     '''
-    masses = list()
+    all_masses = list()
     # Define fnc
     def __list_coder_masses__(inner_coder_masses):
         '''
@@ -52,57 +48,19 @@ def compute_window_size_from_masses(coder_masses, fnc_round=round):
         :type inner_coder_masses: dict or list
         '''
         if isinstance(inner_coder_masses, list):
-            masses.extend(inner_coder_masses)
+            all_masses.extend(inner_coder_masses)
         elif isinstance(inner_coder_masses, dict):
             for cur_inner_coder_masses in inner_coder_masses.values():
                 __list_coder_masses__(cur_inner_coder_masses)
+    if boundary_format == BoundaryFormat.position:
+        reference = convert_positions_to_masses(reference)
     # Recurse and list all masses
-    __list_coder_masses__(coder_masses)
+    __list_coder_masses__(reference)
     # Convert to floats
-    masses = [Decimal(mass) for mass in masses]
+    all_masses = [Decimal(mass) for mass in all_masses]
     # Calculate
-    avg = mean(masses) / 2.0
+    avg = mean(all_masses) / Decimal('2')
     window_size = int(fnc_round(avg))
     return window_size if window_size > 1 else 2
-    
 
-def compute_window_size(reference_segments, fnc_round=round):
-    '''
-    Compute the window size to use with window_diff from half of the average
-    segment length in the reference segmentation.
-    
-    :param ref_segments: An ordered sequence of which section each unit belongs
-        to, e.g., ``[1,1,1,1,1,2,2,2,3,3,3,3,3]`` for 13 units (e.g., sentences,
-        paragraphs)
-    :param fnc_round: rounding function to use (default: :func:`round`).  
-        WinDiff is very sensitive to window size, so to reproduce results from
-        another implementation another rounding function may need to be
-        specified (e.g. :func:`math.ceil`, :func:`math.floor`, etc.).
-    
-    :returns: Integer window size to use with win_diff.
-    :rtype: int
-    '''
-    masses = convert_positions_to_masses(reference_segments)
-    masses = [Decimal(mass) for mass in masses]
-    avg = mean(masses) / Decimal(2)
-    window_size = int(fnc_round(avg))
-    return window_size if window_size > 0 else 1
-
-
-def parser_one_minus_support(parser):
-    '''
-    Add support for the "one minus" parameter to convert penalty metrics into
-    reward metrics.
-    
-    :param parser: Argument parser
-    :type parser: argparse.ArgumentParser
-    '''
-    parser.add_argument('-om', '--oneminus',
-                        default=False,
-                        action='store_true',
-                        help='Calculates 1-metric to make this metric no \
-                                longer penalty-based, meaning that 1.0 \
-                                represents the best performance and 0.0 the \
-                                worst.')
-    
     

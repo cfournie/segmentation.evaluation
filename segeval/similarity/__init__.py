@@ -14,15 +14,6 @@ DEFAULT_BOUNDARY_TYPES = set([1])
 DEFAULT_CONVERT_TO_BOUNDARY_STRINGS = True
 
 
-def load_tests(loader, tests, pattern):
-    '''
-    A load_tests functions utilizing the default loader.
-    '''
-    #pylint: disable=W0613
-    from ..utils import default_load_tests
-    return default_load_tests(__file__, loader, tests)
-
-
 def boundary_string_from_masses(masses):
     '''
     Creates a "boundary string", or sequence of boundary type sets.

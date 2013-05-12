@@ -7,6 +7,7 @@ Specification <http://nlp.chrisfournier.ca/publications/#seg_spec>`_.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+# pylint: disable=C0103
 import os
 import csv
 import json
@@ -14,25 +15,10 @@ import copy
 from collections import defaultdict
 from .tsv import input_linear_mass_tsv
 from .jsonutils import input_linear_mass_json
+from ..util import enum, BoundaryFormat
 
 
-RESULTS = ['summary', 'tsv']
-
-
-FIELD_SINGLE_FILE = 'single_file'
-
-
-def load_tests(loader, tests, pattern):
-    '''
-    A ``load_tests()`` function utilizing the default loader
-    :func:`segeval.Utils.default_load_tests`.
-    
-    .. seealso:: The `load_tests protocol <http://docs.python.org/library/\
-    unittest.html#load-tests-protocol>`_.
-    '''
-    #pylint: disable=W0613
-    from ..utils import default_load_tests
-    return default_load_tests(__file__, loader, tests)
+Field = enum(single_file='single_file')
 
 
 class Dataset(defaultdict):
@@ -42,20 +28,19 @@ class Dataset(defaultdict):
     # pylint: disable=R0903
     
     def __init__(self, item_coder_data=None, properties=None,
-                 boundary_types=None):
+                 boundary_types=None, boundary_format=BoundaryFormat.mass):
         '''
         Initialize.
         '''
         defaultdict.__init__(self, dict)
+        self.properties = dict()
+        self.boundary_format = boundary_format
         # Masses
         if item_coder_data is not None and item_coder_data is not dict:
             defaultdict.update(self, item_coder_data)
         # Properties
         if properties is not None:
-            self.properties = dict()
             self.properties.update(properties)
-        else:
-            self.properties = dict()
         # Boundary types
         if boundary_types is not None:
             self.boundary_types = set(boundary_types)
@@ -214,11 +199,11 @@ def __load_file__(input_path, filetype):
     # Load file or dir
     if is_file:
         dataset = FILETYPES[filetype][FNC](input_path)
-        dataset.properties[FIELD_SINGLE_FILE] = True
+        dataset.properties[Field.single_file] = True
     else:
         dataset = load_nested_folders_dict(input_path, filetype,
                                            dataset=Dataset())
-        dataset.properties[FIELD_SINGLE_FILE] = False
+        dataset.properties[Field.single_file] = False
     
     return dataset
 
@@ -245,51 +230,4 @@ def load_files(args):
         datasets.append(dataset)
     # Return
     return datasets
-
-
-def parser_add_format_support(parser):
-    '''
-    Add support for file input format and output parameters to an argument parser.
-    
-    :param parser: Argument parser
-    :type parser: argparse.ArgumentParser
-    '''
-    
-    parser.add_argument('-f', '--format',
-                        type=str,
-                        default=FILETYPES_DEFAULT,
-                        choices=FILETYPES.keys(),
-                        help='Input file format; default is %s' % \
-                            FILETYPES_DEFAULT)
-    
-    parser.add_argument('-d', '--delimiter',
-                        type=str,
-                        default='\t',
-                        help='Delimiting character for input TSV files; '+\
-                        'ignored if JSON is specified, default is a tab '+\
-                        'character')
-    
-    parser.add_argument('-o', '--output',
-                        type=str,
-                        nargs=1,
-                        required=False,
-                        help='Output file or directory. If not specified, a '+\
-                        'summary or results is printed to the console.')
-
-
-def parser_add_file_support(parser):
-    '''
-    Add support for file input and output parameters to an argument parser.
-    
-    :param parser: Argument parser
-    :type parser: argparse.ArgumentParser
-    '''
-    
-    parser.add_argument('input',
-                        type=str,
-                        nargs=1,
-                        action='store',
-                        help='Input file or directory')
-    
-    parser_add_format_support(parser)
 

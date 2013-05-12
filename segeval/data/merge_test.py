@@ -20,7 +20,7 @@ class TestMerge(unittest.TestCase):
         '''
         # Output complete and larege disagreement, then merge
         large_disagreement = copy.deepcopy(LARGE_DISAGREEMENT)
-        large_disagreement.add(COMPLETE_AGREEMENT)
+        large_disagreement += COMPLETE_AGREEMENT
         self.assertTrue(6, len(large_disagreement.coders))
         self.assertTrue(4, len(large_disagreement))
         self.assertTrue(2, len(large_disagreement['item1']))

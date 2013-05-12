@@ -82,7 +82,4 @@ def render_permuted(name, permuted):
         output = '%s (permuted)' % name
     return output
 
-
-
-
     

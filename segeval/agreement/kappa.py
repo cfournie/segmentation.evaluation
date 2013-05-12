@@ -6,10 +6,6 @@ Inter-coder agreement statistic Fleiss' Kappa.
 from __future__ import division
 from decimal import Decimal
 from . import actual_agreement_linear, DEFAULT_N_T
-from .. import compute_multiple_values, create_tsv_rows
-from ..data import load_file
-from ..data.tsv import write_tsv
-from ..data.display import render_agreement_coefficients
 from ..similarity.boundary import boundary_similarity
 
 
@@ -82,45 +78,3 @@ def fleiss_kappa_linear(dataset, fnc_compare=boundary_similarity,
     else:
         return kappa
 
-OUTPUT_NAME = 'B-based Fleiss\' Multi Kappa coefficient'
-SHORT_NAME  = 'K*_B'
-
-
-def values_kappa(dataset_masses):
-    '''
-    Produces a TSV for this metric
-    '''
-    header = list([SHORT_NAME])
-    values = compute_multiple_values(dataset_masses, fleiss_kappa_linear)
-    return create_tsv_rows(header, values)
-
-
-def parse(args):
-    '''
-    Parse this module's metric arguments and perform requested actions.
-    '''
-    output = None
-    values = load_file(args)
-    # Is a TSV requested?
-    if args['output'] is not None:
-        # Create a TSV
-        output_file = args['output'][0]
-        header, rows = values_kappa(values)
-        write_tsv(output_file, header, rows)
-    else:
-        # Create a string to output and render for one or more items
-        kappas = compute_multiple_values(values, fleiss_kappa_linear)
-        output = render_agreement_coefficients(SHORT_NAME, kappas)
-    # Return
-    return output
-
-
-def create_parser(subparsers):
-    '''
-    Setup a command line parser for this module's metric.
-    '''
-    from ..data import parser_add_file_support
-    parser = subparsers.add_parser('k',
-                                   help=OUTPUT_NAME)
-    parser_add_file_support(parser)
-    parser.set_defaults(func=parse)
