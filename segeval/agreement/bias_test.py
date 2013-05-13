@@ -7,7 +7,7 @@ import unittest
 from decimal import Decimal
 from .bias import artstein_poesio_bias_linear
 from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, 
-    COMPLETE_AGREEMENT)
+    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
 
 
 class TestBias(unittest.TestCase):
@@ -64,4 +64,43 @@ class TestBias(unittest.TestCase):
         self.assertTrue(bias >= 0)
         self.assertEqual(bias,
                          Decimal('0.01455229356727327645713789012'))
+    
+    def test_bias_large(self):
+        '''
+        Test bias upon a hypothetical dataset containing large disagreement.
+        '''
+        bias = artstein_poesio_bias_linear(LARGE_DISAGREEMENT)
+        self.assertTrue(bias >= 0)
+        self.assertEqual(bias,
+                         Decimal('0.3092215912041560442272265692'))
+
+    def test_parts(self):
+        '''
+        Test bias upon a hypothetical dataset containing large disagreement.
+        '''
+        # pylint: disable=C0103
+        A_pi_e, A_fleiss_e = artstein_poesio_bias_linear(LARGE_DISAGREEMENT,
+                                                return_parts=True)
+        self.assertEqual(A_pi_e,
+                         Decimal('0.3653993689819338220050043470'))
+        self.assertEqual(A_fleiss_e,
+                         Decimal('0.05617777777777777777777777776'))
+        self.assertEqual(A_pi_e - A_fleiss_e,
+                         Decimal('0.3092215912041560442272265692'))
+
+    def test_exception_coders(self):
+        '''
+        Test exception.
+        '''
+        data = {'i1' : {'c1' : [2, 8, 2, 1]}}
+        self.assertRaises(Exception, artstein_poesio_bias_linear, data)
+
+    def test_exception_items(self):
+        '''
+        Test exception.
+        '''
+        data = {'i1' : {'c1' : [2, 8, 2, 1]},
+                'i2' : {'c2' : [2, 1, 7, 2, 1]}}
+        self.assertRaises(Exception, artstein_poesio_bias_linear, data)
+
 

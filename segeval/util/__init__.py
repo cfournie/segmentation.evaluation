@@ -24,8 +24,11 @@ def __fnc_metric__(fnc_metric, args, kwargs, kw_defaults):
         if 'hypothesis' in kwargs and 'reference' in kwargs:
             hypothesis = kwargs['hypothesis']
             reference = kwargs['reference']
+            del metric_kwargs['hypothesis']
+            del metric_kwargs['reference']
         elif 'dataset' in kwargs:
             dataset = kwargs['dataset']
+            del metric_kwargs['dataset']
     # Compute
     if dataset:
         metric_kwargs['boundary_format'] = dataset.boundary_format

@@ -20,6 +20,12 @@ class TestMath(unittest.TestCase):
         '''
         self.assertEqual(5, mean([2, 4, 4, 4, 5, 5, 7, 9]))
     
+    def test_mean_0(self):
+        '''
+        Tests population mean.
+        '''
+        self.assertEqual(0, mean([]))
+    
     def test_std(self):
         '''
         Tests population standard deviation.

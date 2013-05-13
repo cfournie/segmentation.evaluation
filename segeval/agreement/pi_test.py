@@ -32,72 +32,51 @@ class TestPi(unittest.TestCase):
     Test segmentation versions of Scott's Pi and Fleiss' Multi-Pi.
     '''
     # pylint: disable=R0904
-    
-    SKIP = False
 
     def test_fliess_pi_g5(self):
         '''
         Test Pi upon Group 5 of Kazantseva (2012) data.
         '''
-        if TestPi.SKIP:
-            return
-        # Test
         self.assertEqual(fleiss_pi_linear(KAZANTSEVA2012_G5),
                          Decimal('0.2307643892167668335086819753'))
-
 
     def test_fliess_pi_g5_ch1(self):
         '''
         Test Pi upon Group 5, Chapter 1, of Kazantseva (2012) data.
         '''
-        if TestPi.SKIP:
-            return
         data = {'ch1' : KAZANTSEVA2012_G5['ch1']}
         self.assertEqual(fleiss_pi_linear(data),
                          Decimal('0.1906323185011709601873536298'))
-
 
     def test_fleiss_pi_g2(self):
         '''
         Test Pi upon Group 2 of Kazantseva (2012) data.
         '''
-        if TestPi.SKIP:
-            return
-        # Test
         self.assertEqual(fleiss_pi_linear(KAZANTSEVA2012_G2),
                          Decimal('0.4018239928733601859131343866'))
-
 
     def test_fleiss_pi_g2_ch2(self):
         '''
         Test Pi upon Group 2, Chapter 2, of Kazantseva (2012) data.
         '''
-        if TestPi.SKIP:
-            return
         data = {'ch2' : KAZANTSEVA2012_G2['ch2']}
         # Test
         self.assertEqual(fleiss_pi_linear(data),
                          Decimal('0.5192587209302325581395348837'))
-        
 
-    def test_fleiss_pi_large_disagree(self):
+    def test_fleiss_pi_disagree(self):
         '''
         Test Pi upon a hypothetical dataset containing large disagreement.
         '''
-        if TestPi.SKIP:
-            return
         data = LARGE_DISAGREEMENT
         self.assertEqual(fleiss_pi_linear(data),
                          Decimal('-0.5757942099675148626179719687'))
 
-
-    def test_scotts_pi(self):
+    def test_fleiss_pi(self):
         '''
-        Test Scott's and Fleiss' Pi.
+        Test Fleiss' Pi.
         '''
         # pylint: disable=C0324,C0103
-        if TestPi.SKIP:
-            return
         data1 = {'i1': {'c1' : [2,8,2,1],
                         'c2' : [2,1,7,2,1]}}
         pi1  = fleiss_pi_linear(data1)
@@ -114,28 +93,28 @@ class TestPi(unittest.TestCase):
         self.assertEqual(pi2,pi2f)
         self.assertTrue(pi2 < pi1)
     
-    
-    def test_scotts_pi_complete(self):
-        '''
-        Test Pi upon a hypothetical dataset containing complete agreement.
-        '''
-        # pylint: disable=C0324,C0103
-        if TestPi.SKIP:
-            return
-        data_complete = {'i1': {'c1' : [2,8,2,1],
-                                'c2' : [2,8,2,1]}}
-        pi = fleiss_pi_linear(data_complete)
-        self.assertEqual(pi, 1.0)
-    
-    
     def test_fleiss_pi_complete(self):
         '''
         Test Pi upon a hypothetical dataset containing complete agreement.
         '''
         # pylint: disable=C0103
-        if TestPi.SKIP:
-            return
         data_complete = COMPLETE_AGREEMENT
         pi = fleiss_pi_linear(data_complete)
         self.assertEqual(pi, 1.0)
+        
+    def test_exception_coders(self):
+        '''
+        Test exception.
+        '''
+        data = {'i1' : {'c1' : [2, 8, 2, 1]}}
+        self.assertRaises(Exception, fleiss_pi_linear, data)
+
+    def test_exception_items(self):
+        '''
+        Test exception.
+        '''
+        data = {'i1' : {'c1' : [2, 8, 2, 1]},
+                'i2' : {'c2' : [2, 1, 7, 2, 1]}}
+        self.assertRaises(Exception, fleiss_pi_linear, data)
+
 

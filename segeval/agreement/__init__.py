@@ -3,6 +3,7 @@ Inter-coder agreement statistics.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import division
 from ..similarity import SIMILARITY_METRIC_DEFAULTS
 from ..similarity.boundary import boundary_similarity
 
@@ -83,6 +84,7 @@ def __actual_agreement_linear__(dataset, **kwargs):
     metric_kwargs['return_parts'] = True
     # Arguments
     fnc_compare = kwargs['fnc_compare']
+    return_parts = kwargs['return_parts']
     # Initialize
     all_numerators    = list()
     all_denominators  = list()
@@ -112,7 +114,10 @@ def __actual_agreement_linear__(dataset, **kwargs):
                 # Add per-coder values to dicts
                 coders_boundaries[coders[m]].append([len(segs_a), pbs])
                 coders_boundaries[coders[n]].append([len(segs_b), pbs])
-    return all_numerators, all_denominators, all_pbs, coders_boundaries
+    if return_parts:
+        return all_numerators, all_denominators, all_pbs, coders_boundaries
+    else:
+        return sum(all_numerators) / sum(all_denominators)
 
 
 def actual_agreement_linear(dataset, **kwargs):

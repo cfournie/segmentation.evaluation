@@ -52,7 +52,7 @@ class TestWindowDiffPositions(TestCase):
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
                          Decimal('1.0'))
         self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
-                         Decimal('0.8333333'))
+                         Decimal('1.0'))
 
     def test_all_and_no_boundaries(self):
         '''
@@ -121,7 +121,7 @@ class TestWindowDiffPositions(TestCase):
     
 
 
-class TestWindowDiffPositions(TestCase):
+class TestWindowDiffMasses(TestCase):
     '''
     Test WindowDiff.
     '''

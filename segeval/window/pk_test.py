@@ -104,6 +104,18 @@ class TestPk(TestCase):
         self.assertEqual(pk(b, a, **self.kwargs),
                          Decimal('0.2727272727272727272727272727'))
 
+    def test_all_kwargs_hyp_ref(self):
+        '''
+        Test whether a full miss and a translated boundary out of 4 produces
+        0.273. 
+        '''
+        # pylint: disable=C0324,C0103
+        metric_kwargs = dict(self.kwargs)
+        metric_kwargs['hypothesis'] = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        metric_kwargs['reference'] = [1,1,1,1,1,2,3,3,4,4,4,4,4]
+        self.assertEqual(pk(**metric_kwargs),
+                         Decimal('0.2727272727272727272727272727'))
+
 
 class TestPairwisePkMeasure(TestCase):
     # pylint: disable=R0904,E1101,W0232
@@ -153,6 +165,18 @@ class TestPairwisePkMeasure(TestCase):
         containing complete agreement.
         '''
         self.assertAlmostEquals(summarize(pk(COMPLETE_AGREEMENT)),
+                         (0.0,
+                          0.0,
+                          0.0,
+                          0.0,
+                          48))
+    
+    def test_dataset_kwargs(self):
+        '''
+        Calculate mean permuted pairwise Pk on a theoretical dataset
+        containing complete agreement.
+        '''
+        self.assertAlmostEquals(summarize(pk(dataset=COMPLETE_AGREEMENT)),
                          (0.0,
                           0.0,
                           0.0,
