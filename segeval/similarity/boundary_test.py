@@ -6,6 +6,9 @@ Tests boundary similarity (B).
 import unittest
 from decimal import Decimal
 from .boundary import boundary_similarity
+from .weight import weight_a, weight_s, weight_t
+from ..format import BoundaryFormat 
+from ..util import SegmentationMetricError
 
 
 class TestBoundary(unittest.TestCase):
@@ -40,5 +43,42 @@ class TestBoundary(unittest.TestCase):
         Test near miss.
         '''
         value = boundary_similarity([2, 3, 6], [1, 1, 3, 1, 5])
+        self.assertEqual(0.5, value)
+    
+    def test_positions(self):
+        '''
+        Test false negative.
+        '''
+        a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
+        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        value = boundary_similarity(a, b, boundary_format=\
+                                    BoundaryFormat.position)
+        self.assertEqual(0, value)
+    
+    def test_format_exception(self):
+        '''
+        Test false negative.
+        '''
+        a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
+        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        self.assertRaises(SegmentationMetricError, boundary_similarity, a, b,
+                          boundary_format=None)
+    
+    def test_arg_exception(self):
+        '''
+        Test false negative.
+        '''
+        a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
+        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        c = 0
+        self.assertRaises(SegmentationMetricError, boundary_similarity, a, b,
+                          c)
+    
+    def test_weight_t(self):
+        '''
+        Test false negative.
+        '''
+        value = boundary_similarity([2, 3, 6], [5, 6],
+                                    weight=(weight_a, weight_s, weight_t))
         self.assertEqual(0.5, value)
 

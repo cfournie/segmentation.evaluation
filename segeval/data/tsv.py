@@ -26,11 +26,11 @@ def write_tsv(filepath, header, rows):
     if os.path.isdir(filepath):
         filepath = os.path.join(filepath, 'output.tsv')
     # Open file
-    tsv = csv.writer(open(filepath, 'wb'), delimiter='\t', quotechar='"',
-                     quoting=csv.QUOTE_MINIMAL)
-    tsv.writerow(header)
-    for row in rows:
-        tsv.writerow(row)
+    with csv.writer(open(filepath, 'wb'), delimiter='\t', quotechar='"',
+                     quoting=csv.QUOTE_MINIMAL) as tsv:
+        tsv.writerow(header)
+        for row in rows:
+            tsv.writerow(row)
 
 
 def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
@@ -47,16 +47,15 @@ def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
     :rtype: :func:`dict`
     '''
     # pylint: disable=R0914
-    from . import Dataset, DataIOError, name_from_filepath
+    from . import Dataset, name_from_filepath
     # List version of file
     header = []
     dataset = Dataset()
     item = name_from_filepath(tsv_filename)
     dataset[item] = dict()
     # Open file
-    csv_file = open(tsv_filename, 'rU')
-    # Read in file
-    try:
+    with open(tsv_filename, 'rU') as csv_file:
+        # Read in file
         reader = csv.reader(csv_file, delimiter=delimiter)
         for i, row in enumerate(reader):
             # Read annotators from header
@@ -73,12 +72,7 @@ def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
                         dataset[item][coder] = list()
                     elif j > 0:
                         dataset[item][coder].append(int(col))
-    # pylint: disable=C0103
-    except Exception as exception:
-        raise DataIOError('Error occurred processing file: %s' \
-                                      % tsv_filename, exception)
-    finally:
-        csv_file.close()
+        # pylint: disable=C0103
     return dataset
 
 

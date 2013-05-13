@@ -9,9 +9,9 @@ counting at the beginning and end of segmentations provided by
 from __future__ import division
 from decimal import Decimal
 from . import compute_window_size, WINDOW_METRIC_DEFAULTS
-from ..compute import SegmentationMetricError
-from ..format import BoundaryFormat, convert_masses_to_positions, convert_positions_to_masses
-from ..util import __fnc_metric__
+from ..format import (BoundaryFormat, convert_masses_to_positions,
+                      convert_positions_to_masses)
+from ..util import __fnc_metric__, SegmentationMetricError
 
 
 WINDOWDIFF_METRIC_DEFAULTS = dict(WINDOW_METRIC_DEFAULTS)
@@ -103,8 +103,7 @@ length (%(ref)i is not %(hyp)i).' % {'ref' : len(reference),
         ref_boundaries = 0
         hyp_boundaries = 0
         # Check that the number of loops is correct
-        if len(window) is not window_size + 1:
-            raise SegmentationMetricError('Incorrect actual window size.')
+        assert len(window) is window_size + 1
         # For pair in window
         for j in xrange(0, len(window) - 1):
             ref_part, hyp_part = zip(*window[j:j+2])
@@ -124,11 +123,9 @@ length (%(ref)i is not %(hyp)i).' % {'ref' : len(reference),
         denominator = measurements + 1
     win_diff = Decimal(sum_differences) / denominator
     # Check normalization
-    if denominator is not measurements and not lamprier_et_al_2007_fix:
-        raise SegmentationMetricError('Normalization mismatch.')
+    assert denominator is measurements or lamprier_et_al_2007_fix
     # Check value
-    if win_diff > 1:
-        raise SegmentationMetricError('Incorrect value calculated: WD > 1')
+    assert win_diff <= 1
     if not one_minus:
         if return_parts:
             return sum_differences, denominator
@@ -140,5 +137,6 @@ length (%(ref)i is not %(hyp)i).' % {'ref' : len(reference),
 
 def window_diff(*args, **kwargs):
     # pylint: disable=W0142
-    return __fnc_metric__(__window_diff__, args, kwargs, WINDOW_METRIC_DEFAULTS)
+    return __fnc_metric__(__window_diff__, args, kwargs,
+                          WINDOWDIFF_METRIC_DEFAULTS)
 

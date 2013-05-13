@@ -6,6 +6,26 @@ Utility functions and classes for the package.
 from ..compute import compute_pairwise_values
 
 
+class SegmentationMetricError(Exception):
+    '''
+    Indicates that a runtime check has failed, and the algorithm is performing
+    incorrectly, or input validation has failed.  Generation of this exception
+    is tested.
+        
+    :param message: Explanation for the exception.
+    :type message: str
+    '''
+    
+    def __init__(self, message):
+        '''
+        Initializer.
+        
+        :param message: Explanation for the exception.
+        :type message: str
+        '''
+        Exception.__init__(self, message)
+
+
 def __fnc_metric__(fnc_metric, args, kwargs, kw_defaults):
     # pylint: disable=W0142
     # Create default keyword arguments
@@ -37,5 +57,5 @@ def __fnc_metric__(fnc_metric, args, kwargs, kw_defaults):
         del metric_kwargs['permuted']
         return fnc_metric(hypothesis, reference, **metric_kwargs)
     # Except if insufficient arguments supplied
-    raise Exception('Correct number of arguments not specified.')
+    raise SegmentationMetricError('Correct number of arguments not specified.')
 

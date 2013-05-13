@@ -99,8 +99,11 @@ class TestBias(unittest.TestCase):
         '''
         Test exception.
         '''
-        data = {'i1' : {'c1' : [2, 8, 2, 1]},
-                'i2' : {'c2' : [2, 1, 7, 2, 1]}}
+        data = {'i1' : {'c1' : [2, 8, 2, 1],
+                        'c2' : [2, 8, 2, 1]},
+                'i2' : {'c1' : [2, 1, 7, 2, 1],
+                        'c2' : [2, 8, 2, 1],
+                        'c3' : [2, 8, 2, 1]}}
         self.assertRaises(Exception, artstein_poesio_bias_linear, data)
 
 

@@ -7,9 +7,8 @@ Implementation of the Pk segmentation evaluation metric described in
 from __future__ import division
 from decimal import Decimal
 from . import compute_window_size, WINDOW_METRIC_DEFAULTS
-from ..util import __fnc_metric__
+from ..util import __fnc_metric__, SegmentationMetricError
 from ..format import BoundaryFormat, convert_masses_to_positions
-from ..compute import SegmentationMetricError
 
 
 def __pk__(hypothesis, reference, window_size, one_minus, boundary_format,

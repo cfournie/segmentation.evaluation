@@ -227,23 +227,3 @@ def create_tsv_rows(header, values, expand=False):
     # Return
     return padded_header, padded_rows
 
-
-class SegmentationMetricError(Exception):
-    '''
-    Indicates that a runtime check has failed, and the algorithm is performing
-    incorrectly, or input validation has failed.  Generation of this exception
-    is tested.
-        
-    :param message: Explanation for the exception.
-    :type message: str
-    '''
-    
-    def __init__(self, message):
-        '''
-        Initializer.
-        
-        :param message: Explanation for the exception.
-        :type message: str
-        '''
-        Exception.__init__(self, message)
-

@@ -18,16 +18,17 @@ from __future__ import division
 from decimal import Decimal
 from collections import defaultdict
 from ..util.math import mean
+from ..util.lang import enum
 
 
-MICRO, MACRO = range(2)
+Average = enum('micro', 'macro')
 
 
 def __value_micro_macro__(fnc, classes, arguments, classification=None,
-                          version=MICRO):
+                          version=Average.micro):
     # pylint: disable=W0142
     if classification is None:
-        if version is MICRO:
+        if version is Average.micro:
             # Micro-average
             numerator, denominator = 0, 0
             for classification in classes:
@@ -40,7 +41,7 @@ def __value_micro_macro__(fnc, classes, arguments, classification=None,
                 return 0
             else:
                 return Decimal(numerator) / denominator
-        elif version is MACRO:
+        elif version is Average.macro:
             # Macro-average
             values = list()
             for classification in classes:
@@ -120,7 +121,7 @@ def __fmeasure__(matrix, classification=None, beta=Decimal('1.0'),
             return Decimal(numerator) / Decimal(denominator)
 
 
-def precision(matrix, classification=None, version=MICRO):
+def precision(matrix, classification=None, version=Average.micro):
     '''
     Calculate precision.
     
@@ -142,7 +143,7 @@ def precision(matrix, classification=None, version=MICRO):
                                  classification, version)
 
 
-def recall(matrix, classification=None, version=MICRO):
+def recall(matrix, classification=None, version=Average.micro):
     '''
     Calculate recall.
     
@@ -164,7 +165,8 @@ def recall(matrix, classification=None, version=MICRO):
                                  version)
 
 
-def fmeasure(matrix, classification=None, beta=Decimal('1.0'), version=MICRO):
+def fmeasure(matrix, classification=None, beta=Decimal('1.0'),
+             version=Average.micro):
     '''
     Calculate FMeasure.
     
@@ -252,5 +254,6 @@ class ConfusionMatrix(dict):
         return self.__classes__
 
 
-__all__ = [MICRO, MACRO, precision, recall, fmeasure, ConfusionMatrix]
+__all__ = [Average.micro, Average.macro, precision, recall, fmeasure,
+           ConfusionMatrix]
 

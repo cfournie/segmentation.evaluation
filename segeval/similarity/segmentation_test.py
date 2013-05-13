@@ -6,6 +6,7 @@ Tests segmentation similarity (S).
 import unittest
 from decimal import Decimal
 from .segmentation import segmentation_similarity
+from ..util import SegmentationMetricError
 
 
 class TestSegmentation(unittest.TestCase):
@@ -41,4 +42,31 @@ class TestSegmentation(unittest.TestCase):
         '''
         value = segmentation_similarity([2, 3, 6], [1, 1, 3, 1, 5])
         self.assertEqual(Decimal('0.8'), value)
+    
+    def test_parts(self):
+        '''
+        Test false negative.
+        '''
+        numerator, denominator  = segmentation_similarity([2, 3, 6], [5, 6],
+                                                          return_parts=True)
+        self.assertEqual(Decimal('9'), numerator)
+        self.assertEqual(Decimal('10'), denominator)
+    
+    def test_format_exception(self):
+        '''
+        Test false negative.
+        '''
+        a = [2, 3, 6]
+        b = [2, 2, 7]
+        self.assertRaises(SegmentationMetricError, segmentation_similarity,
+                          a, b, boundary_format=None)
+
+    def test_mass_exception(self):
+        '''
+        Test false negative.
+        '''
+        a = [2, 2, 7]
+        b = [2, 2, 8]
+        self.assertRaises(SegmentationMetricError, segmentation_similarity,
+                          a, b)
 

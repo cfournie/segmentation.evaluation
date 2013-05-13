@@ -9,6 +9,7 @@ from ..format import BoundaryFormat
 from ..window.pk import pk
 from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, 
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
+from ..util import SegmentationMetricError
 from ..util.test import TestCase
 
 
@@ -115,6 +116,35 @@ class TestPk(TestCase):
         metric_kwargs['reference'] = [1,1,1,1,1,2,3,3,4,4,4,4,4]
         self.assertEqual(pk(**metric_kwargs),
                          Decimal('0.2727272727272727272727272727'))
+
+    def test_parts(self):
+        '''
+        Test parts.
+        '''
+        # pylint: disable=C0324,C0103
+        a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
+        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        metric_kwargs = dict(self.kwargs)
+        metric_kwargs['return_parts'] = True
+        self.assertEqual(pk(a, b, **metric_kwargs),
+                         (7, 11))
+    
+    def test_format_exception(self):
+        '''
+        Test format exception.
+        '''
+        a = [2, 3, 6]
+        b = [2, 2, 7]
+        self.assertRaises(SegmentationMetricError, pk,
+                          a, b, boundary_format=BoundaryFormat.sets)
+
+    def test_mass_exception(self):
+        '''
+        Test length mismatch exception.
+        '''
+        a = [2, 2, 7]
+        b = [2, 2, 8]
+        self.assertRaises(SegmentationMetricError, pk, a, b)
 
 
 class TestPairwisePkMeasure(TestCase):

@@ -6,7 +6,7 @@ Tests the machine learning (ML) statistics functions, and ml package.
 import unittest
 from decimal import Decimal
 from . import (__precision__, precision, __recall__, recall, __fmeasure__,
-               fmeasure, ConfusionMatrix as cm, MICRO, MACRO)
+               fmeasure, ConfusionMatrix as cm, Average)
 
 
 class TestConfusionMatrix(unittest.TestCase):
@@ -69,14 +69,14 @@ class TestML(unittest.TestCase):
         matrix['p']['f'] += 1
         self.assertEqual(__precision__(matrix, 'p'), Decimal('0.5'))
         self.assertEqual(__precision__(matrix, 'f'), Decimal('0'))
-        self.assertEqual(precision(matrix, version=MICRO), Decimal('0.5'))
-        self.assertEqual(precision(matrix, version=MACRO), Decimal('0.25'))
+        self.assertEqual(precision(matrix, version=Average.micro), Decimal('0.5'))
+        self.assertEqual(precision(matrix, version=Average.macro), Decimal('0.25'))
         matrix = cm()
         matrix['p']['p'] += 1
         matrix['p']['f'] += 3
         matrix['f']['p'] += 1
-        self.assertEqual(precision(matrix, version=MICRO), Decimal('0.2'))
-        self.assertEqual(precision(matrix, version=MACRO), Decimal('0.125'))
+        self.assertEqual(precision(matrix, version=Average.micro), Decimal('0.2'))
+        self.assertEqual(precision(matrix, version=Average.macro), Decimal('0.125'))
         self.assertEqual(__precision__(matrix, 'p'), Decimal('0.25'))
         self.assertEqual(__precision__(matrix, 'f'), Decimal('0'))
         matrix = cm()
@@ -84,8 +84,8 @@ class TestML(unittest.TestCase):
         matrix['p']['f'] += 2
         matrix['f']['p'] += 1
         matrix['f']['f'] += 2
-        self.assertEqual(precision(matrix, version=MICRO), Decimal('0.7'))
-        self.assertAlmostEqual(precision(matrix, version=MACRO),
+        self.assertEqual(precision(matrix, version=Average.micro), Decimal('0.7'))
+        self.assertAlmostEqual(precision(matrix, version=Average.macro),
                                Decimal('0.69047'), 4)
         self.assertAlmostEqual(__precision__(matrix, 'p'),
                                Decimal('0.71428'), 4)
@@ -116,14 +116,14 @@ class TestML(unittest.TestCase):
         matrix['p']['f'] += 1
         self.assertEqual(__recall__(matrix, 'p'), Decimal('1.0'))
         self.assertEqual(__recall__(matrix, 'f'), Decimal('0'))
-        self.assertEqual(recall(matrix, version=MICRO), Decimal('0.5'))
-        self.assertEqual(recall(matrix, version=MACRO), Decimal('0.5'))
+        self.assertEqual(recall(matrix, version=Average.micro), Decimal('0.5'))
+        self.assertEqual(recall(matrix, version=Average.macro), Decimal('0.5'))
         matrix = cm()
         matrix['p']['p'] += 1
         matrix['p']['f'] += 3
         matrix['f']['p'] += 1
-        self.assertEqual(recall(matrix, version=MICRO), Decimal('0.2'))
-        self.assertEqual(recall(matrix, version=MACRO), Decimal('0.25'))
+        self.assertEqual(recall(matrix, version=Average.micro), Decimal('0.2'))
+        self.assertEqual(recall(matrix, version=Average.macro), Decimal('0.25'))
         self.assertEqual(__recall__(matrix, 'p'), Decimal('0.5'))
         self.assertEqual(__recall__(matrix, 'f'), Decimal('0'))
         matrix = cm()
@@ -131,8 +131,8 @@ class TestML(unittest.TestCase):
         matrix['p']['f'] += 2
         matrix['f']['p'] += 1
         matrix['f']['f'] += 2
-        self.assertEqual(recall(matrix, version=MICRO), Decimal('0.7'))
-        self.assertAlmostEqual(recall(matrix, version=MACRO),
+        self.assertEqual(recall(matrix, version=Average.micro), Decimal('0.7'))
+        self.assertAlmostEqual(recall(matrix, version=Average.macro),
                                Decimal('0.66666'), 4)
         self.assertAlmostEqual(__recall__(matrix, 'p'),
                                Decimal('0.83333'), 4)
@@ -163,28 +163,33 @@ class TestML(unittest.TestCase):
         matrix['p']['f'] += 1
         self.assertAlmostEqual(__fmeasure__(matrix, 'p'), Decimal('0.66666'), 4)
         self.assertEqual(__fmeasure__(matrix, 'f'), Decimal('0'))
-        self.assertAlmostEqual(fmeasure(matrix, version=MICRO),
+        self.assertAlmostEqual(fmeasure(matrix, version=Average.micro),
                                Decimal('0.66666'), 4)
-        self.assertAlmostEqual(fmeasure(matrix, version=MACRO),
+        self.assertAlmostEqual(fmeasure(matrix, version=Average.macro),
                                Decimal('0.33333'), 4)
+        self.assertAlmostEqual(fmeasure(matrix, classification='p'),
+                               Decimal('0.66666'), 4)
         matrix = cm()
         matrix['p']['p'] += 1
         matrix['p']['f'] += 3
         matrix['f']['p'] += 1
-        self.assertAlmostEqual(fmeasure(matrix, version=MICRO),
+        self.assertAlmostEqual(fmeasure(matrix, version=Average.micro),
                                Decimal('0.33333'), 4)
-        self.assertAlmostEqual(fmeasure(matrix, version=MACRO),
+        self.assertAlmostEqual(fmeasure(matrix, version=Average.macro),
                                Decimal('0.16666'), 4)
-        self.assertAlmostEqual(__fmeasure__(matrix, 'p'), Decimal('0.33333'), 4)
+        self.assertAlmostEqual(__fmeasure__(matrix, 'p'),
+                               Decimal('0.33333'), 4)
+        self.assertAlmostEqual(fmeasure(matrix, classification='p'),
+                               Decimal('0.33333'), 4)
         self.assertEqual(__fmeasure__(matrix, 'f'), Decimal('0'))
         matrix = cm()
         matrix['p']['p'] += 5
         matrix['p']['f'] += 2
         matrix['f']['p'] += 1
         matrix['f']['f'] += 2
-        self.assertAlmostEqual(fmeasure(matrix, version=MICRO),
+        self.assertAlmostEqual(fmeasure(matrix, version=Average.micro),
                                Decimal('0.68421'), 4)
-        self.assertAlmostEqual(fmeasure(matrix, version=MACRO),
+        self.assertAlmostEqual(fmeasure(matrix, version=Average.macro),
                                Decimal('0.67032'), 4)
         self.assertAlmostEqual(__fmeasure__(matrix, 'p'),
                                Decimal('0.76923'), 4)

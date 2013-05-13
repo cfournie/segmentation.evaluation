@@ -40,14 +40,11 @@ def output_linear_mass_json(filepath, dataset):
     Compose an output file's fields and output a JSON file.
     '''
     data = {FIELD_SEGMENTATION_TYPE : TYPE_LINEAR}
-    
     if len(dataset) > 0:
         data[FIELD_ITEMS] = dataset
     else:
         data[FIELD_CODINGS] = dataset
-    
     data.update(dataset.properties)
-    
     write_json(filepath, data)
     
     

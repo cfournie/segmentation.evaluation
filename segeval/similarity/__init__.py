@@ -11,8 +11,7 @@ from .. import METRIC_DEFAULTS
 from ..ml import ConfusionMatrix as cm
 from ..format import (BoundaryFormat, boundary_string_from_masses,
                       convert_positions_to_masses)
-from ..compute import SegmentationMetricError
-from ..util import __fnc_metric__
+from ..util import __fnc_metric__, SegmentationMetricError
 
 
 SIMILARITY_METRIC_DEFAULTS = dict(METRIC_DEFAULTS)
@@ -29,6 +28,7 @@ def __descriptive_statistics__(segs_a, segs_b, boundary_types, boundary_format,
     Compute boundary similarity applying the weighting functions specified.
     '''
     # pylint: disable=C0103,R0913,R0914
+    # Check format
     if boundary_format == BoundaryFormat.sets:
         pass # Correct boundary format
     elif boundary_format == BoundaryFormat.mass:
@@ -41,6 +41,11 @@ def __descriptive_statistics__(segs_a, segs_b, boundary_types, boundary_format,
         segs_b = boundary_string_from_masses(segs_b)
     else:
         raise SegmentationMetricError('Unsupported boundary format')
+    # Check length
+    if len(segs_a) != len(segs_b):
+        raise SegmentationMetricError(
+                'Segmentations differ in length ({0} != {1})'.format(
+                        len(segs_a), len(segs_b)))
     # Calculate the total pbs
     pbs = len(segs_b) * len(boundary_types)
     # Compute edits
@@ -116,6 +121,11 @@ def confusion_matrix(*args, **kwargs):
 
 def descriptive_statistics(*args, **kwargs):
     # pylint: disable=W0142
+    
+    default_kwargs = dict(SIMILARITY_METRIC_DEFAULTS)
+    if 'one_minus' in default_kwargs:
+        del default_kwargs['one_minus']
+        del default_kwargs['return_parts']
     return __fnc_metric__(__descriptive_statistics__, args, kwargs,
-                          SIMILARITY_METRIC_DEFAULTS)
+                          default_kwargs)
 

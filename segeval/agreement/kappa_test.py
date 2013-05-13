@@ -99,7 +99,8 @@ class TestKappa(unittest.TestCase):
         '''
         data = {'i1' : {'c1' : [2, 8, 2, 1],
                         'c2' : [2, 8, 2, 1]},
-                'i2' : {'c2' : [2, 1, 7, 2, 1]},
-                        'c3' : [2, 8, 2, 1]}
+                'i2' : {'c1' : [2, 1, 7, 2, 1],
+                        'c2' : [2, 8, 2, 1],
+                        'c3' : [2, 8, 2, 1]}}
         self.assertRaises(Exception, fleiss_kappa_linear, data)
 

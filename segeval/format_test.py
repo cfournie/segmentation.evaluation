@@ -4,7 +4,8 @@ Tests some general segeval utility functions.
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import unittest
-from format import convert_positions_to_masses, convert_masses_to_positions
+from format import (convert_positions_to_masses, convert_masses_to_positions,
+                    boundary_string_from_masses)
 
 
 class TestSegeval(unittest.TestCase):
@@ -63,5 +64,30 @@ class TestSegeval(unittest.TestCase):
         #pylint: disable=C0324
         self.assertEqual(convert_masses_to_positions([1,1,1,1,1,1,1,1,1,1,1]),
                          [1,2,3,4,5,6,7,8,9,10,11])
+
+    def test_boundary_string_from_masses_none(self):
+        '''
+        No boundaries.
+        '''
+        string = boundary_string_from_masses([3])
+        self.assertEqual(string, [set(), set()])
+
+
+    def test_boundary_string_from_masses_full(self):
+        '''
+        Few boundaries.
+        '''
+        string = boundary_string_from_masses([1,1,1,1])
+        self.assertEqual(string, [set([1]), set([1]), set([1])])
+
+
+    def test_boundary_string_from_masses_one(self):
+        '''
+        Few boundaries.
+        '''
+        string = boundary_string_from_masses([2,3])
+        self.assertEqual(string, [set(), set([1]), set(), set()])
+
+
 
         
