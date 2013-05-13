@@ -9,6 +9,8 @@ from .boundary import boundary_similarity
 from .weight import weight_a, weight_s, weight_t
 from ..format import BoundaryFormat 
 from ..util import SegmentationMetricError
+from ..compute import summarize
+from ..data.samples import MULTIPLE_BOUNDARY_TYPES
 
 
 class TestBoundary(unittest.TestCase):
@@ -81,4 +83,16 @@ class TestBoundary(unittest.TestCase):
         value = boundary_similarity([2, 3, 6], [5, 6],
                                     weight=(weight_a, weight_s, weight_t))
         self.assertEqual(0.5, value)
+    
+    def test_multiple_boundary_types(self):
+        '''
+        Test false negative.
+        '''
+        value = summarize(boundary_similarity(MULTIPLE_BOUNDARY_TYPES))
+        self.assertEqual((0.375,
+                          0.125,
+                          0.015625,
+                          Decimal('0.08838834764831844055010554528'),
+                          2),
+                          value)
 

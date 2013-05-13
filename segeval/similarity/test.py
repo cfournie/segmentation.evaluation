@@ -20,10 +20,12 @@ class TestSimilarity(unittest.TestCase):
         Test confusion matrix.
         '''
         cm = confusion_matrix(
-            [set([ ]), set([2]), set([]), set([ ]), set([1]), set([1])],
-            [set([1]), set([1]), set([]), set([1]), set([ ]), set([1])],
+            [set([ ]), set([2]), set([]), set([ ]), set([1]), set([1]),
+             set([1]), set([1])],
+            [set([1]), set([1]), set([]), set([1]), set([ ]), set([1]),
+             set([ ]), set([ ])],
             boundary_format=BoundaryFormat.sets)
-        self.assertEqual(cm[None][1], 0)
+        self.assertEqual(cm[None][1], 2)
         self.assertEqual(cm[1][None], 1)
         self.assertEqual(cm[None][2], 0)
         self.assertEqual(cm[2][None], 0)

@@ -5,6 +5,7 @@ Test data for unit tests that has been selected from
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from . import Dataset
+from ..format import BoundaryFormat
 #pylint: disable=W0105
 
 
@@ -188,6 +189,28 @@ Contrived segmentations created by Chris Fournier to demonstrate large
 disagreement, but varying item sizes::
 
     LARGE_DISAGREEMENT = Dataset(
+        {'item1': {'an4': [12],
+                   'an1': [1] * 12},
+         'item2': {'an4': [20],
+                   'an1': [1] * 20},
+         'item3': {'an4': [5],
+                   'an1': [1] * 5},
+         'item4': {'an4': [42],
+                   'an1': [1] * 42}})
+'''
+
+MULTIPLE_BOUNDARY_TYPES = Dataset(
+    {'item1': {'an5': [set([1]), set(), set(), set(), set([1])],
+               'an6': [set([1]), set(), set(), set(), set([2])]},
+     'item2': {'an5': [set([1]), set(), set(), set(), set([1])],
+               'an6': [set(), set(), set(), set([1]), set()]}},
+    boundary_types=set([1, 2]),
+    boundary_format=BoundaryFormat.sets)
+'''
+Contrived segmentations created by Chris Fournier to demonstrate large 
+disagreement, but varying item sizes::
+
+    MULTIPLE_BOUNDARY_TYPES = Dataset(
         {'item1': {'an4': [12],
                    'an1': [1] * 12},
          'item2': {'an4': [20],

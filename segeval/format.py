@@ -9,7 +9,7 @@ from .util.lang import enum
 
 
 BoundaryFormat = enum(position='position', mass='mass',
-                      sets='boundary_sets')
+                      sets='sets')
 
 
 def convert_positions_to_masses(positions):
