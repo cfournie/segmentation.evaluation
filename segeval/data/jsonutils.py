@@ -6,16 +6,20 @@ JSON output module (for general JSON writing operations).
 import json
 import os
 import codecs
+from ..util.lang import enum
 
 
-FIELD_SEGMENTATION_TYPE   = 'segmentation_type'
-TYPE_LINEAR               = 'linear'
-FIELD_ITEMS               = 'items'
-FIELD_CODINGS             = 'codings'
-FIELD_HAS_REFERENCE_CODER = 'has_reference_coder'
+Field = enum(single_file='single_file',
+             segmentation_type='segmentation_type',
+             has_reference_coder='has_reference_coder',
+             # Structure
+             items='items',
+             codings='codings')
+
+SegmentationType = enum(linear='linear')
 
 
-def write_json(filepath, data):
+def __write_json__(filepath, data):
     '''
     Write a JSON file using the given data.
     
@@ -39,13 +43,13 @@ def output_linear_mass_json(filepath, dataset):
     '''
     Compose an output file's fields and output a JSON file.
     '''
-    data = {FIELD_SEGMENTATION_TYPE : TYPE_LINEAR}
+    data = {Field.segmentation_type : SegmentationType.linear}
     if len(dataset) > 0:
-        data[FIELD_ITEMS] = dataset
+        data[Field.items] = dataset
     else:
-        data[FIELD_CODINGS] = dataset
+        data[Field.codings] = dataset
     data.update(dataset.properties)
-    write_json(filepath, data)
+    __write_json__(filepath, data)
     
     
 
@@ -75,18 +79,18 @@ def input_linear_mass_json(filepath, create_item=False):
         raise DataIOError('Error occurred processing file: %s' \
                                       % filepath, exception)
     # Check type
-    if FIELD_SEGMENTATION_TYPE in data:
-        if data[FIELD_SEGMENTATION_TYPE] != TYPE_LINEAR:
+    if Field.segmentation_type in data:
+        if data[Field.segmentation_type] != SegmentationType.linear:
             raise DataIOError(
                 'Segmentation type \'%(type)s\' expected, but encountered \
-\'%(type_found)s\'' % {'type'       : TYPE_LINEAR,
-                   'type_found' : data[FIELD_SEGMENTATION_TYPE]})
+\'%(type_found)s\'' % {'type'       : SegmentationType.linear,
+                   'type_found' : data[Field.segmentation_type]})
     # Duplicate to store other properties
     dataset.properties = data
     # Remove the metadata layer
     # If separated into multiple codings of one item per file
-    if FIELD_CODINGS in data:
-        data = data[FIELD_CODINGS]
+    if Field.codings in data:
+        data = data[Field.codings]
         item = name
         dataset[item] = dict()
         # Convert coder labels into strings
@@ -96,17 +100,17 @@ def input_linear_mass_json(filepath, create_item=False):
         if not create_item:
             dataset = dataset[item]
         # Remove from properties
-        del dataset.properties[FIELD_CODINGS]
+        del dataset.properties[Field.codings]
     # If separated into multiple items for one coder per file
-    elif FIELD_ITEMS in data:
-        data = data[FIELD_ITEMS]
+    elif Field.items in data:
+        data = data[Field.items]
         # Convert item labels into strings
         for item, coder_masses in data.items():
             dataset[item] = dict()
             for coder, masses in coder_masses.items():
                 dataset[item][coder] = tuple(masses)
         # Remove from properties
-        del dataset.properties[FIELD_ITEMS]
+        del dataset.properties[Field.items]
     # Return
     return dataset
 

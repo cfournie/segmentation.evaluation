@@ -14,12 +14,19 @@ import json
 import copy
 from collections import defaultdict
 from .tsv import input_linear_mass_tsv
-from .jsonutils import input_linear_mass_json
+from .jsonutils import input_linear_mass_json, Field
 from ..format import BoundaryFormat
-from ..util.lang import enum
 
+FILETYPE_TSV  = 'tsv'
+FILETYPE_JSON = 'json'
 
-Field = enum(single_file='single_file')
+EXT = 'ext'
+FNC = 'fnc'
+FILETYPES           = {FILETYPE_TSV  : {EXT : ['.tsv', '.csv'],
+                                        FNC : input_linear_mass_tsv},
+                       FILETYPE_JSON : {EXT : ['.json', '.jsn'],
+                                        FNC : input_linear_mass_json}}
+FILETYPES_DEFAULT   = FILETYPE_JSON
 
 
 class Dataset(defaultdict):
@@ -106,18 +113,6 @@ class DataIOError(Exception):
         :type message: str
         '''
         Exception.__init__(self, message, exception)
-
-
-FILETYPE_TSV  = 'tsv'
-FILETYPE_JSON = 'json'
-
-EXT = 'ext'
-FNC = 'fnc'
-FILETYPES           = {FILETYPE_TSV  : {EXT : ['.tsv', '.csv'],
-                                        FNC : input_linear_mass_tsv},
-                       FILETYPE_JSON : {EXT : ['.json', '.jsn'],
-                                        FNC : input_linear_mass_json}}
-FILETYPES_DEFAULT   = FILETYPE_JSON
 
 
 def load_nested_folders_dict(containing_dir, filetype, dataset=None,

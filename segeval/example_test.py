@@ -173,4 +173,5 @@ class TestExamples(unittest.TestCase):
         '''
         #pylint: disable=C0324
 
-        self.assertAlmostEquals((1,1,1,1,2,2), convert_masses_to_positions((4,2)))
+        self.assertAlmostEquals((1,1,1,1,2,2),
+            convert_masses_to_positions((4,2)))

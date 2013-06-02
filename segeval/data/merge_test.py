@@ -14,7 +14,7 @@ class TestMerge(unittest.TestCase):
     '''
     #pylint: disable=R0904,C0103
     
-    def testAdd(self):
+    def test_add(self):
         '''
         Test ``Dataset.add()``.
         '''
@@ -24,4 +24,3 @@ class TestMerge(unittest.TestCase):
         self.assertTrue(6, len(large_disagreement.coders))
         self.assertTrue(4, len(large_disagreement))
         self.assertTrue(2, len(large_disagreement['item1']))
-        

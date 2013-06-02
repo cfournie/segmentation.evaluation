@@ -23,7 +23,7 @@ def compute_pairwise_values(dataset_masses, fnc_metric, **kwargs):
     :rtype: :func:`list`
     '''
     # pylint: disable=C0103,R0912,W0142
-    from .data.jsonutils import FIELD_HAS_REFERENCE_CODER
+    from .data.jsonutils import Field
     pairs = dict()
     fnc_kwargs = dict(kwargs)
     permuted = fnc_kwargs['permuted']
@@ -32,9 +32,9 @@ def compute_pairwise_values(dataset_masses, fnc_metric, **kwargs):
     del fnc_kwargs['permuted']
     reference_coder_exists = False
     # Determine whether a reference coder is designated
-    if FIELD_HAS_REFERENCE_CODER in dataset_masses.properties:
+    if Field.has_reference_coder in dataset_masses.properties:
         reference_coder_exists = \
-            dataset_masses.properties[FIELD_HAS_REFERENCE_CODER]
+            dataset_masses.properties[Field.has_reference_coder]
     if reference_coder_exists:
         permuted = False
     # Define fnc per group
