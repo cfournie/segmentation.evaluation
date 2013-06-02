@@ -5,7 +5,7 @@ Tests similarity functions.
 '''
 import unittest
 from decimal import Decimal
-from . import confusion_matrix, descriptive_statistics
+from . import boundary_confusion_matrix, boundary_statistics
 from ..format import BoundaryFormat
 
 
@@ -15,11 +15,11 @@ class TestSimilarity(unittest.TestCase):
     '''
     # pylint: disable=R0904,C0103,C0324
     
-    def test_confusion_matrix(self):
+    def test_boundary_confusion_matrix(self):
         '''
         Test confusion matrix.
         '''
-        cm = confusion_matrix(
+        cm = boundary_confusion_matrix(
             [set([ ]), set([2]), set([]), set([ ]), set([1]), set([1]),
              set([1]), set([1])],
             [set([1]), set([1]), set([]), set([1]), set([ ]), set([1]),
@@ -34,11 +34,11 @@ class TestSimilarity(unittest.TestCase):
         self.assertEqual(cm[1][1], 1.5)
         self.assertEqual(cm[2][2], 0)
     
-    def test_descriptive_statistics(self):
+    def test_boundary_statistics(self):
         '''
         Test false negative.
         '''
-        value = descriptive_statistics([2, 3, 6], [5, 6])
+        value = boundary_statistics([2, 3, 6], [5, 6])
         self.assertEqual(
             {'matches': [1],
              'boundaries_all': 3,

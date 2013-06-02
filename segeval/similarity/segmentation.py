@@ -4,7 +4,7 @@ Similarity package
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from __future__ import division
-from . import __descriptive_statistics__, SIMILARITY_METRIC_DEFAULTS
+from . import __boundary_statistics__, SIMILARITY_METRIC_DEFAULTS
 from ..util import __fnc_metric__
 
 
@@ -20,7 +20,7 @@ def __segmentation_similarity__(*args, **kwargs):
     boundary_types = kwargs['boundary_types']
     return_parts = kwargs['return_parts']
     # Compute
-    statistics = __descriptive_statistics__(*args, **metric_kwargs)
+    statistics = __boundary_statistics__(*args, **metric_kwargs)
     # Process
     pbs = statistics['pbs'] * len(boundary_types)
     # Fraction

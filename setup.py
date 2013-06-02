@@ -14,7 +14,7 @@ except ImportError:
     from distutils.core import setup
     extra = {}
 
-from segeval import __package_name__, __version__, __author__, __author_email__
+from segeval import __package__, __version__, __author__, __author_email__
 
 requires=['numpy>=1.6.0']
 
@@ -27,7 +27,7 @@ packages=['segeval',
           'segeval.window']
 
 setup(
-    name=__package_name__,
+    name=__package__,
     version=__version__,
     long_description=open("./README.rst", "r").read(),
     description='A package and utilities providing a variety of discourse segmentation evaluation metrics',

@@ -4,7 +4,7 @@ Created on Sep 4, 2012
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from __future__ import division
-from . import __descriptive_statistics__, SIMILARITY_METRIC_DEFAULTS
+from . import __boundary_statistics__, SIMILARITY_METRIC_DEFAULTS
 from ..util import __fnc_metric__
 
 
@@ -19,7 +19,7 @@ def __boundary_similarity__(*args, **kwargs):
     # Arguments
     return_parts = kwargs['return_parts']
     # Compute
-    statistics = __descriptive_statistics__(*args, **metric_kwargs)
+    statistics = __boundary_statistics__(*args, **metric_kwargs)
     additions = statistics['additions']
     substitutions = statistics['substitutions']
     transpositions = statistics['transpositions']

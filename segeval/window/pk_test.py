@@ -212,4 +212,3 @@ class TestPairwisePkMeasure(TestCase):
                           0.0,
                           0.0,
                           48))
-

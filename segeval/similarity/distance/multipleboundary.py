@@ -177,9 +177,9 @@ def __optional_set_edits__(boundary_string_a, boundary_string_b):
     options_set = dict()
     for i, value in enumerate(zip(boundary_string_a, boundary_string_b)):
         a_i, b_i = value
-        a = a_i - b_i
-        b = b_i - a_i
-        d = a_i ^ b_i
+        a = set(a_i - b_i)
+        b = set(b_i - a_i)
+        d = set(a_i ^ b_i)
         # Record additions/deletions
         if len(d) > 0:
             options_set[i] = (d, a, b)

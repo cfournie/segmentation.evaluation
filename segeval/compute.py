@@ -27,7 +27,8 @@ def compute_pairwise_values(dataset_masses, fnc_metric, **kwargs):
     pairs = dict()
     fnc_kwargs = dict(kwargs)
     permuted = fnc_kwargs['permuted']
-    return_parts = fnc_kwargs['return_parts']
+    return_parts = fnc_kwargs['return_parts'] \
+        if 'return_parts' in fnc_kwargs else False
     del fnc_kwargs['permuted']
     reference_coder_exists = False
     # Determine whether a reference coder is designated

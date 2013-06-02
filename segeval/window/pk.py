@@ -6,7 +6,7 @@ Implementation of the Pk segmentation evaluation metric described in
 '''
 from __future__ import division
 from decimal import Decimal
-from . import compute_window_size, WINDOW_METRIC_DEFAULTS
+from . import __compute_window_size__, WINDOW_METRIC_DEFAULTS
 from ..util import __fnc_metric__, SegmentationMetricError
 from ..format import BoundaryFormat, convert_masses_to_positions
 
@@ -54,8 +54,8 @@ length (%(ref)i is not %(hyp)i).' % {'ref' : len(reference),
                                  'hyp' : len(hypothesis)})
     # Compute window size to use if unspecified
     if window_size is None:
-        window_size = compute_window_size(reference, fnc_round,
-                                          BoundaryFormat.position)
+        window_size = __compute_window_size__(reference, fnc_round,
+                                                BoundaryFormat.position)
     # Create a set of pairs of units from each segmentation to go over using a
     # window
     sum_differences = 0

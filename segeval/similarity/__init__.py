@@ -7,7 +7,7 @@ from __future__ import division
 from decimal import Decimal
 from .distance.multipleboundary import boundary_edit_distance
 from .weight import weight_a, weight_s_scale, weight_t_scale
-from .. import METRIC_DEFAULTS
+from ..metric import METRIC_DEFAULTS
 from ..ml import ConfusionMatrix as cm
 from ..format import (BoundaryFormat, boundary_string_from_masses,
                       convert_positions_to_masses)
@@ -22,7 +22,7 @@ SIMILARITY_METRIC_DEFAULTS.update({
 })
 
 
-def __descriptive_statistics__(segs_a, segs_b, boundary_types, boundary_format,
+def __boundary_statistics__(segs_a, segs_b, boundary_types, boundary_format,
                                n_t, weight):
     '''
     Compute boundary similarity applying the weighting functions specified.
@@ -73,7 +73,7 @@ def __descriptive_statistics__(segs_a, segs_b, boundary_types, boundary_format,
             'matches' : matches, 'pbs' : pbs}
 
 
-def __confusion_matrix__(*args, **kwargs):
+def __boundary_confusion_matrix__(*args, **kwargs):
     '''
     Create a confusion matrix using boundary edit distance.
     '''
@@ -81,7 +81,7 @@ def __confusion_matrix__(*args, **kwargs):
     metric_kwargs = dict(kwargs)
     del metric_kwargs['return_parts']
     del metric_kwargs['one_minus']
-    statistics = __descriptive_statistics__(*args, **metric_kwargs)
+    statistics = __boundary_statistics__(*args, **metric_kwargs)
     # Get parameters
     n_t = kwargs['n_t']
     weight = kwargs['weight']
@@ -114,19 +114,19 @@ def __confusion_matrix__(*args, **kwargs):
     return matrix
 
 
-def confusion_matrix(*args, **kwargs):
+def boundary_confusion_matrix(*args, **kwargs):
     # pylint: disable=W0142
-    return __fnc_metric__(__confusion_matrix__, args, kwargs,
+    return __fnc_metric__(__boundary_confusion_matrix__, args, kwargs,
                           SIMILARITY_METRIC_DEFAULTS)
 
 
-def descriptive_statistics(*args, **kwargs):
+def boundary_statistics(*args, **kwargs):
     # pylint: disable=W0142
     
     default_kwargs = dict(SIMILARITY_METRIC_DEFAULTS)
     if 'one_minus' in default_kwargs:
         del default_kwargs['one_minus']
         del default_kwargs['return_parts']
-    return __fnc_metric__(__descriptive_statistics__, args, kwargs,
+    return __fnc_metric__(__boundary_statistics__, args, kwargs,
                           default_kwargs)
 

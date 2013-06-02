@@ -17,7 +17,7 @@ evaluation metrics including:
 '''
 from __future__ import division
 from decimal import Decimal
-from .. import METRIC_DEFAULTS
+from ..metric import METRIC_DEFAULTS
 from ..format import BoundaryFormat, convert_positions_to_masses
 from ..util.math import mean
 
@@ -30,7 +30,7 @@ WINDOW_METRIC_DEFAULTS.update({
 })
 
 
-def compute_window_size(reference, fnc_round, boundary_format):
+def __compute_window_size__(reference, fnc_round, boundary_format):
     '''
     Compute a window size from a dict of segment masses.
     
@@ -62,5 +62,15 @@ def compute_window_size(reference, fnc_round, boundary_format):
     avg = mean(all_masses) / Decimal('2')
     window_size = int(fnc_round(avg))
     return window_size if window_size > 1 else 2
+
+
+def compute_window_size(reference, **kwargs):
+    metric_kwargs = dict(WINDOW_METRIC_DEFAULTS)
+    metric_kwargs.update(kwargs)
+    del metric_kwargs['one_minus']
+    del metric_kwargs['permuted']
+    del metric_kwargs['window_size']
+    del metric_kwargs['return_parts']
+    return __compute_window_size__(reference, **metric_kwargs)
 
     
