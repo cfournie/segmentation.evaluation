@@ -81,8 +81,8 @@ class module(ModuleType):
         """Just show what we want to show."""
         result = list(new_module.__all__)
         result.extend(('__file__', '__path__', '__doc__', '__all__',
-                       '__docformat__', '__name__', '__path__',
-                       '__package__', '__version__'))
+            '__docformat__', '__name__', '__path__', '__package__',
+            '__project__', '__version__'))
         return result
 
 
@@ -93,13 +93,16 @@ old_module = sys.modules['segeval']
 # setup the new module and patch it into the dict of loaded modules
 new_module = sys.modules['segeval'] = module('segeval')
 new_module.__dict__.update({
-    '__file__':         __file__,
-    '__path__':         __path__,
-    '__package__':      __package__,
-    '__doc__':          __doc__,
-    '__version__':      __version__,
-    '__author__':       __author__,
-    '__author_email__': __author_email__,
-    '__all__':          tuple(object_origins),
-    '__docformat__':    'restructuredtext en'
+    '__file__':             __file__,
+    '__path__':             __path__,
+    '__package__':          __package__,
+    '__project__':          __project__,
+    '__doc__':              __doc__,
+    '__version__':          __version__,
+    '__version_number__':   __version_number__,
+    '__author__':           __author__,
+    '__author_email__':     __author_email__,
+    '__copyright__':        __copyright__,
+    '__all__':              tuple(object_origins),
+    '__docformat__':        'restructuredtext en'
 })

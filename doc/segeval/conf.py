@@ -18,8 +18,8 @@ import sys, os
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('../../'))
 
-from segeval import (__version__, __version_number__, __project_name__, 
-    __package_name__, __copyright__)
+from segeval import (__version__, __version_number__, __project__, 
+    __package__, __copyright__)
 
 # -- General configuration -----------------------------------------------------
 
@@ -44,7 +44,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = __project_name__
+project = __project__
 copyright = __copyright__
 
 # The version info for the project you're documenting, acts as replacement for
@@ -88,21 +88,20 @@ show_authors = True
 pygments_style = 'sphinx'
 
 # A list of ignored prefixes for module index sorting.
-modindex_common_prefix = [__package_name__]
+modindex_common_prefix = [__package__]
 
 
 # -- Options for HTML output ---------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = 'nature'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = \
 {
-	"collapsiblesidebar": "true"
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
