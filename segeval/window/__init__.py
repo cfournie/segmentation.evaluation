@@ -47,7 +47,8 @@ def __compute_window_size__(reference, fnc_round, boundary_format):
             masses.
         :type inner_coder_masses: dict or list
         '''
-        if isinstance(inner_coder_masses, list):
+        if isinstance(inner_coder_masses, list) or \
+            isinstance(inner_coder_masses, tuple):
             all_masses.extend(inner_coder_masses)
         elif isinstance(inner_coder_masses, dict):
             for cur_inner_coder_masses in inner_coder_masses.values():

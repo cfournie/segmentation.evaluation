@@ -152,10 +152,10 @@ class TestExamples(unittest.TestCase):
         '''
         #pylint: disable=C0324
 
-        self.assertEquals([frozenset([]), frozenset([]), frozenset([]),
+        self.assertEquals((
             frozenset([]), frozenset([]), frozenset([]), frozenset([]),
-            frozenset([]), frozenset([]), frozenset([]), frozenset([1]),
-            frozenset([])],
+            frozenset([]), frozenset([]), frozenset([]), frozenset([]),
+            frozenset([]), frozenset([]), frozenset([1]), frozenset([])),
             boundary_string_from_masses(self.masses_an1))
 
 
@@ -164,7 +164,7 @@ class TestExamples(unittest.TestCase):
         Test convert_positions_to_masses.
         '''
         #pylint: disable=C0324
-        self.assertEquals([4, 2], convert_positions_to_masses([1,1,1,1,2,2]))
+        self.assertEquals((4,2), convert_positions_to_masses([1,1,1,1,2,2]))
 
 
     def test_convert_masses_to_positions(self):

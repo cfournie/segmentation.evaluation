@@ -32,7 +32,7 @@ def __create_paired_window__(hypothesis, reference, window_size,
     else:
         phantom_size = window_size
         phantom_size = 1 if phantom_size <= 0 else phantom_size
-        phantom = [0] * phantom_size
+        phantom = tuple([0] * phantom_size)
         units_ref_hyp = zip(phantom + reference + phantom,
                             phantom + hypothesis + phantom)
     return units_ref_hyp, phantom_size

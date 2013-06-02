@@ -72,6 +72,7 @@ def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
                         dataset[item][coder] = list()
                     elif j > 0:
                         dataset[item][coder].append(int(col))
+                dataset[item][coder] = tuple(dataset[item][coder])
         # pylint: disable=C0103
     return dataset
 

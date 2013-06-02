@@ -30,7 +30,7 @@ def convert_positions_to_masses(positions):
     masses = list()
     for i in range(1, max(counts.keys()) + 1):
         masses.append(counts[i])
-    return masses
+    return tuple(masses)
 
 
 def convert_masses_to_positions(masses):
@@ -48,7 +48,7 @@ def convert_masses_to_positions(masses):
     sequence = list()
     for i, mass in enumerate(masses):
         sequence.extend([i + 1] * mass)
-    return sequence
+    return tuple(sequence)
 
 
 def boundary_string_from_masses(masses):
@@ -69,5 +69,5 @@ def boundary_string_from_masses(masses):
             string[cur_pos].add(1)
         pos += mass
     # Return
-    return [set(pb) for pb in string]
+    return tuple([frozenset(pb) for pb in string])
 

@@ -90,8 +90,8 @@ def input_linear_mass_json(filepath, create_item=False):
         item = name
         dataset[item] = dict()
         # Convert coder labels into strings
-        for coder, segment_masses in data.items():
-            dataset[item][coder] = segment_masses
+        for coder, masses in data.items():
+            dataset[item][coder] = tuple(masses)
         # Undo item
         if not create_item:
             dataset = dataset[item]
@@ -101,8 +101,10 @@ def input_linear_mass_json(filepath, create_item=False):
     elif FIELD_ITEMS in data:
         data = data[FIELD_ITEMS]
         # Convert item labels into strings
-        for item, segment_masses in data.items():
-            dataset[item] = segment_masses
+        for item, coder_masses in data.items():
+            dataset[item] = dict()
+            for coder, masses in coder_masses.items():
+                dataset[item][coder] = tuple(masses)
         # Remove from properties
         del dataset.properties[FIELD_ITEMS]
     # Return

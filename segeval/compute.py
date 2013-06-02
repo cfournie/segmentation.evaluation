@@ -52,7 +52,7 @@ def compute_pairwise_values(dataset_masses, fnc_metric, **kwargs):
             label_pairs = dict()
             
             if len(coder_masses.values()) > 0 and \
-                isinstance(coder_masses.values()[0], list):
+                isinstance(coder_masses.values()[0], tuple):
                 # If is a group
                 coders = coder_masses.keys()
                 for m in range(0, len(coders)):
@@ -117,7 +117,7 @@ def compute_pairwise_values(dataset_masses, fnc_metric, **kwargs):
                 innter_prefix.append(label)
                 __per_group__(innter_prefix, coder_masses)
     # Parse
-    __per_group__(list(), dataset_masses)
+    __per_group__(tuple(), dataset_masses)
     # Return mean, std dev, and variance
     return pairs
 
