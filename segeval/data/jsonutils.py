@@ -30,7 +30,7 @@ def __write_json__(filepath, data):
     '''
     # Create a default filename if a dir is specified
     if os.path.isdir(filepath):
-        filepath = os.path.join(filepath, 'output.tsv')
+        filepath = os.path.join(filepath, 'output.json')
     # Open file
     json_file = codecs.open(filepath, 'w+', 'utf-8')
     try:

@@ -21,9 +21,17 @@ class TestJsonUtils(unittest.TestCase):
         '''
         Test ``Dataset.add()``.
         '''
+        # Output specific file
         file_path_new = os.path.join(self.test_data_dir, 'hearst1997_test.json')
         file_path_existing = os.path.join(self.test_data_dir, 'hearst1997.json')
         output_linear_mass_json(file_path_new, HEARST_1997_STARGAZER)
+        self.assertEqual(re.sub(r'\s+', '', open(file_path_new).read()),
+                         re.sub(r'\s', '',open(file_path_existing).read()))
+        os.remove(file_path_new)
+        self.assertFalse(os.path.exists(file_path_new))
+        # Output to folder
+        file_path_new = os.path.join(self.test_data_dir, 'output.json')
+        output_linear_mass_json(self.test_data_dir, HEARST_1997_STARGAZER)
         self.assertEqual(re.sub(r'\s+', '', open(file_path_new).read()),
                          re.sub(r'\s', '',open(file_path_existing).read()))
         os.remove(file_path_new)

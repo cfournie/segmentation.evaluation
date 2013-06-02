@@ -23,7 +23,16 @@ class TestDataset(unittest.TestCase):
         dataset_a = Dataset()
         dataset_a.properties[prop] = False
         dataset_b = Dataset()
-        self.assertFalse(prop in dataset_b)
+        self.assertFalse(prop in dataset_b.properties)
+
+    def test_dataset_property(self):
+        '''
+        Test dataset property creation and independence.
+        '''
+        prop = 'test'
+        dataset = Dataset(properties={prop:True})
+        self.assertTrue(prop in dataset.properties)
+        self.assertTrue(dataset.properties[prop])
         
     def test_add_coders(self):
         '''

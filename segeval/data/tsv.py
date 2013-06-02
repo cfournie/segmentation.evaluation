@@ -11,28 +11,6 @@ from ..format import convert_positions_to_masses
 DEFAULT_DELIMITER = '\t'
 
 
-def write_tsv(filepath, header, rows):
-    '''
-    Write a TSV file using the given header and rows.
-    
-    :param filepath: Path and filename of a file to write to
-    :param header:   List of category names
-    :param rows:     Data to write for all categories
-    :type filepath: str
-    :type header:   :class:`list`
-    :type rows:     :class:`list` of :class:`list`
-    '''
-    # Create a default filename if a dir is specified
-    if os.path.isdir(filepath):
-        filepath = os.path.join(filepath, 'output.tsv')
-    # Open file
-    with csv.writer(open(filepath, 'wb'), delimiter='\t', quotechar='"',
-                     quoting=csv.QUOTE_MINIMAL) as tsv:
-        tsv.writerow(header)
-        for row in rows:
-            tsv.writerow(row)
-
-
 def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
     '''
     Load a linear segmentation mass TSV file.

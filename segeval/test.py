@@ -5,12 +5,38 @@ Utility functions and classes for the package.
 '''
 import unittest
 from decimal import Decimal
+import segeval
 from segeval import (KAZANTSEVA2012_G5, actual_agreement_linear,
     artstein_poesio_bias_linear, fleiss_kappa_linear, fleiss_pi_linear,
     precision, recall, pk, window_diff, summarize, fmeasure,
     boundary_confusion_matrix, boundary_statistics, boundary_edit_distance,
     compute_window_size, boundary_string_from_masses,
     convert_positions_to_masses, convert_masses_to_positions)
+
+
+class TestModule(unittest.TestCase):
+    '''
+    Test module loading.
+    '''
+    #pylint: disable=R0904,C0103
+    def test_dir(self):
+        self.assertEquals(dir(segeval),
+            ['Average', 'BoundaryFormat', 'COMPLETE_AGREEMENT',
+             'ConfusionMatrix', 'Dataset', 'Field', 'KAZANTSEVA2012_G2',
+             'KAZANTSEVA2012_G5', 'LARGE_DISAGREEMENT', '__all__', '__doc__',
+             '__docformat__', '__file__', '__name__', '__package__',
+             '__path__', '__path__', '__version__', 'actual_agreement_linear',
+             'artstein_poesio_bias_linear', 'boundary_confusion_matrix',
+             'boundary_edit_distance', 'boundary_statistics',
+             'boundary_string_from_masses', 'compute_window_size',
+             'convert_masses_to_positions', 'convert_positions_to_masses',
+             'fleiss_kappa_linear', 'fleiss_pi_linear', 'fmeasure',
+             'input_linear_mass_json', 'input_linear_mass_tsv',
+             'load_nested_folders_dict', 'output_linear_mass_json', 'pk',
+             'precision', 'recall', 'summarize', 'window_diff'])
+
+    def test_get_attr(self):
+        self.assertEquals(segeval.__getattr__('__package__'), 'segeval')
 
 
 class TestExamples(unittest.TestCase):
