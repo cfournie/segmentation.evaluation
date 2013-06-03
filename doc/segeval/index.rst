@@ -5,7 +5,7 @@ This package is a collection of metrics and a `command-line interface <usage>`_ 
 
 Additionally, inter-coder agreement coefficients that are based upon S for both 2 and more coders are provided, including: **Kappa**; and **Pi**.
 
-:Release: |version| (beta)
+:Release: |release|
 :Date: |today|
 
 Additional manual entries include:
