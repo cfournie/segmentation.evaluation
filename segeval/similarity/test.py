@@ -7,7 +7,8 @@ import unittest
 from decimal import Decimal
 from . import boundary_confusion_matrix, boundary_statistics
 from ..format import BoundaryFormat
-
+from ..data.samples import HEARST_1997_STARGAZER
+from ..ml import precision, recall, fmeasure
 
 class TestSimilarity(unittest.TestCase):
     '''
@@ -36,7 +37,7 @@ class TestSimilarity(unittest.TestCase):
     
     def test_boundary_statistics(self):
         '''
-        Test false negative.
+        Test boundary statistics.
         '''
         value = boundary_statistics([2, 3, 6], [5, 6])
         self.assertEqual(
@@ -48,4 +49,25 @@ class TestSimilarity(unittest.TestCase):
              'additions': [(1, 'a')],
              'count_edits': Decimal('1'),
              'substitutions': []}, value)
+    
+    def test_bed_confusion_matrix(self):
+        '''
+        Test BED-based confusion matrix upon two segmentations.
+        '''
+        hypothesis = (5,5,5,5,1)
+        reference  = HEARST_1997_STARGAZER['stargazer']['2']
+        value = boundary_confusion_matrix(hypothesis, reference)
+        self.assertAlmostEquals(float(precision(value)), 0.23076923)
+        self.assertAlmostEquals(float(recall(value)), 0.23076923)
+        self.assertAlmostEquals(float(fmeasure(value)), 0.375)
+    
+    def test_bed_confusion_matrix_dataset(self):
+        '''
+        Test BED-based confusion matrix upon a dataset.
+        '''
+        dataset  = HEARST_1997_STARGAZER
+        value = boundary_confusion_matrix(dataset)
+        self.assertAlmostEquals(float(precision(value)), 0.0)
+        self.assertAlmostEquals(float(recall(value)), 0.0)
+        self.assertAlmostEquals(float(fmeasure(value)), 0.0)
 

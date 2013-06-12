@@ -57,5 +57,6 @@ def __fnc_metric__(fnc_metric, args, kwargs, kw_defaults):
         del metric_kwargs['permuted']
         return fnc_metric(hypothesis, reference, **metric_kwargs)
     # Except if insufficient arguments supplied
-    raise SegmentationMetricError('Correct number of arguments not specified.')
+    raise SegmentationMetricError('Incorrect arguments specified;\
+ expected 1 or 2, obtained {0} of value: {1}'.format(str(len(args)), str(args)))
 

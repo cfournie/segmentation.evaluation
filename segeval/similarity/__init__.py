@@ -78,9 +78,11 @@ def __boundary_confusion_matrix__(*args, **kwargs):
     Create a confusion matrix using boundary edit distance.
     '''
     # pylint: disable=C0103,R0913,R0914,W0142
+    # Trim kwargs
     metric_kwargs = dict(kwargs)
     del metric_kwargs['return_parts']
     del metric_kwargs['one_minus']
+    # Obtain statistics
     statistics = __boundary_statistics__(*args, **metric_kwargs)
     # Get parameters
     n_t = kwargs['n_t']
