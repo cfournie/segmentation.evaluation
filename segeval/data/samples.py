@@ -134,6 +134,25 @@ Segmentations provided by 7 coders of a magazine article titled
          '7' : (2,3,2,2,3,1,3,2,3)}
 '''
 
+HYPOTHESIS_STARGAZER = Dataset(
+    {'stargazer' :
+        {'h1' : (2,6,4,2,4,3),
+         'h2' : (2,1,1,1,5,8,2,1)}
+     })
+'''
+Segmentations provided by 7 coders of a magazine article titled 
+"Stargazers look for life" (Baker1990)_ collected by (Hearst1997)_::
+
+    HEARST_1997_STARGAZER = \
+        {'1' : (2,3,3,1,3,6,3),
+         '2' : (2,8,2,4,2,3),
+         '3' : (2,1,2,3,1,3,1,3,2,2,1),
+         '4' : (2,1,4,1,1,3,1,4,3,1),
+         '5' : (3,2,4,3,5,4),
+         '6' : (2,3,4,2,2,5,3),
+         '7' : (2,3,2,2,3,1,3,2,3)}
+'''
+
 
 COMPLETE_AGREEMENT = Dataset(
     {'item1': {'an4': (2, 8, 2, 1),

@@ -7,7 +7,7 @@ import unittest
 from decimal import Decimal
 from . import boundary_confusion_matrix, boundary_statistics
 from ..format import BoundaryFormat
-from ..data.samples import HEARST_1997_STARGAZER
+from ..data.samples import HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER
 from ..ml import precision, recall, fmeasure
 
 class TestSimilarity(unittest.TestCase):
@@ -65,8 +65,9 @@ class TestSimilarity(unittest.TestCase):
         '''
         Test BED-based confusion matrix upon a dataset.
         '''
-        dataset  = HEARST_1997_STARGAZER
-        value = boundary_confusion_matrix(dataset)
+        hypothesis = HYPOTHESIS_STARGAZER
+        reference = HEARST_1997_STARGAZER
+        value = boundary_confusion_matrix(hypothesis, reference)
         self.assertAlmostEquals(float(precision(value)), 0.0)
         self.assertAlmostEquals(float(recall(value)), 0.0)
         self.assertAlmostEquals(float(fmeasure(value)), 0.0)

@@ -6,16 +6,16 @@ Abstract computation utilities.
 from .util.math import mean, std, var, stderr
 
 
-def compute_pairwise_values(dataset_masses, fnc_metric, **kwargs):
+def compute_pairwise_values(dataset, fnc_metric, **kwargs):
     '''
     Calculate mean pairwise segmentation metric pairs for functions that take
     pairs of segmentations.
     
-    :param dataset_masses: Segmentation mass dataset (including multiple \
+    :param dataset: Segmentation mass dataset (including multiple \
                            codings).
     :param fnc_metric:     Metric function to call on segmentation mass pairs.
     :param permuted:       Permute coder combinations if true.
-    :type dataset_masses: dict
+    :type dataset: dict
     :type fnc_metric:     func
     :type permuted:       bool
     
@@ -26,29 +26,23 @@ def compute_pairwise_values(dataset_masses, fnc_metric, **kwargs):
     from .data.jsonutils import Field
     pairs = dict()
     fnc_kwargs = dict(kwargs)
+    # Obtain parameters
     permuted = fnc_kwargs['permuted']
     return_parts = fnc_kwargs['return_parts'] \
         if 'return_parts' in fnc_kwargs else False
     del fnc_kwargs['permuted']
-    reference_coder_exists = False
-    # Determine whether a reference coder is designated
-    if Field.has_reference_coder in dataset_masses.properties:
-        reference_coder_exists = \
-            dataset_masses.properties[Field.has_reference_coder]
-    if reference_coder_exists:
-        permuted = False
     # Define fnc per group
-    def __per_group__(prefix, inner_dataset_masses):
+    def __per_group__(prefix, inner_dataset):
         '''
         Recurse through a dict to find levels where a metric can be calculated.
         
         
-        :param inner_dataset_masses: Segmentation mass dataset (including \
+        :param inner_dataset: Segmentation mass dataset (including \
                                      multiple codings).
-        :type inner_dataset_masses: dict
+        :type inner_dataset: dict
         '''
         # pylint: disable=R0912,R0914
-        for label, coder_masses in inner_dataset_masses.items():
+        for label, coder_masses in inner_dataset.items():
             label_pairs = dict()
             
             if len(coder_masses.values()) > 0 and \
@@ -56,12 +50,7 @@ def compute_pairwise_values(dataset_masses, fnc_metric, **kwargs):
                 # If is a group
                 coders = coder_masses.keys()
                 for m in range(0, len(coders)):
-                    for n in range(m+1, len(coders)):
-                        if reference_coder_exists and \
-                            'reference' in coders[m] and \
-                            'reference' in coders[n]:
-                            continue
-                        
+                    for n in range(m+1, len(coders)):                        
                         segs_m = coder_masses[coders[m]]
                         segs_n = coder_masses[coders[n]]
                         entry_parts = list(prefix)
@@ -86,29 +75,9 @@ def compute_pairwise_values(dataset_masses, fnc_metric, **kwargs):
                             else:
                                 label_pairs[entry] = fnc_metric(segs_n, segs_m,
                                                                 **fnc_kwargs)
-                # Add to main set
-                if reference_coder_exists:
-                    max_reference_entry = None
-                    max_reference_pair  = 0
-                    # Perform reference exclusion
-                    for entry, pair in label_pairs.items():
-                        coder_parts = entry.split(',')
-                        coders_string = coder_parts.pop()
-                        coders_string += coder_parts.pop()
-                        if 'reference' in coders_string:
-                            if pair > max_reference_pair:
-                                max_reference_entry = entry
-                                max_reference_pair  = pair 
-                        else:
-                            pairs[entry] = pair
-                    # Add only if there is a max
-                    if max_reference_entry is not None:
-                        pairs[max_reference_entry] = max_reference_pair
-                            
-                else:
-                    # Add all
-                    for entry, pair in label_pairs.items():
-                        pairs[entry] = pair
+                # Add all
+                for entry, pair in label_pairs.items():
+                    pairs[entry] = pair
                 # Erase
                 label_pairs = dict()
             else:
@@ -117,7 +86,7 @@ def compute_pairwise_values(dataset_masses, fnc_metric, **kwargs):
                 innter_prefix.append(label)
                 __per_group__(innter_prefix, coder_masses)
     # Parse
-    __per_group__(tuple(), dataset_masses)
+    __per_group__(tuple(), dataset)
     # Return mean, std dev, and variance
     return pairs
 

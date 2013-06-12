@@ -5,7 +5,6 @@ Utility functions and classes for the package.
 '''
 from ..compute import compute_pairwise_values
 
-
 class SegmentationMetricError(Exception):
     '''
     Indicates that a runtime check has failed, and the algorithm is performing
@@ -28,6 +27,7 @@ class SegmentationMetricError(Exception):
 
 def __fnc_metric__(fnc_metric, args, kwargs, kw_defaults):
     # pylint: disable=W0142
+    from ..data import Dataset
     # Create default keyword arguments
     metric_kwargs = dict(kw_defaults)
     metric_kwargs.update(kwargs)
@@ -51,11 +51,19 @@ def __fnc_metric__(fnc_metric, args, kwargs, kw_defaults):
             del metric_kwargs['dataset']
     # Compute
     if dataset:
+        # Compute pairwise values over all coders in a dataset
         metric_kwargs['boundary_format'] = dataset.boundary_format
         return compute_pairwise_values(dataset, fnc_metric, **metric_kwargs)
     elif hypothesis and reference:
-        del metric_kwargs['permuted']
-        return fnc_metric(hypothesis, reference, **metric_kwargs)
+        # Compute values between hypotheses (i.e, automatic) and reference 
+        # (i.e., manual) coder segmentations
+        if isinstance(hypothesis, Dataset) and isinstance(reference, Dataset):
+            # Compare pairwise values between coders paired from two datasets
+            pass
+        else:
+            # Compare a single pair of segmentations
+            del metric_kwargs['permuted']
+            return fnc_metric(hypothesis, reference, **metric_kwargs)
     # Except if insufficient arguments supplied
     raise SegmentationMetricError('Incorrect arguments specified;\
  expected 1 or 2, obtained {0} of value: {1}'.format(str(len(args)), str(args)))
