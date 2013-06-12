@@ -1,5 +1,5 @@
 '''
-Utility functions and classes for the package.
+Tests overall package functions and classes.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
@@ -20,20 +20,22 @@ class TestModule(unittest.TestCase):
     '''
     #pylint: disable=R0904,C0103
     def test_dir(self):
-        self.assertEquals(dir(segeval),
-            ['Average', 'BoundaryFormat', 'COMPLETE_AGREEMENT',
+        self.assertEquals(set(dir(segeval)),
+            set(['Average', 'BoundaryFormat', 'COMPLETE_AGREEMENT',
              'ConfusionMatrix', 'Dataset', 'Field', 'KAZANTSEVA2012_G2',
              'KAZANTSEVA2012_G5', 'LARGE_DISAGREEMENT', '__all__', '__doc__',
              '__docformat__', '__file__', '__name__', '__package__',
-             '__path__', '__path__', '__version__', 'actual_agreement_linear',
+             '__path__', '__path__', '__project__', '__version__', 'actual_agreement_linear',
              'artstein_poesio_bias_linear', 'boundary_confusion_matrix',
              'boundary_edit_distance', 'boundary_statistics',
+             'boundary_similarity', 'segmentation_similarity',
              'boundary_string_from_masses', 'compute_window_size',
              'convert_masses_to_positions', 'convert_positions_to_masses',
              'fleiss_kappa_linear', 'fleiss_pi_linear', 'fmeasure',
              'input_linear_mass_json', 'input_linear_mass_tsv',
              'load_nested_folders_dict', 'output_linear_mass_json', 'pk',
-             'precision', 'recall', 'summarize', 'window_diff'])
+             'precision', 'recall', 'summarize', 'weight_t', 'weight_s_scale',
+             'weight_t_scale', 'weight_s', 'weight_a', 'window_diff']))
 
     def test_get_attr(self):
         self.assertEquals(segeval.__getattr__('__package__'), 'segeval')

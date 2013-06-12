@@ -1,11 +1,5 @@
 '''
-Arstein Poesio's annotator bias.
-
-References:
-    
-    Ron Artstein and Massimo Poesio. 2008. Inter-coder agreement for
-    computational linguistics. Computational Linguistics, 34(4):555-596. MIT
-    Press.
+Arstein Poesio's annotator bias [ArtsteinPoesio2008]_.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''

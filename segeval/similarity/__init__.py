@@ -17,7 +17,7 @@ from ..util import __fnc_metric__, SegmentationMetricError
 SIMILARITY_METRIC_DEFAULTS = dict(METRIC_DEFAULTS)
 SIMILARITY_METRIC_DEFAULTS.update({
     'n_t' : 2,
-    'boundary_types' : set([1]),
+    'boundary_types' : frozenset([1]),
     'weight' : (weight_a, weight_s_scale, weight_t_scale)
 })
 
@@ -122,7 +122,6 @@ def boundary_confusion_matrix(*args, **kwargs):
 
 def boundary_statistics(*args, **kwargs):
     # pylint: disable=W0142
-    
     default_kwargs = dict(SIMILARITY_METRIC_DEFAULTS)
     if 'one_minus' in default_kwargs:
         del default_kwargs['one_minus']

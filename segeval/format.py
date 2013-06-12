@@ -1,15 +1,14 @@
 '''
-Created on Apr 13, 2013
+Segmentation encoding format converstion utilities.
 
-@author: cfournie
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from collections import Counter
 from .util.lang import enum
 # pylint: disable=C0103
 
 
-BoundaryFormat = enum(position='position', mass='mass',
-                      sets='sets')
+BoundaryFormat = enum(position='position', mass='mass', sets='sets')
 
 
 def convert_positions_to_masses(positions):
@@ -19,10 +18,7 @@ def convert_positions_to_masses(positions):
     ``[5,3,5]``.
     
     :param segments: Ordered sequence of which segments a unit belongs to.
-    :type segments: list
-    
-    :returns: Segment mass sequence.
-    :rtype: :func:`list`
+    :type segments: tuple
     
     .. deprecated:: 1.0
     '''
@@ -40,10 +36,7 @@ def convert_masses_to_positions(masses):
     ``[1,1,1,1,1,2,2,2,3,3,3,3,3]``.
     
     :param masses: Segment mass sequence.
-    :type masses: list
-    
-    :returns: Ordered sequence of which segments a unit belongs to.
-    :rtype: :func:`list`
+    :type masses: tuple
     '''
     sequence = list()
     for i, mass in enumerate(masses):
@@ -53,12 +46,12 @@ def convert_masses_to_positions(masses):
 
 def boundary_string_from_masses(masses):
     '''
-    Creates a "boundary string", or sequence of boundary type sets.
+    Creates a "boundary string", or sequence of boundary type sets from a list of segment masses, e.g., ``[5,3,5]`` becomes
+    ``[(),(),(),(),(1),(),(),(1),(),(),(),()]``.
     
+
     :param masses: Segmentation masses.
-    :type masses:  list
-    :returns: A sequence of boundary type sets
-    :rtype: :func:`list` of :func:`set` objects containing :func:`int` values.
+    :type masses: tuple
     '''
     string = [set() for _ in xrange(0, sum(masses) - 1)]
     # Iterate over each position

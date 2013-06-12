@@ -1,5 +1,5 @@
 '''
-Tests some general segeval utility functions.
+Tests segmentation format utility functions.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''

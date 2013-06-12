@@ -1,7 +1,7 @@
 '''
-Created on May 12, 2013
+Python-language utils.
 
-@author: cfournie
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 
 def enum(*sequential, **named):

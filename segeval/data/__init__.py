@@ -2,9 +2,6 @@
 Data I/O package.  Used to import and export data to and from TSV and JSON
 files.
 
-.. seealso:: File format documentation in: `Segmentation Representation \
-Specification <http://nlp.chrisfournier.ca/publications/#seg_spec>`_.
-
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 # pylint: disable=C0103
@@ -31,7 +28,7 @@ FILETYPES_DEFAULT   = FILETYPE_JSON
 
 class Dataset(defaultdict):
     '''
-    Represents a set of segmentations produced by coders.
+    Represents a set of texts that have been segmentations by coders.
     '''
     # pylint: disable=R0903
     

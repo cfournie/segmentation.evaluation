@@ -1,16 +1,6 @@
 '''
 Machine learning metric package.  This package a variety of traditional machine
-learning metrics that have been adapted for use in segmentation, including:
-
-* F-measure; and
-* Percentage agreement.
-
-.. warning:: These are provided for comparison, but are not recommended for \
-    segmentation evaluation.  Instead, use  the segmentation similarity
-    metric [FournierInkpen2012]_ implemented in
-    :func:`segeval.similarity.SegmentationSimilarity.similarity` and the
-    associated inter-coder agreement coefficients in
-    :mod:`segeval.agreement`.
+learning metrics that have been adapted for use in segmentation.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''

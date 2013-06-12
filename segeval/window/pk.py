@@ -1,6 +1,6 @@
 '''
 Implementation of the Pk segmentation evaluation metric described in 
-[BeefermanBerger1999]_
+[BeefermanBerger1999]_.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
@@ -13,32 +13,6 @@ from ..format import BoundaryFormat, convert_masses_to_positions
 
 def __pk__(hypothesis, reference, window_size, one_minus, boundary_format,
            return_parts, fnc_round):
-    '''
-    Calculates the Pk segmentation evaluation metric score for a
-    hypothetical segmentation against a reference segmentation for a given
-    window size.  The standard method of calculating the window size
-    is performed if a window size is not specified.
-    
-    :param hypothesis: Hypothesis segmentation section labels
-                                    sequence.
-    :param reference:  Reference segmentation section labels sequence.
-    :param window_size:          The size of the window that is slid over the \
-                                    two segmentations used to count mismatches \
-                                    (default is None and will use the average \
-                                    window size)
-    :param one_minus:            Return 1-Pk to make it no longer a \
-                                    penalty-metric.
-    :param convert_from_masses:  Convert the segmentations provided from \
-                                    masses into positions.
-    :type hypothesis: list
-    :type reference: list
-    :type window_size: int
-    :type one_minus: bool
-    :type convert_from_masses: bool
-    
-    .. note:: See :func:`segeval.convert_masses_to_positions` for an example of
-              the input format.
-    '''
     # pylint: disable=C0103,R0913
     # Convert from masses into positions 
     if boundary_format == BoundaryFormat.mass:

@@ -1,4 +1,8 @@
+'''
+Tests window-based segmentation metric utility functions.
 
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+'''
 
 from . import compute_window_size
 from ..util.test import TestCase

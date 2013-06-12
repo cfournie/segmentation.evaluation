@@ -9,30 +9,6 @@ from . import __fnc_metric__, __actual_agreement_linear__
 
 
 def __fleiss_pi_linear__(items_masses, **kwargs):
-    '''
-    Calculates Fleiss' Pi (or multi-Pi), originally proposed in [Fleiss1971]_,
-    for segmentations (and described in [SiegelCastellan1988]_ as K).
-    Adapted from the formulations
-    provided in [Hearst1997]_ (p. 53) and [ArtsteinPoesio2008]_'s formulation
-    for expected agreement:
-    
-    .. math::
-        \\text{A}^{\pi^*}_e = \sum_{k \in K} \\big(\\text{P}^\pi_e(k)\\big)^2
-    
-    :param items_masses: Segmentation masses for a collection of items where \
-                        each item is multiply coded (all coders code all items).
-    :param return_parts: If true, return the numerator and denominator.
-    :type items_masses:  dict
-    :type return_parts: bool
-    
-    :returns: Fleiss's Pi
-    :rtype: :class:`decimal.Decimal`
-    
-    .. seealso:: :func:`segeval.agreement.actual_agreement` for an example of\
-     ``items_masses``.
-    
-    .. note:: Applicable for more than 2 coders.
-    '''
     # pylint: disable=C0103,R0914,W0142
     metric_kwargs = dict(kwargs)
     metric_kwargs['return_parts'] = True

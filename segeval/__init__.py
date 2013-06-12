@@ -1,11 +1,7 @@
 '''
 Segmentation evaluation metric package. Provides evaluation metrics to
 evaluate the performance of both human and automatic text (i.e., discourse)
-segmenters.  This package contains a new metric called Segmentation Similarity
-(S) [FournierInkpen2012]_ which is recommended for usage along with a variety
-of inter-coder agreement coefficients that utilize S.
-
-To use S, see the :mod:`segeval.similarity` module.
+segmenters.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
@@ -47,8 +43,18 @@ all_by_module = {
                                  'fmeasure', 'ConfusionMatrix'],
     'segeval.similarity':       ['boundary_confusion_matrix',
                                  'boundary_statistics'],
+    'segeval.similarity.boundary': 
+                                ['boundary_similarity'],
+    'segeval.similarity.segmentation': 
+                                ['segmentation_similarity'],
     'segeval.similarity.distance.multipleboundary':
-    							['boundary_edit_distance'],
+                                ['boundary_edit_distance'],
+    'segeval.similarity.weight': 
+                                ['weight_a',
+                                 'weight_s',
+                                 'weight_s_scale',
+                                 'weight_t',
+                                 'weight_t_scale'],
     'segeval.window':           ['compute_window_size'],
     'segeval.window.pk':        ['pk'],
     'segeval.window.windowdiff':['window_diff'],

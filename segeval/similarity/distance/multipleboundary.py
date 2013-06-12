@@ -5,20 +5,13 @@ Multiple-boundary edit distance.
 '''
 from __future__ import division
 from itertools import permutations
+from collections import namedtuple
 
 
-# Addition/deletion tuple indices
-A_TYPE = 0
-A_SIDE = 1 # a = from a, b = from b
-
-# Substitution tuple indices
-S_TYPE1 = 0
-S_TYPE2 = 1
-
-# n-wise transposition tuple indices
-T_POS1 = 0
-T_POS2 = 1
-T_TYPE = 2
+Addition = namedtuple('Addition', 'type side') # For side; a = from a, b = from b
+Substitution = namedtuple('Substitution', 'type_a type_b')
+Transposition = namedtuple('Transposition', 'start end type')
+Difference = namedtuple('Difference', 'sim a_b b_a')
 
 
 def __additions_substitutions__(d, a, b):
@@ -72,12 +65,12 @@ def __additions_substitutions_sets__(d, a, b):
     additions = d - set(substituted)
     # Add from a
     for addition in a - set(substituted):
-        added.append((addition, 'a'))
+        added.append(Addition(addition, 'a'))
     # Add from b
     for addition in b - set(substituted):
-        added.append((addition, 'b'))
+        added.append(Addition(addition, 'b'))
     assert len(added) is len(additions)
-    return added, set(substitutions)
+    return added, set([Substitution(a, b) for a, b in set(substitutions)])
 
 
 def __has_substitutions__(i, j, d, options_set):
@@ -145,7 +138,7 @@ def __transpositions__(boundary_string_a, boundary_string_b, n, options_set):
             # Apply each transposition found by boundary type
             for d in t_p:
                 # Create transposition representation
-                option_transp = (i, j, d)
+                option_transp = Transposition(i, j, d)
                 # Check to see that it does not overlap an existing 
                 # transposition and that 2 substitutions are not removed
                 if not __overlaps_existing__(i, j, d, options_transp) and \
@@ -182,7 +175,7 @@ def __optional_set_edits__(boundary_string_a, boundary_string_b):
         d = set(a_i ^ b_i)
         # Record additions/deletions
         if len(d) > 0:
-            options_set[i] = (d, a, b)
+            options_set[i] = Difference(d, a, b)
     return options_set
 
 
@@ -192,9 +185,8 @@ def __boundary_edit_distance__(boundary_string_a, boundary_string_b, n_t):
     that could be applied between two boundary strings for a given set
     of transpositions spanning lengths 'n_t'.
     
-    :param t_n: transposition spanning sizes allowed
-    :type t_n:  list or set
-    
+    :param n_t: transposition spanning sizes allowed
+    :type n_t:  list or set
     '''
     # pylint: disable=C0103
     
@@ -207,9 +199,9 @@ def __boundary_edit_distance__(boundary_string_a, boundary_string_b, n_t):
     # Construct additions and substitutions
     additions     = list()
     substitutions = list()
-    for d, a, b in options_set.values():
+    for option in options_set.values():
         current_additions, current_substitutions = \
-            __additions_substitutions_sets__(d, a, b)
+            __additions_substitutions_sets__(option.sim, option.a_b, option.b_a)
         additions.extend(current_additions)
         substitutions.extend(current_substitutions)
     # Return
@@ -218,7 +210,17 @@ def __boundary_edit_distance__(boundary_string_a, boundary_string_b, n_t):
 
 def boundary_edit_distance(boundary_string_a, boundary_string_b, n_t=2):
     '''
-    Convenience function to create spanning lengths given a maximum 'n_t'.
+    Computes boundary edit distance between two boundary strings.  Returns a \
+    list of Addition, Substitution, and Transposition edit sets.
+
+    :param boundary_string_a: Boundary string to compare; produced by :func:`boundary_string_from_masses`
+    :param boundary_string_b: See `boundary_string_a`
+    :param n_t: Maximum distance (in potential boundary positions) that a \
+        transposition may span
+
+    :type boundary_string_a:  tuple
+    :type boundary_string_b:  tuple
+    :type n_t:  int
     '''
     # pylint: disable=C0103
     n_t = range(2, n_t + 1)

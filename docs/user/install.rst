@@ -1,5 +1,7 @@
+.. _install:
+
 Detailed Installation
-*********************
+=====================
 
 If you are having difficulty installing SegEval, run through these detailed guides for your operating system.
 

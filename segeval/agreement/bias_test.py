@@ -1,5 +1,5 @@
 '''
-Tests the segmentation version of Arstein and Poesio's bias.
+Tests the segmentation version of Arstein and Poesio's bias [ArtsteinPoesio2008]_.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''

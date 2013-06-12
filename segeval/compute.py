@@ -1,7 +1,7 @@
 '''
-Created on Apr 13, 2013
+Abstract computation utilities.
 
-@author: cfournie
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from .util.math import mean, std, var, stderr
 

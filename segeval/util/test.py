@@ -1,7 +1,8 @@
 '''
 Test utilities, and tests for said utilities.
-'''
 
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+'''
 import unittest
 from decimal import Decimal
 

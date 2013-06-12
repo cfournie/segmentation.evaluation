@@ -1,5 +1,5 @@
 '''
-Similarity package
+Segmentation Similarity (S) package.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''

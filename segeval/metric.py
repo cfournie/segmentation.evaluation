@@ -1,3 +1,8 @@
+'''
+General metric utilities and constants.
+
+.. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
+'''
 from .format import BoundaryFormat
 
 

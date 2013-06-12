@@ -1,23 +1,6 @@
 '''
 Tests the segmentation versions of Scott's and Fleiss' Pi.
 
-References:
-    Chris Fournier and Diana Inkpen. 2012. Segmentation Similarity and
-    Agreement. Submitted manuscript.
-    
-    Ron Artstein and Massimo Poesio. 2008. Inter-coder agreement for
-    computational linguistics. Computational Linguistics, 34(4):555-596. MIT
-    Press.
-
-    Marti A. Hearst. 1997. TextTiling: Segmenting Text into Multi-paragraph
-    Subtopic Passages. Computational Linguistics, 23(1):33-64.
-    
-    William A. Scott. 1955. Reliability of content analysis: The case of nominal
-    scale coding. Public Opinion Quarterly, 19(3):321-325.
-    
-    Joseph L. Fleiss. 1971. Measuring nominal scale agreement among many raters.
-    Psychological Bulletin, 76(5):378-382.
-
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import unittest

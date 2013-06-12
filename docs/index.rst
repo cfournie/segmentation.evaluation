@@ -1,73 +1,65 @@
 Segmentation Evaluation using SegEval
-*************************************
+=====================================
 
-This package is a collection of metrics and a `command-line interface <usage>`_ for evaluating segmentation.  A variety of metrics are provided, including: **Segmentation Similarity (S)** [FournierInkpen2012]_; **WindowDiff**; **Pk**; and others.
+Tet segmentation is the task of splitting up any amount of text into segments by placing boundaries between some atomic unit (e.g., morphemes, words, lines, sentences, paragraphs, sections, etc.).
 
-Additionally, inter-coder agreement coefficients that are based upon S for both 2 and more coders are provided, including: **Kappa**; and **Pi**.
+This package is a collection of metrics and for comparing text segmentations and evaluating automatic text segmenters.  Both new (**Boundary Similarity**) and traditional (**WindowDiff**, **Pk**) are included, as well as inter-coder agreement coefficients and confusion matrices based upon a boundary edit distance.
 
 :Release: |release|
 :Date: |today|
 
-Additional manual entries include:
+Feature Support
+---------------
+Included is a variety of segmentation comparison metrics, including:
+
+* Boundary Edit Distance (BED; [Fournier2013]_)
+* Boundary Similarity (B; [Fournier2013]_)
+* BED-based confusion matrices (and precision/recall/F1; [Fournier2013]_)
+* Segmentation Similarity [FournierInkpen2012]_
+* WindowDiff [PevznerHearst2002]_
+* Pk [BeefermanBerger1999]_
+
+Additionally, B-based inter-coder agreement coefficients for segmentation that are suitable for 2 or more coders are provided, including:
+
+* Pi [Fleiss1971]_
+* Kappa [DaviesFleiss1982]_
+
+
+User Guide
+----------
+
+This part of the documentation, which is mostly prose, begins with some
+background information about Requests, then focuses on step-by-step
+instructions for getting the most out of Requests.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
-   usage
-   install
+   user/intro
+   user/install
+   user/quickstart
+
+
+API Documentation
+-----------------
+
+If you are looking for information on a specific function, class or method,
+this part of the documentation is for you.
+
+.. toctree::
+   :maxdepth: 2
+
+   api
+
 
 
 Installation
 ============
 
-Install for `Python 2.7 <http://www.python.org/download/>`_ using `distutils <http://pypi.python.org/pypi/setuptools>`_ (``easy_install segeval``) `pip <http://pypi.python.org/pypi/pip>`_ (``pip install segeval``). Alternatively, clone the repository from::
-
-  git clone git://github.com/cfournie/segmentation.evaluation.git
+Install for `Python 2.7 <http://www.python.org/download/>`_ using `pip <http://pypi.python.org/pypi/pip>`_ (``pip install segeval``). 
 
 If you encounter any issues, view the `detailed installation instructions <install>`_.
 
-
-Usage
-=====
-
-To begin to use the module as a utility, from a terminal, enter::
-
-  python -m segeval -h
-
-Ouput is given either as TSV files or to the screen::
-
-  python -m segeval s hearst1997.json 
-
-  S 
-    mean    = 0.7619047619047619047619047619  (macro)
-    std     = 0.07055015423823358837798727192
-    var     = 0.004977324263038548752834467119
-    stderr  = 0.01539530581369118988034410932 (n=21)
-
-For more usage (via command line and programmatically), see the `detailed usage examples <usage>`_.
-
-
-Publications
-============
-
-If you're using this software for research, please cite `the paper <http://nlp.chrisfournier.ca/publications/#segmentation>`_:
-
-  Chris Fournier and Diana Inkpen. 2012. **Segmentation Similarity and Agreement**. Proceedings of Human Language Technologies: The 2012 Annual Conference of the North American Chapter of the Association for Computational Linguistics. (HLT '12), pp. 152—161. Association for Computational Linguistics, Stroudsburg, PA, USA.
-
-
-BibTeX::
-
-  @InProceedings{FournierInkpen2012,
-    author    = {Fournier, Chris  and  Inkpen, Diana},
-    title     = {Segmentation Similarity and Agreement},
-    booktitle = {Proceedings of the 2012 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies},
-    month     = {June},
-    year      = {2012},
-    address   = {Montr\'{e}al, Canada},
-    publisher = {Association for Computational Linguistics},
-    pages     = {152--161},
-    url       = {http://www.aclweb.org/anthology/N/N12/N12-1016}
-  }
 
 
 Support
@@ -121,6 +113,16 @@ References
 
 .. [Fleiss1971] Joseph L. Fleiss. 1971. **Measuring nominal scale agreement \
     among many raters**. Psychological Bulletin, 76(5):378-382.
+
+
+.. [Fournier2013] Chris Fournier. 2013. **Evaluating Text Segmentation using \
+    Boundary Edit Distance**. Proceedings of the 51st Annual Meeting of the \
+    Association for Computational Linguistics. Association for Computational \
+    Linguistics. **To appear**.
+
+
+.. [Fournier2013b] Chris Fournier. 2013. **Evaluating Text Segmentation**. Master's Thesis.  University of Ottawa.
+
 
 .. [FournierInkpen2012] Chris Fournier and Diana Inkpen. 2012. **Segmentation \
     Similarity and Agreement**. Proceedings of Human Language Technologies: The \
