@@ -61,7 +61,7 @@ class TestSimilarity(unittest.TestCase):
         self.assertAlmostEquals(float(recall(value)), 0.23076923)
         self.assertAlmostEquals(float(fmeasure(value)), 0.375)
     
-    def test_bed_confusion_matrix_dataset(self):
+    def test_bed_confusion_matrix_datasets(self):
         '''
         Test BED-based confusion matrix upon a dataset.
         '''

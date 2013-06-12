@@ -11,6 +11,7 @@ from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
     COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
 from ..util import SegmentationMetricError
 from ..util.test import TestCase
+from ..data.samples import HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER
 
 
 class TestPk(TestCase):
@@ -212,3 +213,18 @@ class TestPairwisePkMeasure(TestCase):
                           0.0,
                           0.0,
                           48))
+
+    def test_pk_datasets(self):
+        '''
+        Test pk upon two datasets.
+        '''
+        hypothesis = HYPOTHESIS_STARGAZER
+        reference = HEARST_1997_STARGAZER
+        value = pk(hypothesis, reference)
+
+        # Precision
+        self.assertAlmostEquals(float(value['stargazer,h1,1']), 0.26315789)
+        self.assertAlmostEquals(float(value['stargazer,h2,1']), 0.36842105)
+        self.assertAlmostEquals(float(value['stargazer,h1,2']), 0.42105263)
+        self.assertAlmostEquals(float(value['stargazer,h2,2']), 0.42105263)
+

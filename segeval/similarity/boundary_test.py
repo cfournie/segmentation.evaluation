@@ -10,7 +10,8 @@ from .weight import weight_a, weight_s, weight_t
 from ..format import BoundaryFormat 
 from ..util import SegmentationMetricError
 from ..compute import summarize
-from ..data.samples import MULTIPLE_BOUNDARY_TYPES
+from ..data.samples import (MULTIPLE_BOUNDARY_TYPES, HEARST_1997_STARGAZER,
+                            HYPOTHESIS_STARGAZER)
 
 
 class TestBoundary(unittest.TestCase):
@@ -95,4 +96,19 @@ class TestBoundary(unittest.TestCase):
                           Decimal('0.08838834764831844055010554528'),
                           2),
                           value)
+
+    def test_b_datasets(self):
+        '''
+        Test B upon two datasets.
+        '''
+        hypothesis = HYPOTHESIS_STARGAZER
+        reference = HEARST_1997_STARGAZER
+        value = boundary_similarity(hypothesis, reference)
+
+        # Precision
+        self.assertAlmostEquals(float(value['stargazer,h1,1']), 0.57142857)
+        self.assertAlmostEquals(float(value['stargazer,h2,1']), 0.38888888)
+        self.assertAlmostEquals(float(value['stargazer,h1,2']), 0.42857142)
+        self.assertAlmostEquals(float(value['stargazer,h2,2']), 0.33333333)
+
 

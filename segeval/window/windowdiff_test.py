@@ -11,6 +11,7 @@ from ..compute import summarize
 from ..format import BoundaryFormat
 from ..util import SegmentationMetricError
 from ..util.test import TestCase
+from ..data.samples import HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER
 
 
 class TestWindowDiffPositions(TestCase):
@@ -311,4 +312,18 @@ class TestPairwiseWindowDiff(TestCase):
                            0.0,
                            0.0,
                            48))
+
+    def test_wd_datasets(self):
+        '''
+        Test WD upon two datasets.
+        '''
+        hypothesis = HYPOTHESIS_STARGAZER
+        reference = HEARST_1997_STARGAZER
+        value = window_diff(hypothesis, reference)
+
+        # Precision
+        self.assertAlmostEquals(float(value['stargazer,h1,1']), 0.31578947)
+        self.assertAlmostEquals(float(value['stargazer,h2,1']), 0.47368421)
+        self.assertAlmostEquals(float(value['stargazer,h1,2']), 0.42105263)
+        self.assertAlmostEquals(float(value['stargazer,h2,2']), 0.47368421)
 

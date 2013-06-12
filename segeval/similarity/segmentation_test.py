@@ -7,6 +7,7 @@ import unittest
 from decimal import Decimal
 from .segmentation import segmentation_similarity
 from ..util import SegmentationMetricError
+from ..data.samples import HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER
 
 
 class TestSegmentation(unittest.TestCase):
@@ -69,4 +70,18 @@ class TestSegmentation(unittest.TestCase):
         b = [2, 2, 8]
         self.assertRaises(SegmentationMetricError, segmentation_similarity,
                           a, b)
+
+    def test_s_datasets(self):
+        '''
+        Test S upon two datasets.
+        '''
+        hypothesis = HYPOTHESIS_STARGAZER
+        reference = HEARST_1997_STARGAZER
+        value = segmentation_similarity(hypothesis, reference)
+
+        # Precision
+        self.assertAlmostEquals(float(value['stargazer,h1,1']), 0.85)
+        self.assertAlmostEquals(float(value['stargazer,h2,1']), 0.725)
+        self.assertAlmostEquals(float(value['stargazer,h1,2']), 0.8)
+        self.assertAlmostEquals(float(value['stargazer,h2,2']), 0.7)
 
