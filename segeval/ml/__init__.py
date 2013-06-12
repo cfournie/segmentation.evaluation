@@ -14,34 +14,45 @@ from ..util.lang import enum
 Average = enum('micro', 'macro')
 
 
-def __value_micro_macro__(fnc, classes, arguments, classification=None,
+def __value_micro_macro__(fnc, arguments, classification=None,
                           version=Average.micro):
     # pylint: disable=W0142
-    if classification is None:
-        if version is Average.micro:
-            # Micro-average
-            numerator, denominator = 0, 0
-            for classification in classes:
-                arguments['classification'] = classification
-                arguments['return_parts'] = True
-                class_numerator, class_denominator = fnc(**arguments)
-                numerator += class_numerator
-                denominator += class_denominator
-            if numerator == 0:
-                return 0
-            else:
-                return Decimal(numerator) / denominator
-        elif version is Average.macro:
-            # Macro-average
-            values = list()
-            for classification in classes:
-                arguments['classification'] = classification
-                value = fnc(**arguments)
-                values.append(value)
-            return mean(values)
+    def __compute__(fnc, classes, arguments, classification, version):
+        if classification is None:
+            if version is Average.micro:
+                # Micro-average
+                numerator, denominator = 0, 0
+                for classification in classes:
+                    arguments['classification'] = classification
+                    arguments['return_parts'] = True
+                    class_numerator, class_denominator = fnc(**arguments)
+                    numerator += class_numerator
+                    denominator += class_denominator
+                if numerator == 0:
+                    return 0
+                else:
+                    return Decimal(numerator) / denominator
+            elif version is Average.macro:
+                # Macro-average
+                values = list()
+                for classification in classes:
+                    arguments['classification'] = classification
+                    value = fnc(**arguments)
+                    values.append(value)
+                return mean(values)
+        else:
+            return fnc(**arguments)
+    if isinstance(arguments['matrix'], ConfusionMatrix):
+        classes = arguments['matrix'].classes()
+        return __compute__(fnc, classes, arguments, classification, version)
     else:
-        return fnc(**arguments)
-
+        values = dict()
+        new_arguments = dict(arguments)
+        for label, matrix in arguments['matrix'].items():
+            new_arguments['matrix'] = matrix
+            classes = matrix.classes()
+            values[label] = __compute__(fnc, classes, new_arguments, classification, version)
+        return values
     
 def __precision__(matrix, classification, return_parts=False):
     # pylint: disable=C0103
@@ -125,12 +136,10 @@ def precision(matrix, classification=None, version=Average.micro):
     :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
-    classes = matrix.classes()
     arguments = dict()
     arguments['matrix'] = matrix
     arguments['classification'] = classification
-    return __value_micro_macro__(__precision__, classes, arguments,
-                                 classification, version)
+    return __value_micro_macro__(__precision__, arguments, classification, version)
 
 
 def recall(matrix, classification=None, version=Average.micro):
@@ -147,12 +156,10 @@ def recall(matrix, classification=None, version=Average.micro):
     :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
-    classes = matrix.classes()
     arguments = dict()
     arguments['matrix'] = matrix
     arguments['classification'] = classification
-    return __value_micro_macro__(__recall__, classes, arguments, classification,
-                                 version)
+    return __value_micro_macro__(__recall__, arguments, classification, version)
 
 
 def fmeasure(matrix, classification=None, beta=Decimal('1.0'),
@@ -170,13 +177,11 @@ def fmeasure(matrix, classification=None, beta=Decimal('1.0'),
     :rtype: :class:`decimal.Decimal`
     '''
     # pylint: disable=C0103
-    classes = matrix.classes()
     arguments = dict()
     arguments['matrix'] = matrix
     arguments['classification'] = classification
     arguments['beta'] = beta
-    return __value_micro_macro__(__fmeasure__, classes, arguments,
-                                 classification, version)
+    return __value_micro_macro__(__fmeasure__, arguments, classification, version)
 
 
 class _InnerConfusionMatrix(defaultdict):

@@ -53,13 +53,18 @@ def __fnc_metric__(fnc_metric, args, kwargs, kw_defaults):
     if dataset:
         # Compute pairwise values over all coders in a dataset
         metric_kwargs['boundary_format'] = dataset.boundary_format
-        return compute_pairwise_values(dataset, fnc_metric, **metric_kwargs)
+        return compute_pairwise_values(fnc_metric, dataset, **metric_kwargs)
     elif hypothesis and reference:
         # Compute values between hypotheses (i.e, automatic) and reference 
         # (i.e., manual) coder segmentations
         if isinstance(hypothesis, Dataset) and isinstance(reference, Dataset):
             # Compare pairwise values between coders paired from two datasets
-            pass
+            metric_kwargs['boundary_format'] = hypothesis.boundary_format
+            if hypothesis.boundary_format is not reference.boundary_format:
+                raise SegmentationMetricError(
+                    'Datasets contain differing boundary formats; {0} != {1}'\
+                        .format(hypothesis.boundary_format, reference.boundary_format))
+            return compute_pairwise_values(fnc_metric, hypothesis, reference, **metric_kwargs)
         else:
             # Compare a single pair of segmentations
             del metric_kwargs['permuted']
