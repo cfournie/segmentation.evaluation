@@ -1,7 +1,7 @@
 Segmentation Evaluation using SegEval
 =====================================
 
-Tet segmentation is the task of splitting up any amount of text into segments by placing boundaries between some atomic unit (e.g., morphemes, words, lines, sentences, paragraphs, sections, etc.).
+Text segmentation is the task of splitting up any amount of text into segments by placing boundaries between some atomic unit (e.g., morphemes, words, lines, sentences, paragraphs, sections, etc.).
 
 This package is a collection of metrics and for comparing text segmentations and evaluating automatic text segmenters.  Both new (**Boundary Similarity**, **Segmentation Similarity**) and traditional (**WindowDiff**, **Pk**) are included, as well as inter-coder agreement coefficients and confusion matrices based upon a boundary edit distance.
 
@@ -54,8 +54,35 @@ this part of the documentation is for you.
 
 Support
 -------
-
 If you have any suggestions, problems, or difficulties, please `log an issue <https://github.com/cfournie/segmentation.evaluation/issues>`_, or `contact me <http://nlp.chrisfournier.ca/about/>`_.
+
+
+
+Citing
+------
+If you're using this software for research, please cite `the ACL paper [Fournier2013]_ and, if you need to go into details, the thesis [Fournier2013b]_ describing this work.
+
+BibTeX:
+
+.. code-block:: latex
+
+    @inproceedings{Fournier2013a,
+        author      = {Fournier, Chris},
+        year        = {2013},
+        title       = {{Evaluating Text Segmentation using Boundary Edit Distance}},
+        booktitle   = {Proceedings of 51st Annual Meeting of the Association for Computational Linguistics},
+        publisher   = {Association for Computational Linguistics},
+        location    = {Sophia, Bulgaria},
+        pages       = {to appear},
+        address     = {Stroudsburg, PA, USA}
+    }
+
+    @mastersthesis{Fournier2013b,
+        author      = {Fournier, Chris},
+        title       = {Evaluating Text Segmentation},
+        school      = {University of Ottawa},
+        year        = {2013}
+    }
 
 
 References
