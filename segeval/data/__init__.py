@@ -28,7 +28,7 @@ FILETYPES_DEFAULT   = FILETYPE_JSON
 
 class Dataset(defaultdict):
     '''
-    Represents a set of texts that have been segmentations by coders.
+    Represents a set of texts (i.e., items) that have been segmentations by coders.
     '''
     # pylint: disable=R0903
     
@@ -124,9 +124,7 @@ def load_nested_folders_dict(containing_dir, filetype, dataset=None,
     :param filetype:       File type to load (e.g., json or tsv).
     :type containing_dir: str
     :type filetype: str
-    
-    :returns: Segmentation mass codings.
-    :rtype: :func:`dict`
+
     '''
     # pylint: disable=R0914
     # Create empty dataset
@@ -192,11 +190,9 @@ def __load_file__(input_path, filetype):
     # Load file or dir
     if is_file:
         dataset = FILETYPES[filetype][FNC](input_path)
-        dataset.properties[Field.single_file] = True
     else:
         dataset = load_nested_folders_dict(input_path, filetype,
                                            dataset=Dataset())
-        dataset.properties[Field.single_file] = False
     
     return dataset
 

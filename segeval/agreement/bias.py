@@ -9,18 +9,6 @@ from .pi import __fleiss_pi_linear__
 
 
 def __artstein_poesio_bias_linear__(dataset, **kwargs):
-    '''
-    Artstein and Poesio's annotator bias, or B (Artstein and Poesio, 2008,
-    pp. 572).
-    
-    Arguments:
-    segs_set_all -- A list of document segments for each coder (each in the
-                    same item order), e.g.: [an1, an2, an3], where an1 = 
-                    [d1, d2, d3], where d1 = segmass_d1.
-    
-    Returns:
-    B as a Decimal object.
-    '''
     # pylint: disable=C0103,W0142
     metric_kwargs = dict(kwargs)
     metric_kwargs['return_parts'] = True
@@ -38,6 +26,9 @@ def __artstein_poesio_bias_linear__(dataset, **kwargs):
 
 
 def artstein_poesio_bias_linear(dataset, **kwargs):
+    '''
+    Artstein and Poesio's annotator bias [ArtsteinPoesio2008]_.
+    '''
     # pylint: disable=W0142
     return __fnc_metric__(__artstein_poesio_bias_linear__, dataset, **kwargs)
 

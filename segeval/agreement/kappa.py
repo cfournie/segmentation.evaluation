@@ -9,33 +9,6 @@ from . import __fnc_metric__, __actual_agreement_linear__
 
 
 def __fleiss_kappa_linear__(dataset, **kwargs):
-    '''
-    Calculates Fleiss' Kappa (or multi-Kappa), originally proposed in
-    [DaviesFleiss1982]_, for segmentations.  Adapted in [FournierInkpen2012]_ 
-    from the formulations provided in [Hearst1997]_ (p. 53) and using
-    [ArtsteinPoesio2008]_'s formulation for expected agreement:
-    
-    .. math::
-        \\text{A}^{\kappa^*}_e = \sum_{k \in K} \\bigg(
-        \\frac{1}{{\\textbf{c} \\choose 2}}
-        \sum^{\\textbf{c}-1}_{m=1}
-        \sum^{\\textbf{c}}_{n=m+1} \\text{P}^\kappa_e(k|c_m) \cdot
-            \\text{P}^\kappa_e(k|c_n) \\bigg)
-    
-    :param items_masses: Segmentation masses for a collection of items where \
-                        each item is multiply coded (all coders code all items).
-    :param return_parts: If true, return the numerator and denominator.
-    :type item_masses:  dict
-    :type return_parts: bool
-    
-    :returns: Fleiss's Kappa
-    :rtype: :class:`decimal.Decimal`
-    
-    .. seealso:: :func:`segeval.agreement.actual_agreement` for an example of\
-     ``items_masses``.
-    
-    .. note:: Applicable for more than 2 coders.
-    '''
     # pylint: disable=C0103,R0914,W0142
     metric_kwargs = dict(kwargs)
     metric_kwargs['return_parts'] = True
@@ -82,6 +55,11 @@ def __fleiss_kappa_linear__(dataset, **kwargs):
 
 
 def fleiss_kappa_linear(dataset, **kwargs):
+    '''
+    Calculates Fleiss' :math:`\kappa` (or multi-:math:`\kappa`), originally proposed in
+    [DaviesFleiss1982]_.  For 2 coders, this is equivalent to Cohen's :math:`\kappa`
+    [Cohen1960]_.
+    '''
     # pylint: disable=W0142
     return __fnc_metric__(__fleiss_kappa_linear__, dataset, **kwargs)
 

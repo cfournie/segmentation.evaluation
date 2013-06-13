@@ -3,7 +3,7 @@ Segmentation Evaluation using SegEval
 
 Tet segmentation is the task of splitting up any amount of text into segments by placing boundaries between some atomic unit (e.g., morphemes, words, lines, sentences, paragraphs, sections, etc.).
 
-This package is a collection of metrics and for comparing text segmentations and evaluating automatic text segmenters.  Both new (**Boundary Similarity**) and traditional (**WindowDiff**, **Pk**) are included, as well as inter-coder agreement coefficients and confusion matrices based upon a boundary edit distance.
+This package is a collection of metrics and for comparing text segmentations and evaluating automatic text segmenters.  Both new (**Boundary Similarity**, **Segmentation Similarity**) and traditional (**WindowDiff**, **Pk**) are included, as well as inter-coder agreement coefficients and confusion matrices based upon a boundary edit distance.
 
 :Release: |release|
 :Date: |today|
@@ -54,7 +54,7 @@ this part of the documentation is for you.
 
 
 Installation
-============
+------------
 
 Install for `Python 2.7 <http://www.python.org/download/>`_ using `pip <http://pypi.python.org/pypi/pip>`_ (``pip install segeval``). 
 
@@ -63,19 +63,13 @@ If you encounter any issues, view the `detailed installation instructions <insta
 
 
 Support
-=======
+-------
 
 If you have any suggestions, problems, or difficulties, please `log an issue <https://github.com/cfournie/segmentation.evaluation/issues>`_, or `contact me <http://nlp.chrisfournier.ca/about/>`_.
 
 
-Roadmap
-=======
-
-For a roadmap of planned features and future work see the `SegEval overview page <http://nlp.chrisfournier.ca/software/segeval/>`_.
-
-
 Input Data Formats
-==================
+------------------
 
 SegEval reads data in JSON (JavaScript Object Notation) or TSV (Tab Separated Values) formats as specified in the `Segmentation Representation Specification Version 1.1 <http://nlp.chrisfournier.ca/publications/pdf/fournier_segeval_spec_2012.pdf>`_ (PDF).
 
@@ -83,14 +77,14 @@ For mutliply-coded data examples, see the `Segmentation Corpora github repositor
 
 
 Licenses
-========
+--------
 This software is licensed under the `BSD 3-Clause free software license <http://www.opensource.org/licenses/BSD-3-Clause>`_.
 
 All data and documents not in software form are licensed under the `Creative Commons Attribution-ShareAlike 2.5 Canada (CC BY-SA 2.5) <http://creativecommons.org/licenses/by-sa/2.5/ca/>`_ license.
 
 
 References
-==========
+----------
 
 .. [ArtsteinPoesio2008] Ron Artstein and Massimo Poesio. 2008. **Inter-coder \
     agreement for computational linguistics**. Computational Linguistics, \
@@ -161,12 +155,4 @@ References
 .. [SiegelCastellan1988] Sidney Siegel and N. John Castellan, Jr. 1988. \
     **Non-parametric Statistics for the Behavioral Sciences**. 2nd Edition, \
     Castellanhapter 9.8. McGraw-Hill.
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 

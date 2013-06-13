@@ -44,6 +44,12 @@ def __fleiss_pi_linear__(items_masses, **kwargs):
 
 
 def fleiss_pi_linear(dataset, **kwargs):
+    '''
+    Calculates Fleiss' :math:`\pi` (or multi-:math:`\pi`), originally proposed in
+    [Fleiss1971]_, and is equivalent to Siegel and Castellan's :math:`K`
+    [SiegelCastellan1988]_.  For 2 coders, this is equivalent to Scott's :math:`\pi`
+    [Scott1955]_.
+    '''
     # pylint: disable=W0142
     return __fnc_metric__(__fleiss_pi_linear__, dataset, **kwargs)
 

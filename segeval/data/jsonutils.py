@@ -9,9 +9,7 @@ import codecs
 from ..util.lang import enum
 
 
-Field = enum(single_file='single_file',
-             segmentation_type='segmentation_type',
-             has_reference_coder='has_reference_coder',
+Field = enum(segmentation_type='segmentation_type',
              # Structure
              items='items',
              codings='codings')
@@ -22,11 +20,6 @@ SegmentationType = enum(linear='linear')
 def __write_json__(filepath, data):
     '''
     Write a JSON file using the given data.
-    
-    :param filepath:   Path and filename of a file to write to
-    :param data:       Data, in dictionary or list form, to write
-    :type filepath:   str
-    :type dictionary: :class:`dict` or :class:`list`
     '''
     # Create a default filename if a dir is specified
     if os.path.isdir(filepath):
@@ -41,7 +34,10 @@ def __write_json__(filepath, data):
 
 def output_linear_mass_json(filepath, dataset):
     '''
-    Compose an output file's fields and output a JSON file.
+    Takes a file path and :class:`Dataset` and serializes it as JSON.
+
+    :param filepath: Path to the mass file containing segment position codings.
+    :type filepath: :func:`str`
     '''
     data = {Field.segmentation_type : SegmentationType.linear}
     if len(dataset) > 0:
@@ -53,18 +49,12 @@ def output_linear_mass_json(filepath, dataset):
     
     
 
-def input_linear_mass_json(filepath, create_item=False):
+def input_linear_mass_json(filepath):
     '''
-    Load a segment mass JSON file.
+    Reads a file path. Returns segmentation mass codings as a :class:`Dataset`.
     
-    :param json_filename: path to the mass file containing segment position
-                          codings.
-    :type json_filename: str
-    
-    :returns: Segmentation mass codings.
-    :rtype: :func:`dict`
-    
-    .. seealso:: `JSON (JavaScript Object Notation) <http://www.json.org/>`_.
+    :param filepath: Path to the mass file containing segment position codings.
+    :type filepath: :func:`str`
     '''
     from . import Dataset, DataIOError, name_from_filepath
     dataset = Dataset()
@@ -97,8 +87,7 @@ def input_linear_mass_json(filepath, create_item=False):
         for coder, masses in data.items():
             dataset[item][coder] = tuple(masses)
         # Undo item
-        if not create_item:
-            dataset = dataset[item]
+        dataset = dataset[item]
         # Remove from properties
         del dataset.properties[Field.codings]
     # If separated into multiple items for one coder per file

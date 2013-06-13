@@ -11,28 +11,25 @@ from ..format import convert_positions_to_masses
 DEFAULT_DELIMITER = '\t'
 
 
-def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
+def input_linear_mass_tsv(filepath, delimiter=DEFAULT_DELIMITER):
     '''
-    Load a linear segmentation mass TSV file.
+    Takes a file path.  Returns segmentation mass codings as a :class:`Dataset`.
     
-    :param tsv_filename: path to the mass file containing segment mass codings.
+    :param filepath: path to the mass file containing segment mass codings.
     :param delimiter:    the delimiter used when reading a TSV file (by default,
                          a tab, but it can also be a comma, whitespace, etc.
-    :type tsv_filename: str
+    :type filepath: str
     :type delimiter: str
-    
-    :returns: Segmentation mass codings.
-    :rtype: :func:`dict`
     '''
     # pylint: disable=R0914
     from . import Dataset, name_from_filepath
     # List version of file
     header = []
     dataset = Dataset()
-    item = name_from_filepath(tsv_filename)
+    item = name_from_filepath(filepath)
     dataset[item] = dict()
     # Open file
-    with open(tsv_filename, 'rU') as csv_file:
+    with open(filepath, 'rU') as csv_file:
         # Read in file
         reader = csv.reader(csv_file, delimiter=delimiter)
         for i, row in enumerate(reader):
@@ -55,26 +52,23 @@ def input_linear_mass_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
     return dataset
 
 
-def input_linear_positions_tsv(tsv_filename, delimiter=DEFAULT_DELIMITER):
+def input_linear_positions_tsv(filepath, delimiter=DEFAULT_DELIMITER):
     '''
-    Load a segment position TSV file.
+    Takes a file path.  Returns segmentation mass codings as a :class:`Dataset`.
     
-    :param csv_filename: path to the mass file containing segment position
+    :param filepath: path to the mass file containing segment position
                          codings.
     :param delimiter:    the delimiter used when reading a TSV file (by default,
                          a tab, but it can also be a comma, whitespace, etc.
-    :type csv_filename: str
+    :type filepath: str
     :type delimiter: str
     
     .. deprecated:: 1.0
     
-    .. warning:: This i/o function is for legacy files only and will be removed
+    .. warning:: This I/O function is for legacy files only and will be removed
         in later versions.
-    
-    :returns: Segmentation mass codings.
-    :rtype: :func:`dict`
     '''
-    dataset = input_linear_mass_tsv(tsv_filename, delimiter)
+    dataset = input_linear_mass_tsv(filepath, delimiter)
     # Convert each segment position to masses
     for item, coder_positions in dataset.items():
         for coder, positions in coder_positions.items():

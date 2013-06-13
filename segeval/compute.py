@@ -23,9 +23,6 @@ def compute_pairwise_values(fnc_metric, dataset_a, dataset_b=None, **kwargs):
     :type dataset: dict
     :type fnc_metric:     func
     :type permuted:       bool
-    
-    :returns: List of values
-    :rtype: :func:`list`
     '''
     # pylint: disable=C0103,R0912,W0142
     from .data.jsonutils import Field
@@ -112,6 +109,12 @@ def compute_pairwise_values(fnc_metric, dataset_a, dataset_b=None, **kwargs):
 
 
 def summarize(pairs):
+    '''
+    Takes a list of values and returns the mean, standard deviation, variance, standard error, and number of values.
+    
+    :param pairs: List of numerical values
+    :type pairs: list
+    '''
     return mean(pairs.values()), std(pairs.values()), var(pairs.values()), \
         stderr(pairs.values()), len(pairs)
 

@@ -127,13 +127,12 @@ def precision(matrix, classification=None, version=Average.micro):
     Calculate precision.
     
     :param matrix: Confusion matrix
-    :param classification: Precision for this classification label
-    :param version: MICRO or MACRO precision
+    :param classification: Classification label to compute this metric for
+    :param version: Averaging-method version.
 
     :type matrix: :class:`ConfusionMatrix`
-    
-    :returns: Precision.
-    :rtype: :class:`decimal.Decimal`
+    :type classification: Any :class:`dict` index
+    :type version: :class:`Average`
     '''
     # pylint: disable=C0103
     arguments = dict()
@@ -147,13 +146,12 @@ def recall(matrix, classification=None, version=Average.micro):
     Calculate recall.
     
     :param matrix: Confusion matrix
-    :param classification: Recall for this classification label
-    :param version: MICRO or MACRO recall
+    :param classification: Classification label to compute this metric for
+    :param version: Averaging-method version.
 
     :type matrix: :class:`ConfusionMatrix`
-    
-    :returns: Precision.
-    :rtype: :class:`decimal.Decimal`
+    :type classification: Any :class:`dict` index
+    :type version: :class:`Average`
     '''
     # pylint: disable=C0103
     arguments = dict()
@@ -168,13 +166,12 @@ def fmeasure(matrix, classification=None, beta=Decimal('1.0'),
     Calculate FMeasure.
     
     :param matrix: Confusion matrix
-    :param classification: FMeasure for this classification label
-    :param version: MICRO or MACRO FMeasure
+    :param classification: Classification label to compute this metric for
+    :param version: Averaging-method version.
 
     :type matrix: :class:`ConfusionMatrix`
-    
-    :returns: Precision.
-    :rtype: :class:`decimal.Decimal`
+    :type classification: Any :class:`dict` index
+    :type version: :class:`Average`
     '''
     # pylint: disable=C0103
     arguments = dict()
@@ -202,9 +199,8 @@ class _InnerConfusionMatrix(defaultdict):
 
 class ConfusionMatrix(dict):
     '''
-    Dict representation of a confusion matrix:
-    
-    matrix[predicted][actual]
+    A :func:`dict`-like representation of a confusion matrix offering some automation.
+    To access/store values, use: ``matrix[predicted][actual]``.
     '''
     __classes__ = set()
     __dirty_classes__ = False
@@ -247,8 +243,4 @@ class ConfusionMatrix(dict):
                     self.__classes__.add(actual)
             self.__dirty_classes__ = False
         return self.__classes__
-
-
-__all__ = [Average.micro, Average.macro, precision, recall, fmeasure,
-           ConfusionMatrix]
 
