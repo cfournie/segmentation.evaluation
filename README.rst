@@ -1,7 +1,7 @@
 SegEval v2.0
 ============
 
-.. image:: https://travis-ci.org/cfournie/segmentation.evaluation.png?branch=experimental
+.. image:: https://travis-ci.org/cfournie/segmentation.evaluation.png?branch=master
         :target: https://travis-ci.org/cfournie/segmentation.evaluation
 
 Text segmentation is the task of splitting up any amount of text into segments by placing boundaries between some atomic unit (e.g., morphemes, words, lines, sentences, paragraphs, sections, etc.).
