@@ -3,7 +3,7 @@
 Installation
 ============
 
-This part of the documentation covers the installation of Requests.
+This part of the documentation covers the installation of SegEval.
 The first step to using any software package is getting it properly installed.
 
 
@@ -12,7 +12,7 @@ Distribute & Pip
 
 Installing segeval can be performed using `pip <http://www.pip-installer.org/>`_::
 
-    $ pip install requests
+    $ pip install segeval
 
 
 Get the Code

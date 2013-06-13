@@ -13,12 +13,12 @@ Feature Support
 ---------------
 Included is a variety of segmentation comparison metrics, including:
 
-* Boundary Edit Distance (BED; [Fournier2013]_)
-* Boundary Similarity (B; [Fournier2013]_)
-* BED-based confusion matrices (and precision/recall/F1; [Fournier2013]_)
-* Segmentation Similarity [FournierInkpen2012]_
-* WindowDiff [PevznerHearst2002]_
-* Pk [BeefermanBerger1999]_
+* Boundary Edit Distance (BED)
+* Boundary Similarity (B)
+* BED-based confusion matrices (and precision/recall/F1)
+* Segmentation Similarity (S)
+* WindowDiff
+* Pk
 
 Additionally, B-based inter-coder agreement coefficients for segmentation that are suitable for 2 or more coders are provided, including:
 
