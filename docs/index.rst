@@ -21,8 +21,8 @@ Included is a variety of segmentation comparison metrics, including:
 
 Additionally, B-based inter-coder agreement coefficients for segmentation that are suitable for 2 or more coders are provided, including:
 
-* Pi [Fleiss1971]_
-* Kappa [DaviesFleiss1982]_
+* Fleiss' :math:`\pi` [Fleiss1971]_ (i.e., Siegel and Castellan's :math:`K` [SiegelCastellan1988]_)
+* Fleiss' :math:`\kappa` [DaviesFleiss1982]_
 
 
 User Guide
@@ -52,35 +52,10 @@ this part of the documentation is for you.
    api
 
 
-
-Installation
-------------
-
-Install for `Python 2.7 <http://www.python.org/download/>`_ using `pip <http://pypi.python.org/pypi/pip>`_ (``pip install segeval``). 
-
-If you encounter any issues, view the `detailed installation instructions <install>`_.
-
-
-
 Support
 -------
 
 If you have any suggestions, problems, or difficulties, please `log an issue <https://github.com/cfournie/segmentation.evaluation/issues>`_, or `contact me <http://nlp.chrisfournier.ca/about/>`_.
-
-
-Input Data Formats
-------------------
-
-SegEval reads data in JSON (JavaScript Object Notation) or TSV (Tab Separated Values) formats as specified in the `Segmentation Representation Specification Version 1.1 <http://nlp.chrisfournier.ca/publications/pdf/fournier_segeval_spec_2012.pdf>`_ (PDF).
-
-For mutliply-coded data examples, see the `Segmentation Corpora github repository <https://github.com/cfournie/segmentation.corpora>`_.
-
-
-Licenses
---------
-This software is licensed under the `BSD 3-Clause free software license <http://www.opensource.org/licenses/BSD-3-Clause>`_.
-
-All data and documents not in software form are licensed under the `Creative Commons Attribution-ShareAlike 2.5 Canada (CC BY-SA 2.5) <http://creativecommons.org/licenses/by-sa/2.5/ca/>`_ license.
 
 
 References
@@ -142,12 +117,6 @@ References
 .. [PevznerHearst2002] Lev Pevzner and Marti A. Hearst. 2002. **A critique \
     and improvement of an evaluation metric for text segmentation**. \
     Computational Linguistics, 28(1):19–36. MIT Press, Cambridge, MA, USA.
-
-.. [ScaianoInkpen2012] Martin Scaiano and Diana Inkpen. 2012, **Getting more \
-    from segmentation evaluation**, in Proceedings of Human Language \
-    Technologies: The 2012 Annual Conference of the North American Chapter of \
-    the Association for Computational Linguistics, Association for \
-    Computational Linguistics.
 
 .. [Scott1955] William A. Scott. 1955. **Reliability of content analysis: The \
     case of nominal scale coding**. Public Opinion Quarterly, 19(3):321-325.
