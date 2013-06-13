@@ -22,8 +22,8 @@ Included is a variety of segmentation comparison metrics, including:
 
 Additionally, B-based inter-coder agreement coefficients for segmentation that are suitable for 2 or more coders are provided, including:
 
-* Fleiss' :math:`\pi` [Fleiss1971]_ (i.e., Siegel and Castellan's :math:`K` [SiegelCastellan1988]_)
-* Fleiss' :math:`\kappa` [DaviesFleiss1982]_
+* Fleiss' Pi (i.e., Siegel and Castellan's K)
+* Fleiss' Kappa
 
 
 Installation
