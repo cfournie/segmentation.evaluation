@@ -60,7 +60,7 @@ If you have any suggestions, problems, or difficulties, please `log an issue <ht
 
 Citing
 ------
-If you're using this software for research, please cite `the ACL paper [Fournier2013]_ and, if you need to go into details, the thesis [Fournier2013b]_ describing this work.
+If you're using this software for research, please cite the ACL paper [Fournier2013]_ and, if you need to go into details, the thesis [Fournier2013b]_ describing this work.
 
 BibTeX:
 

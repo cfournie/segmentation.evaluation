@@ -197,8 +197,8 @@ Proposed in [PevznerHearst2002]_, this segmentation comparison metric is an adap
     For parameters see :func:`pk`
 
 
-Inter-coderAgreement Coefficients
----------------------------------
+Inter-coder Agreement Coefficients
+----------------------------------
 Originally adapted in [FournierInkpen2012]_ from formulations provided by [ArtsteinPoesio2008]_, these have inter-coder agreement have been modified by [Fournier2013]_ to better suite the measurement of inter-coder agreement of segmentation boundaries   using :func:`boundary_similarity` for actual agreement.
 
 .. function:: actual_agreement_linear
