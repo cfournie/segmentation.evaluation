@@ -6,6 +6,7 @@ Boundary Similarity (B) package.
 from __future__ import division
 from . import __boundary_statistics__, SIMILARITY_METRIC_DEFAULTS
 from ..util import __fnc_metric__
+from decimal import Decimal
 
 
 def __boundary_similarity__(*args, **kwargs):
@@ -15,6 +16,7 @@ def __boundary_similarity__(*args, **kwargs):
     del metric_kwargs['one_minus']
     # Arguments
     return_parts = kwargs['return_parts']
+    one_minus = kwargs['one_minus']
     # Compute
     statistics = __boundary_statistics__(*args, **metric_kwargs)
     additions = statistics['additions']
@@ -27,7 +29,11 @@ def __boundary_similarity__(*args, **kwargs):
     if return_parts:
         return numerator, denominator, additions, substitutions, transpositions
     else:
-        return numerator / denominator if denominator > 0 else 1
+        value = numerator / denominator if denominator > 0 else 1
+        if one_minus:
+            return Decimal('1') - value
+        else:
+            return value
 
 
 def boundary_similarity(*args, **kwargs):

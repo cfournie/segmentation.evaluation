@@ -22,6 +22,13 @@ class TestWindowDiffPositions(TestCase):
     kwargs = {'boundary_format' : BoundaryFormat.position,
               'lamprier_et_al_2007_fix' : False}
 
+    def test_one_minus(self):
+        '''
+        Test one minus.
+        '''
+        value = window_diff([2, 3, 6], [2, 2, 7], one_minus=True)
+        self.assertAlmostEqual(Decimal('0.77777777'), value)
+        
     def test_identical(self):
         '''
         Test whether identical segmentations produce 0.0.

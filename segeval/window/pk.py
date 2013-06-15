@@ -47,14 +47,15 @@ length (%(ref)i is not %(hyp)i).' % {'ref' : len(reference),
             sum_differences += 1
         measurements += 1
     # Perform final division
-    p_k = Decimal(sum_differences) / measurements
-    if not one_minus:
-        if return_parts:
-            return sum_differences, measurements
-        else:
-            return p_k
+    value = Decimal(sum_differences) / measurements
+    if return_parts:
+        return sum_differences, measurements
     else:
-        return Decimal('1.0') - p_k
+        if one_minus:
+            return Decimal('1.0') - value
+        else:
+            return value
+    
 
 
 def pk(*args, **kwargs):

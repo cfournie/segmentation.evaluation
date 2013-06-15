@@ -37,6 +37,13 @@ class TestSegmentation(unittest.TestCase):
         value = segmentation_similarity([2, 3, 6], [2, 2, 7])
         self.assertEqual(Decimal('0.95'), value)
     
+    def test_one_minus(self):
+        '''
+        Test one minus.
+        '''
+        value = segmentation_similarity([2, 3, 6], [2, 2, 7], one_minus=True)
+        self.assertEqual(Decimal('0.05'), value)
+    
     def test_clustered_fps(self):
         '''
         Test near miss.

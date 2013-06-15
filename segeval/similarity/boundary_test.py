@@ -41,9 +41,16 @@ class TestBoundary(unittest.TestCase):
         value = boundary_similarity([2, 3, 6], [2, 2, 7])
         self.assertEqual(0.75, value)
     
+    def test_one_minus(self):
+        '''
+        Test one minus.
+        '''
+        value = boundary_similarity([2, 3, 6], [2, 2, 7], one_minus=True)
+        self.assertEqual(Decimal('0.25'), value)
+    
     def test_clustered_fps(self):
         '''
-        Test near miss.
+        Test clustered fps.
         '''
         value = boundary_similarity([2, 3, 6], [1, 1, 3, 1, 5])
         self.assertEqual(0.5, value)

@@ -6,6 +6,7 @@ Segmentation Similarity (S) package.
 from __future__ import division
 from . import __boundary_statistics__, SIMILARITY_METRIC_DEFAULTS
 from ..util import __fnc_metric__
+from decimal import Decimal
 
 
 def __segmentation_similarity__(*args, **kwargs):
@@ -19,6 +20,7 @@ def __segmentation_similarity__(*args, **kwargs):
     # Arguments
     boundary_types = kwargs['boundary_types']
     return_parts = kwargs['return_parts']
+    one_minus = kwargs['one_minus']
     # Compute
     statistics = __boundary_statistics__(*args, **metric_kwargs)
     # Process
@@ -29,7 +31,11 @@ def __segmentation_similarity__(*args, **kwargs):
     if return_parts:
         return numerator, denominator
     else:
-        return numerator / denominator if denominator > 0 else 1
+        value = numerator / denominator if denominator > 0 else 1
+        if one_minus:
+            return Decimal('1') - value
+        else:
+            return value
 
 
 def segmentation_similarity(*args, **kwargs):

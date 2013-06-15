@@ -20,6 +20,13 @@ class TestPk(TestCase):
     '''
     # pylint: disable=R0904
     kwargs = {'boundary_format' : BoundaryFormat.position}
+    
+    def test_one_minus(self):
+        '''
+        Test one minus.
+        '''
+        value = pk([2, 3, 6], [2, 2, 7], one_minus=True)
+        self.assertAlmostEqual(Decimal('0.77777777'), value)
 
     def test_identical(self):
         '''
