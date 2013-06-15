@@ -7,7 +7,8 @@ import unittest
 from decimal import Decimal
 from .segmentation import segmentation_similarity
 from ..util import SegmentationMetricError
-from ..data.samples import HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER
+from ..data.samples import (HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER,
+    MULTIPLE_BOUNDARY_TYPES, KAZANTSEVA2012_G5)
 
 
 class TestSegmentation(unittest.TestCase):
@@ -86,9 +87,35 @@ class TestSegmentation(unittest.TestCase):
         reference = HEARST_1997_STARGAZER
         value = segmentation_similarity(hypothesis, reference)
 
-        # Precision
         self.assertAlmostEquals(float(value['stargazer,h1,1']), 0.85)
         self.assertAlmostEquals(float(value['stargazer,h2,1']), 0.725)
         self.assertAlmostEquals(float(value['stargazer,h1,2']), 0.8)
         self.assertAlmostEquals(float(value['stargazer,h2,2']), 0.7)
+
+    def test_s_datasets_return_parts(self):
+        '''
+        Test S upon two datasets and return fnc parts.
+        '''
+        hypothesis = HYPOTHESIS_STARGAZER
+        reference = HEARST_1997_STARGAZER
+        value = segmentation_similarity(hypothesis, reference, return_parts=True)
+
+        self.assertEquals(value['stargazer,h1,1'], (Decimal('17'), 20))
+
+    def test_s_datasets_exception(self):
+        '''
+        Test S upon two datasets that produces an exception.
+        '''
+        hypothesis = MULTIPLE_BOUNDARY_TYPES
+        reference = HEARST_1997_STARGAZER
+        self.assertRaises(SegmentationMetricError, segmentation_similarity, hypothesis, reference)
+    
+    def test_s_datasets_continue(self):
+        '''
+        Test S upon two datasets that compares no items.
+        '''
+        hypothesis = KAZANTSEVA2012_G5
+        reference = HEARST_1997_STARGAZER
+        value = segmentation_similarity(hypothesis, reference)
+        self.assertEqual(value, {})
 

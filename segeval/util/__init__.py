@@ -5,6 +5,7 @@ Utility functions and classes for the package.
 '''
 from ..compute import compute_pairwise_values
 
+
 class SegmentationMetricError(Exception):
     '''
     Indicates that a runtime check has failed, and the algorithm is performing

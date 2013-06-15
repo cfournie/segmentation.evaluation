@@ -11,8 +11,7 @@ from ..util.lang import enum
 
 Field = enum(segmentation_type='segmentation_type',
              # Structure
-             items='items',
-             codings='codings')
+             items='items')
 
 SegmentationType = enum(linear='linear')
 
@@ -40,10 +39,7 @@ def output_linear_mass_json(filepath, dataset):
     :type filepath: :func:`str`
     '''
     data = {Field.segmentation_type : SegmentationType.linear}
-    if len(dataset) > 0:
-        data[Field.items] = dataset
-    else:
-        data[Field.codings] = dataset
+    data[Field.items] = dataset
     data.update(dataset.properties)
     __write_json__(filepath, data)
     
@@ -77,21 +73,8 @@ def input_linear_mass_json(filepath):
                    'type_found' : data[Field.segmentation_type]})
     # Duplicate to store other properties
     dataset.properties = data
-    # Remove the metadata layer
-    # If separated into multiple codings of one item per file
-    if Field.codings in data:
-        data = data[Field.codings]
-        item = name
-        dataset[item] = dict()
-        # Convert coder labels into strings
-        for coder, masses in data.items():
-            dataset[item][coder] = tuple(masses)
-        # Undo item
-        dataset = dataset[item]
-        # Remove from properties
-        del dataset.properties[Field.codings]
     # If separated into multiple items for one coder per file
-    elif Field.items in data:
+    if Field.items in data:
         data = data[Field.items]
         # Convert item labels into strings
         for item, coder_masses in data.items():

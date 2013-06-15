@@ -22,7 +22,7 @@ class TestWindowDiffPositions(TestCase):
     kwargs = {'boundary_format' : BoundaryFormat.position,
               'lamprier_et_al_2007_fix' : False}
 
-    def test_one_minus(self):
+    def test_one_minus_var(self):
         '''
         Test one minus.
         '''

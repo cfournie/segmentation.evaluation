@@ -7,10 +7,6 @@ from .util.math import mean, std, var, stderr
 from itertools import combinations
 
 
-def __is_item_codings__(coder_masses):
-    return coder_masses is not None and len(coder_masses.values()) > 0 and isinstance(coder_masses.values()[0], tuple)
-
-
 def compute_pairwise_values(fnc_metric, dataset_a, dataset_b=None, **kwargs):
     '''
     Calculate mean pairwise segmentation metric pairs for functions that take
@@ -25,7 +21,6 @@ def compute_pairwise_values(fnc_metric, dataset_a, dataset_b=None, **kwargs):
     :type permuted:       bool
     '''
     # pylint: disable=C0103,R0912,W0142
-    from .data.jsonutils import Field
     pairs = dict()
     fnc_kwargs = dict(kwargs)
     # Obtain parameters
@@ -55,52 +50,45 @@ def compute_pairwise_values(fnc_metric, dataset_a, dataset_b=None, **kwargs):
                 continue
             # Check to see if there is further nesting
             label_pairs = dict()
-            if __is_item_codings__(coder_masses_m) and (not has_two_datasets or __is_item_codings__(coder_masses_n)):
-                # If is a group
-                coder_pairs = None
-                if has_two_datasets:
-                    coders_m = coder_masses_m.keys()
-                    coders_n = coder_masses_n.keys()
-                    coder_pairs = [(m, n) for m in coders_m for n in coders_n]
+            # If is a group
+            coder_pairs = None
+            if has_two_datasets:
+                coders_m = coder_masses_m.keys()
+                coders_n = coder_masses_n.keys()
+                coder_pairs = [(m, n) for m in coders_m for n in coders_n]
+            else:
+                coders = coder_masses_m.keys()
+                coder_pairs = combinations(coders, 2)
+                # We use the same data for both coders
+                coder_masses_n = coder_masses_m
+            for m, n in coder_pairs:                        
+                segs_m = coder_masses_m[m]
+                segs_n = coder_masses_n[n]
+                entry_parts = list(prefix)
+                entry_parts.extend([label, str(m), str(n)])
+                entry = ','.join(entry_parts)
+                if return_parts:
+                    label_pairs[entry] = fnc_metric(segs_m, segs_n,
+                                                        **fnc_kwargs)
                 else:
-                    coders = coder_masses_m.keys()
-                    coder_pairs = combinations(coders, 2)
-                    # We use the same data for both coders
-                    coder_masses_n = coder_masses_m
-                for m, n in coder_pairs:                        
-                    segs_m = coder_masses_m[m]
-                    segs_n = coder_masses_n[n]
+                    label_pairs[entry] = fnc_metric(segs_m, segs_n,
+                                                        **fnc_kwargs)
+                # Handle permutation
+                if permuted and not has_two_datasets:
                     entry_parts = list(prefix)
-                    entry_parts.extend([label, str(m), str(n)])
+                    entry_parts.extend([label, str(n), str(m)])
                     entry = ','.join(entry_parts)
                     if return_parts:
-                        label_pairs[entry] = fnc_metric(segs_m, segs_n,
-                                                            **fnc_kwargs)
+                        label_pairs[entry] = \
+                            fnc_metric(segs_n, segs_m, **fnc_kwargs)
                     else:
-                        label_pairs[entry] = fnc_metric(segs_m, segs_n,
-                                                            **fnc_kwargs)
-                    # Handle permutation
-                    if permuted and not has_two_datasets:
-                        entry_parts = list(prefix)
-                        entry_parts.extend([label, str(n), str(m)])
-                        entry = ','.join(entry_parts)
-                        if return_parts:
-                            label_pairs[entry] = \
-                                fnc_metric(segs_n, segs_m, **fnc_kwargs)
-                        else:
-                            label_pairs[entry] = fnc_metric(segs_n, segs_m,
-                                                            **fnc_kwargs)
-                # Add all
-                for entry, pair in label_pairs.items():
-                    pairs[entry] = pair
-                # Erase
-                label_pairs = dict()
-            else:
-                # Else, recurse deeper
-                innter_prefix = list(prefix)
-                innter_prefix.append(label)
-                __per_group__(innter_prefix, coder_masses_m, coder_masses_n,
-                              has_two_datasets)
+                        label_pairs[entry] = fnc_metric(segs_n, segs_m,
+                                                        **fnc_kwargs)
+            # Add all
+            for entry, pair in label_pairs.items():
+                pairs[entry] = pair
+            # Erase
+            label_pairs = dict()
     # Parse
     has_two_datasets = dataset_b is not None
     __per_group__(tuple(), dataset_a, dataset_b, has_two_datasets)

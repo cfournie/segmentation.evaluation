@@ -28,6 +28,20 @@ class TestPk(TestCase):
         value = pk([2, 3, 6], [2, 2, 7], one_minus=True)
         self.assertAlmostEqual(Decimal('0.77777777'), value)
 
+    def test_return_parts(self):
+        '''
+        Test one minus.
+        '''
+        value = pk(KAZANTSEVA2012_G5, return_parts=True)
+        self.assertEqual((3, 10), value['ch1,an3,an1'])
+
+    def test_return_parts_dataset(self):
+        '''
+        Test one minus.
+        '''
+        value = pk([2, 3, 6], [2, 2, 7], return_parts=True)
+        self.assertEqual((2, 9), value)
+
     def test_identical(self):
         '''
         Test whether identical segmentations produce 0.0.
@@ -228,8 +242,6 @@ class TestPairwisePkMeasure(TestCase):
         hypothesis = HYPOTHESIS_STARGAZER
         reference = HEARST_1997_STARGAZER
         value = pk(hypothesis, reference)
-
-        # Precision
         self.assertAlmostEquals(float(value['stargazer,h1,1']), 0.26315789)
         self.assertAlmostEquals(float(value['stargazer,h2,1']), 0.36842105)
         self.assertAlmostEquals(float(value['stargazer,h1,2']), 0.42105263)

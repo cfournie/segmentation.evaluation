@@ -6,7 +6,9 @@ Tests the data merge functions and package.
 import unittest
 import os
 import re
-from .jsonutils import output_linear_mass_json, input_linear_mass_json
+from . import DataIOError
+from .jsonutils import (output_linear_mass_json, input_linear_mass_json,
+    __write_json__, Field)
 from .samples import HEARST_1997_STARGAZER
 
 
@@ -44,3 +46,22 @@ class TestJsonUtils(unittest.TestCase):
         json_file = os.path.join(self.test_data_dir, 'hearst1997.json')
         dataset = input_linear_mass_json(json_file)
         self.assertEqual(dataset, HEARST_1997_STARGAZER)
+
+    def test_input_exception(self):
+        file_path = os.path.join(self.test_data_dir, 'hearst1997.tsv')
+        self.assertRaises(DataIOError, input_linear_mass_json, file_path)
+
+    def test_input_type_exception(self):
+        file_path_new = os.path.join(self.test_data_dir, 'hearst1997_test.json')
+        __write_json__(file_path_new,
+            {Field.segmentation_type : 'incorrect',
+             Field.items : {}})
+        self.assertRaises(DataIOError, input_linear_mass_json, file_path_new)
+        os.remove(file_path_new)
+
+
+        
+
+
+
+
