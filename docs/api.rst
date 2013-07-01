@@ -304,6 +304,7 @@ Classes used to model segmentation comparisons so that they can be summarized by
     An ``enum`` with options representing the methods of computing averages:
         * ``micro``, micro-average
         * ``macro``, macro-average
+    
     For more details, see the `Stanford IR Book <http://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-text-classification-1.html>`_.
 
 .. autoclass:: ConfusionMatrix
