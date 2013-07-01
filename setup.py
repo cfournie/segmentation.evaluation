@@ -26,11 +26,11 @@ setup(
     license=open('LICENSE').read(),
     author=__author__,
     author_email=__author_email__,
-    url='http://pypi.python.org/pypi/segeval/',
+    url='http://segeval.readthedocs.org/',
     install_requires = [],
     zip_safe=True,
     # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-    classifiers=['Development Status :: 2 - Pre-Alpha',
+    classifiers=['Development Status :: 5 - Production/Stable',
                  'Environment :: Console',
                  'Intended Audience :: Developers',
                  'Intended Audience :: Science/Research',
