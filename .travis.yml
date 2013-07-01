@@ -8,7 +8,7 @@ notifications:
     - chris.m.fournier@gmail.com
 
 install:
-    - python setup.py install
+    - pip install -r requirements.txt --use-mirrors
 
 script: make coverage
 
