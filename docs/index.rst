@@ -19,6 +19,8 @@ E.g., if we were to perform both manual and automatic `syllabification <http://e
 
 This package is a collection of metrics and for comparing text segmentations and evaluating automatic text segmenters.  Both new (**Boundary Similarity**, **Segmentation Similarity**) and traditional (**WindowDiff**, **Pk**) are included, as well as inter-coder agreement coefficients and confusion matrices based upon a boundary edit distance.
 
+For more example usage of ``segeval``, see "`An initial study of topical poetry segmentation <http://nbviewer.ipython.org/urls/raw.github.com/cfournie/initial.poetry.segmentation/master/khan_segmentation.ipynb>`_".
+
 :Release: |release|
 :Date: |today|
 
