@@ -42,8 +42,8 @@ Documentation
 Documentation is available at http://segeval.readthedocs.org/.
 
 
-Citing
-------
+Citing SegEval
+--------------
 If you're using this software for research, please cite the `ACL paper <http://nlp.chrisfournier.ca/publications/pdf/fournier_2013a.pdf>`_ [PDF] and, if you need to go into details, the `thesis <http://nlp.chrisfournier.ca/publications/pdf/fournier_masc_thesis.pdf>`_ [PDF] describing this work:
 
 - *Chris Fournier. 2013. Evaluating Text Segmentation using Boundary Edit Distance. Proceedings of 51st Annual Meeting of the Association for Computational Linguistics. (ACL 2013), to appear. Association for Computational Linguistics, Stroudsburg, PA, USA.*
