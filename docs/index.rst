@@ -3,6 +3,20 @@ Segmentation Evaluation using SegEval
 
 Text segmentation is the task of splitting up any amount of text into segments by placing boundaries between some atomic unit (e.g., morphemes, words, lines, sentences, paragraphs, sections, etc.).
 
+E.g., if we were to perform both manual and automatic `syllabification <http://en.wikipedia.org/wiki/Syllabification>`_ of words, one may need a way to compare how close the automatic solution is to the manual one.  For this, we can use **Boundary Edit Distance** and **Boundary Similarity**.   `Evaluating a hypothetical automatic syllabifier <http://nbviewer.ipython.org/urls/raw.github.com/cfournie/segmentation.evaluation/master/examples/syllabification_evaluation.ipynb>`_, we can obtain the results shown below.
+
++--------------+-----------------+--------------------+------------------------+---------------------+
+| Word         | Manual Solution | Automatic Solution | Boundary Edit Distance | Boundary Similarity |
++==============+=================+====================+========================+=====================+
+| automatic    | au·to·ma·tic    | au·tom·a·tic       | 2 matches, 1 near      | 0.83                |
++--------------+-----------------+--------------------+------------------------+---------------------+
+| segmentation | seg·men·ta·tion | seg·ment·ation     | 1 match, 1 near, 1 miss| 0.50                |
++--------------+-----------------+--------------------+------------------------+---------------------+
+| is           | is              | is                 | No edits               | 1.00                |
++--------------+-----------------+--------------------+------------------------+---------------------+
+| fun          | fun             | f·un               | 1 miss                 | 0.00                |
++--------------+-----------------+--------------------+------------------------+---------------------+
+
 This package is a collection of metrics and for comparing text segmentations and evaluating automatic text segmenters.  Both new (**Boundary Similarity**, **Segmentation Similarity**) and traditional (**WindowDiff**, **Pk**) are included, as well as inter-coder agreement coefficients and confusion matrices based upon a boundary edit distance.
 
 :Release: |release|
@@ -10,7 +24,7 @@ This package is a collection of metrics and for comparing text segmentations and
 
 Feature Support
 ---------------
-Included is a variety of segmentation comparison metrics, including:
+A variety of segmentation comparison metrics are implemented, including:
 
 * Boundary Edit Distance (BED; [Fournier2013]_)
 * Boundary Similarity (B; [Fournier2013]_)
