@@ -1,0 +1,18 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+
+source =
+    segeval
+
+omit =
+   */*est.py
+
+[paths]
+source =
+	segeval/
+
+[report]
+
+[html]
+title = SegEval Coverage Report
