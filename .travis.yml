@@ -10,10 +10,13 @@ notifications:
 install:
     - pip install -r requirements.txt --use-mirrors
 
-script: make coverage
+script: make coverage_report
 
 # whitelist
 branches:
   only:
     - master
     - experimental
+
+after_success:
+  - make coveralls

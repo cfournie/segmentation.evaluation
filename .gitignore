@@ -10,3 +10,4 @@ dist/**
 htmlcov/**
 .coverage
 segeval.egg-info/**
+.coveralls.yml
