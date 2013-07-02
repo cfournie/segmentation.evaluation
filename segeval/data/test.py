@@ -4,9 +4,11 @@ Tests the data i/o functions and package.
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import os
+import copy
 import unittest
 from . import Dataset, load_nested_folders_dict, FILETYPE_JSON, DataIOError
-from .samples import HEARST_1997_STARGAZER
+from .samples import (HEARST_1997_STARGAZER, COMPLETE_AGREEMENT,
+        LARGE_DISAGREEMENT)
 
 
 class TestDataset(unittest.TestCase):
@@ -24,6 +26,17 @@ class TestDataset(unittest.TestCase):
         dataset_a.properties[prop] = False
         dataset_b = Dataset()
         self.assertFalse(prop in dataset_b.properties)
+
+    def test_add(self):
+        '''
+        Test ``Dataset.add()``.
+        '''
+        # Output complete and larege disagreement, then merge
+        large_disagreement = copy.deepcopy(LARGE_DISAGREEMENT)
+        large_disagreement += COMPLETE_AGREEMENT
+        self.assertTrue(6, len(large_disagreement.coders))
+        self.assertTrue(4, len(large_disagreement))
+        self.assertTrue(2, len(large_disagreement['item1']))
 
     def test_dataset_property(self):
         '''
