@@ -1,7 +1,7 @@
 Segmentation Evaluation using SegEval
 =====================================
 
-Text segmentation is the task of splitting up any amount of text into segments by placing boundaries between some atomic unit (e.g., morphemes, words, lines, sentences, paragraphs, sections, etc.).
+Text segmentation is the task of splitting up any amount of text into segments by placing boundaries between some atomic unit (e.g., morphemes, words, lines, sentences, paragraphs, sections, etc.).  It's a common pre-processing step in many `Natural Language Processing (NLP) <http://en.wikipedia.org/wiki/Natural_language_processing>`_ tasks.
 
 E.g., if we were to perform both manual and automatic `syllabification <http://en.wikipedia.org/wiki/Syllabification>`_ of words, one may need a way to compare how close the automatic solution is to the manual one.  For this, we can use **Boundary Edit Distance** and **Boundary Similarity**.   `Evaluating a hypothetical automatic syllabifier <http://nbviewer.ipython.org/urls/raw.github.com/cfournie/segmentation.evaluation/master/examples/syllabification_evaluation.ipynb>`_, we can obtain the results shown below.
 

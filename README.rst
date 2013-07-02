@@ -2,11 +2,19 @@ SegEval v2.0
 ============
 
 .. image:: https://travis-ci.org/cfournie/segmentation.evaluation.png?branch=master
-        :target: https://travis-ci.org/cfournie/segmentation.evaluation
+	:target: https://travis-ci.org/cfournie/segmentation.evaluation
+.. image:: https://pypip.in/v/segeval/badge.png
+   :target: https://crate.io/packages/segeval/
+.. image:: https://pypip.in/d/segeval/badge.png
+	:target: https://crate.io/packages/segeval/
 
-Text segmentation is the task of splitting up any amount of text into segments by placing boundaries between some atomic unit (e.g., morphemes, words, lines, sentences, paragraphs, sections, etc.).
+
+
+Text segmentation is the task of splitting up any amount of text into segments by placing boundaries between some atomic unit (e.g., morphemes, words, lines, sentences, paragraphs, sections, etc.).  It's a common pre-processing step in many `Natural Language Processing (NLP) <http://en.wikipedia.org/wiki/Natural_language_processing>`_ tasks.
 
 This package is a collection of metrics and for comparing text segmentations and evaluating automatic text segmenters.  Both new (**Boundary Similarity**, **Segmentation Similarity**) and traditional (**WindowDiff**, **Pk**) are included, as well as inter-coder agreement coefficients and confusion matrices based upon a boundary edit distance.
+
+To see some examples of its usage, `read the docs <http://segeval.readthedocs.org/>`_).
 
 
 Feature Support
