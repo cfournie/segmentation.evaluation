@@ -10,7 +10,7 @@ notifications:
 install:
     - pip install -r requirements.txt --use-mirrors
 
-script: make coverage_report
+script: make test
 
 # whitelist
 branches:
