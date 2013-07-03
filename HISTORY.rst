@@ -3,6 +3,40 @@
 History
 =======
 
+2.0.5 (2013-07-03)
+----------------
+
+* Fixed a README typo
+* Updated this history
+
+
+2.0.4 (2013-07-03)
+----------------
+
+* Fixed pep8 and flake errors
+
+
+2.0.3 (2013-07-03)
+----------------
+
+* Increased branch code coverage to 100%
+* Added coveralls support for builds
+
+
+2.0.2 (2013-07-01)
+----------------
+
+* Corrected documentation and added examples
+* Happy Canada Day!
+
+
+2.0.1 (2013-06-16)
+----------------
+
+* Fixed a bug with the 'minus_one' keyword argument
+* Improved code coverage
+
+
 2.0 (2013-05-13)
 ----------------
 
