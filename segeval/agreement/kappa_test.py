@@ -14,7 +14,7 @@ class TestKappa(unittest.TestCase):
     '''
     Test segmentation versions of Cohen's Kappa and Fleiss' Multi-Kappa.
     '''
-    # pylint: disable=R0904
+
 
     def test_fleiss_kappa_linear_g5(self):
         '''

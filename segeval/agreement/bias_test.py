@@ -14,7 +14,7 @@ class TestBias(unittest.TestCase):
     '''
     Test Arstein and Poesio's (2008) annotator bias.
     '''
-    # pylint: disable=R0904
+
 
     def test_bias_g5(self):
         '''
@@ -78,7 +78,7 @@ class TestBias(unittest.TestCase):
         '''
         Test bias upon a hypothetical dataset containing large disagreement.
         '''
-        # pylint: disable=C0103
+
         A_pi_e, A_fleiss_e = artstein_poesio_bias_linear(LARGE_DISAGREEMENT,
                                                 return_parts=True)
         self.assertEqual(A_pi_e,

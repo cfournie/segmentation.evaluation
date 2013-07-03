@@ -17,7 +17,7 @@ Average = enum('micro', 'macro')
 
 def __value_micro_macro__(fnc, arguments, classification=None,
                           version=Average.micro):
-    # pylint: disable=W0142
+
     def __compute__(fnc, classes, arguments, classification, version):
         if classification is None:
             if version is Average.micro:
@@ -59,7 +59,7 @@ def __value_micro_macro__(fnc, arguments, classification=None,
         return values
     
 def __precision__(matrix, classification, return_parts=False):
-    # pylint: disable=C0103
+
     predicted = classification
     denominator = 0
     for actual in matrix.classes():
@@ -75,7 +75,7 @@ def __precision__(matrix, classification, return_parts=False):
 
 
 def __recall__(matrix, classification, return_parts=False):
-    # pylint: disable=C0103
+
     actual = classification
     denominator = 0
     for predicted in matrix.classes():
@@ -107,7 +107,7 @@ def __fmeasure__(matrix, classification=None, beta=Decimal('1.0'),
     :returns: F-measure.
     :rtype: :class:`decimal.Decimal`
     '''
-    # pylint: disable=C0103
+
     class_precision = __precision__(matrix, classification)
     class_recall = __recall__(matrix, classification)
     if not return_parts and (class_precision == 0 or class_recall == 0):
@@ -138,7 +138,7 @@ def precision(matrix, classification=None, version=Average.micro):
     :type classification: Any :class:`dict` index
     :type version: :class:`Average`
     '''
-    # pylint: disable=C0103
+
     arguments = dict()
     arguments['matrix'] = matrix
     arguments['classification'] = classification
@@ -157,7 +157,7 @@ def recall(matrix, classification=None, version=Average.micro):
     :type classification: Any :class:`dict` index
     :type version: :class:`Average`
     '''
-    # pylint: disable=C0103
+
     arguments = dict()
     arguments['matrix'] = matrix
     arguments['classification'] = classification
@@ -177,7 +177,7 @@ def fmeasure(matrix, classification=None, beta=Decimal('1.0'),
     :type classification: Any :class:`dict` index
     :type version: :class:`Average`
     '''
-    # pylint: disable=C0103
+
     arguments = dict()
     arguments['matrix'] = matrix
     arguments['classification'] = classification
@@ -190,7 +190,7 @@ class _InnerConfusionMatrix(defaultdict):
     Inner dict of the confusion matrix; used to determine when the classes list
     is dirty.
     '''
-    # pylint: disable=R0903
+
     
     def __init__(self, parent):
         self.__parent__ = parent

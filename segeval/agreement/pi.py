@@ -9,7 +9,7 @@ from . import __fnc_metric__, __actual_agreement_linear__
 
 
 def __fleiss_pi_linear__(items_masses, **kwargs):
-    # pylint: disable=C0103,R0914,W0142
+
     metric_kwargs = dict(kwargs)
     metric_kwargs['return_parts'] = True
     # Arguments
@@ -50,7 +50,7 @@ def fleiss_pi_linear(dataset, **kwargs):
     [SiegelCastellan1988]_.  For 2 coders, this is equivalent to Scott's :math:`\pi`
     [Scott1955]_.
     '''
-    # pylint: disable=W0142
+
     return __fnc_metric__(__fleiss_pi_linear__, dataset, **kwargs)
 
 

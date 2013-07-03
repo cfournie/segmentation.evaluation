@@ -16,7 +16,7 @@ AGREEMENT_METRIC_DEFAULTS.update({
 
 
 def __fnc_metric__(fnc_metric, dataset, **kwargs):
-    # pylint: disable=W0142
+
     metric_kwargs = dict(AGREEMENT_METRIC_DEFAULTS)
     metric_kwargs.update(kwargs)
     return fnc_metric(dataset, **metric_kwargs)
@@ -78,7 +78,7 @@ def __actual_agreement_linear__(dataset, **kwargs):
     :mod:`segeval.data.Samples`.
     
     '''
-    # pylint: disable=C0103,R0914,W0142
+
     metric_kwargs = dict(kwargs)
     del metric_kwargs['fnc_compare']
     metric_kwargs['return_parts'] = True
@@ -121,6 +121,6 @@ def __actual_agreement_linear__(dataset, **kwargs):
 
 
 def actual_agreement_linear(dataset, **kwargs):
-    # pylint: disable=W0142
+
     return __fnc_metric__(__actual_agreement_linear__, dataset, **kwargs)
 

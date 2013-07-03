@@ -13,7 +13,7 @@ def __segmentation_similarity__(*args, **kwargs):
     '''
     S
     '''
-    # pylint: disable=C0103,R0913,R0914,W0142
+
     metric_kwargs = dict(kwargs)
     del metric_kwargs['return_parts']
     del metric_kwargs['one_minus']
@@ -39,7 +39,7 @@ def __segmentation_similarity__(*args, **kwargs):
 
 
 def segmentation_similarity(*args, **kwargs):
-    # pylint: disable=W0142
+
     return __fnc_metric__(__segmentation_similarity__, args, kwargs,
                           SIMILARITY_METRIC_DEFAULTS)
 

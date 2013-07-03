@@ -14,7 +14,7 @@ class TestConfusionMatrix(unittest.TestCase):
     '''
     Confusion matrix tests.
     '''
-    #pylint: disable=R0904,C0103
+
     
     def test_matrix_set_add(self):
         '''
@@ -59,7 +59,7 @@ class TestML(unittest.TestCase):
     '''
     Machine-learning metric tests.
     '''
-    # pylint: disable=R0904
+
     
     def test_precision(self):
         '''

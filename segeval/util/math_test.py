@@ -12,7 +12,7 @@ class TestMath(unittest.TestCase):
     '''
     Math utlity function tests.
     '''
-    #pylint: disable=R0904,C0103
+
     
     def test_mean(self):
         '''

@@ -14,7 +14,7 @@ class TestSimilarity(unittest.TestCase):
     '''
     Test similarity helper functions.
     '''
-    # pylint: disable=R0904,C0103,C0324
+
     
     def test_boundary_confusion_matrix(self):
         '''

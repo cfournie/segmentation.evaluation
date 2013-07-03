@@ -12,5 +12,5 @@ class TestMerge(unittest.TestCase):
     '''
     Test data merge functions.
     '''
-    #pylint: disable=R0904,C0103
+
     

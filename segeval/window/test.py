@@ -13,7 +13,7 @@ class TestWindow(TestCase):
     '''
     Test window metric fncs.
     '''
-    # pylint: disable=R0904,C0324
+
 
     def test_window_size(self):
         reference = [1, 2, 3]

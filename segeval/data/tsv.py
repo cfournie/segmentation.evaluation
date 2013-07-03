@@ -21,7 +21,7 @@ def input_linear_mass_tsv(filepath, delimiter=DEFAULT_DELIMITER):
     :type filepath: str
     :type delimiter: str
     '''
-    # pylint: disable=R0914
+
     from . import Dataset, name_from_filepath
     # List version of file
     header = []
@@ -48,7 +48,7 @@ def input_linear_mass_tsv(filepath, delimiter=DEFAULT_DELIMITER):
                     else:
                         dataset[item][coder].append(int(col))
                 dataset[item][coder] = tuple(dataset[item][coder])
-        # pylint: disable=C0103
+
     return dataset
 
 

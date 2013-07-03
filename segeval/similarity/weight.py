@@ -17,7 +17,7 @@ def weight_s(substitutions, max_s, min_s=1):
     '''
     Unweighted weighting function for substitution edit operations.
     '''
-    # pylint: disable=W0613,C0103
+
     return len(substitutions)
 
 
@@ -25,7 +25,7 @@ def weight_s_scale(substitutions, max_s, min_s=1):
     '''
     Default weighting function for substitution edit operations by the distance between ordinal boundary types.
     '''
-    # pylint: disable=W0613,C0103
+
     return weight_t_scale(substitutions, max_s - min_s + 1)
 
 
@@ -33,7 +33,7 @@ def weight_t(transpositions, max_n):
     '''
     Unweighted weighting function for transposition edit operations.
     '''
-    # pylint: disable=W0613,C0103
+
     return len(transpositions)
 
 

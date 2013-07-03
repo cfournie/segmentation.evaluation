@@ -9,7 +9,7 @@ from .pi import __fleiss_pi_linear__
 
 
 def __artstein_poesio_bias_linear__(dataset, **kwargs):
-    # pylint: disable=C0103,W0142
+
     metric_kwargs = dict(kwargs)
     metric_kwargs['return_parts'] = True
     # Arguments
@@ -29,6 +29,6 @@ def artstein_poesio_bias_linear(dataset, **kwargs):
     '''
     Artstein and Poesio's annotator bias [ArtsteinPoesio2008]_.
     '''
-    # pylint: disable=W0142
+
     return __fnc_metric__(__artstein_poesio_bias_linear__, dataset, **kwargs)
 

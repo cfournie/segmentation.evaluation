@@ -20,7 +20,7 @@ def compute_pairwise_values(fnc_metric, dataset_a, dataset_b=None, **kwargs):
     :type fnc_metric:     func
     :type permuted:       bool
     '''
-    # pylint: disable=C0103,R0912,W0142
+
     pairs = dict()
     fnc_kwargs = dict(kwargs)
     # Obtain parameters
@@ -37,7 +37,7 @@ def compute_pairwise_values(fnc_metric, dataset_a, dataset_b=None, **kwargs):
                                      multiple codings).
         :type inner_dataset: dict
         '''
-        # pylint: disable=R0912,R0914
+
         labels = set(inner_dataset_m.keys())
         if inner_dataset_n is not None:
             labels.update(inner_dataset_n.keys())

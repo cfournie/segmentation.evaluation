@@ -18,7 +18,7 @@ class TestWindowDiffPositions(TestCase):
     '''
     Test WindowDiff.
     '''
-    # pylint: disable=R0904,C0324
+
     kwargs = {'boundary_format' : BoundaryFormat.position,
               'lamprier_et_al_2007_fix' : False}
 
@@ -33,7 +33,7 @@ class TestWindowDiffPositions(TestCase):
         '''
         Test whether identical segmentations produce 0.0.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         self.assertEqual(window_diff(a, b, **self.kwargs), 0.0)
@@ -42,7 +42,7 @@ class TestWindowDiffPositions(TestCase):
         '''
         Test whether no segments versus some segments produce 1.0.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
@@ -55,7 +55,7 @@ class TestWindowDiffPositions(TestCase):
         Test whether all segments versus some segments produces 0.833
         erroneous windows.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
@@ -67,7 +67,7 @@ class TestWindowDiffPositions(TestCase):
         '''
         Test whether all segments versus no segments produces 1.0.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
         b = [1,1,1,1,1,1,1,1,1,1,1,1,1]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs), Decimal('1'))
@@ -77,7 +77,7 @@ class TestWindowDiffPositions(TestCase):
         '''
         Test mis-alignment.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs), # k = 2
@@ -89,7 +89,7 @@ class TestWindowDiffPositions(TestCase):
         '''
         Test extra boundary.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
@@ -102,7 +102,7 @@ class TestWindowDiffPositions(TestCase):
         Test whether a full miss and a translated boundary out of 4 produces
         0.25. 
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
@@ -114,7 +114,7 @@ class TestWindowDiffPositions(TestCase):
         '''
         Test the difference between FP and FN.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
@@ -132,7 +132,7 @@ class TestWindowDiffPositions(TestCase):
         '''
         Test parts.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         metric_kwargs = dict(self.kwargs)
@@ -161,7 +161,7 @@ class TestWindowDiffPositions(TestCase):
         '''
         Test whether no segments versus some segments produce 1.0.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         metric_kwargs = dict(self.kwargs)
@@ -176,7 +176,7 @@ class TestWindowDiffMasses(TestCase):
     '''
     Test WindowDiff.
     '''
-    # pylint: disable=R0904,C0324
+
     kwargs = {'boundary_format' : BoundaryFormat.mass,
               'lamprier_et_al_2007_fix' : False}
 
@@ -239,7 +239,7 @@ class TestWindowDiffMasses(TestCase):
 
 
 class TestPairwiseWindowDiff(TestCase):
-    # pylint: disable=R0904,E1101,W0232
+
     '''
     Test pairwise WindowDiff.
     '''
@@ -267,7 +267,7 @@ class TestPairwiseWindowDiff(TestCase):
         '''
         Test a comparison that is troublesome when using lamprier_et_al_2007_fix 
         '''
-        # pylint: disable=C0103
+
         wd = window_diff(KAZANTSEVA2012_G5['ch4']['an2'],
                          KAZANTSEVA2012_G5['ch4']['an1'],
                          lamprier_et_al_2007_fix=True)

@@ -15,7 +15,7 @@ class TestDataset(unittest.TestCase):
     '''
     Test data i/o functions and package.
     '''
-    #pylint: disable=R0904,C0103
+
     
     def test_dataset(self):
         '''
@@ -94,7 +94,7 @@ class TestUtils(unittest.TestCase):
     '''
     Test data merge functions.
     '''
-    #pylint: disable=R0904,C0103
+
     test_data_dir = os.path.split(__file__)[0]
 
     def test_load_nested_folders_dict(self):

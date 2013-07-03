@@ -27,7 +27,7 @@ class SegmentationMetricError(Exception):
 
 
 def __fnc_metric__(fnc_metric, args, kwargs, kw_defaults):
-    # pylint: disable=W0142
+
     from ..data import Dataset
     # Create default keyword arguments
     metric_kwargs = dict(kw_defaults)

@@ -18,7 +18,7 @@ class TestModule(unittest.TestCase):
     '''
     Test module loading.
     '''
-    #pylint: disable=R0904,C0103
+
     def test_dir(self):
         self.assertEquals(set(dir(segeval)),
             set(['Average', 'BoundaryFormat', 'COMPLETE_AGREEMENT',
@@ -46,7 +46,7 @@ class TestExamples(unittest.TestCase):
     '''
     Example of segeval function usage.
     '''
-    #pylint: disable=R0904,C0103
+
 
     masses_an1 = KAZANTSEVA2012_G5['ch1']['an1']
     masses_an2 = KAZANTSEVA2012_G5['ch1']['an2']
@@ -56,7 +56,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test actual_agreement_linear.
         '''
-        #pylint: disable=C0324
+
 
         self.assertAlmostEquals(Decimal('0.25645756'),
             actual_agreement_linear(KAZANTSEVA2012_G5))
@@ -66,7 +66,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test artstein_poesio_bias_linear.
         '''
-        #pylint: disable=C0324
+
 
         self.assertAlmostEquals(Decimal('0.00841453'),
             artstein_poesio_bias_linear(KAZANTSEVA2012_G5))
@@ -76,7 +76,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test fleiss_kappa_linear.
         '''
-        #pylint: disable=C0324
+
 
         self.assertAlmostEquals(Decimal('0.23740302'),
             fleiss_kappa_linear(KAZANTSEVA2012_G5))
@@ -86,7 +86,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test fleiss_pi_linear.
         '''
-        #pylint: disable=C0324
+
 
         self.assertAlmostEquals(Decimal('0.23076438'),
             fleiss_pi_linear(KAZANTSEVA2012_G5))
@@ -96,7 +96,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test precision.
         '''
-        #pylint: disable=C0324
+
         cm = boundary_confusion_matrix(self.masses_an1, self.masses_an2)
         self.assertAlmostEquals(Decimal('0.14285714'), precision(cm))
 
@@ -105,7 +105,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test recall.
         '''
-        #pylint: disable=C0324
+
         cm = boundary_confusion_matrix(self.masses_an1, self.masses_an2)
         self.assertAlmostEquals(Decimal('0.14285714'), recall(cm))
 
@@ -114,7 +114,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test fmeasure.
         '''
-        #pylint: disable=C0324
+
         cm = boundary_confusion_matrix(self.masses_an1, self.masses_an2)
         self.assertAlmostEquals(Decimal('0.25000000'), fmeasure(cm))
 
@@ -123,7 +123,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test boundary_statistics.
         '''
-        #pylint: disable=C0324
+
         self.assertEquals(24, len(boundary_statistics(KAZANTSEVA2012_G5)))
 
 
@@ -131,7 +131,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test boundary_edit_distance.
         '''
-        #pylint: disable=C0324
+
         edits = ([(1, 'b'), (1, 'b'), (1, 'b')], [], [(9, 10, 1)])
         self.assertEquals(edits, boundary_edit_distance(
             boundary_string_from_masses(self.masses_an1),
@@ -142,7 +142,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test compute_window_size.
         '''
-        #pylint: disable=C0324
+
         self.assertEquals(3, compute_window_size(self.masses_an1))
         self.assertEquals(3, compute_window_size(KAZANTSEVA2012_G5))
 
@@ -151,7 +151,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test pk.
         '''
-        #pylint: disable=C0324
+
         mean, std, var, stderr, count = \
             summarize(pk(KAZANTSEVA2012_G5))
         self.assertAlmostEquals(Decimal('0.35530058'), mean)
@@ -165,7 +165,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test window_diff.
         '''
-        #pylint: disable=C0324
+
         mean, std, var, stderr, count = \
             summarize(window_diff(KAZANTSEVA2012_G5))
         self.assertAlmostEquals(Decimal('0.42514977'), mean)
@@ -179,7 +179,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test boundary_string_from_masses.
         '''
-        #pylint: disable=C0324
+
 
         self.assertEquals((
             frozenset([]), frozenset([]), frozenset([]), frozenset([]),
@@ -192,7 +192,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test convert_positions_to_masses.
         '''
-        #pylint: disable=C0324
+
         self.assertEquals((4,2), convert_positions_to_masses([1,1,1,1,2,2]))
 
 
@@ -200,7 +200,7 @@ class TestExamples(unittest.TestCase):
         '''
         Test convert_masses_to_positions.
         '''
-        #pylint: disable=C0324
+
 
         self.assertAlmostEquals((1,1,1,1,2,2),
             convert_masses_to_positions((4,2)))

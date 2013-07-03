@@ -13,7 +13,7 @@ class TestMultipleBoundaries(unittest.TestCase):
     '''
     Test multiple boundary edit distance.
     '''
-    # pylint: disable=R0904,C0324,C0103,C0301
+
 
     def test_edit_distance_identity(self):
         '''

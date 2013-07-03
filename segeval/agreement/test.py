@@ -14,7 +14,7 @@ class TestAgreement(unittest.TestCase):
     '''
     Test actual agreement.
     '''
-    # pylint: disable=R0904
+
     kwargs = {'return_parts' : False}
 
     def test_agreement_g5(self):

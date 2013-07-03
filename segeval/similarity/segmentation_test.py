@@ -15,7 +15,7 @@ class TestSegmentation(unittest.TestCase):
     '''
     Test.
     '''
-    # pylint: disable=R0904,C0103,C0324
+
     
     def test_fn(self):
         '''

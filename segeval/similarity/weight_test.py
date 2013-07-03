@@ -11,7 +11,7 @@ class TestWeight(unittest.TestCase):
     '''
     Test similarity helper functions.
     '''
-    # pylint: disable=R0904,C0103,C0324
+
     
     def test_weight_t_scale(self):
         '''

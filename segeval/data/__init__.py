@@ -4,7 +4,7 @@ files.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-# pylint: disable=C0103
+
 import os
 import csv
 import json
@@ -30,7 +30,7 @@ class Dataset(defaultdict):
     '''
     Represents a set of texts (i.e., items) that have been segmentations by coders.
     '''
-    # pylint: disable=R0903
+
     
     def __init__(self, item_coder_data=None, properties=None,
                  boundary_types=None, boundary_format=BoundaryFormat.mass):
@@ -126,7 +126,7 @@ def load_nested_folders_dict(containing_dir, filetype, dataset=None,
     :type filetype: str
 
     '''
-    # pylint: disable=R0914
+
     # Create empty dataset
     if dataset is None:
         dataset = Dataset()

@@ -6,7 +6,7 @@ Test data for unit tests that has been selected from
 '''
 from . import Dataset
 from ..format import BoundaryFormat
-#pylint: disable=W0105
+
 
 
 KAZANTSEVA2012_G5 = Dataset(

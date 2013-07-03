@@ -9,7 +9,7 @@ from . import __fnc_metric__, __actual_agreement_linear__
 
 
 def __fleiss_kappa_linear__(dataset, **kwargs):
-    # pylint: disable=C0103,R0914,W0142
+
     metric_kwargs = dict(kwargs)
     metric_kwargs['return_parts'] = True
     # Arguments
@@ -60,6 +60,6 @@ def fleiss_kappa_linear(dataset, **kwargs):
     [DaviesFleiss1982]_.  For 2 coders, this is equivalent to Cohen's :math:`\kappa`
     [Cohen1960]_.
     '''
-    # pylint: disable=W0142
+
     return __fnc_metric__(__fleiss_kappa_linear__, dataset, **kwargs)
 

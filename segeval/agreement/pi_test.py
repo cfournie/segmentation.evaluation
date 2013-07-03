@@ -14,7 +14,7 @@ class TestPi(unittest.TestCase):
     '''
     Test segmentation versions of Scott's Pi and Fleiss' Multi-Pi.
     '''
-    # pylint: disable=R0904
+
 
     def test_fliess_pi_g5(self):
         '''
@@ -59,7 +59,7 @@ class TestPi(unittest.TestCase):
         '''
         Test Fleiss' Pi.
         '''
-        # pylint: disable=C0324,C0103
+
         data1 = {'i1': {'c1' : [2,8,2,1],
                         'c2' : [2,1,7,2,1]}}
         pi1  = fleiss_pi_linear(data1)
@@ -80,7 +80,7 @@ class TestPi(unittest.TestCase):
         '''
         Test Pi upon a hypothetical dataset containing complete agreement.
         '''
-        # pylint: disable=C0103
+
         data_complete = COMPLETE_AGREEMENT
         pi = fleiss_pi_linear(data_complete)
         self.assertEqual(pi, 1.0)

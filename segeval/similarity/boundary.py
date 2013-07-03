@@ -10,7 +10,7 @@ from decimal import Decimal
 
 
 def __boundary_similarity__(*args, **kwargs):
-    # pylint: disable=C0103,R0913,R0914
+
     metric_kwargs = dict(kwargs)
     del metric_kwargs['return_parts']
     del metric_kwargs['one_minus']
@@ -40,7 +40,7 @@ def boundary_similarity(*args, **kwargs):
     '''
     Computes Boundary Similarity (B)
     '''
-    # pylint: disable=W0142
+
     return __fnc_metric__(__boundary_similarity__, args, kwargs,
                           SIMILARITY_METRIC_DEFAULTS)
 

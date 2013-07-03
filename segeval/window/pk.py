@@ -13,7 +13,7 @@ from ..format import BoundaryFormat, convert_masses_to_positions
 
 def __pk__(hypothesis, reference, window_size, one_minus, boundary_format,
            return_parts, fnc_round):
-    # pylint: disable=C0103,R0913
+
     # Convert from masses into positions 
     if boundary_format == BoundaryFormat.mass:
         reference  = convert_masses_to_positions(reference)
@@ -59,6 +59,6 @@ length (%(ref)i is not %(hyp)i).' % {'ref' : len(reference),
 
 
 def pk(*args, **kwargs):
-    # pylint: disable=W0142
+
     return __fnc_metric__(__pk__, args, kwargs, WINDOW_METRIC_DEFAULTS)
 

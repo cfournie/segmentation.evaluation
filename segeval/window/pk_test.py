@@ -18,7 +18,7 @@ class TestPk(TestCase):
     '''
     Test Pk.
     '''
-    # pylint: disable=R0904
+
     kwargs = {'boundary_format' : BoundaryFormat.position}
     
     def test_one_minus(self):
@@ -46,7 +46,7 @@ class TestPk(TestCase):
         '''
         Test whether identical segmentations produce 0.0.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         one_minus_kwargs = dict(TestPk.kwargs)
@@ -58,7 +58,7 @@ class TestPk(TestCase):
         '''
         Test whether no segments versus some segments produce 1.0.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         self.assertEqual(pk(b, a, **self.kwargs),
@@ -71,7 +71,7 @@ class TestPk(TestCase):
         Test whether all segments versus some segments produces 7/11 = 0.636
         erroneous windows.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         self.assertEqual(pk(a, b, **self.kwargs),
@@ -83,7 +83,7 @@ class TestPk(TestCase):
         '''
         Test whether all segments versus no segments produces 1.0.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
         b = [1,1,1,1,1,1,1,1,1,1,1,1,1]
         self.assertEqual(pk(a, b, **self.kwargs), 1.0)
@@ -94,7 +94,7 @@ class TestPk(TestCase):
         Test whether 2/3 total segments participate in mis-alignment produces
         0.182.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         self.assertEqual(pk(a, b, **self.kwargs),
@@ -106,7 +106,7 @@ class TestPk(TestCase):
         '''
         Test whether 1/3 segments that are non-existent produces 0.091.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
         self.assertEqual(pk(a, b, **self.kwargs),
@@ -119,7 +119,7 @@ class TestPk(TestCase):
         Test whether a full miss and a translated boundary out of 4 produces
         0.273. 
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
         self.assertEqual(pk(a, b, **self.kwargs),
@@ -132,7 +132,7 @@ class TestPk(TestCase):
         Test whether a full miss and a translated boundary out of 4 produces
         0.273. 
         '''
-        # pylint: disable=C0324,C0103
+
         metric_kwargs = dict(self.kwargs)
         metric_kwargs['hypothesis'] = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         metric_kwargs['reference'] = [1,1,1,1,1,2,3,3,4,4,4,4,4]
@@ -143,7 +143,7 @@ class TestPk(TestCase):
         '''
         Test parts.
         '''
-        # pylint: disable=C0324,C0103
+
         a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         metric_kwargs = dict(self.kwargs)
@@ -177,7 +177,7 @@ class TestPk(TestCase):
 
 
 class TestPairwisePkMeasure(TestCase):
-    # pylint: disable=R0904,E1101,W0232
+
     '''
     Test pairwise Pk.
     '''

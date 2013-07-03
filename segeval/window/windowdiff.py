@@ -73,7 +73,7 @@ def __window_diff__(hypothesis, reference, window_size, one_minus,
     .. note:: See :func:`segeval.convert_masses_to_positions` for an example of
               the input format.
     '''
-    # pylint: disable=C0103,R0913,R0914,R0912
+
     # Convert from masses into positions 
     if boundary_format == BoundaryFormat.mass:
         reference  = convert_masses_to_positions(reference)
@@ -136,7 +136,7 @@ length (%(ref)i is not %(hyp)i).' % {'ref' : len(reference),
 
 
 def window_diff(*args, **kwargs):
-    # pylint: disable=W0142
+
     return __fnc_metric__(__window_diff__, args, kwargs,
                           WINDOWDIFF_METRIC_DEFAULTS)
 

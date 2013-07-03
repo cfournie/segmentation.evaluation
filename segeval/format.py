@@ -5,7 +5,7 @@ Segmentation encoding format converstion utilities.
 '''
 from collections import Counter
 from .util.lang import enum
-# pylint: disable=C0103
+
 
 
 BoundaryFormat = enum(position='position', mass='mass', sets='sets')

@@ -13,7 +13,7 @@ class TestCase(unittest.TestCase):
     A test case that supports performing assertAlmostEquals upon lists, tuples,
     or dicts of values.
     '''
-    # pylint: disable=R0904,C0324
+
     DECIMAL_PLACES = 4
 
     def assertAlmostEquals(self, first, second, places=DECIMAL_PLACES,
@@ -21,7 +21,7 @@ class TestCase(unittest.TestCase):
         '''
         Automatically converts values to floats.
         '''
-        # pylint: disable=C0103,R0913
+
         if isinstance(first, dict) and isinstance(second, dict):
             for item in set(first.keys() + second.keys()):
                 if not msg:
@@ -63,7 +63,7 @@ class TestTestCase(TestCase):
     '''
     Test the test utilities.
     '''
-    # pylint: disable=R0904
+
     
     def test_almost_equal_values(self):
         '''
@@ -121,7 +121,7 @@ class TestTestCase(TestCase):
     '''
     Test the test utilities.
     '''
-    # pylint: disable=R0904
+
     def test_fnc_metric_missing_args(self):
         fnc_metric = lambda x: x
         args = []

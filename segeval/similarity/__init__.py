@@ -27,7 +27,7 @@ def __boundary_statistics__(segs_a, segs_b, boundary_types, boundary_format,
     '''
     Compute boundary similarity applying the weighting functions specified.
     '''
-    # pylint: disable=C0103,R0913,R0914
+
     # Check format
     if boundary_format == BoundaryFormat.sets:
         pass # Correct boundary format
@@ -77,7 +77,7 @@ def __boundary_confusion_matrix__(*args, **kwargs):
     '''
     Create a confusion matrix using boundary edit distance.
     '''
-    # pylint: disable=C0103,R0913,R0914,W0142
+
     # Trim kwargs
     metric_kwargs = dict(kwargs)
     del metric_kwargs['return_parts']
@@ -117,13 +117,13 @@ def __boundary_confusion_matrix__(*args, **kwargs):
 
 
 def boundary_confusion_matrix(*args, **kwargs):
-    # pylint: disable=W0142
+
     return __fnc_metric__(__boundary_confusion_matrix__, args, kwargs,
                           SIMILARITY_METRIC_DEFAULTS)
 
 
 def boundary_statistics(*args, **kwargs):
-    # pylint: disable=W0142
+
     default_kwargs = dict(SIMILARITY_METRIC_DEFAULTS)
     del default_kwargs['one_minus']
     del default_kwargs['return_parts']

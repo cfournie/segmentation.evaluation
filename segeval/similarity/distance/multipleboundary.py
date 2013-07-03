@@ -26,7 +26,7 @@ def __additions_substitutions__(d, a, b):
     :type a: set
     :type b: set
     '''
-    # pylint: disable=C0103
+
     additions     = abs(len(a) - len(b))
     substitutions = (len(d) - additions) / 2
     return additions, substitutions
@@ -44,7 +44,7 @@ def __additions_substitutions_sets__(d, a, b):
     :type a: set
     :type b: set
     '''
-    # pylint: disable=C0103
+
     substitutions = list()
     delta = None
     for perm_a in permutations(sorted(a)):
@@ -78,7 +78,7 @@ def __has_substitutions__(i, j, d, options_set):
     Determine whether two substitutions are present involving the boundary 'd'
     at the positions 'i' and 'j'.
     '''
-    # pylint: disable=C0103
+
     present = False
     if i in options_set and d in options_set[i][0] and j in options_set and d in options_set[j][0]:
         d_i, a_i, b_i = options_set[i]
@@ -95,7 +95,7 @@ def __overlaps_existing__(i, j, d, options_transp):
     previously identified involving the boundary 'd' at the positions 'i' and
     'j'.
     '''
-    # pylint: disable=C0103
+
     def check_position(position):
         '''
         Check a position for an overlapping transposition
@@ -115,7 +115,7 @@ def __transpositions__(boundary_string_a, boundary_string_b, n, options_set):
     would overlap from the set of potential additions/deletions and
     substitutions.
     '''
-    # pylint: disable=C0103,R0914
+
     options_transp = dict()
     transpositions = list()
     for n_i in sorted(n):
@@ -165,7 +165,7 @@ def __optional_set_edits__(boundary_string_a, boundary_string_b):
     '''
     Identify all potential additions/deletions and substitutions.
     '''
-    # pylint: disable=C0103
+
     options_set = dict()
     for i, value in enumerate(zip(boundary_string_a, boundary_string_b)):
         a_i, b_i = value
@@ -187,7 +187,7 @@ def __boundary_edit_distance__(boundary_string_a, boundary_string_b, n_t):
     :param n_t: transposition spanning sizes allowed
     :type n_t:  list or set
     '''
-    # pylint: disable=C0103
+
     
     # Find potential addition/deletion/substitution operations
     options_set = __optional_set_edits__(boundary_string_a,
@@ -221,7 +221,7 @@ def boundary_edit_distance(boundary_string_a, boundary_string_b, n_t=2):
     :type boundary_string_b:  tuple
     :type n_t:  int
     '''
-    # pylint: disable=C0103
+
     n_t = range(2, n_t + 1)
     return __boundary_edit_distance__(boundary_string_a, boundary_string_b, n_t)
 

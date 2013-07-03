@@ -13,7 +13,7 @@ class TestTsv(unittest.TestCase):
     '''
     Test data merge functions.
     '''
-    #pylint: disable=R0904,C0103
+
     
     test_data_dir = os.path.split(__file__)[0]
     
