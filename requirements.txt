@@ -1,3 +1,4 @@
 segeval
+nose
 coverage>=3.6
 coveralls
