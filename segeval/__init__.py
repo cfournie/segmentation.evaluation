@@ -10,7 +10,7 @@ from types import ModuleType
 
 
 # Package description
-__version_number__ = '2.0.4'
+__version_number__ = '2.0.5'
 __release__ = None
 __version__ = '-'.join((__version_number__, __release__)) if __release__ is not None else __version_number__
 __project__ = 'SegEval'
