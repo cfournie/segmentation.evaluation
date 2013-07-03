@@ -1,5 +1,6 @@
 test:
-	python -m unittest discover -s . -p '*est.py'
+	cd segeval
+	nosetests
 coverage:
 	cd segeval
 	nosetests --with-coverage --cover-package=segeval
