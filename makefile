@@ -7,7 +7,7 @@ coverage:
 coverage_html: coverage
 	coverage html 
 coveralls: coverage
-	coveralls --verbose
+	coveralls
 build:
 	python setup.py sdist --formats=gztar,zip
 install:
