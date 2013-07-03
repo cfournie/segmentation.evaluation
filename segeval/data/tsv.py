@@ -4,7 +4,6 @@ TSV output module (for general TSV writing operations).
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import csv
-import os
 from ..format import convert_positions_to_masses
 
 
@@ -14,7 +13,7 @@ DEFAULT_DELIMITER = '\t'
 def input_linear_mass_tsv(filepath, delimiter=DEFAULT_DELIMITER):
     '''
     Takes a file path.  Returns segmentation mass codings as a :class:`Dataset`.
-    
+
     :param filepath: path to the mass file containing segment mass codings.
     :param delimiter:    the delimiter used when reading a TSV file (by default,
                          a tab, but it can also be a comma, whitespace, etc.
@@ -55,16 +54,16 @@ def input_linear_mass_tsv(filepath, delimiter=DEFAULT_DELIMITER):
 def input_linear_positions_tsv(filepath, delimiter=DEFAULT_DELIMITER):
     '''
     Takes a file path.  Returns segmentation mass codings as a :class:`Dataset`.
-    
+
     :param filepath: path to the mass file containing segment position
                          codings.
     :param delimiter:    the delimiter used when reading a TSV file (by default,
                          a tab, but it can also be a comma, whitespace, etc.
     :type filepath: str
     :type delimiter: str
-    
+
     .. deprecated:: 1.0
-    
+
     .. warning:: This I/O function is for legacy files only and will be removed
         in later versions.
     '''
@@ -75,4 +74,3 @@ def input_linear_positions_tsv(filepath, delimiter=DEFAULT_DELIMITER):
             dataset[item][coder] = convert_positions_to_masses(positions)
     # Return
     return dataset
-

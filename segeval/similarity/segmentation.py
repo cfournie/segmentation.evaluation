@@ -11,7 +11,7 @@ from decimal import Decimal
 
 def __segmentation_similarity__(*args, **kwargs):
     '''
-    S
+    Segmentation Similarity (S).
     '''
 
     metric_kwargs = dict(kwargs)
@@ -27,7 +27,7 @@ def __segmentation_similarity__(*args, **kwargs):
     pbs = statistics['pbs'] * len(boundary_types)
     # Fraction
     denominator = pbs
-    numerator   = pbs - statistics['count_edits']
+    numerator = pbs - statistics['count_edits']
     if return_parts:
         return numerator, denominator
     else:
@@ -39,7 +39,8 @@ def __segmentation_similarity__(*args, **kwargs):
 
 
 def segmentation_similarity(*args, **kwargs):
-
+    '''
+    Segmentation Similarity (S).
+    '''
     return __fnc_metric__(__segmentation_similarity__, args, kwargs,
                           SIMILARITY_METRIC_DEFAULTS)
-

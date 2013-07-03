@@ -9,14 +9,19 @@ from . import __fnc_metric__, __actual_agreement_linear__
 
 
 def __fleiss_pi_linear__(items_masses, **kwargs):
-
+    '''
+    Calculates Fleiss' :math:`\pi` (or multi-:math:`\pi`), originally proposed in
+    [Fleiss1971]_, and is equivalent to Siegel and Castellan's :math:`K`
+    [SiegelCastellan1988]_.  For 2 coders, this is equivalent to Scott's :math:`\pi`
+    [Scott1955]_.
+    '''
     metric_kwargs = dict(kwargs)
     metric_kwargs['return_parts'] = True
     # Arguments
     return_parts = kwargs['return_parts']
     # Check that there are an equal number of items for each coder
     num_items = len(items_masses.values()[0].keys())
-    if len([True for coder_segs in items_masses.values() \
+    if len([True for coder_segs in items_masses.values()
             if len(coder_segs.values()) is not num_items]) > 0:
         raise Exception('Unequal number of items contained.')
     # Initialize totals
@@ -50,7 +55,4 @@ def fleiss_pi_linear(dataset, **kwargs):
     [SiegelCastellan1988]_.  For 2 coders, this is equivalent to Scott's :math:`\pi`
     [Scott1955]_.
     '''
-
     return __fnc_metric__(__fleiss_pi_linear__, dataset, **kwargs)
-
-

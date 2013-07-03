@@ -8,11 +8,11 @@ from . import (weight_s_scale, weight_t_scale)
 
 
 class TestWeight(unittest.TestCase):
+
     '''
     Test similarity helper functions.
     '''
 
-    
     def test_weight_t_scale(self):
         '''
         Test to see that penalties for substitution edits are discounted from
@@ -21,7 +21,6 @@ class TestWeight(unittest.TestCase):
         transpositions = [[1,2], [1,3], [1,4]]
         weight = weight_t_scale(transpositions, 4)
         self.assertEqual(weight, 1.5)
-        
 
     def test_weight_s_scale(self):
         '''
@@ -33,4 +32,3 @@ class TestWeight(unittest.TestCase):
         self.assertEqual(weight, 1.5)
         weight = weight_s_scale(substitutions, 5, 2)
         self.assertEqual(weight, 1.5)
-

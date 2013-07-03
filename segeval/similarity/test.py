@@ -10,21 +10,22 @@ from ..format import BoundaryFormat
 from ..data.samples import HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER
 from ..ml import precision, recall, fmeasure
 
+
 class TestSimilarity(unittest.TestCase):
+
     '''
     Test similarity helper functions.
     '''
 
-    
     def test_boundary_confusion_matrix(self):
         '''
         Test confusion matrix.
         '''
         cm = boundary_confusion_matrix(
-            [set([ ]), set([2]), set([]), set([ ]), set([1]), set([1]),
+            [set([]), set([2]), set([]), set([]), set([1]), set([1]),
              set([1]), set([1])],
-            [set([1]), set([1]), set([]), set([1]), set([ ]), set([1]),
-             set([ ]), set([ ])],
+            [set([1]), set([1]), set([]), set([1]), set([]), set([1]),
+             set([]), set([])],
             boundary_format=BoundaryFormat.sets)
         self.assertEqual(cm[None][1], 2)
         self.assertEqual(cm[1][None], 1)
@@ -34,7 +35,7 @@ class TestSimilarity(unittest.TestCase):
         self.assertEqual(cm[1][2], 0)
         self.assertEqual(cm[1][1], 1.5)
         self.assertEqual(cm[2][2], 0)
-    
+
     def test_boundary_statistics(self):
         '''
         Test boundary statistics.
@@ -49,18 +50,18 @@ class TestSimilarity(unittest.TestCase):
              'additions': [(1, 'a')],
              'count_edits': Decimal('1'),
              'substitutions': []}, value)
-    
+
     def test_bed_confusion_matrix(self):
         '''
         Test BED-based confusion matrix upon two segmentations.
         '''
         hypothesis = (5,5,5,5,1)
-        reference  = HEARST_1997_STARGAZER['stargazer']['2']
+        reference = HEARST_1997_STARGAZER['stargazer']['2']
         value = boundary_confusion_matrix(hypothesis, reference)
         self.assertAlmostEquals(float(precision(value)), 0.23076923)
         self.assertAlmostEquals(float(recall(value)), 0.23076923)
         self.assertAlmostEquals(float(fmeasure(value)), 0.375)
-    
+
     def test_bed_confusion_matrix_datasets(self):
         '''
         Test BED-based confusion matrix upon a dataset.
@@ -86,4 +87,3 @@ class TestSimilarity(unittest.TestCase):
         self.assertAlmostEquals(float(hyp_f['stargazer,h2,1']), 0.58333333)
         self.assertAlmostEquals(float(hyp_f['stargazer,h1,2']), 0.6)
         self.assertAlmostEquals(float(hyp_f['stargazer,h2,2']), 0.5)
-

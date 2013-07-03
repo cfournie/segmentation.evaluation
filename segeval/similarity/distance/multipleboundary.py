@@ -8,7 +8,7 @@ from itertools import permutations
 from collections import namedtuple
 
 
-Addition = namedtuple('Addition', 'type side') # For side; a = from a, b = from b
+Addition = namedtuple('Addition', 'type side')  # For side; a = from a, b = from b
 Substitution = namedtuple('Substitution', 'type_a type_b')
 Transposition = namedtuple('Transposition', 'start end type')
 Difference = namedtuple('Difference', 'sim a_b b_a')
@@ -18,7 +18,7 @@ def __additions_substitutions__(d, a, b):
     '''
     Compute the number of additions and substitutions for a given pair of
     boundary string positions using:
-    
+
     :param d: Symmetric difference between the pair.
     :param a: Difference between the pair; A / B.
     :param b: Difference between the pair; B / A.
@@ -27,7 +27,7 @@ def __additions_substitutions__(d, a, b):
     :type b: set
     '''
 
-    additions     = abs(len(a) - len(b))
+    additions = abs(len(a) - len(b))
     substitutions = (len(d) - additions) / 2
     return additions, substitutions
 
@@ -36,7 +36,7 @@ def __additions_substitutions_sets__(d, a, b):
     '''
     Compute the sets of additions and substitutions for a given pair of
     boundary string positions using:
-    
+
     :param d: Symmetric difference between the pair.
     :param a: Difference between the pair; A / B.
     :param b: Difference between the pair; B / A.
@@ -51,7 +51,7 @@ def __additions_substitutions_sets__(d, a, b):
         for perm_b in permutations(sorted(b)):
             current_substitutions = zip(perm_a, perm_b)
             current_substitutions = set(current_substitutions)
-            current_delta = sum(abs(a_i - b_i) \
+            current_delta = sum(abs(a_i - b_i)
                                 for a_i, b_i in current_substitutions)
             if delta is None or current_delta < delta:
                 delta = current_delta
@@ -70,7 +70,7 @@ def __additions_substitutions_sets__(d, a, b):
     for addition in b - set(substituted):
         added.append(Addition(addition, 'b'))
     assert len(added) is len(additions)
-    return added, set([Substitution(a, b) for a, b in set(substitutions)])
+    return added, set([Substitution(a_i, b_i) for a_i, b_i in set(substitutions)])
 
 
 def __has_substitutions__(i, j, d, options_set):
@@ -87,8 +87,8 @@ def __has_substitutions__(i, j, d, options_set):
            __additions_substitutions__(d_j, a_j, b_j)[1] > 0:
             present = True
     return present
-       
-        
+
+
 def __overlaps_existing__(i, j, d, options_transp):
     '''
     Determine whether a  transposition would overlap another that has been
@@ -138,7 +138,7 @@ def __transpositions__(boundary_string_a, boundary_string_b, n, options_set):
             for d in t_p:
                 # Create transposition representation
                 option_transp = Transposition(i, j, d)
-                # Check to see that it does not overlap an existing 
+                # Check to see that it does not overlap an existing
                 # transposition and that 2 substitutions are not removed
                 if not __overlaps_existing__(i, j, d, options_transp) and \
                    not __has_substitutions__(i, j, d, options_set):
@@ -183,12 +183,11 @@ def __boundary_edit_distance__(boundary_string_a, boundary_string_b, n_t):
     Identify the minimum set of additions, substitutions, and transpositions
     that could be applied between two boundary strings for a given set
     of transpositions spanning lengths 'n_t'.
-    
+
     :param n_t: transposition spanning sizes allowed
     :type n_t:  list or set
     '''
 
-    
     # Find potential addition/deletion/substitution operations
     options_set = __optional_set_edits__(boundary_string_a,
                                          boundary_string_b)
@@ -196,7 +195,7 @@ def __boundary_edit_distance__(boundary_string_a, boundary_string_b, n_t):
     transpositions = __transpositions__(boundary_string_a,
                                         boundary_string_b, n_t, options_set)
     # Construct additions and substitutions
-    additions     = list()
+    additions = list()
     substitutions = list()
     for option in options_set.values():
         current_additions, current_substitutions = \
@@ -205,7 +204,7 @@ def __boundary_edit_distance__(boundary_string_a, boundary_string_b, n_t):
         substitutions.extend(current_substitutions)
     # Return
     return additions, substitutions, transpositions
-    
+
 
 def boundary_edit_distance(boundary_string_a, boundary_string_b, n_t=2):
     '''
@@ -224,4 +223,3 @@ def boundary_edit_distance(boundary_string_a, boundary_string_b, n_t=2):
 
     n_t = range(2, n_t + 1)
     return __boundary_edit_distance__(boundary_string_a, boundary_string_b, n_t)
-

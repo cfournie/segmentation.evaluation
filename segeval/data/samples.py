@@ -8,17 +8,16 @@ from . import Dataset
 from ..format import BoundaryFormat
 
 
-
 KAZANTSEVA2012_G5 = Dataset(
     {'ch1': {'an4': (2, 8, 2, 1),
              'an1': (11, 2),
              'an2': (2, 1, 7, 2, 1),
              'an3': (9, 4)},
      'ch11':{'an4': (10, 4, 3, 2, 1, 8, 3, 2, 6, 1, 2, 8, 10, 9, 4, 10, 4,
-                      8, 4, 3, 5, 4),
+                     8, 4, 3, 5, 4),
              'an1': (20, 22, 8, 11, 11, 11, 13, 11, 4),
              'an2': (1, 7, 2, 4, 3, 3, 10, 1, 1, 5, 3, 2, 8, 3, 3, 3, 14,
-                      4, 1, 1, 4, 4, 2, 7, 3, 2, 3, 3, 2, 1, 1),
+                     4, 1, 1, 4, 4, 2, 7, 3, 2, 3, 3, 2, 1, 1),
              'an3': (10, 10, 15, 11, 4, 10, 13, 5, 4, 23, 6)},
      'ch4': {'an4': (2, 9, 2, 5, 2, 19, 1, 6),
              'an1': (17, 25, 4),
@@ -111,17 +110,17 @@ Segmentations provided by 6 coders (labeled group 2) of 4 chapters of
 '''
 
 HEARST_1997_STARGAZER = Dataset(
-    {'stargazer' :
-        {'1' : (2,3,3,1,3,6,3),
-         '2' : (2,8,2,4,2,3),
-         '3' : (2,1,2,3,1,3,1,3,2,2,1),
-         '4' : (2,1,4,1,1,3,1,4,3,1),
-         '5' : (3,2,4,3,5,4),
-         '6' : (2,3,4,2,2,5,3),
-         '7' : (2,3,2,2,3,1,3,2,3)}
+    {'stargazer':
+        {'1': (2,3,3,1,3,6,3),
+         '2': (2,8,2,4,2,3),
+         '3': (2,1,2,3,1,3,1,3,2,2,1),
+         '4': (2,1,4,1,1,3,1,4,3,1),
+         '5': (3,2,4,3,5,4),
+         '6': (2,3,4,2,2,5,3),
+         '7': (2,3,2,2,3,1,3,2,3)}
      })
 '''
-Segmentations provided by 7 coders of a magazine article titled 
+Segmentations provided by 7 coders of a magazine article titled
 "Stargazers look for life" (Baker1990)_ collected by (Hearst1997)_::
 
     HEARST_1997_STARGAZER = \
@@ -135,12 +134,12 @@ Segmentations provided by 7 coders of a magazine article titled
 '''
 
 HYPOTHESIS_STARGAZER = Dataset(
-    {'stargazer' :
-        {'h1' : (2,6,4,2,4,3),
-         'h2' : (2,1,1,1,5,8,2,1)}
+    {'stargazer':
+        {'h1': (2,6,4,2,4,3),
+         'h2': (2,1,1,1,5,8,2,1)}
      })
 '''
-Segmentations provided by 7 coders of a magazine article titled 
+Segmentations provided by 7 coders of a magazine article titled
 "Stargazers look for life" (Baker1990)_ collected by (Hearst1997)_::
 
     HEARST_1997_STARGAZER = \
@@ -204,7 +203,7 @@ LARGE_DISAGREEMENT = Dataset(
      'item4': {'an5': (42,),
                'an6': (1,) * 42}})
 '''
-Contrived segmentations created by Chris Fournier to demonstrate large 
+Contrived segmentations created by Chris Fournier to demonstrate large
 disagreement, but varying item sizes::
 
     LARGE_DISAGREEMENT = Dataset(
@@ -230,7 +229,7 @@ MULTIPLE_BOUNDARY_TYPES = Dataset(
     boundary_types=frozenset([1, 2]),
     boundary_format=BoundaryFormat.sets)
 '''
-Contrived segmentations created by Chris Fournier to demonstrate large 
+Contrived segmentations created by Chris Fournier to demonstrate large
 disagreement, but varying item sizes::
 
     MULTIPLE_BOUNDARY_TYPES = Dataset(
@@ -243,4 +242,3 @@ disagreement, but varying item sizes::
          'item4': {'an4': (42),
                    'an1': (1) * 42}})
 '''
-

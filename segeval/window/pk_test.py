@@ -7,20 +7,21 @@ from decimal import Decimal
 from ..compute import summarize
 from ..format import BoundaryFormat
 from ..window.pk import pk
-from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, 
-    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
+from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
+                            COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
 from ..util import SegmentationMetricError
 from ..util.test import TestCase
 from ..data.samples import HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER
 
 
 class TestPk(TestCase):
+
     '''
     Test Pk.
     '''
 
-    kwargs = {'boundary_format' : BoundaryFormat.position}
-    
+    kwargs = {'boundary_format': BoundaryFormat.position}
+
     def test_one_minus(self):
         '''
         Test one minus.
@@ -101,7 +102,7 @@ class TestPk(TestCase):
                          Decimal('0.1818181818181818181818181818'))
         self.assertEqual(pk(b, a, **self.kwargs),
                          Decimal('0.1818181818181818181818181818'))
-    
+
     def test_extra_boundary(self):
         '''
         Test whether 1/3 segments that are non-existent produces 0.091.
@@ -113,11 +114,11 @@ class TestPk(TestCase):
                          Decimal('0.09090909090909090909090909091'))
         self.assertEqual(pk(b, a, **self.kwargs),
                          Decimal('0.09090909090909090909090909091'))
-    
+
     def test_full_miss_and_misaligned(self):
         '''
         Test whether a full miss and a translated boundary out of 4 produces
-        0.273. 
+        0.273.
         '''
 
         a = [1,1,1,1,2,2,2,2,3,3,3,3,3]
@@ -130,7 +131,7 @@ class TestPk(TestCase):
     def test_all_kwargs_hyp_ref(self):
         '''
         Test whether a full miss and a translated boundary out of 4 produces
-        0.273. 
+        0.273.
         '''
 
         metric_kwargs = dict(self.kwargs)
@@ -150,7 +151,7 @@ class TestPk(TestCase):
         metric_kwargs['return_parts'] = True
         self.assertEqual(pk(a, b, **metric_kwargs),
                          (7, 11))
-    
+
     def test_format_exception(self):
         '''
         Test format exception.
@@ -181,66 +182,66 @@ class TestPairwisePkMeasure(TestCase):
     '''
     Test pairwise Pk.
     '''
-    
+
     def test_kazantseva2012_g5(self):
         '''
         Calculate permuted pairwise Pk on Group 5 from the dataset
         collected in [KazantsevaSzpakowicz2012]_.
         '''
         self.assertAlmostEquals(summarize(pk(KAZANTSEVA2012_G5)),
-                         (Decimal('0.35530058282396693'),
-                          Decimal('0.11001760846099215'),
-                          Decimal('0.012103874171476172'),
-                          Decimal('0.015879673965138168'),
-                          48))
-    
+                               (Decimal('0.35530058282396693'),
+                                Decimal('0.11001760846099215'),
+                                Decimal('0.012103874171476172'),
+                                Decimal('0.015879673965138168'),
+                                48))
+
     def test_kazantseva2012_g2(self):
         '''
         Calculate mean permuted pairwise Pk on Group 2 from the dataset
         collected in [KazantsevaSzpakowicz2012]_.
         '''
         self.assertAlmostEquals(summarize(pk(KAZANTSEVA2012_G2)),
-                         (Decimal('0.2882256923776327507173609771'),
-                          Decimal('0.1454395656787966169084191445'),
-                          Decimal('0.02115266726483699483402909754'),
-                          Decimal('0.01327675514600517730547602481'),
-                          120))
-    
+                               (Decimal('0.2882256923776327507173609771'),
+                                Decimal('0.1454395656787966169084191445'),
+                                Decimal('0.02115266726483699483402909754'),
+                                Decimal('0.01327675514600517730547602481'),
+                                120))
+
     def test_large_disagreement(self):
         '''
         Calculate mean permuted pairwise Pk on a theoretical dataset
         containing large disagreement.
         '''
         self.assertAlmostEquals(summarize(pk(LARGE_DISAGREEMENT)),
-                         (1.0,
-                          0.0,
-                          0.0,
-                          0.0,
-                          8))
-    
+                               (1.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                8))
+
     def test_complete_agreement(self):
         '''
         Calculate mean permuted pairwise Pk on a theoretical dataset
         containing complete agreement.
         '''
         self.assertAlmostEquals(summarize(pk(COMPLETE_AGREEMENT)),
-                         (0.0,
-                          0.0,
-                          0.0,
-                          0.0,
-                          48))
-    
+                               (0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                48))
+
     def test_dataset_kwargs(self):
         '''
         Calculate mean permuted pairwise Pk on a theoretical dataset
         containing complete agreement.
         '''
         self.assertAlmostEquals(summarize(pk(dataset=COMPLETE_AGREEMENT)),
-                         (0.0,
-                          0.0,
-                          0.0,
-                          0.0,
-                          48))
+                               (0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                48))
 
     def test_pk_datasets(self):
         '''
@@ -253,4 +254,3 @@ class TestPairwisePkMeasure(TestCase):
         self.assertAlmostEquals(float(value['stargazer,h2,1']), 0.36842105)
         self.assertAlmostEquals(float(value['stargazer,h1,2']), 0.42105263)
         self.assertAlmostEquals(float(value['stargazer,h2,2']), 0.42105263)
-

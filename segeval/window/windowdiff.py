@@ -1,7 +1,7 @@
 '''
 Implementation of the WindowDiff segmentation evaluation metric described in
 [PevznerHearst2002]_ with an optional modification to fix incorrect error
-counting at the beginning and end of segmentations provided by 
+counting at the beginning and end of segmentations provided by
 [LamprierEtAl2007]_.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
@@ -16,8 +16,8 @@ from ..util import __fnc_metric__, SegmentationMetricError
 
 WINDOWDIFF_METRIC_DEFAULTS = dict(WINDOW_METRIC_DEFAULTS)
 WINDOWDIFF_METRIC_DEFAULTS.update({
-    'lamprier_et_al_2007_fix' : False
-    })
+    'lamprier_et_al_2007_fix': False
+})
 
 
 def __create_paired_window__(hypothesis, reference, window_size,
@@ -46,7 +46,7 @@ def __window_diff__(hypothesis, reference, window_size, one_minus,
     hypothetical segmentation against a reference segmentation for a given
     window size.  The standard method of calculating the window size
     is performed a window size is not specified.
-    
+
     :param hypothesis:     Hypothesis segmentation section labels
                                         sequence.
     :param reference:      Reference segmentation section labels
@@ -69,27 +69,27 @@ def __window_diff__(hypothesis, reference, window_size, one_minus,
     :type one_minus: bool
     :type lamprier_et_al_2007_fix: bool
     :type convert_from_masses: bool
-    
+
     .. note:: See :func:`segeval.convert_masses_to_positions` for an example of
               the input format.
     '''
 
-    # Convert from masses into positions 
+    # Convert from masses into positions
     if boundary_format == BoundaryFormat.mass:
-        reference  = convert_masses_to_positions(reference)
+        reference = convert_masses_to_positions(reference)
         hypothesis = convert_masses_to_positions(hypothesis)
     elif boundary_format != BoundaryFormat.position:
         raise SegmentationMetricError('Unsupported boundary format')
     # Check for input errors
     if len(reference) is not len(hypothesis):
         raise SegmentationMetricError(
-                    'Reference and hypothesis segmentations differ in position \
-length (%(ref)i is not %(hyp)i).' % {'ref' : len(reference),
-                                     'hyp' : len(hypothesis)})
+            'Reference and hypothesis segmentations differ in position \
+length (%(ref)i is not %(hyp)i).' % {'ref': len(reference),
+                                     'hyp': len(hypothesis)})
     # Compute window size to use if unspecified
     if window_size is None:
         window_size = __compute_window_size__(reference, fnc_round,
-                                                BoundaryFormat.position)
+                                              BoundaryFormat.position)
     # Create a set of pairs of units from each segmentation to go over using a
     # window
     units_ref_hyp = __create_paired_window__(hypothesis, reference,
@@ -106,7 +106,7 @@ length (%(ref)i is not %(hyp)i).' % {'ref' : len(reference),
         assert len(window) is window_size + 1
         # For pair in window
         for j in xrange(0, len(window) - 1):
-            ref_part, hyp_part = zip(*window[j:j+2])
+            ref_part, hyp_part = zip(*window[j:j + 2])
             # Boundary exists in the reference segmentation
             if ref_part[0] is not ref_part[1]:
                 ref_boundaries += 1
@@ -139,4 +139,3 @@ def window_diff(*args, **kwargs):
 
     return __fnc_metric__(__window_diff__, args, kwargs,
                           WINDOWDIFF_METRIC_DEFAULTS)
-

@@ -11,11 +11,11 @@ from ..util import SegmentationMetricError
 
 
 class TestConfusionMatrix(unittest.TestCase):
+
     '''
     Confusion matrix tests.
     '''
 
-    
     def test_matrix_set_add(self):
         '''
         Test matrix.
@@ -27,7 +27,7 @@ class TestConfusionMatrix(unittest.TestCase):
         self.assertEqual(matrix['p']['n'], 3)
         self.assertEqual(matrix['p']['f'], 0)
         self.assertEqual(matrix['a']['b'], 0)
-    
+
     def test_setitem(self):
         '''
         Ensure that __setitem__ raises an AttributeError
@@ -39,7 +39,7 @@ class TestConfusionMatrix(unittest.TestCase):
         except AttributeError:
             exception = True
         self.assertTrue(exception, 'AttributeError not raised')
-    
+
     def test_matrix_classes(self):
         '''
         Test matrix.
@@ -51,16 +51,16 @@ class TestConfusionMatrix(unittest.TestCase):
         self.assertEqual(matrix['p']['n'], 3)
         self.assertEqual(matrix['p']['f'], 0)
         self.assertEqual(matrix['a']['b'], 0)
-        
+
         self.assertEqual(matrix.classes(), set(['p', 'n', 'a', 'b', 'f']))
-        
-    
+
+
 class TestML(unittest.TestCase):
+
     '''
     Machine-learning metric tests.
     '''
 
-    
     def test_precision(self):
         '''
         Test precision.
@@ -70,14 +70,18 @@ class TestML(unittest.TestCase):
         matrix['p']['f'] += 1
         self.assertEqual(__precision__(matrix, 'p'), Decimal('0.5'))
         self.assertEqual(__precision__(matrix, 'f'), Decimal('0'))
-        self.assertEqual(precision(matrix, version=Average.micro), Decimal('0.5'))
-        self.assertEqual(precision(matrix, version=Average.macro), Decimal('0.25'))
+        self.assertEqual(
+            precision(matrix, version=Average.micro), Decimal('0.5'))
+        self.assertEqual(
+            precision(matrix, version=Average.macro), Decimal('0.25'))
         matrix = cm()
         matrix['p']['p'] += 1
         matrix['p']['f'] += 3
         matrix['f']['p'] += 1
-        self.assertEqual(precision(matrix, version=Average.micro), Decimal('0.2'))
-        self.assertEqual(precision(matrix, version=Average.macro), Decimal('0.125'))
+        self.assertEqual(
+            precision(matrix, version=Average.micro), Decimal('0.2'))
+        self.assertEqual(
+            precision(matrix, version=Average.macro), Decimal('0.125'))
         self.assertEqual(__precision__(matrix, 'p'), Decimal('0.25'))
         self.assertEqual(__precision__(matrix, 'f'), Decimal('0'))
         matrix = cm()
@@ -85,7 +89,8 @@ class TestML(unittest.TestCase):
         matrix['p']['f'] += 2
         matrix['f']['p'] += 1
         matrix['f']['f'] += 2
-        self.assertEqual(precision(matrix, version=Average.micro), Decimal('0.7'))
+        self.assertEqual(
+            precision(matrix, version=Average.micro), Decimal('0.7'))
         self.assertAlmostEqual(precision(matrix, version=Average.macro),
                                Decimal('0.69047'), 4)
         self.assertAlmostEqual(__precision__(matrix, 'p'),
@@ -107,7 +112,6 @@ class TestML(unittest.TestCase):
         self.assertEqual(__precision__(matrix, 'p'), Decimal('0'))
         self.assertEqual(__precision__(matrix, 'f'), Decimal('0'))
 
-
     def test_recall(self):
         '''
         Test recall.
@@ -124,7 +128,8 @@ class TestML(unittest.TestCase):
         matrix['p']['f'] += 3
         matrix['f']['p'] += 1
         self.assertEqual(recall(matrix, version=Average.micro), Decimal('0.2'))
-        self.assertEqual(recall(matrix, version=Average.macro), Decimal('0.25'))
+        self.assertEqual(
+            recall(matrix, version=Average.macro), Decimal('0.25'))
         self.assertEqual(__recall__(matrix, 'p'), Decimal('0.5'))
         self.assertEqual(__recall__(matrix, 'f'), Decimal('0'))
         matrix = cm()
@@ -154,7 +159,6 @@ class TestML(unittest.TestCase):
         self.assertEqual(__recall__(matrix, 'p'), Decimal('0'))
         self.assertEqual(__recall__(matrix, 'f'), Decimal('0'))
 
-
     def test_fmeasure(self):
         '''
         Test FMeasure.
@@ -162,7 +166,8 @@ class TestML(unittest.TestCase):
         matrix = cm()
         matrix['p']['p'] += 1
         matrix['p']['f'] += 1
-        self.assertAlmostEqual(__fmeasure__(matrix, 'p'), Decimal('0.66666'), 4)
+        self.assertAlmostEqual(
+            __fmeasure__(matrix, 'p'), Decimal('0.66666'), 4)
         self.assertEqual(__fmeasure__(matrix, 'f'), Decimal('0'))
         self.assertAlmostEqual(fmeasure(matrix, version=Average.micro),
                                Decimal('0.66666'), 4)
@@ -211,7 +216,6 @@ class TestML(unittest.TestCase):
         self.assertEqual(__fmeasure__(matrix, 'p'), Decimal('0'))
         self.assertEqual(__fmeasure__(matrix, 'f'), Decimal('0'))
 
-
     def test_exception_on_incorrect_average(self):
         '''
         Test exception on incorrect average.
@@ -219,5 +223,5 @@ class TestML(unittest.TestCase):
         matrix = cm()
         matrix['p']['p'] += 1
         matrix['p']['f'] += 1
-        self.assertRaises(SegmentationMetricError, fmeasure, matrix, version='incorrect')
-
+        self.assertRaises(
+            SegmentationMetricError, fmeasure, matrix, version='incorrect')

@@ -13,25 +13,26 @@ from ..util.math import mean
 
 WINDOW_METRIC_DEFAULTS = dict(METRIC_DEFAULTS)
 WINDOW_METRIC_DEFAULTS.update({
-    'window_size' : None,
-    'fnc_round' : round,
-    'permuted' : True
+    'window_size': None,
+    'fnc_round': round,
+    'permuted': True
 })
 
 
 def __compute_window_size__(reference, fnc_round, boundary_format):
     '''
     Compute a window size from a dict of segment masses.
-    
+
     :param masses: A dict of segment masses.
     :type masses: dict
     '''
     all_masses = list()
     # Define fnc
+
     def __list_coder_masses__(inner_coder_masses):
         '''
         Recursively collect all masses.
-        
+
         :param inner_coder_masses: Either a dict of dicts, or dict of a list of
             masses.
         :type inner_coder_masses: dict or list
@@ -64,5 +65,3 @@ def compute_window_size(reference, **kwargs):
     del metric_kwargs['window_size']
     del metric_kwargs['return_parts']
     return __compute_window_size__(reference, **metric_kwargs)
-
-    

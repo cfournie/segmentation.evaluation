@@ -4,7 +4,6 @@ Similarity utility functions based upon boundary edit distance.
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from __future__ import division
-from decimal import Decimal
 from .distance.multipleboundary import boundary_edit_distance
 from .weight import weight_a, weight_s_scale, weight_t_scale
 from ..metric import METRIC_DEFAULTS
@@ -16,21 +15,20 @@ from ..util import __fnc_metric__, SegmentationMetricError
 
 SIMILARITY_METRIC_DEFAULTS = dict(METRIC_DEFAULTS)
 SIMILARITY_METRIC_DEFAULTS.update({
-    'n_t' : 2,
-    'boundary_types' : frozenset([1]),
-    'weight' : (weight_a, weight_s_scale, weight_t_scale)
+    'n_t': 2,
+    'boundary_types': frozenset([1]),
+    'weight': (weight_a, weight_s_scale, weight_t_scale)
 })
 
 
-def __boundary_statistics__(segs_a, segs_b, boundary_types, boundary_format,
-                               n_t, weight):
+def __boundary_statistics__(segs_a, segs_b, boundary_types, boundary_format, n_t, weight):
     '''
     Compute boundary similarity applying the weighting functions specified.
     '''
 
     # Check format
     if boundary_format == BoundaryFormat.sets:
-        pass # Correct boundary format
+        pass  # Correct boundary format
     elif boundary_format == BoundaryFormat.mass:
         segs_a = boundary_string_from_masses(segs_a)
         segs_b = boundary_string_from_masses(segs_b)
@@ -44,8 +42,8 @@ def __boundary_statistics__(segs_a, segs_b, boundary_types, boundary_format,
     # Check length
     if len(segs_a) != len(segs_b):
         raise SegmentationMetricError(
-                'Segmentations differ in length ({0} != {1})'.format(
-                        len(segs_a), len(segs_b)))
+            'Segmentations differ in length ({0} != {1})'.format(
+                len(segs_a), len(segs_b)))
     # Calculate the total pbs
     pbs = len(segs_b) * len(boundary_types)
     # Compute edits
@@ -53,10 +51,10 @@ def __boundary_statistics__(segs_a, segs_b, boundary_types, boundary_format,
         boundary_edit_distance(segs_a, segs_b, n_t=n_t)
     # Apply weighting functions
     fnc_weight_a, fnc_weight_s, fnc_weight_t = weight
-    count_additions      = fnc_weight_a(additions)
-    count_substitutions  = fnc_weight_s(substitutions,
-                                        max(boundary_types),
-                                        min(boundary_types))
+    count_additions = fnc_weight_a(additions)
+    count_substitutions = fnc_weight_s(substitutions,
+                                       max(boundary_types),
+                                       min(boundary_types))
     count_transpositions = fnc_weight_t(transpositions, n_t)
     count_edits = count_additions + count_substitutions + count_transpositions
     # Compute
@@ -67,10 +65,10 @@ def __boundary_statistics__(segs_a, segs_b, boundary_types, boundary_format,
         matches.extend(set_a.intersection(set_b))
         full_misses.extend(set_a.symmetric_difference(set_b))
         boundaries_all += len(set_a) + len(set_b)
-    return {'count_edits' : count_edits, 'additions' : additions,
-            'substitutions' : substitutions, 'transpositions' : transpositions, 
-            'full_misses' : full_misses, 'boundaries_all' : boundaries_all, 
-            'matches' : matches, 'pbs' : pbs}
+    return {'count_edits': count_edits, 'additions': additions,
+            'substitutions': substitutions, 'transpositions': transpositions,
+            'full_misses': full_misses, 'boundaries_all': boundaries_all,
+            'matches': matches, 'pbs': pbs}
 
 
 def __boundary_confusion_matrix__(*args, **kwargs):
@@ -108,7 +106,7 @@ def __boundary_confusion_matrix__(*args, **kwargs):
         if side == 'a':
             hyp = None
             ref = boundary_type
-        else: # side == 'b'
+        else:  # side == 'b'
             hyp = boundary_type
             ref = None
         assert side == 'a' or side == 'b'
@@ -129,4 +127,3 @@ def boundary_statistics(*args, **kwargs):
     del default_kwargs['return_parts']
     return __fnc_metric__(__boundary_statistics__, args, kwargs,
                           default_kwargs)
-

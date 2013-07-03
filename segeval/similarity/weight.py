@@ -45,4 +45,3 @@ def weight_t_scale(transpositions, max_n):
     for transposition in transpositions:
         numerator += abs(transposition[0] - transposition[1])
     return Decimal(numerator) / max_n
-

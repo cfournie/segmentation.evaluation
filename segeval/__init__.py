@@ -5,7 +5,6 @@ segmenters.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-import os
 import sys
 from types import ModuleType
 
@@ -19,7 +18,6 @@ __package__ = 'segeval'
 __author__ = 'Chris Fournier'
 __author_email__ = 'chris.m.fournier@gmail.com'
 __copyright__ = '2012-2013, ' + __author__
-
 
 
 # The import magic shown here was taken (nearly verbatim) from the Werkzeug
@@ -43,13 +41,13 @@ all_by_module = {
                                  'fmeasure', 'ConfusionMatrix'],
     'segeval.similarity':       ['boundary_confusion_matrix',
                                  'boundary_statistics'],
-    'segeval.similarity.boundary': 
+    'segeval.similarity.boundary':
                                 ['boundary_similarity'],
-    'segeval.similarity.segmentation': 
+    'segeval.similarity.segmentation':
                                 ['segmentation_similarity'],
     'segeval.similarity.distance.multipleboundary':
                                 ['boundary_edit_distance'],
-    'segeval.similarity.weight': 
+    'segeval.similarity.weight':
                                 ['weight_a',
                                  'weight_s',
                                  'weight_s_scale',
@@ -86,9 +84,10 @@ class module(ModuleType):
     def __dir__(self):
         """Just show what we want to show."""
         result = list(new_module.__all__)
-        result.extend(('__file__', '__path__', '__doc__', '__all__',
-            '__docformat__', '__name__', '__path__', '__package__',
-            '__project__', '__version__'))
+        result.extend(
+            ('__file__', '__path__', '__doc__', '__all__',
+             '__docformat__', '__name__', '__path__', '__package__',
+             '__project__', '__version__'))
         return result
 
 

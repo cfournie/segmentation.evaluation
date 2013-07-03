@@ -6,15 +6,15 @@ Tests the segmentation version of Arstein and Poesio's bias [ArtsteinPoesio2008]
 import unittest
 from decimal import Decimal
 from .bias import artstein_poesio_bias_linear
-from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, 
-    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
+from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
+                            COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
 
 
 class TestBias(unittest.TestCase):
+
     '''
     Test Arstein and Poesio's (2008) annotator bias.
     '''
-
 
     def test_bias_g5(self):
         '''
@@ -30,7 +30,7 @@ class TestBias(unittest.TestCase):
         Test bias upon Group 5, Chapter 1, of Kazantseva (2012) data.
         '''
         data = KAZANTSEVA2012_G5['ch1']
-        data = {'ch1' : data}
+        data = {'ch1': data}
         bias = artstein_poesio_bias_linear(data)
         self.assertTrue(bias > 0)
         self.assertEqual(bias,
@@ -50,7 +50,7 @@ class TestBias(unittest.TestCase):
         Test bias upon Group 2, Chapter 2, of Kazantseva (2012) data.
         '''
         data = KAZANTSEVA2012_G2['ch2']
-        data = {'ch2' : data}
+        data = {'ch2': data}
         bias = artstein_poesio_bias_linear(data)
         self.assertTrue(bias > 0)
         self.assertEqual(bias,
@@ -64,7 +64,7 @@ class TestBias(unittest.TestCase):
         self.assertTrue(bias >= 0)
         self.assertEqual(bias,
                          Decimal('0.01455229356727327645713789012'))
-    
+
     def test_bias_large(self):
         '''
         Test bias upon a hypothetical dataset containing large disagreement.
@@ -80,7 +80,7 @@ class TestBias(unittest.TestCase):
         '''
 
         A_pi_e, A_fleiss_e = artstein_poesio_bias_linear(LARGE_DISAGREEMENT,
-                                                return_parts=True)
+                                                         return_parts=True)
         self.assertEqual(A_pi_e,
                          Decimal('0.3653993689819338220050043470'))
         self.assertEqual(A_fleiss_e,
@@ -92,18 +92,16 @@ class TestBias(unittest.TestCase):
         '''
         Test exception.
         '''
-        data = {'i1' : {'c1' : [2, 8, 2, 1]}}
+        data = {'i1': {'c1': [2, 8, 2, 1]}}
         self.assertRaises(Exception, artstein_poesio_bias_linear, data)
 
     def test_exception_items(self):
         '''
         Test exception.
         '''
-        data = {'i1' : {'c1' : [2, 8, 2, 1],
-                        'c2' : [2, 8, 2, 1]},
-                'i2' : {'c1' : [2, 1, 7, 2, 1],
-                        'c2' : [2, 8, 2, 1],
-                        'c3' : [2, 8, 2, 1]}}
+        data = {'i1': {'c1': [2, 8, 2, 1],
+                       'c2': [2, 8, 2, 1]},
+                'i2': {'c1': [2, 1, 7, 2, 1],
+                       'c2': [2, 8, 2, 1],
+                       'c3': [2, 8, 2, 1]}}
         self.assertRaises(Exception, artstein_poesio_bias_linear, data)
-
-

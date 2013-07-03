@@ -55,9 +55,11 @@ def __value_micro_macro__(fnc, arguments, classification=None,
         for label, matrix in arguments['matrix'].items():
             new_arguments['matrix'] = matrix
             classes = matrix.classes()
-            values[label] = __compute__(fnc, classes, new_arguments, classification, version)
+            values[label] = __compute__(
+                fnc, classes, new_arguments, classification, version)
         return values
-    
+
+
 def __precision__(matrix, classification, return_parts=False):
 
     predicted = classification
@@ -94,16 +96,16 @@ def __fmeasure__(matrix, classification=None, beta=Decimal('1.0'),
                  return_parts=False):
     '''
     Calculate F-measure, also known as F-score.
-    
+
     .. math::
         \\text{F}_{\\beta}\\text{-measure} = \\frac{(1 + \\beta^2) \\cdot TP}\
         {(1 + \\beta^2) \\cdot TP + \\beta^2 \\cdot FN + FP}
-    
+
     :param matrix: Confusion matrix
     :param predicted: Precision for this classification label
-    
+
     :type matrix: :class:`ConfusionMatrix`
-    
+
     :returns: F-measure.
     :rtype: :class:`decimal.Decimal`
     '''
@@ -116,9 +118,9 @@ def __fmeasure__(matrix, classification=None, beta=Decimal('1.0'),
         # Convert to Decimal
         beta = Decimal(str(beta))
         # Calculate terms
-        beta2   = beta ** 2
+        beta2 = beta ** 2
         beta2_1 = Decimal('1.0') + beta2
-        numerator   = beta2_1 * class_precision * class_recall
+        numerator = beta2_1 * class_precision * class_recall
         denominator = (beta2 * class_precision) + class_recall
         if return_parts:
             return numerator, denominator
@@ -129,7 +131,7 @@ def __fmeasure__(matrix, classification=None, beta=Decimal('1.0'),
 def precision(matrix, classification=None, version=Average.micro):
     '''
     Calculate precision.
-    
+
     :param matrix: Confusion matrix
     :param classification: Classification label to compute this metric for
     :param version: Averaging-method version.
@@ -148,7 +150,7 @@ def precision(matrix, classification=None, version=Average.micro):
 def recall(matrix, classification=None, version=Average.micro):
     '''
     Calculate recall.
-    
+
     :param matrix: Confusion matrix
     :param classification: Classification label to compute this metric for
     :param version: Averaging-method version.
@@ -168,7 +170,7 @@ def fmeasure(matrix, classification=None, beta=Decimal('1.0'),
              version=Average.micro):
     '''
     Calculate FMeasure.
-    
+
     :param matrix: Confusion matrix
     :param classification: Classification label to compute this metric for
     :param version: Averaging-method version.
@@ -186,12 +188,12 @@ def fmeasure(matrix, classification=None, beta=Decimal('1.0'),
 
 
 class _InnerConfusionMatrix(defaultdict):
+
     '''
     Inner dict of the confusion matrix; used to determine when the classes list
     is dirty.
     '''
 
-    
     def __init__(self, parent):
         self.__parent__ = parent
         defaultdict.__init__(self, int)
@@ -202,20 +204,21 @@ class _InnerConfusionMatrix(defaultdict):
 
 
 class ConfusionMatrix(dict):
+
     '''
     A :func:`dict`-like representation of a confusion matrix offering some automation.
     To access/store values, use: ``matrix[predicted][actual]``.
     '''
     __classes__ = set()
     __dirty_classes__ = False
-    
+
     def __setitem__(self, key, value):
         raise AttributeError('no such method')
-        
+
     def __getitem__(self, key):
         '''
         Return default dicts and store them so that the following is possible:
-        
+
         >>> matrix = ConfusionMatrix()
         >>> matrix['a']['b'] += 1
         >>> matrix['a']['b']
@@ -225,7 +228,7 @@ class ConfusionMatrix(dict):
         1
         >>> matrix['c']['d']
         0
-        
+
         '''
         value = None
         if key not in self:
@@ -247,4 +250,3 @@ class ConfusionMatrix(dict):
                     self.__classes__.add(actual)
             self.__dirty_classes__ = False
         return self.__classes__
-

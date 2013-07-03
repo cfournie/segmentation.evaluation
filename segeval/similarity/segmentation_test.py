@@ -8,59 +8,59 @@ from decimal import Decimal
 from .segmentation import segmentation_similarity
 from ..util import SegmentationMetricError
 from ..data.samples import (HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER,
-    MULTIPLE_BOUNDARY_TYPES, KAZANTSEVA2012_G5)
+                            MULTIPLE_BOUNDARY_TYPES, KAZANTSEVA2012_G5)
 
 
 class TestSegmentation(unittest.TestCase):
+
     '''
     Test.
     '''
 
-    
     def test_fn(self):
         '''
         Test false negative.
         '''
         value = segmentation_similarity([2, 3, 6], [5, 6])
         self.assertEqual(Decimal('0.9'), value)
-    
+
     def test_fp(self):
         '''
         Test false negative.
         '''
         value = segmentation_similarity([2, 3, 6], [2, 3, 3, 3])
         self.assertEqual(Decimal('0.9'), value)
-    
+
     def test_near_miss(self):
         '''
         Test near miss.
         '''
         value = segmentation_similarity([2, 3, 6], [2, 2, 7])
         self.assertEqual(Decimal('0.95'), value)
-    
+
     def test_one_minus(self):
         '''
         Test one minus.
         '''
         value = segmentation_similarity([2, 3, 6], [2, 2, 7], one_minus=True)
         self.assertEqual(Decimal('0.05'), value)
-    
+
     def test_clustered_fps(self):
         '''
         Test near miss.
         '''
         value = segmentation_similarity([2, 3, 6], [1, 1, 3, 1, 5])
         self.assertEqual(Decimal('0.8'), value)
-    
+
     def test_parts(self):
         '''
         Test false negative.
         '''
-        numerator, denominator  = segmentation_similarity([2, 3, 6], [5, 6],
-                                                          return_parts=True)
+        numerator, denominator = segmentation_similarity([2, 3, 6], [5, 6],
+                                                         return_parts=True)
         self.assertEqual(Decimal('9'), numerator)
         self.assertEqual(Decimal('10'), denominator)
-    
+
     def test_format_exception(self):
         '''
         Test false negative.
@@ -109,7 +109,7 @@ class TestSegmentation(unittest.TestCase):
         hypothesis = MULTIPLE_BOUNDARY_TYPES
         reference = HEARST_1997_STARGAZER
         self.assertRaises(SegmentationMetricError, segmentation_similarity, hypothesis, reference)
-    
+
     def test_s_datasets_continue(self):
         '''
         Test S upon two datasets that compares no items.
@@ -118,4 +118,3 @@ class TestSegmentation(unittest.TestCase):
         reference = HEARST_1997_STARGAZER
         value = segmentation_similarity(hypothesis, reference)
         self.assertEqual(value, {})
-

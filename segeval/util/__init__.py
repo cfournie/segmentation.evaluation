@@ -7,19 +7,20 @@ from ..compute import compute_pairwise_values
 
 
 class SegmentationMetricError(Exception):
+
     '''
     Indicates that a runtime check has failed, and the algorithm is performing
     incorrectly, or input validation has failed.  Generation of this exception
     is tested.
-        
+
     :param message: Explanation for the exception.
     :type message: str
     '''
-    
+
     def __init__(self, message):
         '''
         Initializer.
-        
+
         :param message: Explanation for the exception.
         :type message: str
         '''
@@ -59,15 +60,15 @@ hypothesis or dataset argument.')
         metric_kwargs['boundary_format'] = dataset.boundary_format
         return compute_pairwise_values(fnc_metric, dataset, **metric_kwargs)
     elif hypothesis and reference:
-        # Compute values between hypotheses (i.e, automatic) and reference 
+        # Compute values between hypotheses (i.e, automatic) and reference
         # (i.e., manual) coder segmentations
         if isinstance(hypothesis, Dataset) and isinstance(reference, Dataset):
             # Compare pairwise values between coders paired from two datasets
             metric_kwargs['boundary_format'] = hypothesis.boundary_format
             if hypothesis.boundary_format is not reference.boundary_format:
                 raise SegmentationMetricError(
-                    'Datasets contain differing boundary formats; {0} != {1}'\
-                        .format(hypothesis.boundary_format, reference.boundary_format))
+                    'Datasets contain differing boundary formats; {0} != {1}'
+                    .format(hypothesis.boundary_format, reference.boundary_format))
             return compute_pairwise_values(fnc_metric, hypothesis, reference, **metric_kwargs)
         else:
             # Compare a single pair of segmentations
@@ -76,4 +77,3 @@ hypothesis or dataset argument.')
     # Except if insufficient arguments supplied
     raise SegmentationMetricError('Incorrect arguments specified;\
  expected 1 or 2, obtained {0} of value: {1}'.format(str(len(args)), str(args)))
-

@@ -8,15 +8,15 @@ import copy
 import unittest
 from . import Dataset, load_nested_folders_dict, FILETYPE_JSON, DataIOError
 from .samples import (HEARST_1997_STARGAZER, COMPLETE_AGREEMENT,
-        LARGE_DISAGREEMENT)
+                      LARGE_DISAGREEMENT)
 
 
 class TestDataset(unittest.TestCase):
+
     '''
     Test data i/o functions and package.
     '''
 
-    
     def test_dataset(self):
         '''
         Test dataset property creation and independence.
@@ -46,51 +46,52 @@ class TestDataset(unittest.TestCase):
         dataset = Dataset(properties={prop:True})
         self.assertTrue(prop in dataset.properties)
         self.assertTrue(dataset.properties[prop])
-        
+
     def test_add_coders(self):
         '''
         Test dataset property creation and independence.
         '''
-        dataset_a = Dataset({'item1' : {'a' : [2]}})
-        dataset_b = Dataset({'item1' : {'b' : [2]}})
-        dataset_c = Dataset({'item1' : {'a' : [2], 'b' : [2]}})
-        
+        dataset_a = Dataset({'item1': {'a': [2]}})
+        dataset_b = Dataset({'item1': {'b': [2]}})
+        dataset_c = Dataset({'item1': {'a': [2], 'b': [2]}})
+
         self.assertNotEqual(dataset_a, dataset_b)
         self.assertEqual(dataset_a + dataset_b, dataset_c)
         self.assertNotEqual(dataset_a, dataset_b)
         self.assertNotEqual(dataset_a, dataset_c)
         self.assertNotEqual(dataset_b, dataset_c)
-        
+
     def test_add_codings(self):
         '''
         Test dataset property creation and independence.
         '''
-        dataset_a = Dataset({'item1' : {'a' : [2]}})
-        dataset_b = Dataset({'item2' : {'a' : [2]}})
-        dataset_c = Dataset({'item1' : {'a' : [2]},
-                             'item2' : {'a' : [2]}})
-        
+        dataset_a = Dataset({'item1': {'a': [2]}})
+        dataset_b = Dataset({'item2': {'a': [2]}})
+        dataset_c = Dataset({'item1': {'a': [2]},
+                             'item2': {'a': [2]}})
+
         self.assertNotEqual(dataset_a, dataset_b)
         self.assertEqual(dataset_a + dataset_b, dataset_c)
         self.assertNotEqual(dataset_a, dataset_b)
         self.assertNotEqual(dataset_a, dataset_c)
         self.assertNotEqual(dataset_b, dataset_c)
-        
+
     def test_add_duplicate_codings(self):
         '''
         Test dataset property creation and independence.
         '''
-        dataset_a = Dataset({'item1' : {'a' : [2]}})
-        dataset_b = Dataset({'item1' : {'a' : [2]}})
+        dataset_a = Dataset({'item1': {'a': [2]}})
+        dataset_b = Dataset({'item1': {'a': [2]}})
         exception = False
         try:
             dataset_a + dataset_b
         except DataIOError:
             exception = True
-        self.assertTrue(exception, 'Did not throw DataIOError')        
+        self.assertTrue(exception, 'Did not throw DataIOError')
 
 
 class TestUtils(unittest.TestCase):
+
     '''
     Test data merge functions.
     '''
@@ -105,6 +106,3 @@ class TestUtils(unittest.TestCase):
         dataset = load_nested_folders_dict(data_dir, FILETYPE_JSON)
         self.assertEqual(dataset['data,stargazer'],
                          HEARST_1997_STARGAZER['stargazer'])
-
-
-        

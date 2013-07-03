@@ -4,6 +4,7 @@ Python-language utils.
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 
+
 def enum(*sequential, **named):
     '''
     http://stackoverflow.com/a/1695250/2134

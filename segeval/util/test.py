@@ -9,6 +9,7 @@ from . import SegmentationMetricError, __fnc_metric__
 
 
 class TestCase(unittest.TestCase):
+
     '''
     A test case that supports performing assertAlmostEquals upon lists, tuples,
     or dicts of values.
@@ -28,28 +29,28 @@ class TestCase(unittest.TestCase):
                     msg = '{0} != {1}'.format(first, second)
                 if item not in first:
                     raise Exception(
-                            '{0} not in {1}; expected {2}'.format(item, first,
-                                                                  second))
+                        '{0} not in {1}; expected {2}'.format(item, first,
+                                                              second))
                 if item not in second:
                     raise Exception(
-                            '{0} not in {1}; expected {2}'.format(item, second,
-                                                                  first))
+                        '{0} not in {1}; expected {2}'.format(item, second,
+                                                              first))
                 self.assertAlmostEquals(first[item], second[item], places, msg,
                                         delta)
         elif (isinstance(first, list) or isinstance(first, tuple)) and \
-            (isinstance(second, list) or isinstance(second, tuple)):
+                (isinstance(second, list) or isinstance(second, tuple)):
             if len(first) != len(second):
                 raise Exception(
-                        'Size mismatch; {0} != {1}'.format(first, second))
+                    'Size mismatch; {0} != {1}'.format(first, second))
             for item in zip(first, second):
                 if not msg:
                     msg = '{0} != {1}'.format(first, second)
                 self.assertAlmostEquals(item[0], item[1], places, msg, delta)
-        elif type(first) != type(second):
-            if type(first) != float and type(first) != Decimal and \
-            type(second) != float and type(second) != Decimal:
+        elif not isinstance(first, type(second)):
+            if not isinstance(first, float) and not isinstance(first, Decimal) and \
+                    not isinstance(second, float) and not isinstance(second, Decimal):
                 raise Exception('Type mismatch; {0} != {1}'.format(
-                                    type(first), type(second)))
+                    type(first), type(second)))
         else:
             return unittest.TestCase.assertAlmostEquals(self,
                                                         float(first),
@@ -60,25 +61,25 @@ class TestCase(unittest.TestCase):
 
 
 class TestTestCase(TestCase):
+
     '''
     Test the test utilities.
     '''
 
-    
     def test_almost_equal_values(self):
         '''
         Test a type mistmatch.
         '''
         self.assertRaises(AssertionError, self.assertAlmostEquals,
-                          {'a' : 1},
-                          {'a' : 2})
-    
+                          {'a': 1},
+                          {'a': 2})
+
     def test_mismatch(self):
         '''
         Test a type mistmatch.
         '''
         self.assertRaises(Exception, self.assertAlmostEquals, (), {})
-    
+
     def test_equal_types(self):
         '''
         Test a type mistmatch.
@@ -97,27 +98,28 @@ class TestTestCase(TestCase):
         self.assertAlmostEquals(Decimal('0'), 0)
         self.assertAlmostEquals(0.0, Decimal('0'))
         self.assertAlmostEquals(Decimal('0'), 0.0)
-    
+
     def test_tuple_first(self):
         self.assertRaises(Exception, self.assertAlmostEquals, (), (1))
-    
+
     def test_tuple_second(self):
         self.assertRaises(Exception, self.assertAlmostEquals, (1), ())
-    
+
     def test_list_first(self):
         self.assertRaises(Exception, self.assertAlmostEquals, [], [1])
-    
+
     def test_list_second(self):
         self.assertRaises(Exception, self.assertAlmostEquals, [1], [])
-    
+
     def test_dict_first(self):
-        self.assertRaises(Exception, self.assertAlmostEquals, {}, {'a' : 1})
-    
+        self.assertRaises(Exception, self.assertAlmostEquals, {}, {'a': 1})
+
     def test_dict_second(self):
-        self.assertRaises(Exception, self.assertAlmostEquals, {'a' : 1}, {})
+        self.assertRaises(Exception, self.assertAlmostEquals, {'a': 1}, {})
 
 
-class TestTestCase(TestCase):
+class UtilTestCase(TestCase):
+
     '''
     Test the test utilities.
     '''
@@ -128,7 +130,3 @@ class TestTestCase(TestCase):
         kwargs = {}
         kw_defaults = {}
         self.assertRaises(SegmentationMetricError, __fnc_metric__, fnc_metric, args, kwargs, kw_defaults)
-    
-    
-        
-        

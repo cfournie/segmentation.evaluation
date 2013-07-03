@@ -11,7 +11,7 @@ def compute_pairwise_values(fnc_metric, dataset_a, dataset_b=None, **kwargs):
     '''
     Calculate mean pairwise segmentation metric pairs for functions that take
     pairs of segmentations.
-    
+
     :param dataset: Segmentation mass dataset (including multiple \
                            codings).
     :param fnc_metric:     Metric function to call on segmentation mass pairs.
@@ -28,11 +28,12 @@ def compute_pairwise_values(fnc_metric, dataset_a, dataset_b=None, **kwargs):
     return_parts = fnc_kwargs['return_parts'] \
         if 'return_parts' in fnc_kwargs else False
     del fnc_kwargs['permuted']
+
     # Define fnc per group
     def __per_group__(prefix, inner_dataset_m, inner_dataset_n, has_two_datasets):
         '''
         Recurse through a dict to find levels where a metric can be calculated.
-        
+
         :param inner_dataset: Segmentation mass dataset (including \
                                      multiple codings).
         :type inner_dataset: dict
@@ -43,8 +44,10 @@ def compute_pairwise_values(fnc_metric, dataset_a, dataset_b=None, **kwargs):
             labels.update(inner_dataset_n.keys())
         for label in labels:
             # Get coders from both datasets
-            coder_masses_m = inner_dataset_m[label] if label in inner_dataset_m else None
-            coder_masses_n = inner_dataset_n[label] if inner_dataset_n is not None and label in inner_dataset_n else None
+            coder_masses_m = inner_dataset_m[
+                label] if label in inner_dataset_m else None
+            coder_masses_n = inner_dataset_n[
+                label] if inner_dataset_n is not None and label in inner_dataset_n else None
             # Skip this label if it is not contained within both datasets
             if has_two_datasets and (coder_masses_m is None or coder_masses_n is None):
                 continue
@@ -61,7 +64,7 @@ def compute_pairwise_values(fnc_metric, dataset_a, dataset_b=None, **kwargs):
                 coder_pairs = combinations(coders, 2)
                 # We use the same data for both coders
                 coder_masses_n = coder_masses_m
-            for m, n in coder_pairs:                        
+            for m, n in coder_pairs:
                 segs_m = coder_masses_m[m]
                 segs_n = coder_masses_n[n]
                 entry_parts = list(prefix)
@@ -69,10 +72,10 @@ def compute_pairwise_values(fnc_metric, dataset_a, dataset_b=None, **kwargs):
                 entry = ','.join(entry_parts)
                 if return_parts:
                     label_pairs[entry] = fnc_metric(segs_m, segs_n,
-                                                        **fnc_kwargs)
+                                                    **fnc_kwargs)
                 else:
                     label_pairs[entry] = fnc_metric(segs_m, segs_n,
-                                                        **fnc_kwargs)
+                                                    **fnc_kwargs)
                 # Handle permutation
                 if permuted and not has_two_datasets:
                     entry_parts = list(prefix)
@@ -99,10 +102,9 @@ def compute_pairwise_values(fnc_metric, dataset_a, dataset_b=None, **kwargs):
 def summarize(pairs):
     '''
     Takes a list of values and returns the mean, standard deviation, variance, standard error, and number of values.
-    
+
     :param pairs: List of numerical values
     :type pairs: list
     '''
     return mean(pairs.values()), std(pairs.values()), var(pairs.values()), \
         stderr(pairs.values()), len(pairs)
-

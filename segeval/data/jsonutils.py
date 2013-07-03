@@ -9,9 +9,12 @@ import codecs
 from ..util.lang import enum
 
 
-Field = enum(segmentation_type='segmentation_type',
-             # Structure
-             items='items')
+Field = enum(
+    # Property fields
+    segmentation_type='segmentation_type',
+    # Structural fields
+    items='items'
+)
 
 SegmentationType = enum(linear='linear')
 
@@ -29,7 +32,7 @@ def __write_json__(filepath, data):
         json.dump(data, fp=json_file, sort_keys=True, indent=4)
     finally:
         json_file.close()
-        
+
 
 def output_linear_mass_json(filepath, dataset):
     '''
@@ -38,43 +41,38 @@ def output_linear_mass_json(filepath, dataset):
     :param filepath: Path to the mass file containing segment position codings.
     :type filepath: :func:`str`
     '''
-    data = {Field.segmentation_type : SegmentationType.linear}
+    data = {Field.segmentation_type: SegmentationType.linear}
     data[Field.items] = dataset
     data.update(dataset.properties)
     __write_json__(filepath, data)
-    
-    
 
-_MSG_INCORRECT_TYPE = 'Segmentation type \'{0}\' expected, but encountered \
-\'{1}\' for file: {2}'
 
 def input_linear_mass_json(filepath):
     '''
     Reads a file path. Returns segmentation mass codings as a :class:`Dataset`.
-    
+
     :param filepath: Path to the mass file containing segment position codings.
     :type filepath: :func:`str`
     '''
-    from . import Dataset, DataIOError, name_from_filepath
+    from . import Dataset, DataIOError
     dataset = Dataset()
     data = dict()
-    name = name_from_filepath(filepath)
     # Open file
     json_file = open(filepath, 'rU')
     # Read in file
     try:
         data = json.load(json_file)
     except Exception as exception:
-        raise DataIOError('Error occurred processing file: ' + filepath, exception)
+        raise DataIOError(
+            'Error occurred processing file: ' + filepath, exception)
     # Check type
     if Field.segmentation_type in data:
         if data[Field.segmentation_type] != SegmentationType.linear:
-            raise DataIOError(_MSG_INCORRECT_TYPE
-                .format(SegmentationType.linear, data[Field.segmentation_type],
-                    filepath))
+            raise DataIOError('Segmentation type \'{0}\' expected, but encountered \'{1}\' for file: {2}'
+                              .format(SegmentationType.linear, data[Field.segmentation_type], filepath))
     else:
-        raise DataIOError('The entry \'segmentation_type\' was expected in \
-JSON for file:' + filepath)
+        raise DataIOError(
+            'The entry \'segmentation_type\' was expected in JSON for file:' + filepath)
     # Duplicate to store other properties
     dataset.properties = data
     # If separated into multiple items for one coder per file
@@ -88,8 +86,6 @@ JSON for file:' + filepath)
         # Remove from properties
         del dataset.properties[Field.items]
     else:
-        raise DataIOError('Expected an entry \'{0}\' that contained \
-segmentation codings for specific individual texts (i.e., items) in file: {1}'
-            .format(Field.items, filepath))
+        raise DataIOError('Expected an entry \'{0}\' that contained segmentation codings for specific individual texts (i.e., items) in file: {1}'
+                          .format(Field.items, filepath))
     return dataset
-

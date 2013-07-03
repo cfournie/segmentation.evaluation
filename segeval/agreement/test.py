@@ -6,16 +6,17 @@ Tests actual agreement.
 import unittest
 from decimal import Decimal
 from . import actual_agreement_linear
-from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2, 
-    COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
+from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
+                            COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
 
 
 class TestAgreement(unittest.TestCase):
+
     '''
     Test actual agreement.
     '''
 
-    kwargs = {'return_parts' : False}
+    kwargs = {'return_parts': False}
 
     def test_agreement_g5(self):
         '''
@@ -31,7 +32,7 @@ class TestAgreement(unittest.TestCase):
         Test agreement upon Group 5, Chapter 1, of Kazantseva (2012) data.
         '''
         data = KAZANTSEVA2012_G5['ch1']
-        data = {'ch1' : data}
+        data = {'ch1': data}
         agreement = actual_agreement_linear(data)
         self.assertTrue(agreement > 0)
         self.assertEqual(agreement,
@@ -51,7 +52,7 @@ class TestAgreement(unittest.TestCase):
         Test agreement upon Group 2, Chapter 2, of Kazantseva (2012) data.
         '''
         data = KAZANTSEVA2012_G2['ch2']
-        data = {'ch2' : data}
+        data = {'ch2': data}
         agreement = actual_agreement_linear(data)
         self.assertTrue(agreement > 0)
         self.assertEqual(agreement,
@@ -65,7 +66,7 @@ class TestAgreement(unittest.TestCase):
         self.assertTrue(agreement >= 0)
         self.assertEqual(agreement,
                          Decimal('1'))
-    
+
     def test_disagreement_large(self):
         '''
         Test agreement upon a hypothetical dataset containing large disagreement.
@@ -74,4 +75,3 @@ class TestAgreement(unittest.TestCase):
         self.assertTrue(agreement >= 0)
         self.assertEqual(agreement,
                          Decimal('0'))
-

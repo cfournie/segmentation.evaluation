@@ -25,7 +25,7 @@ def __boundary_similarity__(*args, **kwargs):
     count_unweighted = len(additions) + len(substitutions) + len(transpositions)
     # Fraction
     denominator = count_unweighted + len(statistics['matches'])
-    numerator   = denominator - statistics['count_edits']
+    numerator = denominator - statistics['count_edits']
     if return_parts:
         return numerator, denominator, additions, substitutions, transpositions
     else:
@@ -38,9 +38,8 @@ def __boundary_similarity__(*args, **kwargs):
 
 def boundary_similarity(*args, **kwargs):
     '''
-    Computes Boundary Similarity (B)
+    Boundary Similarity (B).
     '''
 
     return __fnc_metric__(__boundary_similarity__, args, kwargs,
                           SIMILARITY_METRIC_DEFAULTS)
-

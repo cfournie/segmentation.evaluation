@@ -6,32 +6,30 @@ files.
 '''
 
 import os
-import csv
-import json
 import copy
 from collections import defaultdict
 from .tsv import input_linear_mass_tsv
-from .jsonutils import input_linear_mass_json, Field
+from .jsonutils import input_linear_mass_json
 from ..format import BoundaryFormat
 
-FILETYPE_TSV  = 'tsv'
+FILETYPE_TSV = 'tsv'
 FILETYPE_JSON = 'json'
 
 EXT = 'ext'
 FNC = 'fnc'
-FILETYPES           = {FILETYPE_TSV  : {EXT : ['.tsv', '.csv'],
-                                        FNC : input_linear_mass_tsv},
-                       FILETYPE_JSON : {EXT : ['.json', '.jsn'],
-                                        FNC : input_linear_mass_json}}
-FILETYPES_DEFAULT   = FILETYPE_JSON
+FILETYPES = {FILETYPE_TSV: {EXT: ['.tsv', '.csv'],
+                            FNC: input_linear_mass_tsv},
+             FILETYPE_JSON: {EXT: ['.json', '.jsn'],
+                             FNC: input_linear_mass_json}}
+FILETYPES_DEFAULT = FILETYPE_JSON
 
 
 class Dataset(defaultdict):
+
     '''
     Represents a set of texts (i.e., items) that have been segmentations by coders.
     '''
 
-    
     def __init__(self, item_coder_data=None, properties=None,
                  boundary_types=None, boundary_format=BoundaryFormat.mass):
         '''
@@ -57,7 +55,7 @@ class Dataset(defaultdict):
         for coder_masses in defaultdict.values(self):
             for coder in coder_masses.keys():
                 self.coders.add(coder)
-    
+
     def __iadd__(self, other, prepend_item=None):
         '''
         Add one dataset's data to this dataset
@@ -78,9 +76,9 @@ class Dataset(defaultdict):
                     self[item][coder] = item_masses
                 else:
                     raise DataIOError('Duplicate coders of same name \
-%(coder)s found for item %(item)s' % {'coder' : coder, 'item' : item})
+%(coder)s found for item %(item)s' % {'coder': coder, 'item': item})
         return self
-    
+
     def __add__(self, other):
         dataset = copy.deepcopy(self)
         dataset += other
@@ -98,14 +96,15 @@ def name_from_filepath(filepath):
 
 
 class DataIOError(Exception):
+
     '''
     Indicates that an input processing error has occurred.
     '''
-    
+
     def __init__(self, message, exception=None):
         '''
         Initializer.
-        
+
         :param message: Explanation for the exception.
         :type message: str
         '''
@@ -118,8 +117,8 @@ def load_nested_folders_dict(containing_dir, filetype, dataset=None,
     Loads TSV files from a file directory structure, which reflects the
     directory structure in nested :func:`dict` with each directory name
     representing a key in these :func:`dict`.
-    
-    :param containing_dir: Root directory containing sub-directories which 
+
+    :param containing_dir: Root directory containing sub-directories which
                            contain segmentation files.
     :param filetype:       File type to load (e.g., json or tsv).
     :type containing_dir: str
@@ -165,4 +164,3 @@ def load_nested_folders_dict(containing_dir, filetype, dataset=None,
                                  dataset=dataset,
                                  prepend_item=new_prepend_item)
     return dataset
-

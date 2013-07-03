@@ -10,13 +10,12 @@ from ..similarity.boundary import boundary_similarity
 
 AGREEMENT_METRIC_DEFAULTS = dict(SIMILARITY_METRIC_DEFAULTS)
 AGREEMENT_METRIC_DEFAULTS.update({
-    'fnc_compare' : boundary_similarity,
-    'return_parts' : False
+    'fnc_compare': boundary_similarity,
+    'return_parts': False
 })
 
 
 def __fnc_metric__(fnc_metric, dataset, **kwargs):
-
     metric_kwargs = dict(AGREEMENT_METRIC_DEFAULTS)
     metric_kwargs.update(kwargs)
     return fnc_metric(dataset, **metric_kwargs)
@@ -27,16 +26,16 @@ def __actual_agreement_linear__(dataset, **kwargs):
     Calculate actual (i.e., observed or :math:`\\text{A}_a`), segmentation
     agreement without accounting for chance, using [ArtsteinPoesio2008]_'s
     formulation as adapted in [FournierInkpen2012]_:
-    
+
     .. math::
         \\text{A}_a = \\frac{
             \sum_{i \in I} \\text{mass}(i) \cdot \\text{S}(s_{i1},s_{i2})
         }{
-            \sum_{i \in I} \\text{mass}(i) 
+            \sum_{i \in I} \\text{mass}(i)
         }
-        
+
     Or, for more than two coders:
-    
+
     .. math::
         \\text{A}_a = \\frac{1}{{\\textbf{c} \\choose 2}}
         \sum^{\\textbf{c}-1}_{m=1}
@@ -46,21 +45,21 @@ def __actual_agreement_linear__(dataset, **kwargs):
         }{
             \sum_{i \in I} \\big( \\text{mass}(i) - 1 \\big)
         }
-        
-    Where :math:`\\text{S}(s_{i1},s_{i2})` is defined in 
+
+    Where :math:`\\text{S}(s_{i1},s_{i2})` is defined in
     :func:`segeval.similarity.SegmentationSimilarity.similarity`.
-    
+
     :param items_masses: Segmentation masses for a collection of items where \
                         each item is multiply coded (all coders code all items).
     :type items_masses: dict
-    
+
     :returns: Potential boundaries unmoved, all potential boundaries, and the \
               boundaries per coder.
     :rtype: :func:`list`, :func:`list`, :func:`dict`
-    
+
     An example of the dictionary structure if the ``items_masses``
     parameter is::
-    
+
             items_masses = {
                 'item1' : {
                     'coder1' : [5],
@@ -73,10 +72,10 @@ def __actual_agreement_linear__(dataset, **kwargs):
                     'coder2' : [2,2,4]
                 }
             }
-    
-    Other real and contrived examples can be found in 
+
+    Other real and contrived examples can be found in
     :mod:`segeval.data.Samples`.
-    
+
     '''
 
     metric_kwargs = dict(kwargs)
@@ -86,14 +85,14 @@ def __actual_agreement_linear__(dataset, **kwargs):
     fnc_compare = kwargs['fnc_compare']
     return_parts = kwargs['return_parts']
     # Initialize
-    all_numerators    = list()
-    all_denominators  = list()
-    all_pbs           = list()
+    all_numerators = list()
+    all_denominators = list()
+    all_pbs = list()
     coders_boundaries = dict()
     coders = dataset.values()[0].keys()
     # FOr each permutation of coders
     for m in range(0, len(coders) - 1):
-        for n in range(m+1, len(coders)):
+        for n in range(m + 1, len(coders)):
             for item in dataset.keys():
                 segs_a = dataset[item][coders[m]]
                 segs_b = dataset[item][coders[n]]
@@ -123,4 +122,3 @@ def __actual_agreement_linear__(dataset, **kwargs):
 def actual_agreement_linear(dataset, **kwargs):
 
     return __fnc_metric__(__actual_agreement_linear__, dataset, **kwargs)
-
