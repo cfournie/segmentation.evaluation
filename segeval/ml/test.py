@@ -7,6 +7,7 @@ import unittest
 from decimal import Decimal
 from . import (__precision__, precision, __recall__, recall, __fmeasure__,
                fmeasure, ConfusionMatrix as cm, Average)
+from ..util import SegmentationMetricError
 
 
 class TestConfusionMatrix(unittest.TestCase):
@@ -209,4 +210,14 @@ class TestML(unittest.TestCase):
         self.assertEqual(fmeasure(matrix), Decimal('0'))
         self.assertEqual(__fmeasure__(matrix, 'p'), Decimal('0'))
         self.assertEqual(__fmeasure__(matrix, 'f'), Decimal('0'))
+
+
+    def test_exception_on_incorrect_average(self):
+        '''
+        Test exception on incorrect average.
+        '''
+        matrix = cm()
+        matrix['p']['p'] += 1
+        matrix['p']['f'] += 1
+        self.assertRaises(SegmentationMetricError, fmeasure, matrix, version='incorrect')
 

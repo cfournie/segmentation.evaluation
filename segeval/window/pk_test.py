@@ -168,6 +168,13 @@ class TestPk(TestCase):
         b = [2, 2, 8]
         self.assertRaises(SegmentationMetricError, pk, a, b)
 
+    def test_window_size_specified(self):
+        '''
+        Test when window size is specified.
+        '''
+        value = pk([2, 3, 6], [2, 2, 7], window_size=2)
+        self.assertAlmostEqual(Decimal('0.2222222'), value)
+
 
 class TestPairwisePkMeasure(TestCase):
     # pylint: disable=R0904,E1101,W0232

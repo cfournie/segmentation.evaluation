@@ -6,7 +6,7 @@ Tests the data merge functions and package.
 import unittest
 import os
 import re
-from . import DataIOError
+from . import Dataset, DataIOError
 from .jsonutils import (output_linear_mass_json, input_linear_mass_json,
     __write_json__, Field)
 from .samples import HEARST_1997_STARGAZER
@@ -46,9 +46,33 @@ class TestJsonUtils(unittest.TestCase):
         json_file = os.path.join(self.test_data_dir, 'hearst1997.json')
         dataset = input_linear_mass_json(json_file)
         self.assertEqual(dataset, HEARST_1997_STARGAZER)
+        
+    def test_input_exception_without_items(self):
+        '''
+        Test that exceptions occur when missing the field 'items'.
+        '''
+        json_file = os.path.join(self.test_data_dir, 'hearst1997_missing_items.ejson')
+        self.assertRaises(DataIOError, input_linear_mass_json, json_file)
 
-    def test_input_exception(self):
+    def test_input_exception_format(self):
+        '''
+        Test that exceptions occur when given an incorrect file type (TSV).
+        '''
         file_path = os.path.join(self.test_data_dir, 'hearst1997.tsv')
+        self.assertRaises(DataIOError, input_linear_mass_json, file_path)
+
+    def test_input_exception_bad_type(self):
+        '''
+        Test that exceptions occur when given an incorrect segmentation type.
+        '''
+        file_path = os.path.join(self.test_data_dir, 'hearst1997_bad_type.ejson')
+        self.assertRaises(DataIOError, input_linear_mass_json, file_path)
+
+    def test_input_exception_missing_type(self):
+        '''
+        Test that exceptions occur when missing a segmentation type.
+        '''
+        file_path = os.path.join(self.test_data_dir, 'hearst1997_missing_type.ejson')
         self.assertRaises(DataIOError, input_linear_mass_json, file_path)
 
     def test_input_type_exception(self):

@@ -42,8 +42,7 @@ def weight_t_scale(transpositions, max_n):
     Default weighting function for transposition edit operations by the distance that transpositions span.
     '''
     numerator = 0
-    if isinstance(transpositions, list):
-        for transposition in transpositions:
-            numerator += abs(transposition[0] - transposition[1])
-        return Decimal(numerator) / max_n
+    for transposition in transpositions:
+        numerator += abs(transposition[0] - transposition[1])
+    return Decimal(numerator) / max_n
 

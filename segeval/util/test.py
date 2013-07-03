@@ -5,10 +5,13 @@ Test utilities, and tests for said utilities.
 '''
 import unittest
 from decimal import Decimal
+from . import SegmentationMetricError, __fnc_metric__
+
 
 class TestCase(unittest.TestCase):
     '''
-    Test WindowDiff.
+    A test case that supports performing assertAlmostEquals upon lists, tuples,
+    or dicts of values.
     '''
     # pylint: disable=R0904,C0324
     DECIMAL_PLACES = 4
@@ -58,7 +61,7 @@ class TestCase(unittest.TestCase):
 
 class TestTestCase(TestCase):
     '''
-    Test utility tests.
+    Test the test utilities.
     '''
     # pylint: disable=R0904
     
@@ -112,9 +115,20 @@ class TestTestCase(TestCase):
     
     def test_dict_second(self):
         self.assertRaises(Exception, self.assertAlmostEquals, {'a' : 1}, {})
+
+
+class TestTestCase(TestCase):
+    '''
+    Test the test utilities.
+    '''
+    # pylint: disable=R0904
+    def test_fnc_metric_missing_args(self):
+        fnc_metric = lambda x: x
+        args = []
+        kwargs = {}
+        kw_defaults = {}
+        self.assertRaises(SegmentationMetricError, __fnc_metric__, fnc_metric, args, kwargs, kw_defaults)
     
-        
-        
-        
+    
         
         

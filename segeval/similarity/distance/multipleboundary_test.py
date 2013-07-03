@@ -5,43 +5,16 @@ Tests multiple-boundary edit distance.
 '''
 import unittest
 from .multipleboundary import (boundary_edit_distance, 
-    __additions_substitutions__, __additions_substitutions_sets__)
+    __additions_substitutions__, __additions_substitutions_sets__,
+    __has_substitutions__)
 
 
 class TestMultipleBoundaries(unittest.TestCase):
     '''
-    Test items.
+    Test multiple boundary edit distance.
     '''
     # pylint: disable=R0904,C0324,C0103,C0301
-    
-    def test_additions_substitutions(self):
-        '''
-        Test the expected functionality of __additions_substitutions__
-        '''
-        a_i = set([1, 2, 3, 4])
-        b_i = set([1, 6])
-        
-        a = a_i - b_i
-        b = b_i - a_i
-        d = a_i ^ b_i
-        
-        self.assertEqual((2, 1),
-                         __additions_substitutions__(d, a, b))
-    
-    def test_additions_substitutions_sets(self):
-        '''
-        Test the expected functionality of __additions_substitutions_sets__
-        '''
-        a_i = set([1, 2, 3, 4])
-        b_i = set([1, 6])
-        
-        a = a_i - b_i
-        b = b_i - a_i
-        d = a_i ^ b_i
-        
-        self.assertEqual(([(2, 'a'), (3, 'a')], set([(4, 6)])), 
-                         __additions_substitutions_sets__(d, a, b))
-    
+
     def test_edit_distance_identity(self):
         '''
         Test a mixed example of additions, substitutions and transpositions.
@@ -154,4 +127,45 @@ class TestMultipleBoundaries(unittest.TestCase):
         additions, substitutions, transpositions = boundary_edit_distance(a, b, n_t=3)
         self.assertEqual(([], [], [(3,4,3),(3,5,1),(3,5,2)]),
                          (additions, substitutions, transpositions))
+
+
+class TestInnerFncOfMultipleBoundaries(unittest.TestCase):
+    '''
+    Test private functions for multiple boundary edit distance calculation.
+    '''
+
+    def test_has_substitutions_not_present(self):
+        '''
+        '''
+        self.assertFalse(__has_substitutions__(1, 1, 1, set()))
+    
+    def test_additions_substitutions(self):
+        '''
+        Test the expected functionality of __additions_substitutions__
+        '''
+        a_i = set([1, 2, 3, 4])
+        b_i = set([1, 6])
+        
+        a = a_i - b_i
+        b = b_i - a_i
+        d = a_i ^ b_i
+        
+        self.assertEqual((2, 1),
+                         __additions_substitutions__(d, a, b))
+    
+    def test_additions_substitutions_sets(self):
+        '''
+        Test the expected functionality of __additions_substitutions_sets__
+        '''
+        a_i = set([1, 2, 3, 4])
+        b_i = set([1, 6])
+        
+        a = a_i - b_i
+        b = b_i - a_i
+        d = a_i ^ b_i
+        
+        self.assertEqual(([(2, 'a'), (3, 'a')], set([(4, 6)])), 
+                         __additions_substitutions_sets__(d, a, b))
+    
+
 

@@ -1,2 +1,2 @@
 include README.rst LICENSE makefile
-recursive-include segeval/data *.json *.csv *.tsv
+recursive-include segeval/data *.json *.csv *.tsv *.ejson

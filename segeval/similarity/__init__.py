@@ -108,7 +108,7 @@ def __boundary_confusion_matrix__(*args, **kwargs):
         if side == 'a':
             hyp = None
             ref = boundary_type
-        elif side == 'b':
+        else: # side == 'b'
             hyp = boundary_type
             ref = None
         assert side == 'a' or side == 'b'
@@ -125,9 +125,8 @@ def boundary_confusion_matrix(*args, **kwargs):
 def boundary_statistics(*args, **kwargs):
     # pylint: disable=W0142
     default_kwargs = dict(SIMILARITY_METRIC_DEFAULTS)
-    if 'one_minus' in default_kwargs:
-        del default_kwargs['one_minus']
-        del default_kwargs['return_parts']
+    del default_kwargs['one_minus']
+    del default_kwargs['return_parts']
     return __fnc_metric__(__boundary_statistics__, args, kwargs,
                           default_kwargs)
 

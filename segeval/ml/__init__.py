@@ -7,6 +7,7 @@ learning metrics that have been adapted for use in segmentation.
 from __future__ import division
 from decimal import Decimal
 from collections import defaultdict
+from ..util import SegmentationMetricError
 from ..util.math import mean
 from ..util.lang import enum
 
@@ -40,6 +41,9 @@ def __value_micro_macro__(fnc, arguments, classification=None,
                     value = fnc(**arguments)
                     values.append(value)
                 return mean(values)
+            else:
+                raise SegmentationMetricError('Unrecognized type of averaging;\
+ expected Average.micro or Average.macro')
         else:
             return fnc(**arguments)
     if isinstance(arguments['matrix'], ConfusionMatrix):

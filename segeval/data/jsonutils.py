@@ -45,6 +45,9 @@ def output_linear_mass_json(filepath, dataset):
     
     
 
+_MSG_INCORRECT_TYPE = 'Segmentation type \'{0}\' expected, but encountered \
+\'{1}\' for file: {2}'
+
 def input_linear_mass_json(filepath):
     '''
     Reads a file path. Returns segmentation mass codings as a :class:`Dataset`.
@@ -62,15 +65,16 @@ def input_linear_mass_json(filepath):
     try:
         data = json.load(json_file)
     except Exception as exception:
-        raise DataIOError('Error occurred processing file: %s' \
-                                      % filepath, exception)
+        raise DataIOError('Error occurred processing file: ' + filepath, exception)
     # Check type
     if Field.segmentation_type in data:
         if data[Field.segmentation_type] != SegmentationType.linear:
-            raise DataIOError(
-                'Segmentation type \'%(type)s\' expected, but encountered \
-\'%(type_found)s\'' % {'type'       : SegmentationType.linear,
-                   'type_found' : data[Field.segmentation_type]})
+            raise DataIOError(_MSG_INCORRECT_TYPE
+                .format(SegmentationType.linear, data[Field.segmentation_type],
+                    filepath))
+    else:
+        raise DataIOError('The entry \'segmentation_type\' was expected in \
+JSON for file:' + filepath)
     # Duplicate to store other properties
     dataset.properties = data
     # If separated into multiple items for one coder per file
@@ -83,6 +87,9 @@ def input_linear_mass_json(filepath):
                 dataset[item][coder] = tuple(masses)
         # Remove from properties
         del dataset.properties[Field.items]
-    # Return
+    else:
+        raise DataIOError('Expected an entry \'{0}\' that contained \
+segmentation codings for specific individual texts (i.e., items) in file: {1}'
+            .format(Field.items, filepath))
     return dataset
 

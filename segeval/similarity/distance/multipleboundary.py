@@ -80,8 +80,7 @@ def __has_substitutions__(i, j, d, options_set):
     '''
     # pylint: disable=C0103
     present = False
-    if i in options_set and d in options_set[i][0] and \
-       j in options_set and d in options_set[j][0]:
+    if i in options_set and d in options_set[i][0] and j in options_set and d in options_set[j][0]:
         d_i, a_i, b_i = options_set[i]
         d_j, a_j, b_j = options_set[j]
         if __additions_substitutions__(d_i, a_i, b_i)[1] > 0 and \

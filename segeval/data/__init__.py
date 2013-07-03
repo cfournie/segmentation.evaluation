@@ -144,7 +144,7 @@ def load_nested_folders_dict(containing_dir, filetype, dataset=None,
         if os.path.isdir(path):
             dirs[name] = path
         # Found a file
-        elif os.path.isfile(path):
+        else:
             name, ext = os.path.splitext(name)
             if len(ext) > 0 and ext.lower() in allowable_extensions:
                 files[name] = path

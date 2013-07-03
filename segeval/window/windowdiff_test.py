@@ -230,6 +230,13 @@ class TestWindowDiffMasses(TestCase):
         actual = window_diff(hypothesis, reference, **self.kwargs)
         self.assertAlmostEquals(5.0/9.0, float(actual))
 
+    def test_window_size_specified(self):
+        '''
+        Test when window size is specified.
+        '''
+        value = window_diff([2, 3, 6], [2, 2, 7], window_size=2)
+        self.assertAlmostEqual(Decimal('0.2222222'), value)
+
 
 class TestPairwiseWindowDiff(TestCase):
     # pylint: disable=R0904,E1101,W0232

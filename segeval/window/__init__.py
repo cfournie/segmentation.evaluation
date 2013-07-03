@@ -7,6 +7,7 @@ from __future__ import division
 from decimal import Decimal
 from ..metric import METRIC_DEFAULTS
 from ..format import BoundaryFormat, convert_positions_to_masses
+from ..util import SegmentationMetricError
 from ..util.math import mean
 
 
@@ -35,12 +36,14 @@ def __compute_window_size__(reference, fnc_round, boundary_format):
             masses.
         :type inner_coder_masses: dict or list
         '''
-        if isinstance(inner_coder_masses, list) or \
-            isinstance(inner_coder_masses, tuple):
-            all_masses.extend(inner_coder_masses)
-        elif isinstance(inner_coder_masses, dict):
+        if hasattr(inner_coder_masses, 'items'):
             for cur_inner_coder_masses in inner_coder_masses.values():
                 __list_coder_masses__(cur_inner_coder_masses)
+        elif hasattr(inner_coder_masses, '__iter__'):
+            all_masses.extend(inner_coder_masses)
+        else:
+            raise SegmentationMetricError('Expected either a dict-like \
+collection of segmentations or a segmentation as a list-like object')
     if boundary_format == BoundaryFormat.position:
         reference = convert_positions_to_masses(reference)
     # Recurse and list all masses

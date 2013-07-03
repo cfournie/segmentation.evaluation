@@ -50,6 +50,9 @@ def __fnc_metric__(fnc_metric, args, kwargs, kw_defaults):
         elif 'dataset' in kwargs:
             dataset = kwargs['dataset']
             del metric_kwargs['dataset']
+        else:
+            raise SegmentationMetricError('Expected either a reference and \
+hypothesis or dataset argument.')
     # Compute
     if dataset:
         # Compute pairwise values over all coders in a dataset
