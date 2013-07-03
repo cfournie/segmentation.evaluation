@@ -1,4 +1,4 @@
-flake8
-nose
+flake8>=2.0
+nose>=1.3.0
 coverage>=3.6
-python-coveralls
+python-coveralls>=2.2
