@@ -10,6 +10,8 @@ coveralls: coverage
 	coveralls
 build:
 	python setup.py sdist --formats=gztar,zip
+install_requirements:
+	pip install -r requirements.txt --use-mirrors
 install:
 	python setup.py install
 upload:

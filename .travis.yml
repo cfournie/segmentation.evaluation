@@ -8,7 +8,8 @@ notifications:
     - chris.m.fournier@gmail.com
 
 install:
-    - pip install -r requirements.txt --use-mirrors
+    - make install_requirements
+    - make install
 
 script: make test
 
