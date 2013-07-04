@@ -16,7 +16,14 @@ except ImportError:
 
 from segeval import __package__, __version__, __author__, __author_email__
 
-packages=['segeval']
+packages=['segeval',
+          'segeval.agreement',
+          'segeval.data',
+          'segeval.ml',
+          'segeval.similarity',
+          'segeval.similarity.distance',
+          'segeval.util',
+          'segeval.window']
 
 setup(
     name=__package__,
@@ -28,7 +35,7 @@ setup(
     author_email=__author_email__,
     url='http://segeval.readthedocs.org/',
     install_requires = [],
-    zip_safe=True,
+    zip_safe=False,
     # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=['Development Status :: 5 - Production/Stable',
                  'Environment :: Console',
