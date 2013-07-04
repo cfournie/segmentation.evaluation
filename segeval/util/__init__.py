@@ -52,8 +52,7 @@ def __fnc_metric__(fnc_metric, args, kwargs, kw_defaults):
             dataset = kwargs['dataset']
             del metric_kwargs['dataset']
         else:
-            raise SegmentationMetricError('Expected either a reference and \
-hypothesis or dataset argument.')
+            raise SegmentationMetricError('Expected either a reference and hypothesis or dataset argument.')
     # Compute
     if dataset:
         # Compute pairwise values over all coders in a dataset
@@ -75,5 +74,4 @@ hypothesis or dataset argument.')
             del metric_kwargs['permuted']
             return fnc_metric(hypothesis, reference, **metric_kwargs)
     # Except if insufficient arguments supplied
-    raise SegmentationMetricError('Incorrect arguments specified;\
- expected 1 or 2, obtained {0} of value: {1}'.format(str(len(args)), str(args)))
+    raise SegmentationMetricError('Incorrect arguments specified; expected 1 or 2, obtained {0} of value: {1}'.format(str(len(args)), str(args)))
