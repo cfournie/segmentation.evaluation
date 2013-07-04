@@ -28,15 +28,15 @@ class TestPi(unittest.TestCase):
         Test Pi upon Group 5, Chapter 1, of Kazantseva (2012) data.
         '''
         data = {'ch1': KAZANTSEVA2012_G5['ch1']}
-        self.assertEqual(fleiss_pi_linear(data),
-                         Decimal('0.1906323185011709601873536298'))
+        self.assertAlmostEqual(fleiss_pi_linear(data),
+                               Decimal('0.1906323185011709601873536298'))
 
     def test_fleiss_pi_g2(self):
         '''
         Test Pi upon Group 2 of Kazantseva (2012) data.
         '''
-        self.assertEqual(fleiss_pi_linear(KAZANTSEVA2012_G2),
-                         Decimal('0.4018239928733601859131343866'))
+        self.assertAlmostEqual(fleiss_pi_linear(KAZANTSEVA2012_G2),
+                               Decimal('0.4018239928733601859131343866'))
 
     def test_fleiss_pi_g2_ch2(self):
         '''
@@ -44,8 +44,8 @@ class TestPi(unittest.TestCase):
         '''
         data = {'ch2': KAZANTSEVA2012_G2['ch2']}
         # Test
-        self.assertEqual(fleiss_pi_linear(data),
-                         Decimal('0.5192587209302325581395348837'))
+        self.assertAlmostEqual(fleiss_pi_linear(data),
+                               Decimal('0.5192587209302325581395348837'))
 
     def test_fleiss_pi_disagree(self):
         '''

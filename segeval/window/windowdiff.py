@@ -35,7 +35,7 @@ def __create_paired_window__(hypothesis, reference, window_size,
         phantom = tuple([0] * phantom_size)
         units_ref_hyp = zip(phantom + reference + phantom,
                             phantom + hypothesis + phantom)
-    return units_ref_hyp, phantom_size
+    return list(units_ref_hyp), phantom_size
 
 
 def __window_diff__(hypothesis, reference, window_size, one_minus,
@@ -102,14 +102,14 @@ length (%(ref)i is not %(hyp)i).' % {'ref': len(reference),
     # Slide window over and sum the number of varying windows
     sum_differences = 0
     measurements = len(units_ref_hyp) - window_size
-    for i in xrange(0, measurements):
+    for i in range(0, measurements):
         window = units_ref_hyp[i: i + window_size + 1]
         ref_boundaries = 0
         hyp_boundaries = 0
         # Check that the number of loops is correct
         assert len(window) is window_size + 1
         # For pair in window
-        for j in xrange(0, len(window) - 1):
+        for j in range(0, len(window) - 1):
             ref_part, hyp_part = zip(*window[j:j + 2])
             # Boundary exists in the reference segmentation
             if ref_part[0] is not ref_part[1]:

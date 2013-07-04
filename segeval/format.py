@@ -52,7 +52,7 @@ def boundary_string_from_masses(masses):
     :param masses: Segmentation masses.
     :type masses: tuple
     '''
-    string = [set() for _ in xrange(0, sum(masses) - 1)]
+    string = [set() for _ in range(0, sum(masses) - 1)]
     # Iterate over each position
     pos = 0
     for mass in masses:

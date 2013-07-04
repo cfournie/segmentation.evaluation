@@ -40,7 +40,7 @@ def __compute_window_size__(reference, fnc_round, boundary_format):
         if hasattr(inner_coder_masses, 'items'):
             for cur_inner_coder_masses in inner_coder_masses.values():
                 __list_coder_masses__(cur_inner_coder_masses)
-        elif hasattr(inner_coder_masses, '__iter__'):
+        elif hasattr(inner_coder_masses, '__iter__') and not isinstance(inner_coder_masses, str):
             all_masses.extend(inner_coder_masses)
         else:
             raise SegmentationMetricError('Expected either a dict-like \

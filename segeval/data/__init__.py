@@ -33,7 +33,7 @@ class Dataset(defaultdict):
     def __init__(self, item_coder_data=None, properties=None,
                  boundary_types=None, boundary_format=BoundaryFormat.mass):
         '''
-        Initialize.
+        Initialize a dataset.
         '''
         defaultdict.__init__(self, dict)
         self.properties = dict()
@@ -96,6 +96,16 @@ class Dataset(defaultdict):
         dataset.properties = copy.deepcopy(self.properties)
         dataset.boundary_types = copy.deepcopy(self.boundary_types)
         return dataset
+
+
+def get_coders(container):
+    if isinstance(container, Dataset):
+        return container.coders
+    else:
+        coders = set()
+        for value in container.values():
+            coders = coders.union(value.keys())
+        return coders
 
 
 def name_from_filepath(filepath):

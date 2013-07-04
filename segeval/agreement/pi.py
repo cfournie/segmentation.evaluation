@@ -8,7 +8,7 @@ from decimal import Decimal
 from . import __fnc_metric__, __actual_agreement_linear__
 
 
-def __fleiss_pi_linear__(items_masses, **kwargs):
+def __fleiss_pi_linear__(dataset, **kwargs):
     '''
     Calculates Fleiss' :math:`\pi` (or multi-:math:`\pi`), originally proposed in
     [Fleiss1971]_, and is equivalent to Siegel and Castellan's :math:`K`
@@ -20,13 +20,11 @@ def __fleiss_pi_linear__(items_masses, **kwargs):
     # Arguments
     return_parts = kwargs['return_parts']
     # Check that there are an equal number of items for each coder
-    num_items = len(items_masses.values()[0].keys())
-    if len([True for coder_segs in items_masses.values()
-            if len(coder_segs.values()) is not num_items]) > 0:
+    if len(set([len(coder_segs.values()) for coder_segs in dataset.values()])) != 1:
         raise Exception('Unequal number of items contained.')
     # Initialize totals
     all_numerators, all_denominators, _, coders_boundaries = \
-        __actual_agreement_linear__(items_masses, **metric_kwargs)
+        __actual_agreement_linear__(dataset, **metric_kwargs)
     # Calculate Aa
     A_a = Decimal(sum(all_numerators)) / sum(all_denominators)
     # Calculate Ae

@@ -23,9 +23,7 @@ def __fleiss_kappa_linear__(dataset, **kwargs):
             if len(coder_segs.keys()) < 2]) > 0:
         raise Exception('Less than 2 coders specified.')
     # Check that there are an identical number of items
-    num_items = len(dataset.values()[0].keys())
-    if len([True for coder_segs in dataset.values()
-            if len(coder_segs.values()) is not num_items]) > 0:
+    if len(set([len(coder_segs.values()) for coder_segs in dataset.values()])) != 1:
         raise Exception('Unequal number of items contained.')
     # Initialize totals
     all_numerators, all_denominators, _, coders_boundaries = \
@@ -33,7 +31,7 @@ def __fleiss_kappa_linear__(dataset, **kwargs):
     # Calculate Aa
     A_a = Decimal(sum(all_numerators)) / sum(all_denominators)
     # Calculate Ae
-    coders = coders_boundaries.keys()
+    coders = list(coders_boundaries.keys())
     P_segs = list()
     for m in range(0, len(coders) - 1):
         for n in range(m + 1, len(coders)):

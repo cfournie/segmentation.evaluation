@@ -24,7 +24,7 @@ class TestCase(unittest.TestCase):
         '''
 
         if isinstance(first, dict) and isinstance(second, dict):
-            for item in set(first.keys() + second.keys()):
+            for item in set(list(first.keys()) + list(second.keys())):
                 if not msg:
                     msg = '{0} != {1}'.format(first, second)
                 if item not in first:

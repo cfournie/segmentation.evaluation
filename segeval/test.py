@@ -21,7 +21,7 @@ class TestModule(unittest.TestCase):
     '''
 
     def test_dir(self):
-        self.assertEquals(49, len(dir(segeval)))
+        self.assertEquals(50, len(dir(segeval)))
         self.assertEquals(set(dir(segeval)),
                           set([
                               'Average', 'BoundaryFormat', 'COMPLETE_AGREEMENT',
@@ -52,7 +52,7 @@ class TestImport(unittest.TestCase):
     '''
 
     def test_import_data(self):
-        self.assertEquals(39, len(segeval.__all__))
+        self.assertEquals(40, len(segeval.__all__))
         for item in segeval.__all__:
             self.assertNotEquals(None, getattr(segeval, item))
 

@@ -4,7 +4,6 @@ Tests the data i/o functions and package.
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import os
-import copy
 import unittest
 from . import Dataset, load_nested_folders_dict, FILETYPE_JSON, DataIOError
 from .samples import (HEARST_1997_STARGAZER, COMPLETE_AGREEMENT,

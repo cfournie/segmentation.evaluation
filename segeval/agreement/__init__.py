@@ -4,6 +4,7 @@ Inter-coder agreement statistics.
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from __future__ import division
+from ..data import get_coders
 from ..similarity import SIMILARITY_METRIC_DEFAULTS
 from ..similarity.boundary import boundary_similarity
 
@@ -89,8 +90,9 @@ def __actual_agreement_linear__(dataset, **kwargs):
     all_denominators = list()
     all_pbs = list()
     coders_boundaries = dict()
-    coders = dataset.values()[0].keys()
-    # FOr each permutation of coders
+    # Obtain the list of coders
+    coders = list(get_coders(dataset))
+    # For each permutation of coders
     for m in range(0, len(coders) - 1):
         for n in range(m + 1, len(coders)):
             for item in dataset.keys():

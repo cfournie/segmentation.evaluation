@@ -120,7 +120,7 @@ def __transpositions__(boundary_string_a, boundary_string_b, n, options_set):
     transpositions = list()
     for n_i in sorted(n):
         n_i = n_i - 1
-        for i in xrange(0, len(boundary_string_a) - n_i):
+        for i in range(0, len(boundary_string_a) - n_i):
             j = i + n_i
             # Select edge sets
             a_i = boundary_string_a[i]

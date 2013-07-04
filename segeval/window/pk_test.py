@@ -193,23 +193,23 @@ class TestPk(TestCase):
             Decimal('0.0'))
         # Originally 0.5
         self.assertAlmostEqual(
-            pk('010', '100', window_size=2, boundary_format=BoundaryFormat.nltk), 
+            pk('010', '100', window_size=2, boundary_format=BoundaryFormat.nltk),
             Decimal('0.5'))
         # Originally 0.64
         self.assertAlmostEqual(
-            pk('111111', '100100', window_size=2, boundary_format=BoundaryFormat.nltk), 
+            pk('111111', '100100', window_size=2, boundary_format=BoundaryFormat.nltk),
             Decimal('0.4'))
         # Originally 0.04
         self.assertAlmostEqual(
-            pk('000000', '100100', window_size=2, boundary_format=BoundaryFormat.nltk), 
+            pk('000000', '100100', window_size=2, boundary_format=BoundaryFormat.nltk),
             Decimal('0.6'))
         # Originally 0.25
         self.assertAlmostEqual(
-            pk('111111', '100100', window_size=3, boundary_format=BoundaryFormat.nltk), 
+            pk('111111', '100100', window_size=3, boundary_format=BoundaryFormat.nltk),
             Decimal('0'))
         # Originally 0.25
         self.assertAlmostEqual(
-            pk('000000', '100100', window_size=3, boundary_format=BoundaryFormat.nltk), 
+            pk('000000', '100100', window_size=3, boundary_format=BoundaryFormat.nltk),
             Decimal('1'))
 
 

@@ -22,8 +22,8 @@ class TestBias(unittest.TestCase):
         '''
         bias = artstein_poesio_bias_linear(KAZANTSEVA2012_G5)
         self.assertTrue(bias > 0)
-        self.assertEqual(bias,
-                         Decimal('0.00841453429829254475759269324'))
+        self.assertAlmostEqual(bias,
+                               Decimal('0.00841453429829254475759269324'))
 
     def test_bias_g5_ch1(self):
         '''
@@ -33,8 +33,8 @@ class TestBias(unittest.TestCase):
         data = {'ch1': data}
         bias = artstein_poesio_bias_linear(data)
         self.assertTrue(bias > 0)
-        self.assertEqual(bias,
-                         Decimal('0.00390625000000000000000000011'))
+        self.assertAlmostEqual(bias,
+                               Decimal('0.00390625000000000000000000011'))
 
     def test_bias_g2(self):
         '''
@@ -42,8 +42,8 @@ class TestBias(unittest.TestCase):
         '''
         bias = artstein_poesio_bias_linear(KAZANTSEVA2012_G2)
         self.assertTrue(bias > 0)
-        self.assertEqual(bias,
-                         Decimal('0.00821695210923559041105482425'))
+        self.assertAlmostEqual(bias,
+                               Decimal('0.00821695210923559041105482425'))
 
     def test_bias_g2_ch2(self):
         '''
@@ -53,8 +53,8 @@ class TestBias(unittest.TestCase):
         data = {'ch2': data}
         bias = artstein_poesio_bias_linear(data)
         self.assertTrue(bias > 0)
-        self.assertEqual(bias,
-                         Decimal('0.00090702947845804988662131528'))
+        self.assertAlmostEqual(bias,
+                               Decimal('0.00090702947845804988662131528'))
 
     def test_bias_complete(self):
         '''
