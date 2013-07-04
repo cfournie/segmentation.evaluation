@@ -239,6 +239,33 @@ class TestWindowDiffMasses(TestCase):
         value = window_diff([2, 3, 6], [2, 2, 7], window_size=2)
         self.assertAlmostEqual(Decimal('0.2222222'), value)
 
+    def test_boundary_format_nltk(self):
+        '''
+        Test the nltk boundary format.
+        '''
+        value = window_diff('0100100000', '0101000000', window_size=2, boundary_format=BoundaryFormat.nltk)
+        self.assertAlmostEqual(Decimal('0.2222222'), value)
+
+    def test_nltk(self):
+        '''
+        Runs WD tests from https://github.com/nltk/nltk/blob/master/nltk/test/segmentation.doctest
+        '''
+        s1 = "000100000010"
+        s2 = "000010000100"
+        s3 = "100000010000"
+        # Originally 0.0
+        self.assertAlmostEqual(
+            window_diff(s1, s1, window_size=3, boundary_format=BoundaryFormat.nltk),
+            Decimal('0'))
+        # Originally 0.3
+        self.assertAlmostEqual(
+            window_diff(s2, s1, window_size=3, boundary_format=BoundaryFormat.nltk),
+            Decimal('0.3'))
+        # Originally 0.7
+        self.assertAlmostEqual(
+            window_diff(s3, s2, window_size=3, boundary_format=BoundaryFormat.nltk),
+            Decimal('0.8'))
+
 
 class TestPairwiseWindowDiff(TestCase):
 

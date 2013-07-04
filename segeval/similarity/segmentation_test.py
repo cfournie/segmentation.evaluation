@@ -7,6 +7,7 @@ import unittest
 from decimal import Decimal
 from .segmentation import segmentation_similarity
 from ..util import SegmentationMetricError
+from ..format import BoundaryFormat
 from ..data.samples import (HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER,
                             MULTIPLE_BOUNDARY_TYPES, KAZANTSEVA2012_G5)
 
@@ -44,6 +45,13 @@ class TestSegmentation(unittest.TestCase):
         '''
         value = segmentation_similarity([2, 3, 6], [2, 2, 7], one_minus=True)
         self.assertEqual(Decimal('0.05'), value)
+
+    def test_boundary_format_nltk(self):
+        '''
+        Test the nltk boundary format.
+        '''
+        value = segmentation_similarity('0100100000', '0101000000', boundary_format=BoundaryFormat.nltk)
+        self.assertAlmostEqual(Decimal('0.95'), value)
 
     def test_clustered_fps(self):
         '''

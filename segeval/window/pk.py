@@ -8,12 +8,17 @@ from __future__ import division
 from decimal import Decimal
 from . import __compute_window_size__, WINDOW_METRIC_DEFAULTS
 from ..util import __fnc_metric__, SegmentationMetricError
-from ..format import BoundaryFormat, convert_masses_to_positions
+from ..format import (BoundaryFormat, convert_masses_to_positions, convert_nltk_to_masses)
 
 
 def __pk__(hypothesis, reference, window_size, one_minus, boundary_format,
            return_parts, fnc_round):
 
+    # Convert from NLTK types
+    if boundary_format == BoundaryFormat.nltk:
+        reference = convert_nltk_to_masses(reference)
+        hypothesis = convert_nltk_to_masses(hypothesis)
+        boundary_format = BoundaryFormat.mass
     # Convert from masses into positions
     if boundary_format == BoundaryFormat.mass:
         reference = convert_masses_to_positions(reference)
@@ -45,7 +50,7 @@ def __pk__(hypothesis, reference, window_size, one_minus, boundary_format,
             sum_differences += 1
         measurements += 1
     # Perform final division
-    value = Decimal(sum_differences) / measurements
+    value = Decimal(sum_differences) / measurements if measurements > 0 else 0
     if return_parts:
         return sum_differences, measurements
     else:

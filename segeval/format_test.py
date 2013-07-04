@@ -5,7 +5,7 @@ Tests segmentation format utility functions.
 '''
 import unittest
 from format import (convert_positions_to_masses, convert_masses_to_positions,
-                    boundary_string_from_masses)
+                    boundary_string_from_masses, convert_nltk_to_masses)
 
 
 class TestSegeval(unittest.TestCase):
@@ -76,3 +76,17 @@ class TestSegeval(unittest.TestCase):
         '''
         string = boundary_string_from_masses([2,3])
         self.assertEqual(string, (set(), set([1]), set(), set()))
+
+    def test_convert_nltk_to_masses_pk_ab(self):
+        '''
+        NLTK-style segmentations starting with a boundary.
+        '''
+        self.assertEqual(convert_nltk_to_masses('100'), (1,3))
+        self.assertEqual(convert_nltk_to_masses('010'), (2,2))
+
+    def test_convert_nltk_to_masses_pk_long(self):
+        '''
+        NLTK-style segmentations starting with a boundary.
+        '''
+        self.assertEqual(convert_nltk_to_masses('0100100000'), (2, 3, 6))
+        self.assertEqual(convert_nltk_to_masses('0101000000'), (2, 2, 7))

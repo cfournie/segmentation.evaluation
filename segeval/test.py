@@ -35,8 +35,8 @@ class TestModule(unittest.TestCase):
                               'boundary_similarity', 'segmentation_similarity',
                               'boundary_string_from_masses', 'compute_window_size',
                               'convert_masses_to_positions', 'convert_positions_to_masses',
-                              'fleiss_kappa_linear', 'fleiss_pi_linear', 'fmeasure',
-                              'input_linear_mass_json', 'input_linear_mass_tsv',
+                              'convert_nltk_to_masses', 'fleiss_kappa_linear', 'fleiss_pi_linear',
+                              'fmeasure', 'input_linear_mass_json', 'input_linear_mass_tsv',
                               'load_nested_folders_dict', 'output_linear_mass_json', 'pk',
                               'precision', 'recall', 'summarize', 'weight_t', 'weight_s_scale',
                               'weight_t_scale', 'weight_s', 'weight_a', 'window_diff']))

@@ -14,15 +14,15 @@ These segmentation comparison metrics were introduced in [Fournier2013]_.
 
 .. autofunction:: boundary_statistics
 
-    Computes a large number of BED-based and other segmentation statistics, returning a :func:`dict` that includes:
-        * ``count_edits``, a count of BED edits;
-        * ``additions``, a list of BED addition edits;
-        * ``substitutions``, a list of BED substitution edits;
-        * ``transpositions``, a list of BED transposition edits;
-        * ``full_misses``, a list of fully-missed boundaries (regardless of edits);
-        * ``boundaries_all``, a count of boundaries compared;
-        * ``matches``, a list of matching boundaries;
-        * ``pbs``, a count of potential boundary types.
+	Computes a large number of BED-based and other segmentation statistics, returning a :func:`dict` that includes:
+		* ``count_edits``, a count of BED edits;
+		* ``additions``, a list of BED addition edits;
+		* ``substitutions``, a list of BED substitution edits;
+		* ``transpositions``, a list of BED transposition edits;
+		* ``full_misses``, a list of fully-missed boundaries (regardless of edits);
+		* ``boundaries_all``, a count of boundaries compared;
+		* ``matches``, a list of matching boundaries;
+		* ``pbs``, a count of potential boundary types.
 
 .. class:: BoundaryFormat()
 
@@ -30,6 +30,8 @@ These segmentation comparison metrics were introduced in [Fournier2013]_.
 		* ``sets``, a boundary set string; see :func:`boundary_string_from_masses`
 		* ``mass``, a tuple of segment masses; see :func:`convert_positions_to_masses`
 		* ``position``, a tuple of position segment labels; see :func:`convert_masses_to_positions`
+		* ``nltk``, a string representation of segment positions; see :func:`convert_nltk_to_masses`
+
 
 
 Boundary Similarity (B)
@@ -50,20 +52,20 @@ This metric compares the correctness of boundary pairs between segmentations [Fo
 
 .. function:: boundary_similarity
 
-    :param boundary_format: Segmentation format; default ``BoundaryFormat.mass``
-    :param permuted: Use pairwise permutations v.s. combinations; default ``False``
-    :param one_minus: Return :math:`1-value`; default ``False``
-    :param return_parts: Return tuples of numerators, demoninators, or other values comprising a metric; default ``False``
-    :param n_t: See :func:`boundary_edit_distance`
-    :param boundary_types: Set of allowewable boundary types; default ``set([1])``
-    :param weight: Tuple of weighting functions, see :ref:`weightfunctions`; default is scaling of substitution and transposition but not addition edits (:func:`weight_a`, :func:`weight_s_scale`, :func:`weight_t_scale`)
-    :type boundary_format: :class:`BoundaryFormat` enum
-    :type permuted: bool
-    :type one_minus: bool
-    :type return_parts: bool
-    :type n_t: int
-    :type boundary_types: set
-    :type weight: tuple
+	:param boundary_format: Segmentation format; default ``BoundaryFormat.mass``
+	:param permuted: Use pairwise permutations v.s. combinations; default ``False``
+	:param one_minus: Return :math:`1-value`; default ``False``
+	:param return_parts: Return tuples of numerators, demoninators, or other values comprising a metric; default ``False``
+	:param n_t: See :func:`boundary_edit_distance`
+	:param boundary_types: Set of allowewable boundary types; default ``set([1])``
+	:param weight: Tuple of weighting functions, see :ref:`weightfunctions`; default is scaling of substitution and transposition but not addition edits (:func:`weight_a`, :func:`weight_s_scale`, :func:`weight_t_scale`)
+	:type boundary_format: :class:`BoundaryFormat` enum
+	:type permuted: bool
+	:type one_minus: bool
+	:type return_parts: bool
+	:type n_t: int
+	:type boundary_types: set
+	:type weight: tuple
 
 
 Segmentation Similarity (S)
@@ -164,18 +166,18 @@ Proposed in [BeefermanBerger1999]_, this segmentation comparison metric runs a w
 
 .. function:: pk
 
-    :param boundary_format: Segmentation format; default ``BoundaryFormat.mass``
-    :param permuted: Use pairwise permutations v.s. combinations; default ``True``
-    :param one_minus: Return :math:`1-value`; default ``False``
-    :param return_parts: Return tuples of numerators, demoninators, or other values comprising a metric; default ``False``
-    :param window_size: Overriding window size -- if not ``None``, this replaces the per-comparison window size computed using :func:`compute_window_size` as the window size used; default ``None``
-    :param fnc_round: Rounding function used when computing window size, see :func:`compute_window_size`; default :func:`round`
-    :type boundary_format: :class:`BoundaryFormat` enum
-    :type permuted: bool
-    :type one_minus: bool
-    :type return_parts: bool
-    :type window_size: int
-    :type fnc_round: `function`
+	:param boundary_format: Segmentation format; default ``BoundaryFormat.mass``
+	:param permuted: Use pairwise permutations v.s. combinations; default ``True``
+	:param one_minus: Return :math:`1-value`; default ``False``
+	:param return_parts: Return tuples of numerators, demoninators, or other values comprising a metric; default ``False``
+	:param window_size: Overriding window size -- if not ``None``, this replaces the per-comparison window size computed using :func:`compute_window_size` as the window size used; default ``None``
+	:param fnc_round: Rounding function used when computing window size, see :func:`compute_window_size`; default :func:`round`
+	:type boundary_format: :class:`BoundaryFormat` enum
+	:type permuted: bool
+	:type one_minus: bool
+	:type return_parts: bool
+	:type window_size: int
+	:type fnc_round: `function`
 
 
 WindowDiff
@@ -186,15 +188,15 @@ Proposed in [PevznerHearst2002]_, this segmentation comparison metric is an adap
 
 .. function:: window_diff(hypothesis, reference, **kwargs)
 
-    For parameters see :func:`pk`
+	For parameters see :func:`pk`
 
 .. function:: window_diff(dataset, **kwargs)
 
-    For parameters see :func:`pk`
+	For parameters see :func:`pk`
 
 .. function:: window_diff
 
-    For parameters see :func:`pk`
+	For parameters see :func:`pk`
 
 
 Inter-coder Agreement Coefficients
@@ -202,37 +204,37 @@ Inter-coder Agreement Coefficients
 Originally adapted in [FournierInkpen2012]_ from formulations provided by [ArtsteinPoesio2008]_, these have inter-coder agreement have been modified by [Fournier2013]_ to better suite the measurement of inter-coder agreement of segmentation boundaries   using :func:`boundary_similarity` for actual agreement.
 
 .. function:: actual_agreement_linear
-    
-    Calculate actual (i.e., observed or :math:`\\text{A}_a`), boundary agreement without accounting for chance, using [ArtsteinPoesio2008]_'s formulation as adapted by [Fournier2013]_.
-    
-    :param fnc_compare: Segmentation comparison metric function to use; default :func:`boundary_similarity`
-    :param boundary_format: Segmentation format; default ``BoundaryFormat.mass``
-    :param permuted: Use pairwise permutations v.s. combinations; default ``False``
-    :param one_minus: Return :math:`1-value`; default ``False``
-    :param return_parts: Return tuples of numerators, demoninators, or other values comprising a metric; default ``False``
-    :param n_t: See :func:`boundary_edit_distance`
-    :param boundary_types: Set of allowewable boundary types; default ``set([1])``
-    :param weight: Tuple of weighting functions, see :ref:`weightfunctions`; default is scaling of substitution and transposition but not addition edits (:func:`weight_a`, :func:`weight_s_scale`, :func:`weight_t_scale`)
-    :type fnc_compare: function
-    :type boundary_format: :class:`BoundaryFormat` enum
-    :type permuted: bool
-    :type one_minus: bool
-    :type return_parts: bool
-    :type n_t: int
-    :type boundary_types: set
-    :type weight: tuple
+	
+	Calculate actual (i.e., observed or :math:`\\text{A}_a`), boundary agreement without accounting for chance, using [ArtsteinPoesio2008]_'s formulation as adapted by [Fournier2013]_.
+	
+	:param fnc_compare: Segmentation comparison metric function to use; default :func:`boundary_similarity`
+	:param boundary_format: Segmentation format; default ``BoundaryFormat.mass``
+	:param permuted: Use pairwise permutations v.s. combinations; default ``False``
+	:param one_minus: Return :math:`1-value`; default ``False``
+	:param return_parts: Return tuples of numerators, demoninators, or other values comprising a metric; default ``False``
+	:param n_t: See :func:`boundary_edit_distance`
+	:param boundary_types: Set of allowewable boundary types; default ``set([1])``
+	:param weight: Tuple of weighting functions, see :ref:`weightfunctions`; default is scaling of substitution and transposition but not addition edits (:func:`weight_a`, :func:`weight_s_scale`, :func:`weight_t_scale`)
+	:type fnc_compare: function
+	:type boundary_format: :class:`BoundaryFormat` enum
+	:type permuted: bool
+	:type one_minus: bool
+	:type return_parts: bool
+	:type n_t: int
+	:type boundary_types: set
+	:type weight: tuple
 
 .. autofunction:: fleiss_pi_linear
 
-    For parameters see :func:`actual_agreement_linear`
+	For parameters see :func:`actual_agreement_linear`
 
 .. autofunction:: fleiss_kappa_linear
 
-    For parameters see :func:`actual_agreement_linear`
+	For parameters see :func:`actual_agreement_linear`
 
 .. autofunction:: artstein_poesio_bias_linear
 
-    For parameters see :func:`actual_agreement_linear`
+	For parameters see :func:`actual_agreement_linear`
 
 
 Format Conversion
@@ -242,6 +244,7 @@ These utility functions are used internally and provided to allow for the conver
 .. autofunction:: boundary_string_from_masses
 .. autofunction:: convert_positions_to_masses
 .. autofunction:: convert_masses_to_positions
+.. autofunction:: convert_nltk_to_masses
 
 
 Data
@@ -253,19 +256,19 @@ Model
 These classes are used to model and store text (i.e., item) segmentations (i.e., codings).
 
 .. autoclass:: Dataset
-    :members:
+	:members:
 
 .. class:: Field()
 
-    An ``enum`` with options representing json fields when storing segmentations which include:
-        * ``segmentation_type``, the type if segmentation; default is ``SegmentationType.linear``
-        * ``items``, items with annotators and codings stored within
-        * ``codings``, annotators and codings stored within
+	An ``enum`` with options representing json fields when storing segmentations which include:
+		* ``segmentation_type``, the type if segmentation; default is ``SegmentationType.linear``
+		* ``items``, items with annotators and codings stored within
+		* ``codings``, annotators and codings stored within
 
 .. class:: SegmentationType()
 
-    An ``enum`` with options representing segmentation structure types including:
-        * ``linear``, linear segmentation
+	An ``enum`` with options representing segmentation structure types including:
+		* ``linear``, linear segmentation
 
 Input/Output
 ************
@@ -301,13 +304,13 @@ Classes used to model segmentation comparisons so that they can be summarized by
 
 .. class:: Average
 
-    An ``enum`` with options representing the methods of computing averages:
-        * ``micro``, micro-average
-        * ``macro``, macro-average
-    
-    For more details, see the `Stanford IR Book <http://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-text-classification-1.html>`_.
+	An ``enum`` with options representing the methods of computing averages:
+		* ``micro``, micro-average
+		* ``macro``, macro-average
+	
+	For more details, see the `Stanford IR Book <http://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-text-classification-1.html>`_.
 
 .. autoclass:: ConfusionMatrix
-    :members:
+	:members:
 
 

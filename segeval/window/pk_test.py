@@ -176,6 +176,42 @@ class TestPk(TestCase):
         value = pk([2, 3, 6], [2, 2, 7], window_size=2)
         self.assertAlmostEqual(Decimal('0.2222222'), value)
 
+    def test_boundary_format_nltk(self):
+        '''
+        Test the nltk boundary format.
+        '''
+        value = pk('0100100000', '0101000000', window_size=2, boundary_format=BoundaryFormat.nltk)
+        self.assertAlmostEqual(Decimal('0.2222222'), value)
+
+    def test_nltk(self):
+        '''
+        Runs Pk tests from https://github.com/nltk/nltk/blob/master/nltk/test/segmentation.doctest
+        '''
+        # Originally 0.0
+        self.assertAlmostEqual(
+            pk('1000100', '1000100', window_size=3, boundary_format=BoundaryFormat.nltk),
+            Decimal('0.0'))
+        # Originally 0.5
+        self.assertAlmostEqual(
+            pk('010', '100', window_size=2, boundary_format=BoundaryFormat.nltk), 
+            Decimal('0.5'))
+        # Originally 0.64
+        self.assertAlmostEqual(
+            pk('111111', '100100', window_size=2, boundary_format=BoundaryFormat.nltk), 
+            Decimal('0.4'))
+        # Originally 0.04
+        self.assertAlmostEqual(
+            pk('000000', '100100', window_size=2, boundary_format=BoundaryFormat.nltk), 
+            Decimal('0.6'))
+        # Originally 0.25
+        self.assertAlmostEqual(
+            pk('111111', '100100', window_size=3, boundary_format=BoundaryFormat.nltk), 
+            Decimal('0'))
+        # Originally 0.25
+        self.assertAlmostEqual(
+            pk('000000', '100100', window_size=3, boundary_format=BoundaryFormat.nltk), 
+            Decimal('1'))
+
 
 class TestPairwisePkMeasure(TestCase):
 

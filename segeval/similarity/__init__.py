@@ -9,7 +9,7 @@ from .weight import weight_a, weight_s_scale, weight_t_scale
 from ..metric import METRIC_DEFAULTS
 from ..ml import ConfusionMatrix as cm
 from ..format import (BoundaryFormat, boundary_string_from_masses,
-                      convert_positions_to_masses)
+                      convert_positions_to_masses, convert_nltk_to_masses)
 from ..util import __fnc_metric__, SegmentationMetricError
 
 
@@ -26,6 +26,11 @@ def __boundary_statistics__(segs_a, segs_b, boundary_types, boundary_format, n_t
     Compute boundary similarity applying the weighting functions specified.
     '''
 
+    # Convert from NLTK types
+    if boundary_format == BoundaryFormat.nltk:
+        segs_a = convert_nltk_to_masses(segs_a)
+        segs_b = convert_nltk_to_masses(segs_b)
+        boundary_format = BoundaryFormat.mass
     # Check format
     if boundary_format == BoundaryFormat.sets:
         pass  # Correct boundary format

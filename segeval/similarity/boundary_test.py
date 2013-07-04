@@ -7,8 +7,8 @@ import unittest
 from decimal import Decimal
 from .boundary import boundary_similarity
 from .weight import weight_a, weight_s, weight_t
-from ..format import BoundaryFormat
 from ..util import SegmentationMetricError
+from ..format import BoundaryFormat
 from ..compute import summarize
 from ..data.samples import (MULTIPLE_BOUNDARY_TYPES, HEARST_1997_STARGAZER,
                             HYPOTHESIS_STARGAZER)
@@ -47,6 +47,13 @@ class TestBoundary(unittest.TestCase):
         '''
         value = boundary_similarity([2, 3, 6], [2, 2, 7], one_minus=True)
         self.assertEqual(Decimal('0.25'), value)
+
+    def test_boundary_format_nltk(self):
+        '''
+        Test the nltk boundary format.
+        '''
+        value = boundary_similarity('01001000000', '01010000000', boundary_format=BoundaryFormat.nltk)
+        self.assertAlmostEqual(Decimal('0.75'), value)
 
     def test_clustered_fps(self):
         '''

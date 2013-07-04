@@ -10,7 +10,7 @@ from __future__ import division
 from decimal import Decimal
 from . import __compute_window_size__, WINDOW_METRIC_DEFAULTS
 from ..format import (BoundaryFormat, convert_masses_to_positions,
-                      convert_positions_to_masses)
+                      convert_positions_to_masses, convert_nltk_to_masses)
 from ..util import __fnc_metric__, SegmentationMetricError
 
 
@@ -73,7 +73,11 @@ def __window_diff__(hypothesis, reference, window_size, one_minus,
     .. note:: See :func:`segeval.convert_masses_to_positions` for an example of
               the input format.
     '''
-
+    # Convert from NLTK types
+    if boundary_format == BoundaryFormat.nltk:
+        reference = convert_nltk_to_masses(reference)
+        hypothesis = convert_nltk_to_masses(hypothesis)
+        boundary_format = BoundaryFormat.mass
     # Convert from masses into positions
     if boundary_format == BoundaryFormat.mass:
         reference = convert_masses_to_positions(reference)

@@ -7,7 +7,7 @@ from collections import Counter
 from .util.lang import enum
 
 
-BoundaryFormat = enum(position='position', mass='mass', sets='sets')
+BoundaryFormat = enum(position='position', mass='mass', sets='sets', nltk='nltk')
 
 
 def convert_positions_to_masses(positions):
@@ -62,3 +62,19 @@ def boundary_string_from_masses(masses):
         pos += mass
     # Return
     return tuple([frozenset(pb) for pb in string])
+
+
+def convert_nltk_to_masses(string, boundary_symbol='1'):
+    '''
+    Convert an `NLTK <http://nltk.org/>`_-formatted segmentation into masses, e.g., ``000001000100000`` becomes
+    ``[5,3,5]``.
+
+    For more information, see `nltk.metrics.segmentation <http://nltk.org/api/nltk.metrics.html#module-nltk.metrics.segmentation>`_.
+
+    :param string: NLTK-formatted segmentation.
+    :type string: str
+    :param boundary_symbol: String that represents a boundary.
+    :type boundary_symbol: str
+    '''
+    masses = [len(segment) + 1 for segment in string.split(boundary_symbol)]
+    return tuple(masses)

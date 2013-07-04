@@ -59,7 +59,8 @@ all_by_module = {
     'segeval.format':           ['BoundaryFormat',
                                  'boundary_string_from_masses',
                                  'convert_positions_to_masses',
-                                 'convert_masses_to_positions'],
+                                 'convert_masses_to_positions',
+                                 'convert_nltk_to_masses'],
 }
 
 
