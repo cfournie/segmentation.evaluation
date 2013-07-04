@@ -3,6 +3,12 @@
 History
 =======
 
+2.0.6 (2013-07-04)
+----------------
+
+* Fixed an issue with subpackages not being included in the distribution.
+
+
 2.0.5 (2013-07-03)
 ----------------
 
