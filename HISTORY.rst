@@ -3,10 +3,16 @@
 History
 =======
 
+2.0.7 (2013-07-05)
+----------------
+
+* Fixed an issue with importing the Dataset object which resulted in an inablity to also build docs
+
+
 2.0.6 (2013-07-04)
 ----------------
 
-* Fixed an issue with subpackages not being included in the distribution.
+* Fixed an issue with subpackages not being included in the distribution
 
 
 2.0.5 (2013-07-03)
