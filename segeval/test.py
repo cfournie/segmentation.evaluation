@@ -21,6 +21,7 @@ class TestModule(unittest.TestCase):
     '''
 
     def test_dir(self):
+        self.assertEquals(49, len(dir(segeval)))
         self.assertEquals(set(dir(segeval)),
                           set([
                               'Average', 'BoundaryFormat', 'COMPLETE_AGREEMENT',
@@ -42,6 +43,18 @@ class TestModule(unittest.TestCase):
 
     def test_get_attr(self):
         self.assertEquals(segeval.__getattr__('__package__'), 'segeval')
+
+
+class TestImport(unittest.TestCase):
+
+    '''
+    Test that data functions can be imported.
+    '''
+
+    def test_import_data(self):
+        self.assertEquals(39, len(segeval.__all__))
+        for item in segeval.__all__:
+            self.assertNotEquals(None, getattr(segeval, item))
 
 
 class TestExamples(unittest.TestCase):
