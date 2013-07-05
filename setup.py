@@ -34,8 +34,6 @@ setup(
     author=__author__,
     author_email=__author_email__,
     url='http://segeval.readthedocs.org/',
-    install_requires = [],
-    zip_safe=False,
     # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=['Development Status :: 5 - Production/Stable',
                  'Environment :: Console',
