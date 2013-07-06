@@ -3,6 +3,14 @@
 History
 =======
 
+2.0.8 (2013-07-05)
+----------------
+
+* Added Python 2.6, 3.2, and 3.3 support
+* Added support for converting NLTK-style segmentations into segmentation masses
+* Fixed minor comment/documentation typos
+
+
 2.0.7 (2013-07-05)
 ----------------
 
