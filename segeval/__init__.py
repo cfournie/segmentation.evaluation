@@ -18,6 +18,7 @@ __package__ = 'segeval'
 __author__ = 'Chris Fournier'
 __author_email__ = 'chris.m.fournier@gmail.com'
 __copyright__ = '2012-2013, ' + __author__
+__description__ = 'A package providing text segmentation evaluation metrics and utilities'
 
 
 # The import magic shown here was taken (nearly verbatim) from the Werkzeug
@@ -109,5 +110,6 @@ new_module.__dict__.update({
     '__author_email__':     __author_email__,
     '__copyright__':        __copyright__,
     '__all__':              tuple(object_origins),
-    '__docformat__':        'restructuredtext en'
+    '__docformat__':        'restructuredtext en',
+    '__description__':      __description__
 })
