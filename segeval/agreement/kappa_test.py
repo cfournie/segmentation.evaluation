@@ -84,7 +84,7 @@ class TestKappa(unittest.TestCase):
         '''
         data_complete = COMPLETE_AGREEMENT
         kappa = fleiss_kappa_linear(data_complete)
-        self.assertEqual(kappa, 1.0)
+        self.assertEqual(kappa, Decimal('1.0'))
 
     def test_exception_coders(self):
         '''

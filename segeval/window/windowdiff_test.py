@@ -37,7 +37,7 @@ class TestWindowDiffPositions(TestCase):
 
         a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,1,2,2,2,3,3,3,3,3]
-        self.assertEqual(window_diff(a, b, **self.kwargs), 0.0)
+        self.assertEqual(window_diff(a, b, **self.kwargs), Decimal('0.0'))
 
     def test_no_boundaries(self):
         '''
@@ -82,9 +82,9 @@ class TestWindowDiffPositions(TestCase):
         a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),  # k = 2
-                               Decimal(2.0 / 11.0))
+                               Decimal('2.0') / Decimal('11.0'))
         self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
-                               Decimal(2.0 / 11.0))
+                               Decimal('2.0') / Decimal('11.0'))
 
     def test_extra_boundary(self):
         '''
@@ -94,9 +94,9 @@ class TestWindowDiffPositions(TestCase):
         a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
-                               Decimal(2.0 / 11.0))
+                               Decimal('2.0') / Decimal('11.0'))
         self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
-                               Decimal(2.0 / 11.0))
+                               Decimal('2.0') / Decimal('11.0'))
 
     def test_full_miss_and_misaligned(self):
         '''

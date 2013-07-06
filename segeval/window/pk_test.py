@@ -52,8 +52,8 @@ class TestPk(TestCase):
         b = [1,1,1,1,1,2,2,2,3,3,3,3,3]
         one_minus_kwargs = dict(TestPk.kwargs)
         one_minus_kwargs['one_minus'] = True
-        self.assertEqual(pk(a, b, **self.kwargs), 0.0)
-        self.assertEqual(pk(a, b, **one_minus_kwargs), 1.0)
+        self.assertEqual(pk(a, b, **self.kwargs), Decimal('0.0'))
+        self.assertEqual(pk(a, b, **one_minus_kwargs), Decimal('1.0'))
 
     def test_no_boundaries(self):
         '''
@@ -87,8 +87,8 @@ class TestPk(TestCase):
 
         a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
         b = [1,1,1,1,1,1,1,1,1,1,1,1,1]
-        self.assertEqual(pk(a, b, **self.kwargs), 1.0)
-        self.assertEqual(pk(b, a, **self.kwargs), 1.0)
+        self.assertEqual(pk(a, b, **self.kwargs), Decimal('1.0'))
+        self.assertEqual(pk(b, a, **self.kwargs), Decimal('1.0'))
 
     def test_translated_boundary(self):
         '''

@@ -25,7 +25,7 @@ class TestBoundary(unittest.TestCase):
         Test false negative.
         '''
         value = boundary_similarity([2, 3, 6], [5, 6])
-        self.assertEqual(0.5, value)
+        self.assertEqual(Decimal('0.5'), value)
 
     def test_fp(self):
         '''
@@ -39,7 +39,7 @@ class TestBoundary(unittest.TestCase):
         Test near miss.
         '''
         value = boundary_similarity([2, 3, 6], [2, 2, 7])
-        self.assertEqual(0.75, value)
+        self.assertEqual(Decimal('0.75'), value)
 
     def test_one_minus(self):
         '''
@@ -60,7 +60,7 @@ class TestBoundary(unittest.TestCase):
         Test clustered fps.
         '''
         value = boundary_similarity([2, 3, 6], [1, 1, 3, 1, 5])
-        self.assertEqual(0.5, value)
+        self.assertEqual(Decimal('0.5'), value)
 
     def test_positions(self):
         '''
@@ -70,7 +70,7 @@ class TestBoundary(unittest.TestCase):
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
         value = boundary_similarity(a, b, boundary_format=
                                     BoundaryFormat.position)
-        self.assertEqual(0, value)
+        self.assertEqual(Decimal('0'), value)
 
     def test_format_exception(self):
         '''
@@ -104,9 +104,9 @@ class TestBoundary(unittest.TestCase):
         Test false negative.
         '''
         value = summarize(boundary_similarity(MULTIPLE_BOUNDARY_TYPES))
-        self.assertEqual((0.375,
-                          0.125,
-                          0.015625,
+        self.assertEqual((Decimal('0.375'),
+                          Decimal('0.125'),
+                          Decimal('0.015625'),
                           Decimal('0.08838834764831844055010554528'),
                           2),
                          value)

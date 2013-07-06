@@ -33,7 +33,7 @@ class TestSimilarity(unittest.TestCase):
         self.assertEqual(cm[2][None], 0)
         self.assertEqual(cm[2][1], 1)
         self.assertEqual(cm[1][2], 0)
-        self.assertEqual(cm[1][1], 1.5)
+        self.assertEqual(cm[1][1], Decimal('1.5'))
         self.assertEqual(cm[2][2], 0)
 
     def test_boundary_statistics(self):

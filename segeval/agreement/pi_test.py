@@ -83,7 +83,7 @@ class TestPi(unittest.TestCase):
 
         data_complete = COMPLETE_AGREEMENT
         pi = fleiss_pi_linear(data_complete)
-        self.assertEqual(pi, 1.0)
+        self.assertEqual(pi, Decimal('1'))
 
     def test_exception_coders(self):
         '''

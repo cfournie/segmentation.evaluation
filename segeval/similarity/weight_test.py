@@ -4,6 +4,7 @@ Tests weight functions.
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 import unittest
+from decimal import Decimal
 from . import (weight_s_scale, weight_t_scale)
 
 
@@ -20,7 +21,7 @@ class TestWeight(unittest.TestCase):
         '''
         transpositions = [[1,2], [1,3], [1,4]]
         weight = weight_t_scale(transpositions, 4)
-        self.assertEqual(weight, 1.5)
+        self.assertEqual(weight, Decimal('1.5'))
 
     def test_weight_s_scale(self):
         '''
@@ -29,6 +30,6 @@ class TestWeight(unittest.TestCase):
         '''
         substitutions = [[1,2], [1,3], [1,4]]
         weight = weight_s_scale(substitutions, 4)
-        self.assertEqual(weight, 1.5)
+        self.assertEqual(weight, Decimal('1.5'))
         weight = weight_s_scale(substitutions, 5, 2)
-        self.assertEqual(weight, 1.5)
+        self.assertEqual(weight, Decimal('1.5'))
