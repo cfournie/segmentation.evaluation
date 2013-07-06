@@ -84,6 +84,13 @@ class Dataset(defaultdict):
         dataset += other
         return dataset
 
+    def copy(self):
+        dataset = copy.deepcopy(self)
+        dataset.coders = copy.deepcopy(self.coders)
+        dataset.properties = copy.deepcopy(self.properties)
+        dataset.boundary_types = copy.deepcopy(self.boundary_types)
+        return dataset
+
 
 def name_from_filepath(filepath):
     '''

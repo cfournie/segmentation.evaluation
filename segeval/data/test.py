@@ -31,12 +31,20 @@ class TestDataset(unittest.TestCase):
         '''
         Test ``Dataset.add()``.
         '''
-        # Output complete and larege disagreement, then merge
-        large_disagreement = copy.deepcopy(LARGE_DISAGREEMENT)
+        # Output complete and large disagreement, then merge
+        self.assertEqual(set(['an5', 'an6']), LARGE_DISAGREEMENT.coders)
+        large_disagreement = LARGE_DISAGREEMENT.copy()
+        self.assertEqual(set(['an5', 'an6']), large_disagreement.coders)
         large_disagreement += COMPLETE_AGREEMENT
-        self.assertTrue(6, len(large_disagreement.coders))
-        self.assertTrue(4, len(large_disagreement))
-        self.assertTrue(2, len(large_disagreement['item1']))
+        self.assertEqual(6, len(large_disagreement.coders))
+        self.assertEqual(4, len(large_disagreement))
+        self.assertEqual(6, len(large_disagreement['item1']))
+
+    def test_coders(self):
+        '''
+        Test ``Dataset.add()``.
+        '''
+        self.assertEqual(set(['an4', 'an1', 'an2', 'an3']), COMPLETE_AGREEMENT.coders)
 
     def test_dataset_property(self):
         '''
