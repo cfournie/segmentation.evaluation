@@ -3,7 +3,7 @@ Segmentation encoding format converstion utilities.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from collections import Counter
+from itertools import groupby
 from .util.lang import enum
 
 
@@ -21,11 +21,7 @@ def convert_positions_to_masses(positions):
 
     .. deprecated:: 1.0
     '''
-    counts = Counter(positions)
-    masses = list()
-    for i in range(1, max(counts.keys()) + 1):
-        masses.append(counts[i])
-    return tuple(masses)
+    return tuple([len(list(group)) for key, group in groupby(positions)])
 
 
 def convert_masses_to_positions(masses):
