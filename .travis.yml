@@ -25,7 +25,3 @@ branches:
 after_success:
   - make coveralls
   - make style
-
-matrix:
-  allow_failures:
-    - python: "2.6"
