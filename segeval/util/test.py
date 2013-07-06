@@ -18,7 +18,7 @@ class TestCase(unittest.TestCase):
     DECIMAL_PLACES = 4
 
     def assertAlmostEquals(self, first, second, places=DECIMAL_PLACES,
-                           msg=None, delta=None):
+                           msg=None):
         '''
         Automatically converts values to floats.
         '''
@@ -35,8 +35,7 @@ class TestCase(unittest.TestCase):
                     raise Exception(
                         '{0} not in {1}; expected {2}'.format(item, second,
                                                               first))
-                self.assertAlmostEquals(first[item], second[item], places, msg,
-                                        delta)
+                self.assertAlmostEquals(first[item], second[item], places, msg)
         elif (isinstance(first, list) or isinstance(first, tuple)) and \
                 (isinstance(second, list) or isinstance(second, tuple)):
             if len(first) != len(second):
@@ -45,7 +44,7 @@ class TestCase(unittest.TestCase):
             for item in zip(first, second):
                 if not msg:
                     msg = '{0} != {1}'.format(first, second)
-                self.assertAlmostEquals(item[0], item[1], places, msg, delta)
+                self.assertAlmostEquals(item[0], item[1], places, msg)
         elif not isinstance(first, type(second)):
             if not isinstance(first, float) and not isinstance(first, Decimal) and \
                     not isinstance(second, float) and not isinstance(second, Decimal):
@@ -56,8 +55,7 @@ class TestCase(unittest.TestCase):
                                                         float(first),
                                                         float(second),
                                                         places=places,
-                                                        msg=msg,
-                                                        delta=delta)
+                                                        msg=msg)
 
 
 class TestTestCase(TestCase):
