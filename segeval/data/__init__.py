@@ -58,7 +58,7 @@ class Dataset(defaultdict):
 
     def __iadd__(self, other, prepend_item=None):
         '''
-        Add one dataset's data to this dataset
+        Add one dataset's data to this dataset.
         '''
         # Combine item codings
         for item, codings in other.items():
@@ -80,11 +80,17 @@ class Dataset(defaultdict):
         return self
 
     def __add__(self, other):
-        dataset = copy.deepcopy(self)
+        '''
+        Copy this dataset and add the other dataset to it.
+        '''
+        dataset = self.copy()
         dataset += other
         return dataset
 
     def copy(self):
+        '''
+        Create a deep copy of the entire dataset object and properties.
+        '''
         dataset = copy.deepcopy(self)
         dataset.coders = copy.deepcopy(self.coders)
         dataset.properties = copy.deepcopy(self.properties)
