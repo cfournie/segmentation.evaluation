@@ -1,9 +1,10 @@
 .DS_Store
+env_*
 **/.DS_Store
 **/*.pyc
 **/*.pdf
 **/*.brf
-**/*.synctex.gz
+**.synctex.gz
 doc/build/**
 build/**
 dist/**
