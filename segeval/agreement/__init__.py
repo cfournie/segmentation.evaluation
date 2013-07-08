@@ -7,6 +7,7 @@ from __future__ import division
 from ..data import get_coders
 from ..similarity import SIMILARITY_METRIC_DEFAULTS
 from ..similarity.boundary import boundary_similarity
+from ..similarity.distance import identify_types
 from ..format import (BoundaryFormat, boundary_string_from_masses,
                       convert_positions_to_masses, convert_nltk_to_masses)
 from ..util import SegmentationMetricError
@@ -29,9 +30,35 @@ def __fnc_metric__(fnc_metric, dataset, **kwargs):
     return fnc_metric(dataset, **metric_kwargs)
 
 
-def __potential_boundaries__(segmentation, **kwargs):
+def __potential_boundaries__(segmentation_a, segmentation_b, **kwargs):
     boundary_format = kwargs['boundary_format']
-    boundary_types = kwargs['boundary_types']
+    boundary_string_a = segmentation_a
+    boundary_string_b = segmentation_b
+    # Convert from NLTK types
+    if boundary_format == BoundaryFormat.nltk:
+        boundary_string_a = convert_nltk_to_masses(segmentation_a)
+        boundary_string_b = convert_nltk_to_masses(segmentation_b)
+        boundary_format = BoundaryFormat.mass
+    # Check format
+    if boundary_format == BoundaryFormat.sets:
+        pass
+    elif boundary_format == BoundaryFormat.mass:
+        boundary_string_a = boundary_string_from_masses(boundary_string_a)
+        boundary_string_b = boundary_string_from_masses(boundary_string_b)
+    elif boundary_format == BoundaryFormat.position:
+        boundary_string_a = convert_positions_to_masses(boundary_string_a)
+        boundary_string_b = convert_positions_to_masses(boundary_string_b)
+        boundary_string_a = boundary_string_from_masses(boundary_string_a)
+        boundary_string_b = boundary_string_from_masses(boundary_string_b)
+    else:
+        raise SegmentationMetricError('Unsupported boundary format')
+    # Compute boundary types if required
+    boundary_types = identify_types(boundary_string_a, boundary_string_b)
+    return len(boundary_string_a) * len(boundary_types)
+
+
+def __boundaries__(segmentation, **kwargs):
+    boundary_format = kwargs['boundary_format']
     boundary_string = segmentation
     # Convert from NLTK types
     if boundary_format == BoundaryFormat.nltk:
@@ -47,7 +74,7 @@ def __potential_boundaries__(segmentation, **kwargs):
         boundary_string = boundary_string_from_masses(boundary_string)
     else:
         raise SegmentationMetricError('Unsupported boundary format')
-    return len(boundary_string) * len(boundary_types)
+    return sum([len(position) for position in boundary_string])
 
 
 def __actual_agreement_linear__(dataset, **kwargs):
@@ -129,7 +156,7 @@ def __actual_agreement_linear__(dataset, **kwargs):
                 numerator, denominator = \
                     fnc_compare(segs_a, segs_b, **metric_kwargs)[0:2]
                 # Obtain necessary values
-                pbs = __potential_boundaries__(segs_a, **metric_kwargs)
+                pbs = __potential_boundaries__(segs_a, segs_b, **metric_kwargs)
                 # Add all pbs
                 all_numerators.append(numerator)
                 all_denominators.append(denominator)
@@ -140,8 +167,8 @@ def __actual_agreement_linear__(dataset, **kwargs):
                 if coders[n] not in coders_boundaries:
                     coders_boundaries[coders[n]] = list()
                 # Add per-coder values to dicts
-                coders_boundaries[coders[m]].append([len(segs_a), pbs])
-                coders_boundaries[coders[n]].append([len(segs_b), pbs])
+                coders_boundaries[coders[m]].append([__boundaries__(segs_a, **metric_kwargs), pbs])
+                coders_boundaries[coders[n]].append([__boundaries__(segs_b, **metric_kwargs), pbs])
     if return_parts:
         return all_numerators, all_denominators, all_pbs, coders_boundaries
     else:

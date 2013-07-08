@@ -5,8 +5,9 @@ Tests the data merge functions and package.
 '''
 import unittest
 import os
-from .tsv import input_linear_mass_tsv, input_linear_positions_tsv
-from .samples import HEARST_1997_STARGAZER
+from segeval.data.tsv import (input_linear_mass_tsv, input_linear_positions_tsv,
+                  input_hierarchical_levels_tsv)
+from segeval.data.samples import HEARST_1997_STARGAZER
 
 
 class TestTsv(unittest.TestCase):

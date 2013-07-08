@@ -3,8 +3,9 @@ TSV output module (for general TSV writing operations).
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import csv
-from ..format import convert_positions_to_masses
+from segeval.format import convert_positions_to_masses, BoundaryFormat
 
 
 DEFAULT_DELIMITER = '\t'

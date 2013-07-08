@@ -24,7 +24,7 @@ def __segmentation_similarity__(*args, **kwargs):
     # Compute
     statistics = __boundary_statistics__(*args, **metric_kwargs)
     # Process
-    pbs = statistics['pbs'] * len(boundary_types)
+    pbs = statistics['pbs'] * len(statistics['boundary_types'])
     # Fraction
     denominator = pbs
     numerator = pbs - statistics['count_edits']

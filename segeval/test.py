@@ -79,7 +79,7 @@ class TestExamples(unittest.TestCase):
         Test artstein_poesio_bias_linear.
         '''
 
-        self.assertAlmostEquals(Decimal('0.00841453'),
+        self.assertAlmostEquals(Decimal('0.00277829'),
                                 artstein_poesio_bias_linear(KAZANTSEVA2012_G5))
 
     def test_fleiss_kappa_linear(self):
@@ -87,7 +87,7 @@ class TestExamples(unittest.TestCase):
         Test fleiss_kappa_linear.
         '''
 
-        self.assertAlmostEquals(Decimal('0.23740302'),
+        self.assertAlmostEquals(Decimal('0.24210993'),
                                 fleiss_kappa_linear(KAZANTSEVA2012_G5))
 
     def test_fleiss_pi_linear(self):
@@ -95,7 +95,7 @@ class TestExamples(unittest.TestCase):
         Test fleiss_pi_linear.
         '''
 
-        self.assertAlmostEquals(Decimal('0.23076438'),
+        self.assertAlmostEquals(Decimal('0.23995756'),
                                 fleiss_pi_linear(KAZANTSEVA2012_G5))
 
     def test_precision(self):
@@ -196,5 +196,5 @@ class TestExamples(unittest.TestCase):
         Test convert_masses_to_positions.
         '''
 
-        self.assertEquals((1,1,1,1,2,2),
-                          convert_masses_to_positions((4,2)))
+        self.assertEquals((1, 1, 1, 1, 2, 2),
+                          convert_masses_to_positions((4, 2)))

@@ -95,6 +95,7 @@ class Dataset(defaultdict):
         dataset.coders = copy.deepcopy(self.coders)
         dataset.properties = copy.deepcopy(self.properties)
         dataset.boundary_types = copy.deepcopy(self.boundary_types)
+        dataset.boundary_format = copy.deepcopy(self.boundary_format)
         return dataset
 
 

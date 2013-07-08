@@ -24,7 +24,7 @@ class TestBias(unittest.TestCase):
         bias = artstein_poesio_bias_linear(KAZANTSEVA2012_G5)
         self.assertTrue(bias > 0)
         self.assertAlmostEqual(bias,
-                               Decimal('0.00841453429829254475759269324'))
+                               Decimal('0.00277829320319822615823397979'))
 
     def test_bias_g5_ch1(self):
         '''
@@ -44,7 +44,7 @@ class TestBias(unittest.TestCase):
         bias = artstein_poesio_bias_linear(KAZANTSEVA2012_G2)
         self.assertTrue(bias > 0)
         self.assertAlmostEqual(bias,
-                               Decimal('0.00821695210923559041105482425'))
+                               Decimal('0.00393636062003502686364542151'))
 
     def test_bias_g2_ch2(self):
         '''
@@ -64,14 +64,14 @@ class TestBias(unittest.TestCase):
         bias = artstein_poesio_bias_linear(COMPLETE_AGREEMENT)
         self.assertTrue(bias >= 0)
         self.assertEqual(bias,
-                         Decimal('0.01455229356727327645713789012'))
+                         Decimal('0.008099721956129627956849957112'))
 
     def test_multiple_boundary_types(self):
         '''
         Test multiple boundaries.
         '''
         value = artstein_poesio_bias_linear(MULTIPLE_BOUNDARY_TYPES)
-        self.assertEqual(value, Decimal('0.00'))
+        self.assertAlmostEqual(value, Decimal('0.00916666666'))
 
     def test_bias_large(self):
         '''
@@ -80,7 +80,7 @@ class TestBias(unittest.TestCase):
         bias = artstein_poesio_bias_linear(LARGE_DISAGREEMENT)
         self.assertTrue(bias >= 0)
         self.assertEqual(bias,
-                         Decimal('0.3092215912041560442272265692'))
+                         Decimal('0.25'))
 
     def test_parts(self):
         '''
@@ -90,11 +90,11 @@ class TestBias(unittest.TestCase):
         A_pi_e, A_fleiss_e = artstein_poesio_bias_linear(LARGE_DISAGREEMENT,
                                                          return_parts=True)
         self.assertEqual(A_pi_e,
-                         Decimal('0.3653993689819338220050043470'))
+                         Decimal('0.25'))
         self.assertEqual(A_fleiss_e,
-                         Decimal('0.05617777777777777777777777776'))
+                         Decimal('0.0'))
         self.assertEqual(A_pi_e - A_fleiss_e,
-                         Decimal('0.3092215912041560442272265692'))
+                         Decimal('0.25'))
 
     def test_exception_coders(self):
         '''

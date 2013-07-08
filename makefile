@@ -21,3 +21,6 @@ clean:
 	rm -r dist build segeval.egg-info
 style:
 	flake8 --config=setup.cfg segeval
+uninstall:
+	pip uninstall segeval
+

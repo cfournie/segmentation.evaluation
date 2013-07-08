@@ -4,6 +4,7 @@ Similarity utility functions based upon boundary edit distance.
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
 from __future__ import division
+from .distance import identify_types
 from .distance.multipleboundary import boundary_edit_distance
 from .weight import weight_a, weight_s_scale, weight_t_scale
 from ..metric import METRIC_DEFAULTS
@@ -16,7 +17,7 @@ from ..util import __fnc_metric__, SegmentationMetricError
 SIMILARITY_METRIC_DEFAULTS = dict(METRIC_DEFAULTS)
 SIMILARITY_METRIC_DEFAULTS.update({
     'n_t': 2,
-    'boundary_types': frozenset([1]),
+    'boundary_types': None,
     'weight': (weight_a, weight_s_scale, weight_t_scale)
 })
 
@@ -49,6 +50,8 @@ def __boundary_statistics__(segs_a, segs_b, boundary_types, boundary_format, n_t
         raise SegmentationMetricError(
             'Segmentations differ in length ({0} != {1})'.format(
                 len(segs_a), len(segs_b)))
+    # Determine the boundary types
+    boundary_types = identify_types(segs_a, segs_b)
     # Calculate the total pbs
     pbs = len(segs_b) * len(boundary_types)
     # Compute edits
@@ -73,7 +76,7 @@ def __boundary_statistics__(segs_a, segs_b, boundary_types, boundary_format, n_t
     return {'count_edits': count_edits, 'additions': additions,
             'substitutions': substitutions, 'transpositions': transpositions,
             'full_misses': full_misses, 'boundaries_all': boundaries_all,
-            'matches': matches, 'pbs': pbs}
+            'matches': matches, 'pbs': pbs, 'boundary_types': boundary_types}
 
 
 def __boundary_confusion_matrix__(*args, **kwargs):

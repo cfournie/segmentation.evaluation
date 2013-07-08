@@ -5,11 +5,13 @@ Tests actual agreement.
 '''
 import unittest
 from decimal import Decimal
-from . import actual_agreement_linear, __potential_boundaries__
-from .. import BoundaryFormat
-from ..util import SegmentationMetricError
-from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
-                            COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
+from segeval.agreement import (actual_agreement_linear,
+                               __potential_boundaries__,
+                               __boundaries__, BoundaryFormat)
+from segeval.util import SegmentationMetricError
+from segeval.data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
+                                  COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
+
 
 
 class TestAgreement(unittest.TestCase):
@@ -86,7 +88,7 @@ class TestAgreement(unittest.TestCase):
             'boundary_format': BoundaryFormat.mass,
             'boundary_types': (1,)
         }
-        self.assertEqual(4, __potential_boundaries__([2, 3], **kwargs))
+        self.assertEqual(4, __potential_boundaries__([2, 3], [1, 4], **kwargs))
 
     def test_potential_boundaries_position(self):
         '''
@@ -97,7 +99,7 @@ class TestAgreement(unittest.TestCase):
             'boundary_types': (1,)
         }
         self.assertEqual(
-            4, __potential_boundaries__([1, 1, 1, 2, 2], **kwargs))
+            4, __potential_boundaries__([1, 1, 1, 2, 2], [1, 1, 2, 2, 3], **kwargs))
 
     def test_potential_boundaries_sets(self):
         '''
@@ -108,7 +110,9 @@ class TestAgreement(unittest.TestCase):
             'boundary_types': (1,)
         }
         self.assertEqual(
-            4, __potential_boundaries__([(), (), (1,), ()], **kwargs))
+            4, __potential_boundaries__([(), (), (1,), ()], [(), (1,), (), ()], **kwargs))
+        self.assertEqual(
+            8, __potential_boundaries__([(), (), (1,2), ()], [(), (1,), (), ()], **kwargs))
 
     def test_potential_boundaries_nltk(self):
         '''
@@ -118,7 +122,51 @@ class TestAgreement(unittest.TestCase):
             'boundary_format': BoundaryFormat.nltk,
             'boundary_types': (1,)
         }
-        self.assertEqual(4, __potential_boundaries__('0010', **kwargs))
+        self.assertEqual(4, __potential_boundaries__('0010', '0100', **kwargs))
+
+    def test_boundaries_mass(self):
+        '''
+        Test counting the number of potential boundaries for BoundaryFormat.mass.
+        '''
+        kwargs = {
+            'boundary_format': BoundaryFormat.mass,
+            'boundary_types': (1,)
+        }
+        self.assertEqual(1, __boundaries__([2, 3], **kwargs))
+
+    def test_boundaries_position(self):
+        '''
+        Test counting the number of potential boundaries for BoundaryFormat.position.
+        '''
+        kwargs = {
+            'boundary_format': BoundaryFormat.position,
+            'boundary_types': (1,)
+        }
+        self.assertEqual(
+            1, __boundaries__([1, 1, 1, 2, 2], **kwargs))
+
+    def test_boundaries_sets(self):
+        '''
+        Test counting the number of potential boundaries for BoundaryFormat.sets.
+        '''
+        kwargs = {
+            'boundary_format': BoundaryFormat.sets,
+            'boundary_types': (1,)
+        }
+        self.assertEqual(
+            1, __boundaries__([(), (), (1,), ()], **kwargs))
+        self.assertEqual(
+            3, __boundaries__([(2,1), (), (1,), ()], **kwargs))
+
+    def test_boundaries_nltk(self):
+        '''
+        Test counting the number of potential boundaries for BoundaryFormat.nltk.
+        '''
+        kwargs = {
+            'boundary_format': BoundaryFormat.nltk,
+            'boundary_types': (1,)
+        }
+        self.assertEqual(1, __boundaries__('0010', **kwargs))
 
     def test_potential_boundaries_exception(self):
         '''
@@ -131,5 +179,19 @@ class TestAgreement(unittest.TestCase):
         self.assertRaises(
             SegmentationMetricError,
             __potential_boundaries__,
+            '0010', '0100',
+            **kwargs)
+
+    def test_boundaries_exception(self):
+        '''
+        Test an incorrect format when counting the number of potential boundaries.
+        '''
+        kwargs = {
+            'boundary_format': 'incorrect',
+            'boundary_types': (1,)
+        }
+        self.assertRaises(
+            SegmentationMetricError,
+            __boundaries__,
             '0010',
             **kwargs)

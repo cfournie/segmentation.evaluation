@@ -3,6 +3,14 @@
 History
 =======
 
+2.0.11 (2013-12-01)
+----------------
+
+* Boundary types are now automatically identified for each comparison
+	* Fixes a bug in multiple boundary segmentation comparison where by default, only the boundary type ``1`` is compared
+* Fixed a bug where during agreement computation, an extra boundary was being counted and only the boundary-mass format was truly supported
+
+
 2.0.10 (2013-10-01)
 ----------------
 
@@ -16,12 +24,12 @@ History
 * Fixed a bug where agreement could not be computed on boundary-set-format segmentations and segmentations and segmentations containing multiple boundary types.
 
 
-
 2.0.8 (2013-07-05)
 ----------------
 
 * Added Python 2.6, 3.2, and 3.3 support
 * Added support for converting NLTK-style segmentations into segmentation masses
+	* Added ``convert_nltk_to_masses``
 * Fixed minor comment/documentation typos
 
 

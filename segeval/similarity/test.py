@@ -44,6 +44,7 @@ class TestSimilarity(unittest.TestCase):
         self.assertEqual(
             {'matches': [1],
              'boundaries_all': 3,
+             'boundary_types': frozenset([1]),
              'pbs': 10,
              'transpositions': [],
              'full_misses': [1],

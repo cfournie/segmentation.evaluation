@@ -101,13 +101,27 @@ class TestBoundary(unittest.TestCase):
 
     def test_multiple_boundary_types(self):
         '''
-        Test multiple boundaries.
+        Test multiple boundary types with auto boundary type identification.
         '''
         value = summarize(boundary_similarity(MULTIPLE_BOUNDARY_TYPES))
-        self.assertEqual((Decimal('0.375'),
-                          Decimal('0.125'),
-                          Decimal('0.015625'),
-                          Decimal('0.08838834764831844055010554528'),
+        self.assertEqual((Decimal('0.50'),
+                          Decimal('0.25'),
+                          Decimal('0.0625'),
+                          Decimal('0.1767766952966368811002110906'),
+                          2),
+                         value)
+
+    def test_multiple_boundary_types_boundary_type(self):
+        '''
+        Test multiple boundary types with manual boundary type identification.
+        '''
+        value = summarize(
+            boundary_similarity(MULTIPLE_BOUNDARY_TYPES,
+                                boundary_types=set([1])))
+        self.assertEqual((Decimal('0.50'),
+                          Decimal('0.25'),
+                          Decimal('0.0625'),
+                          Decimal('0.1767766952966368811002110906'),
                           2),
                          value)
 
