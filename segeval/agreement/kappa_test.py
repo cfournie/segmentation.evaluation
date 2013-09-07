@@ -7,7 +7,8 @@ import unittest
 from decimal import Decimal
 from .kappa import fleiss_kappa_linear
 from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
-                            COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
+                            COMPLETE_AGREEMENT, LARGE_DISAGREEMENT,
+                            MULTIPLE_BOUNDARY_TYPES)
 
 
 class TestKappa(unittest.TestCase):
@@ -85,6 +86,13 @@ class TestKappa(unittest.TestCase):
         data_complete = COMPLETE_AGREEMENT
         kappa = fleiss_kappa_linear(data_complete)
         self.assertEqual(kappa, Decimal('1.0'))
+
+    def test_multiple_boundary_types(self):
+        '''
+        Test multiple boundaries.
+        '''
+        value = fleiss_kappa_linear(MULTIPLE_BOUNDARY_TYPES)
+        self.assertEqual(value, Decimal('0.3333333333333333333333333333'))
 
     def test_exception_coders(self):
         '''

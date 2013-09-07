@@ -64,7 +64,7 @@ class TestBoundary(unittest.TestCase):
 
     def test_positions(self):
         '''
-        Test false negative.
+        Test position-format.
         '''
         a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
@@ -74,7 +74,7 @@ class TestBoundary(unittest.TestCase):
 
     def test_format_exception(self):
         '''
-        Test false negative.
+        Test incorrect format exception.
         '''
         a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
@@ -83,7 +83,7 @@ class TestBoundary(unittest.TestCase):
 
     def test_arg_exception(self):
         '''
-        Test false negative.
+        Test incorrect argument exception.
         '''
         a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
         b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
@@ -93,7 +93,7 @@ class TestBoundary(unittest.TestCase):
 
     def test_weight_t(self):
         '''
-        Test false negative.
+        Test transposition weighting.
         '''
         value = boundary_similarity([2, 3, 6], [5, 6],
                                     weight=(weight_a, weight_s, weight_t))
@@ -101,7 +101,7 @@ class TestBoundary(unittest.TestCase):
 
     def test_multiple_boundary_types(self):
         '''
-        Test false negative.
+        Test multiple boundaries.
         '''
         value = summarize(boundary_similarity(MULTIPLE_BOUNDARY_TYPES))
         self.assertEqual((Decimal('0.375'),

@@ -7,7 +7,8 @@ import unittest
 from decimal import Decimal
 from .bias import artstein_poesio_bias_linear
 from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
-                            COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
+                            COMPLETE_AGREEMENT, LARGE_DISAGREEMENT,
+                            MULTIPLE_BOUNDARY_TYPES)
 
 
 class TestBias(unittest.TestCase):
@@ -64,6 +65,13 @@ class TestBias(unittest.TestCase):
         self.assertTrue(bias >= 0)
         self.assertEqual(bias,
                          Decimal('0.01455229356727327645713789012'))
+
+    def test_multiple_boundary_types(self):
+        '''
+        Test multiple boundaries.
+        '''
+        value = artstein_poesio_bias_linear(MULTIPLE_BOUNDARY_TYPES)
+        self.assertEqual(value, Decimal('0.00'))
 
     def test_bias_large(self):
         '''

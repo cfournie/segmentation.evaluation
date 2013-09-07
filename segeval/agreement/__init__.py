@@ -7,6 +7,9 @@ from __future__ import division
 from ..data import get_coders
 from ..similarity import SIMILARITY_METRIC_DEFAULTS
 from ..similarity.boundary import boundary_similarity
+from ..format import (BoundaryFormat, boundary_string_from_masses,
+                      convert_positions_to_masses, convert_nltk_to_masses)
+from ..util import SegmentationMetricError
 
 
 AGREEMENT_METRIC_DEFAULTS = dict(SIMILARITY_METRIC_DEFAULTS)
@@ -19,7 +22,32 @@ AGREEMENT_METRIC_DEFAULTS.update({
 def __fnc_metric__(fnc_metric, dataset, **kwargs):
     metric_kwargs = dict(AGREEMENT_METRIC_DEFAULTS)
     metric_kwargs.update(kwargs)
+    if hasattr(dataset, 'boundary_types'):
+        metric_kwargs['boundary_types'] = dataset.boundary_types
+    if hasattr(dataset, 'boundary_format'):
+        metric_kwargs['boundary_format'] = dataset.boundary_format
     return fnc_metric(dataset, **metric_kwargs)
+
+
+def __potential_boundaries__(segmentation, **kwargs):
+    boundary_format = kwargs['boundary_format']
+    boundary_types = kwargs['boundary_types']
+    boundary_string = segmentation
+    # Convert from NLTK types
+    if boundary_format == BoundaryFormat.nltk:
+        boundary_string = convert_nltk_to_masses(segmentation)
+        boundary_format = BoundaryFormat.mass
+    # Check format
+    if boundary_format == BoundaryFormat.sets:
+        pass
+    elif boundary_format == BoundaryFormat.mass:
+        boundary_string = boundary_string_from_masses(boundary_string)
+    elif boundary_format == BoundaryFormat.position:
+        boundary_string = convert_positions_to_masses(boundary_string)
+        boundary_string = boundary_string_from_masses(boundary_string)
+    else:
+        raise SegmentationMetricError('Unsupported boundary format')
+    return len(boundary_string) * len(boundary_types)
 
 
 def __actual_agreement_linear__(dataset, **kwargs):
@@ -78,7 +106,6 @@ def __actual_agreement_linear__(dataset, **kwargs):
     :mod:`segeval.data.Samples`.
 
     '''
-
     metric_kwargs = dict(kwargs)
     del metric_kwargs['fnc_compare']
     metric_kwargs['return_parts'] = True
@@ -102,7 +129,7 @@ def __actual_agreement_linear__(dataset, **kwargs):
                 numerator, denominator = \
                     fnc_compare(segs_a, segs_b, **metric_kwargs)[0:2]
                 # Obtain necessary values
-                pbs = sum(segs_a) - 1
+                pbs = __potential_boundaries__(segs_a, **metric_kwargs)
                 # Add all pbs
                 all_numerators.append(numerator)
                 all_denominators.append(denominator)
