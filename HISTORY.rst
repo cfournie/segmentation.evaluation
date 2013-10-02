@@ -3,6 +3,20 @@
 History
 =======
 
+2.0.10 (2013-10-01)
+----------------
+
+* Fixed a bug where long mass sequences would not work for window metrics
+* Removed duplicate unit test
+
+
+2.0.9 (2013-09-07)
+----------------
+
+* Fixed a bug where agreement could not be computed on boundary-set-format segmentations and segmentations and segmentations containing multiple boundary types.
+
+
+
 2.0.8 (2013-07-05)
 ----------------
 
@@ -72,6 +86,7 @@ History
 * Added support for an authorative reference coder (see the `Segmentation Representation Specification Version 1.1 PDF <http://nlp.chrisfournier.ca/publications/pdf/fournier_segeval_spec_2012.pdf>`_) and support for S-based precision, recall, and F-beta measure
 * Modified the input JSON files to allow for an entire dataset to be contained within a single file (see the `Segmentation Representation Specification Version 1.1 PDF <http://nlp.chrisfournier.ca/publications/pdf/fournier_segeval_spec_2012.pdf>`_)
 * Added additional unit tests
+
 
 1.0.1 beta (2012-06-04)
 -----------------------
