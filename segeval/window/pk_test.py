@@ -48,8 +48,8 @@ class TestPk(TestCase):
         Test whether identical segmentations produce 0.0.
         '''
 
-        a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
-        b = [1,1,1,1,1,2,2,2,3,3,3,3,3]
+        a = [1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3]
+        b = [1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3]
         one_minus_kwargs = dict(TestPk.kwargs)
         one_minus_kwargs['one_minus'] = True
         self.assertEqual(pk(a, b, **self.kwargs), Decimal('0.0'))
@@ -60,8 +60,8 @@ class TestPk(TestCase):
         Test whether no segments versus some segments produce 1.0.
         '''
 
-        a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
-        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        a = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        b = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
         self.assertEqual(pk(b, a, **self.kwargs),
                          Decimal('1.0'))
         self.assertEqual(pk(a, b, **self.kwargs),
@@ -73,8 +73,8 @@ class TestPk(TestCase):
         erroneous windows.
         '''
 
-        a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+        b = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
         self.assertEqual(pk(a, b, **self.kwargs),
                          Decimal('0.6363636363636363636363636364'))
         self.assertEqual(pk(b, a, **self.kwargs),
@@ -85,8 +85,8 @@ class TestPk(TestCase):
         Test whether all segments versus no segments produces 1.0.
         '''
 
-        a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-        b = [1,1,1,1,1,1,1,1,1,1,1,1,1]
+        a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+        b = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         self.assertEqual(pk(a, b, **self.kwargs), Decimal('1.0'))
         self.assertEqual(pk(b, a, **self.kwargs), Decimal('1.0'))
 
@@ -96,8 +96,8 @@ class TestPk(TestCase):
         0.182.
         '''
 
-        a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
-        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        a = [1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3]
+        b = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
         self.assertEqual(pk(a, b, **self.kwargs),
                          Decimal('0.1818181818181818181818181818'))
         self.assertEqual(pk(b, a, **self.kwargs),
@@ -108,8 +108,8 @@ class TestPk(TestCase):
         Test whether 1/3 segments that are non-existent produces 0.091.
         '''
 
-        a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
-        b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
+        a = [1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3]
+        b = [1, 1, 1, 1, 1, 2, 3, 3, 4, 4, 4, 4, 4]
         self.assertEqual(pk(a, b, **self.kwargs),
                          Decimal('0.09090909090909090909090909091'))
         self.assertEqual(pk(b, a, **self.kwargs),
@@ -121,8 +121,8 @@ class TestPk(TestCase):
         0.273.
         '''
 
-        a = [1,1,1,1,2,2,2,2,3,3,3,3,3]
-        b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
+        a = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
+        b = [1, 1, 1, 1, 1, 2, 3, 3, 4, 4, 4, 4, 4]
         self.assertEqual(pk(a, b, **self.kwargs),
                          Decimal('0.2727272727272727272727272727'))
         self.assertEqual(pk(b, a, **self.kwargs),
@@ -135,8 +135,8 @@ class TestPk(TestCase):
         '''
 
         metric_kwargs = dict(self.kwargs)
-        metric_kwargs['hypothesis'] = [1,1,1,1,2,2,2,2,3,3,3,3,3]
-        metric_kwargs['reference'] = [1,1,1,1,1,2,3,3,4,4,4,4,4]
+        metric_kwargs['hypothesis'] = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
+        metric_kwargs['reference'] = [1, 1, 1, 1, 1, 2, 3, 3, 4, 4, 4, 4, 4]
         self.assertEqual(pk(**metric_kwargs),
                          Decimal('0.2727272727272727272727272727'))
 
@@ -145,8 +145,8 @@ class TestPk(TestCase):
         Test parts.
         '''
 
-        a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+        b = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
         metric_kwargs = dict(self.kwargs)
         metric_kwargs['return_parts'] = True
         self.assertEqual(pk(a, b, **metric_kwargs),
@@ -180,7 +180,11 @@ class TestPk(TestCase):
         '''
         Test the nltk boundary format.
         '''
-        value = pk('0100100000', '0101000000', window_size=2, boundary_format=BoundaryFormat.nltk)
+        value = pk(
+            '0100100000',
+            '0101000000',
+            window_size=2,
+            boundary_format=BoundaryFormat.nltk)
         self.assertAlmostEqual(Decimal('0.2222222'), value)
 
     def test_nltk(self):
@@ -189,28 +193,95 @@ class TestPk(TestCase):
         '''
         # Originally 0.0
         self.assertAlmostEqual(
-            pk('1000100', '1000100', window_size=3, boundary_format=BoundaryFormat.nltk),
+            pk('1000100', '1000100', window_size=3,
+               boundary_format=BoundaryFormat.nltk),
             Decimal('0.0'))
         # Originally 0.5
         self.assertAlmostEqual(
-            pk('010', '100', window_size=2, boundary_format=BoundaryFormat.nltk),
+            pk('010', '100', window_size=2,
+               boundary_format=BoundaryFormat.nltk),
             Decimal('0.5'))
         # Originally 0.64
         self.assertAlmostEqual(
-            pk('111111', '100100', window_size=2, boundary_format=BoundaryFormat.nltk),
+            pk('111111', '100100', window_size=2,
+               boundary_format=BoundaryFormat.nltk),
             Decimal('0.4'))
         # Originally 0.04
         self.assertAlmostEqual(
-            pk('000000', '100100', window_size=2, boundary_format=BoundaryFormat.nltk),
+            pk('000000', '100100', window_size=2,
+               boundary_format=BoundaryFormat.nltk),
             Decimal('0.6'))
         # Originally 0.25
         self.assertAlmostEqual(
-            pk('111111', '100100', window_size=3, boundary_format=BoundaryFormat.nltk),
+            pk('111111', '100100', window_size=3,
+               boundary_format=BoundaryFormat.nltk),
             Decimal('0'))
         # Originally 0.25
         self.assertAlmostEqual(
-            pk('000000', '100100', window_size=3, boundary_format=BoundaryFormat.nltk),
+            pk('000000', '100100', window_size=3,
+               boundary_format=BoundaryFormat.nltk),
             Decimal('1'))
+
+    def test_long_format(self):
+        hypothesis = (
+            2,
+            31,
+            4,
+            1,
+            1,
+            3,
+            11,
+            5,
+            21,
+            4,
+            2,
+            1,
+            17,
+            26,
+            16,
+            1,
+            17,
+            4,
+            3,
+            7,
+            7,
+            6,
+            12,
+            1,
+            6,
+            25,
+            2,
+            4,
+            3,
+            16,
+            8)
+        reference = (
+            2,
+            36,
+            1,
+            3,
+            10,
+            1,
+            5,
+            21,
+            4,
+            3,
+            59,
+            8,
+            10,
+            4,
+            3,
+            7,
+            13,
+            12,
+            7,
+            27,
+            4,
+            3,
+            24)
+        self.assertAlmostEqual(
+            pk(hypothesis, reference),
+            Decimal('0.1532567049808429118773946360'))
 
 
 class TestPairwisePkMeasure(TestCase):

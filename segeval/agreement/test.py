@@ -83,50 +83,40 @@ class TestAgreement(unittest.TestCase):
         Test counting the number of potential boundaries for BoundaryFormat.mass.
         '''
         kwargs = {
-            'boundary_format'   : BoundaryFormat.mass,
-            'boundary_types'    : (1,)
+            'boundary_format': BoundaryFormat.mass,
+            'boundary_types': (1,)
         }
-        self.assertEqual(4, __potential_boundaries__([2,3], **kwargs))
-
-    def test_potential_boundaries_mass(self):
-        '''
-        Test counting the number of potential boundaries for BoundaryFormat.mass.
-        '''
-        kwargs = {
-            'boundary_format'   : BoundaryFormat.mass,
-            'boundary_types'    : (1,)
-        }
-        self.assertEqual(4, __potential_boundaries__([2,3], **kwargs))
-
+        self.assertEqual(4, __potential_boundaries__([2, 3], **kwargs))
 
     def test_potential_boundaries_position(self):
         '''
         Test counting the number of potential boundaries for BoundaryFormat.position.
         '''
         kwargs = {
-            'boundary_format'   : BoundaryFormat.position,
-            'boundary_types'    : (1,)
+            'boundary_format': BoundaryFormat.position,
+            'boundary_types': (1,)
         }
-        self.assertEqual(4, __potential_boundaries__([1,1,1,2,2], **kwargs))
-
+        self.assertEqual(
+            4, __potential_boundaries__([1, 1, 1, 2, 2], **kwargs))
 
     def test_potential_boundaries_sets(self):
         '''
         Test counting the number of potential boundaries for BoundaryFormat.sets.
         '''
         kwargs = {
-            'boundary_format'   : BoundaryFormat.sets,
-            'boundary_types'    : (1,)
+            'boundary_format': BoundaryFormat.sets,
+            'boundary_types': (1,)
         }
-        self.assertEqual(4, __potential_boundaries__([(),(),(1,),()], **kwargs))
+        self.assertEqual(
+            4, __potential_boundaries__([(), (), (1,), ()], **kwargs))
 
     def test_potential_boundaries_nltk(self):
         '''
         Test counting the number of potential boundaries for BoundaryFormat.nltk.
         '''
         kwargs = {
-            'boundary_format'   : BoundaryFormat.nltk,
-            'boundary_types'    : (1,)
+            'boundary_format': BoundaryFormat.nltk,
+            'boundary_types': (1,)
         }
         self.assertEqual(4, __potential_boundaries__('0010', **kwargs))
 
@@ -135,7 +125,11 @@ class TestAgreement(unittest.TestCase):
         Test an incorrect format when counting the number of potential boundaries.
         '''
         kwargs = {
-            'boundary_format'   : 'incorrect',
-            'boundary_types'    : (1,)
+            'boundary_format': 'incorrect',
+            'boundary_types': (1,)
         }
-        self.assertRaises(SegmentationMetricError, __potential_boundaries__, '0010', **kwargs)
+        self.assertRaises(
+            SegmentationMetricError,
+            __potential_boundaries__,
+            '0010',
+            **kwargs)

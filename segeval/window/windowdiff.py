@@ -85,7 +85,7 @@ def __window_diff__(hypothesis, reference, window_size, one_minus,
     elif boundary_format != BoundaryFormat.position:
         raise SegmentationMetricError('Unsupported boundary format')
     # Check for input errors
-    if len(reference) is not len(hypothesis):
+    if len(reference) != len(hypothesis):
         raise SegmentationMetricError(
             'Reference and hypothesis segmentations differ in position \
 length (%(ref)i is not %(hyp)i).' % {'ref': len(reference),
@@ -127,7 +127,7 @@ length (%(ref)i is not %(hyp)i).' % {'ref': len(reference),
         denominator = measurements + 1
     win_diff = Decimal(sum_differences) / denominator
     # Check normalization
-    assert denominator is measurements or lamprier_et_al_2007_fix
+    assert denominator == measurements or lamprier_et_al_2007_fix
     # Check value
     assert win_diff <= 1
     if not one_minus:

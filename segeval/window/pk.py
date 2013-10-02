@@ -26,7 +26,7 @@ def __pk__(hypothesis, reference, window_size, one_minus, boundary_format,
     elif boundary_format != BoundaryFormat.position:
         raise SegmentationMetricError('Unsupported boundary format')
     # Check for input errors
-    if len(reference) is not len(hypothesis):
+    if len(reference) != len(hypothesis):
         raise SegmentationMetricError(
             'Reference and hypothesis segmentations differ in position length ({0} is not {1}).'.format(len(reference), len(hypothesis)))
     # Compute window size to use if unspecified

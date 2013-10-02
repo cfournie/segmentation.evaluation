@@ -35,8 +35,8 @@ class TestWindowDiffPositions(TestCase):
         Test whether identical segmentations produce 0.0.
         '''
 
-        a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
-        b = [1,1,1,1,1,2,2,2,3,3,3,3,3]
+        a = [1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3]
+        b = [1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3]
         self.assertEqual(window_diff(a, b, **self.kwargs), Decimal('0.0'))
 
     def test_no_boundaries(self):
@@ -44,8 +44,8 @@ class TestWindowDiffPositions(TestCase):
         Test whether no segments versus some segments produce 1.0.
         '''
 
-        a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
-        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        a = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        b = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
                                Decimal('0.3636363636363636363636363636'))
         self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
@@ -57,8 +57,8 @@ class TestWindowDiffPositions(TestCase):
         erroneous windows.
         '''
 
-        a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+        b = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
                                Decimal('1.0'))
         self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
@@ -69,8 +69,8 @@ class TestWindowDiffPositions(TestCase):
         Test whether all segments versus no segments produces 1.0.
         '''
 
-        a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-        b = [1,1,1,1,1,1,1,1,1,1,1,1,1]
+        a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+        b = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs), Decimal('1'))
         self.assertAlmostEqual(window_diff(b, a, **self.kwargs), Decimal('1'))
 
@@ -79,8 +79,8 @@ class TestWindowDiffPositions(TestCase):
         Test mis-alignment.
         '''
 
-        a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
-        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        a = [1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3]
+        b = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),  # k = 2
                                Decimal('2.0') / Decimal('11.0'))
         self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
@@ -91,8 +91,8 @@ class TestWindowDiffPositions(TestCase):
         Test extra boundary.
         '''
 
-        a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
-        b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
+        a = [1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3]
+        b = [1, 1, 1, 1, 1, 2, 3, 3, 4, 4, 4, 4, 4]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
                                Decimal('2.0') / Decimal('11.0'))
         self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
@@ -104,8 +104,8 @@ class TestWindowDiffPositions(TestCase):
         0.25.
         '''
 
-        a = [1,1,1,1,2,2,2,2,3,3,3,3,3]
-        b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
+        a = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
+        b = [1, 1, 1, 1, 1, 2, 3, 3, 4, 4, 4, 4, 4]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
                                Decimal('0.2727272727272727272727272727'))
         self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
@@ -116,14 +116,14 @@ class TestWindowDiffPositions(TestCase):
         Test the difference between FP and FN.
         '''
 
-        a = [1,1,1,1,1,2,2,2,3,3,3,3,3]
-        b = [1,1,1,1,1,2,3,3,4,4,4,4,4]
+        a = [1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3]
+        b = [1, 1, 1, 1, 1, 2, 3, 3, 4, 4, 4, 4, 4]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
                                Decimal('0.1818181818181818181818181818'))
         self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
                                Decimal('0.1818181818181818181818181818'))
-        a = [1,1,1,1,1,2,3,3,4,4,4,4,4]
-        b = [1,1,1,1,1,2,2,2,3,3,3,3,3]
+        a = [1, 1, 1, 1, 1, 2, 3, 3, 4, 4, 4, 4, 4]
+        b = [1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3]
         self.assertAlmostEqual(window_diff(a, b, **self.kwargs),
                                Decimal('0.1818181818181818181818181818'))
         self.assertAlmostEqual(window_diff(b, a, **self.kwargs),
@@ -134,8 +134,8 @@ class TestWindowDiffPositions(TestCase):
         Test parts.
         '''
 
-        a = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+        b = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
         metric_kwargs = dict(self.kwargs)
         metric_kwargs['return_parts'] = True
         self.assertEqual(window_diff(a, b, **metric_kwargs),
@@ -163,8 +163,8 @@ class TestWindowDiffPositions(TestCase):
         Test whether no segments versus some segments produce 1.0.
         '''
 
-        a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
-        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        a = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        b = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
         metric_kwargs = dict(self.kwargs)
         metric_kwargs['one_minus'] = True
         self.assertAlmostEqual(window_diff(a, b, **metric_kwargs),
@@ -187,7 +187,7 @@ class TestWindowDiffMasses(TestCase):
         Test paper example A vs B
         '''
         reference = [11]
-        hypothesis = [1,1,1,1,1,1,1,1,1,1,1]
+        hypothesis = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         # Test normal
         actual = window_diff(hypothesis, reference, **self.kwargs)
         self.assertAlmostEqual(1.0, float(actual))
@@ -196,7 +196,7 @@ class TestWindowDiffMasses(TestCase):
         '''
         Test paper example A vs B
         '''
-        reference = [6,6]
+        reference = [6, 6]
         hypothesis = [12]
         # Test normal
         actual = window_diff(hypothesis, reference, **self.kwargs)
@@ -206,8 +206,8 @@ class TestWindowDiffMasses(TestCase):
         '''
         Test paper example A vs C
         '''
-        reference = [6,6]
-        hypothesis = [5,7]
+        reference = [6, 6]
+        hypothesis = [5, 7]
         # Test normal
         actual = window_diff(hypothesis, reference, **self.kwargs)
         self.assertAlmostEquals(2.0 / 9.0, float(actual))
@@ -216,8 +216,8 @@ class TestWindowDiffMasses(TestCase):
         '''
         Test paper example A vs D
         '''
-        reference = [6,6]
-        hypothesis = [1,5,6]
+        reference = [6, 6]
+        hypothesis = [1, 5, 6]
         # Test normal
         actual = window_diff(hypothesis, reference, **self.kwargs)
         self.assertAlmostEquals(1.0 / 9.0, float(actual))
@@ -226,8 +226,8 @@ class TestWindowDiffMasses(TestCase):
         '''
         Test paper example A vs E
         '''
-        reference = [6,6]
-        hypothesis = [5,1,1,5]
+        reference = [6, 6]
+        hypothesis = [5, 1, 1, 5]
         # Test normal
         actual = window_diff(hypothesis, reference, **self.kwargs)
         self.assertAlmostEquals(5.0 / 9.0, float(actual))
@@ -243,7 +243,11 @@ class TestWindowDiffMasses(TestCase):
         '''
         Test the nltk boundary format.
         '''
-        value = window_diff('0100100000', '0101000000', window_size=2, boundary_format=BoundaryFormat.nltk)
+        value = window_diff(
+            '0100100000',
+            '0101000000',
+            window_size=2,
+            boundary_format=BoundaryFormat.nltk)
         self.assertAlmostEqual(Decimal('0.2222222'), value)
 
     def test_nltk(self):
@@ -255,16 +259,89 @@ class TestWindowDiffMasses(TestCase):
         s3 = "100000010000"
         # Originally 0.0
         self.assertAlmostEqual(
-            window_diff(s1, s1, window_size=3, boundary_format=BoundaryFormat.nltk),
+            window_diff(
+                s1,
+                s1,
+                window_size=3,
+                boundary_format=BoundaryFormat.nltk),
             Decimal('0'))
         # Originally 0.3
         self.assertAlmostEqual(
-            window_diff(s2, s1, window_size=3, boundary_format=BoundaryFormat.nltk),
+            window_diff(
+                s2,
+                s1,
+                window_size=3,
+                boundary_format=BoundaryFormat.nltk),
             Decimal('0.3'))
         # Originally 0.7
         self.assertAlmostEqual(
-            window_diff(s3, s2, window_size=3, boundary_format=BoundaryFormat.nltk),
+            window_diff(
+                s3,
+                s2,
+                window_size=3,
+                boundary_format=BoundaryFormat.nltk),
             Decimal('0.8'))
+
+    def test_long_format(self):
+        hypothesis = (
+            2,
+            31,
+            4,
+            1,
+            1,
+            3,
+            11,
+            5,
+            21,
+            4,
+            2,
+            1,
+            17,
+            26,
+            16,
+            1,
+            17,
+            4,
+            3,
+            7,
+            7,
+            6,
+            12,
+            1,
+            6,
+            25,
+            2,
+            4,
+            3,
+            16,
+            8)
+        reference = (
+            2,
+            36,
+            1,
+            3,
+            10,
+            1,
+            5,
+            21,
+            4,
+            3,
+            59,
+            8,
+            10,
+            4,
+            3,
+            7,
+            13,
+            12,
+            7,
+            27,
+            4,
+            3,
+            24)
+        self.assertAlmostEqual(
+            window_diff(hypothesis, reference),
+            Decimal('0.2681992337164750957854406130'))
 
 
 class TestPairwiseWindowDiff(TestCase):
