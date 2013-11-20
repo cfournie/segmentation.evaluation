@@ -3,12 +3,12 @@ Window-based segmentation evaluation metrics package.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from __future__ import division
+from __future__ import division, absolute_import
 from decimal import Decimal
-from ..metric import METRIC_DEFAULTS
-from ..format import BoundaryFormat, convert_positions_to_masses
-from ..util import SegmentationMetricError
-from ..util.math import mean
+from segeval.metric import METRIC_DEFAULTS
+from segeval.format import BoundaryFormat, convert_positions_to_masses
+from segeval.util import SegmentationMetricError
+from segeval.util.math import mean
 
 
 WINDOW_METRIC_DEFAULTS = dict(METRIC_DEFAULTS)

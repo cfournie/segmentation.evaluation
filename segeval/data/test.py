@@ -3,11 +3,12 @@ Tests the data i/o functions and package.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import os
 import unittest
-from . import Dataset, load_nested_folders_dict, FILETYPE_JSON, DataIOError
-from .samples import (HEARST_1997_STARGAZER, COMPLETE_AGREEMENT,
-                      LARGE_DISAGREEMENT)
+from segeval.data import Dataset, load_nested_folders_dict, FILETYPE_JSON, DataIOError
+from segeval.data.samples import (HEARST_1997_STARGAZER, COMPLETE_AGREEMENT,
+                                  LARGE_DISAGREEMENT)
 
 
 class TestDataset(unittest.TestCase):
@@ -43,14 +44,15 @@ class TestDataset(unittest.TestCase):
         '''
         Test ``Dataset.add()``.
         '''
-        self.assertEqual(set(['an4', 'an1', 'an2', 'an3']), COMPLETE_AGREEMENT.coders)
+        self.assertEqual(
+            set(['an4', 'an1', 'an2', 'an3']), COMPLETE_AGREEMENT.coders)
 
     def test_dataset_property(self):
         '''
         Test dataset property creation and independence.
         '''
         prop = 'test'
-        dataset = Dataset(properties={prop:True})
+        dataset = Dataset(properties={prop: True})
         self.assertTrue(prop in dataset.properties)
         self.assertTrue(dataset.properties[prop])
 

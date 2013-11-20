@@ -3,10 +3,11 @@ JSON output module (for general JSON writing operations).
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import json
 import os
 import codecs
-from ..util.lang import enum
+from segeval.util.lang import enum
 
 
 Field = enum(
@@ -54,7 +55,7 @@ def input_linear_mass_json(filepath):
     :param filepath: Path to the mass file containing segment position codings.
     :type filepath: :func:`str`
     '''
-    from . import Dataset, DataIOError
+    from segeval.data import Dataset, DataIOError
     dataset = Dataset()
     data = dict()
     # Open file

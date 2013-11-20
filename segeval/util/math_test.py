@@ -3,9 +3,10 @@ Tests some math related utility functions.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import unittest
 from decimal import Decimal
-from .math import mean, std, var, stderr
+from segeval.util.math import mean, std, var, stderr
 
 
 class TestMath(unittest.TestCase):

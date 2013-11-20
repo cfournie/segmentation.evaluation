@@ -4,8 +4,9 @@ Test data for unit tests that has been selected from
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from . import Dataset
-from ..format import BoundaryFormat
+from __future__ import absolute_import
+from segeval.data import Dataset
+from segeval.format import BoundaryFormat
 
 
 KAZANTSEVA2012_G5 = Dataset(

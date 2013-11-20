@@ -3,15 +3,16 @@ Tests the WindowDiff evaluation metric.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 from decimal import Decimal
-from ..compute import summarize
-from ..format import BoundaryFormat
-from ..window.pk import pk
-from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
-                            COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
-from ..util import SegmentationMetricError
-from ..util.test import TestCase
-from ..data.samples import HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER
+from segeval.compute import summarize
+from segeval.format import BoundaryFormat
+from segeval.window.pk import pk
+from segeval.data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
+                                  COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
+from segeval.util import SegmentationMetricError
+from segeval.util.test import TestCase
+from segeval.data.samples import HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER
 
 
 class TestPk(TestCase):

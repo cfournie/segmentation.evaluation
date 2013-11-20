@@ -3,15 +3,17 @@ Tests boundary similarity (B).
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import unittest
 from decimal import Decimal
-from .boundary import boundary_similarity
-from .weight import weight_a, weight_s, weight_t
-from ..util import SegmentationMetricError
-from ..format import BoundaryFormat
-from ..compute import summarize
-from ..data.samples import (MULTIPLE_BOUNDARY_TYPES, HEARST_1997_STARGAZER,
-                            HYPOTHESIS_STARGAZER)
+from segeval.similarity.boundary import boundary_similarity
+from segeval.similarity.weight import weight_a, weight_s, weight_t
+from segeval.util import SegmentationMetricError
+from segeval.format import BoundaryFormat
+from segeval.compute import summarize
+from segeval.data.samples import (
+    MULTIPLE_BOUNDARY_TYPES, HEARST_1997_STARGAZER,
+    HYPOTHESIS_STARGAZER)
 
 
 class TestBoundary(unittest.TestCase):
@@ -52,7 +54,10 @@ class TestBoundary(unittest.TestCase):
         '''
         Test the nltk boundary format.
         '''
-        value = boundary_similarity('01001000000', '01010000000', boundary_format=BoundaryFormat.nltk)
+        value = boundary_similarity(
+            '01001000000',
+            '01010000000',
+            boundary_format=BoundaryFormat.nltk)
         self.assertAlmostEqual(Decimal('0.75'), value)
 
     def test_clustered_fps(self):
@@ -66,8 +71,8 @@ class TestBoundary(unittest.TestCase):
         '''
         Test position-format.
         '''
-        a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
-        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        a = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        b = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
         value = boundary_similarity(a, b, boundary_format=
                                     BoundaryFormat.position)
         self.assertEqual(Decimal('0'), value)
@@ -76,8 +81,8 @@ class TestBoundary(unittest.TestCase):
         '''
         Test incorrect format exception.
         '''
-        a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
-        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        a = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        b = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
         self.assertRaises(SegmentationMetricError, boundary_similarity, a, b,
                           boundary_format=None)
 
@@ -85,8 +90,8 @@ class TestBoundary(unittest.TestCase):
         '''
         Test incorrect argument exception.
         '''
-        a = [1,1,1,1,1,1,1,1,1,1,1,1,1]
-        b = [1,1,1,1,2,2,2,2,3,3,3,3,3]
+        a = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        b = [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3]
         c = 0
         self.assertRaises(SegmentationMetricError, boundary_similarity, a, b,
                           c)

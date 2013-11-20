@@ -3,10 +3,10 @@ Tests the data merge functions and package.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import unittest
 import os
-from segeval.data.tsv import (input_linear_mass_tsv, input_linear_positions_tsv,
-                  input_hierarchical_levels_tsv)
+from segeval.data.tsv import (input_linear_mass_tsv, input_linear_positions_tsv)
 from segeval.data.samples import HEARST_1997_STARGAZER
 
 

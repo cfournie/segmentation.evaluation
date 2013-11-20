@@ -3,9 +3,11 @@ Tests overall package functions and classes.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import unittest
 from decimal import Decimal
 import segeval
+from segeval.util.test import TestCase
 from segeval import (KAZANTSEVA2012_G5, actual_agreement_linear,
                      artstein_poesio_bias_linear, fleiss_kappa_linear, fleiss_pi_linear,
                      precision, recall, pk, window_diff, summarize, fmeasure,
@@ -57,7 +59,7 @@ class TestImport(unittest.TestCase):
             self.assertNotEquals(None, getattr(segeval, item))
 
 
-class TestExamples(unittest.TestCase):
+class TestExamples(TestCase):
 
     '''
     Example of segeval function usage.
@@ -189,7 +191,8 @@ class TestExamples(unittest.TestCase):
         Test convert_positions_to_masses.
         '''
 
-        self.assertEquals((4,2), convert_positions_to_masses([1,1,1,1,2,2]))
+        self.assertEquals(
+            (4, 2), convert_positions_to_masses([1, 1, 1, 1, 2, 2]))
 
     def test_convert_masses_to_positions(self):
         '''

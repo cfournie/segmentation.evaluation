@@ -3,13 +3,14 @@ Tests segmentation similarity (S).
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import, division
 import unittest
 from decimal import Decimal
-from .segmentation import segmentation_similarity
-from ..util import SegmentationMetricError
-from ..format import BoundaryFormat
-from ..data.samples import (HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER,
-                            MULTIPLE_BOUNDARY_TYPES, KAZANTSEVA2012_G5)
+from segeval.similarity.segmentation import segmentation_similarity
+from segeval.util import SegmentationMetricError
+from segeval.format import BoundaryFormat
+from segeval.data.samples import (HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER,
+                                  MULTIPLE_BOUNDARY_TYPES, KAZANTSEVA2012_G5)
 
 
 class TestSegmentation(unittest.TestCase):
@@ -50,7 +51,10 @@ class TestSegmentation(unittest.TestCase):
         '''
         Test the nltk boundary format.
         '''
-        value = segmentation_similarity('0100100000', '0101000000', boundary_format=BoundaryFormat.nltk)
+        value = segmentation_similarity(
+            '0100100000',
+            '0101000000',
+            boundary_format=BoundaryFormat.nltk)
         self.assertAlmostEqual(Decimal('0.95'), value)
 
     def test_clustered_fps(self):
@@ -106,7 +110,10 @@ class TestSegmentation(unittest.TestCase):
         '''
         hypothesis = HYPOTHESIS_STARGAZER
         reference = HEARST_1997_STARGAZER
-        value = segmentation_similarity(hypothesis, reference, return_parts=True)
+        value = segmentation_similarity(
+            hypothesis,
+            reference,
+            return_parts=True)
 
         self.assertEquals(value['stargazer,h1,1'], (Decimal('17'), 20))
 
@@ -116,7 +123,11 @@ class TestSegmentation(unittest.TestCase):
         '''
         hypothesis = MULTIPLE_BOUNDARY_TYPES
         reference = HEARST_1997_STARGAZER
-        self.assertRaises(SegmentationMetricError, segmentation_similarity, hypothesis, reference)
+        self.assertRaises(
+            SegmentationMetricError,
+            segmentation_similarity,
+            hypothesis,
+            reference)
 
     def test_s_datasets_continue(self):
         '''

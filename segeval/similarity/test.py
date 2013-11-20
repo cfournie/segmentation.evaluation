@@ -3,12 +3,13 @@ Tests similarity functions.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import unittest
 from decimal import Decimal
-from . import boundary_confusion_matrix, boundary_statistics
-from ..format import BoundaryFormat
-from ..data.samples import HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER
-from ..ml import precision, recall, fmeasure
+from segeval.similarity import boundary_confusion_matrix, boundary_statistics
+from segeval.format import BoundaryFormat
+from segeval.data.samples import HEARST_1997_STARGAZER, HYPOTHESIS_STARGAZER
+from segeval.ml import precision, recall, fmeasure
 
 
 class TestSimilarity(unittest.TestCase):

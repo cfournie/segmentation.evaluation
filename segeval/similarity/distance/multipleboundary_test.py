@@ -3,10 +3,11 @@ Tests multiple-boundary edit distance.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import unittest
-from .multipleboundary import (boundary_edit_distance,
-                               __additions_substitutions__, __additions_substitutions_sets__,
-                               __has_substitutions__)
+from segeval.similarity.distance.multipleboundary import (
+    boundary_edit_distance, __additions_substitutions__,
+    __additions_substitutions_sets__, __has_substitutions__)
 
 
 class TestMultipleBoundaries(unittest.TestCase):

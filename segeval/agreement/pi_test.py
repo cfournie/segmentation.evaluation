@@ -3,12 +3,13 @@ Tests the segmentation versions of Scott's and Fleiss' Pi.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import unittest
 from decimal import Decimal
-from .pi import fleiss_pi_linear
-from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
-                            COMPLETE_AGREEMENT, LARGE_DISAGREEMENT,
-                            MULTIPLE_BOUNDARY_TYPES)
+from segeval.agreement.pi import fleiss_pi_linear
+from segeval.data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
+                                  COMPLETE_AGREEMENT, LARGE_DISAGREEMENT,
+                                  MULTIPLE_BOUNDARY_TYPES)
 
 
 class TestPi(unittest.TestCase):

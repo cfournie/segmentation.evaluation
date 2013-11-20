@@ -3,6 +3,7 @@ Tests actual agreement.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import unittest
 from decimal import Decimal
 from segeval.agreement import (actual_agreement_linear,
@@ -11,7 +12,6 @@ from segeval.agreement import (actual_agreement_linear,
 from segeval.util import SegmentationMetricError
 from segeval.data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
                                   COMPLETE_AGREEMENT, LARGE_DISAGREEMENT)
-
 
 
 class TestAgreement(unittest.TestCase):

@@ -3,7 +3,7 @@ Math utility functions.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from __future__ import division
+from __future__ import division, absolute_import
 from decimal import Decimal
 
 

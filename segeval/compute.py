@@ -3,7 +3,8 @@ Abstract computation utilities.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from .util.math import mean, std, var, stderr
+from __future__ import absolute_import
+from segeval.util.math import mean, std, var, stderr
 from itertools import combinations
 
 

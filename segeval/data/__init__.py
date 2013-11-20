@@ -4,13 +4,13 @@ files.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-
+from __future__ import absolute_import
 import os
 import copy
 from collections import defaultdict
-from .tsv import input_linear_mass_tsv
-from .jsonutils import input_linear_mass_json
-from ..format import BoundaryFormat
+from segeval.data.tsv import input_linear_mass_tsv
+from segeval.data.jsonutils import input_linear_mass_json
+from segeval.format import BoundaryFormat
 
 FILETYPE_TSV = 'tsv'
 FILETYPE_JSON = 'json'

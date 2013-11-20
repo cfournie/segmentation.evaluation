@@ -6,12 +6,12 @@ counting at the beginning and end of segmentations provided by
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from __future__ import division
+from __future__ import division, absolute_import
 from decimal import Decimal
-from . import __compute_window_size__, WINDOW_METRIC_DEFAULTS
-from ..format import (BoundaryFormat, convert_masses_to_positions,
-                      convert_positions_to_masses, convert_nltk_to_masses)
-from ..util import __fnc_metric__, SegmentationMetricError
+from segeval.window import __compute_window_size__, WINDOW_METRIC_DEFAULTS
+from segeval.format import (BoundaryFormat, convert_masses_to_positions,
+                            convert_positions_to_masses, convert_nltk_to_masses)
+from segeval.util import __fnc_metric__, SegmentationMetricError
 
 
 WINDOWDIFF_METRIC_DEFAULTS = dict(WINDOW_METRIC_DEFAULTS)

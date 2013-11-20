@@ -3,9 +3,10 @@ Tests weight functions.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import unittest
 from decimal import Decimal
-from . import (weight_s_scale, weight_t_scale)
+from segeval.similarity import (weight_s_scale, weight_t_scale)
 
 
 class TestWeight(unittest.TestCase):

@@ -3,7 +3,6 @@ Tests segmentation format utility functions.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-import unittest
 from __future__ import absolute_import
 from segeval.util.test import TestCase
 from segeval.format import (convert_positions_to_masses,
@@ -12,7 +11,7 @@ from segeval.format import (convert_positions_to_masses,
                             convert_nltk_to_masses)
 
 
-class TestSegeval(unittest.TestCase):
+class TestFormat(TestCase):
 
     '''
     Segmentation-format-related function tests.

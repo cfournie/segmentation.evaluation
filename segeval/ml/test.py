@@ -3,11 +3,13 @@ Tests the machine learning (ML) statistics functions, and ml package.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import unittest
 from decimal import Decimal
-from . import (__precision__, precision, __recall__, recall, __fmeasure__,
-               fmeasure, ConfusionMatrix as cm, Average)
-from ..util import SegmentationMetricError
+from segeval.ml import (
+    __precision__, precision, __recall__, recall, __fmeasure__,
+    fmeasure, ConfusionMatrix as cm, Average)
+from segeval.util import SegmentationMetricError
 
 
 class TestConfusionMatrix(unittest.TestCase):

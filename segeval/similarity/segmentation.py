@@ -3,9 +3,9 @@ Segmentation Similarity (S) package.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from __future__ import division
-from . import __boundary_statistics__, SIMILARITY_METRIC_DEFAULTS
-from ..util import __fnc_metric__
+from __future__ import absolute_import, division
+from segeval.similarity import __boundary_statistics__, SIMILARITY_METRIC_DEFAULTS
+from segeval.util import __fnc_metric__
 from decimal import Decimal
 
 
@@ -18,7 +18,6 @@ def __segmentation_similarity__(*args, **kwargs):
     del metric_kwargs['return_parts']
     del metric_kwargs['one_minus']
     # Arguments
-    boundary_types = kwargs['boundary_types']
     return_parts = kwargs['return_parts']
     one_minus = kwargs['one_minus']
     # Compute

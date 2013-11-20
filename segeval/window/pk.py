@@ -4,11 +4,14 @@ Implementation of the Pk segmentation evaluation metric described in
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from __future__ import division
+from __future__ import division, absolute_import
 from decimal import Decimal
-from . import __compute_window_size__, WINDOW_METRIC_DEFAULTS
-from ..util import __fnc_metric__, SegmentationMetricError
-from ..format import (BoundaryFormat, convert_masses_to_positions, convert_nltk_to_masses)
+from segeval.window import __compute_window_size__, WINDOW_METRIC_DEFAULTS
+from segeval.util import __fnc_metric__, SegmentationMetricError
+from segeval.format import (
+    BoundaryFormat,
+    convert_masses_to_positions,
+    convert_nltk_to_masses)
 
 
 def __pk__(hypothesis, reference, window_size, one_minus, boundary_format,

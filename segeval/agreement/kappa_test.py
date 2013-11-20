@@ -3,12 +3,13 @@ Tests the segmentation versions of Cohen's and Fleiss' Kappa.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import unittest
 from decimal import Decimal
-from .kappa import fleiss_kappa_linear
-from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
-                            COMPLETE_AGREEMENT, LARGE_DISAGREEMENT,
-                            MULTIPLE_BOUNDARY_TYPES)
+from segeval.agreement.kappa import fleiss_kappa_linear
+from segeval.data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
+                                  COMPLETE_AGREEMENT, LARGE_DISAGREEMENT,
+                                  MULTIPLE_BOUNDARY_TYPES)
 
 
 class TestKappa(unittest.TestCase):

@@ -3,8 +3,9 @@ Segmentation encoding format converstion utilities.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 from itertools import groupby
-from .util.lang import enum
+from segeval.util.lang import enum
 
 
 BoundaryFormat = enum(position='position', mass='mass', sets='sets', nltk='nltk')
@@ -21,7 +22,7 @@ def convert_positions_to_masses(positions):
 
     .. deprecated:: 1.0
     '''
-    return tuple([len(list(group)) for key, group in groupby(positions)])
+    return tuple([len(list(group)) for _, group in groupby(positions)])
 
 
 def convert_masses_to_positions(masses):

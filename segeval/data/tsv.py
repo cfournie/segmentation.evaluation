@@ -5,7 +5,7 @@ TSV output module (for general TSV writing operations).
 '''
 from __future__ import absolute_import
 import csv
-from segeval.format import convert_positions_to_masses, BoundaryFormat
+from segeval.format import convert_positions_to_masses
 
 
 DEFAULT_DELIMITER = '\t'
@@ -22,7 +22,7 @@ def input_linear_mass_tsv(filepath, delimiter=DEFAULT_DELIMITER):
     :type delimiter: str
     '''
 
-    from . import Dataset, name_from_filepath
+    from segeval.data import Dataset, name_from_filepath
     # List version of file
     header = []
     dataset = Dataset()

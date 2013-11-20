@@ -3,9 +3,10 @@ Test utilities, and tests for said utilities.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import unittest
 from decimal import Decimal
-from . import SegmentationMetricError, __fnc_metric__
+from segeval.util import SegmentationMetricError, __fnc_metric__
 
 
 class TestCase(unittest.TestCase):
@@ -16,6 +17,13 @@ class TestCase(unittest.TestCase):
     '''
 
     DECIMAL_PLACES = 4
+
+    def assertEqualSet(self, first, second):
+        '''
+        Convert the arguments into a list of sets.
+        '''
+        return self.assertEqual([set(position) for position in first],
+                                [set(position) for position in second])
 
     def assertAlmostEquals(self, first, second, places=DECIMAL_PLACES,
                            msg=None):

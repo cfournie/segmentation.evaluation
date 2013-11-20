@@ -5,6 +5,7 @@ segmenters.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import sys
 from types import ModuleType
 

@@ -3,9 +3,10 @@ Arstein Poesio's annotator bias [ArtsteinPoesio2008]_.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from . import __fnc_metric__
-from .kappa import __fleiss_kappa_linear__
-from .pi import __fleiss_pi_linear__
+from __future__ import absolute_import
+from segeval.agreement import __fnc_metric__
+from segeval.agreement.kappa import __fleiss_kappa_linear__
+from segeval.agreement.pi import __fleiss_pi_linear__
 
 
 def __artstein_poesio_bias_linear__(dataset, **kwargs):

@@ -3,16 +3,19 @@ Tests the data merge functions and package.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import unittest
 import os
 import re
-from . import DataIOError
-from .jsonutils import (output_linear_mass_json, input_linear_mass_json,
-                        __write_json__, Field)
-from .samples import HEARST_1997_STARGAZER
+from segeval.data import DataIOError
+from segeval.data.jsonutils import (
+    output_linear_mass_json, input_linear_mass_json,
+    __write_json__, Field)
+from segeval.data.samples import HEARST_1997_STARGAZER
 
 
 class TestJsonUtils(unittest.TestCase):
+
     '''
     Test data merge functions.
     '''
@@ -30,14 +33,14 @@ class TestJsonUtils(unittest.TestCase):
             self.test_data_dir, 'hearst1997.json')
         output_linear_mass_json(file_path_new, HEARST_1997_STARGAZER)
         self.assertEqual(re.sub(r'\s+', '', open(file_path_new).read()),
-                         re.sub(r'\s', '',open(file_path_existing).read()))
+                         re.sub(r'\s', '', open(file_path_existing).read()))
         os.remove(file_path_new)
         self.assertFalse(os.path.exists(file_path_new))
         # Output to folder
         file_path_new = os.path.join(self.test_data_dir, 'output.json')
         output_linear_mass_json(self.test_data_dir, HEARST_1997_STARGAZER)
         self.assertEqual(re.sub(r'\s+', '', open(file_path_new).read()),
-                         re.sub(r'\s', '',open(file_path_existing).read()))
+                         re.sub(r'\s', '', open(file_path_existing).read()))
         os.remove(file_path_new)
         self.assertFalse(os.path.exists(file_path_new))
 

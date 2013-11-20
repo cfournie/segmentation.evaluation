@@ -3,7 +3,8 @@ Utility functions and classes for the package.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from ..compute import compute_pairwise_values
+from __future__ import absolute_import
+from segeval.compute import compute_pairwise_values
 
 
 class SegmentationMetricError(Exception):
@@ -29,7 +30,7 @@ class SegmentationMetricError(Exception):
 
 def __fnc_metric__(fnc_metric, args, kwargs, kw_defaults):
 
-    from ..data import Dataset
+    from segeval.data import Dataset
     # Create default keyword arguments
     metric_kwargs = dict(kw_defaults)
     metric_kwargs.update(kwargs)

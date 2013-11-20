@@ -3,9 +3,9 @@ Inter-coder agreement statistic Fleiss' Pi.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from __future__ import division
+from __future__ import absolute_import, division
 from decimal import Decimal
-from . import __fnc_metric__, __actual_agreement_linear__
+from segeval.agreement import __fnc_metric__, __actual_agreement_linear__
 
 
 def __fleiss_pi_linear__(dataset, **kwargs):

@@ -3,12 +3,13 @@ Tests the segmentation version of Arstein and Poesio's bias [ArtsteinPoesio2008]
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
+from __future__ import absolute_import
 import unittest
 from decimal import Decimal
-from .bias import artstein_poesio_bias_linear
-from ..data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
-                            COMPLETE_AGREEMENT, LARGE_DISAGREEMENT,
-                            MULTIPLE_BOUNDARY_TYPES)
+from segeval.agreement.bias import artstein_poesio_bias_linear
+from segeval.data.samples import (KAZANTSEVA2012_G5, KAZANTSEVA2012_G2,
+                                  COMPLETE_AGREEMENT, LARGE_DISAGREEMENT,
+                                  MULTIPLE_BOUNDARY_TYPES)
 
 
 class TestBias(unittest.TestCase):

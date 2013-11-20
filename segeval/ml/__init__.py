@@ -4,12 +4,12 @@ learning metrics that have been adapted for use in segmentation.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from __future__ import division
+from __future__ import absolute_import, division
 from decimal import Decimal
 from collections import defaultdict
-from ..util import SegmentationMetricError
-from ..util.math import mean
-from ..util.lang import enum
+from segeval.util import SegmentationMetricError
+from segeval.util.math import mean
+from segeval.util.lang import enum
 
 
 Average = enum('micro', 'macro')

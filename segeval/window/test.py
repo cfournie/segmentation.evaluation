@@ -3,10 +3,11 @@ Tests window-based segmentation metric utility functions.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from . import compute_window_size
-from ..util import SegmentationMetricError
-from ..util.test import TestCase
-from ..data.samples import KAZANTSEVA2012_G5
+from __future__ import absolute_import
+from segeval.window import compute_window_size
+from segeval.util import SegmentationMetricError
+from segeval.util.test import TestCase
+from segeval.data.samples import KAZANTSEVA2012_G5
 
 
 class TestWindow(TestCase):

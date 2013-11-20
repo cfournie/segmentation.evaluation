@@ -3,14 +3,14 @@ Inter-coder agreement statistics.
 
 .. moduleauthor:: Chris Fournier <chris.m.fournier@gmail.com>
 '''
-from __future__ import division
-from ..data import get_coders
-from ..similarity import SIMILARITY_METRIC_DEFAULTS
-from ..similarity.boundary import boundary_similarity
-from ..similarity.distance import identify_types
-from ..format import (BoundaryFormat, boundary_string_from_masses,
-                      convert_positions_to_masses, convert_nltk_to_masses)
-from ..util import SegmentationMetricError
+from __future__ import absolute_import, division
+from segeval.data import get_coders
+from segeval.similarity import SIMILARITY_METRIC_DEFAULTS
+from segeval.similarity.boundary import boundary_similarity
+from segeval.similarity.distance import identify_types
+from segeval.format import (BoundaryFormat, boundary_string_from_masses,
+                            convert_positions_to_masses, convert_nltk_to_masses)
+from segeval.util import SegmentationMetricError
 
 
 AGREEMENT_METRIC_DEFAULTS = dict(SIMILARITY_METRIC_DEFAULTS)
