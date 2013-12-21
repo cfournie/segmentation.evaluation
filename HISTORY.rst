@@ -3,12 +3,12 @@
 History
 =======
 
-2.0.11 (2013-12-01)
+2.0.11 (2013-12-21)
 ----------------
 
-* Boundary types are now automatically identified for each comparison
-	* Fixes a bug in multiple boundary segmentation comparison where by default, only the boundary type ``1`` is compared
-* Fixed a bug where during agreement computation, an extra boundary was being counted and only the boundary-mass format was truly supported
+* Boundary types are now automatically identified for each comparison (fixes a bug in multiple boundary segmentation comparison where by default, only the boundary type ``1`` is compared)
+* Fixed a bug where during agreement computation, an extra boundary was being counted and only the boundary-mass format was properly supported (oops)
+* If someone uses a hypothesis or reference argument in mass format that is a single number (e.g., using ``(20)`` instead of the proper ``(20, )``), their argument is converted for them into a tuple
 
 
 2.0.10 (2013-10-01)

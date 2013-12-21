@@ -77,6 +77,15 @@ class TestBoundary(unittest.TestCase):
                                     BoundaryFormat.position)
         self.assertEqual(Decimal('0'), value)
 
+    def test_int_as_param(self):
+        '''
+        Test using an int instead of a tuple (common mistake)
+        '''
+        value = boundary_similarity([11], [5, 6])
+        self.assertEqual(Decimal('0'), value)
+        value = boundary_similarity([5, 6], [11])
+        self.assertEqual(Decimal('0'), value)
+
     def test_format_exception(self):
         '''
         Test incorrect format exception.

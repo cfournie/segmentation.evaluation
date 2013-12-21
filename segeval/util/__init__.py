@@ -54,6 +54,11 @@ def __fnc_metric__(fnc_metric, args, kwargs, kw_defaults):
             del metric_kwargs['dataset']
         else:
             raise SegmentationMetricError('Expected either a reference and hypothesis or dataset argument.')
+    # Fix the case when people put in just a single int by accident, e.g., (20) => (20,)
+    if isinstance(hypothesis, int):
+        hypothesis = (hypothesis, )
+    if isinstance(reference, int):
+        reference = (reference, )
     # Compute
     if dataset:
         # Compute pairwise values over all coders in a dataset
