@@ -6,6 +6,7 @@ Inter-coder agreement statistic Fleiss' Pi.
 from __future__ import absolute_import, division
 from decimal import Decimal
 from segeval.agreement import __fnc_metric__, __actual_agreement_linear__
+from itertools import chain
 
 
 def __fleiss_pi_linear__(dataset, **kwargs):
@@ -29,13 +30,10 @@ def __fleiss_pi_linear__(dataset, **kwargs):
     A_a = Decimal(sum(all_numerators)) / sum(all_denominators)
     # Calculate Ae
     p_e_segs = list()
-    for boundaries_info in coders_boundaries.values():
-        for item in boundaries_info:
-            boundaries, total_boundaries = item
-            p_e_seg = Decimal(boundaries) / total_boundaries
-            p_e_segs.append(p_e_seg)
+    boundary_ratios = chain.from_iterable(coders_boundaries.values())
+    b_placed, b_possible = map(sum, zip(*boundary_ratios))
     # Calculate P_e_seg
-    P_e_seg = Decimal(sum(p_e_segs)) / len(p_e_segs)
+    P_e_seg = Decimal(b_placed) / b_possible
     A_e = (P_e_seg ** 2)
     # Calculate pi
     pi = (A_a - A_e) / (Decimal('1') - A_e)

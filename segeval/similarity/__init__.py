@@ -103,7 +103,7 @@ def __boundary_confusion_matrix__(*args, **kwargs):
     # Add weighted near misses
     for transposition in statistics['transpositions']:
         match = transposition[2]
-        matrix[match][match] += fnc_weight_t([transposition], n_t)
+        matrix[match][match] += (1 - fnc_weight_t([transposition], n_t))
     # Add confusion errors
     for substitution in statistics['substitutions']:
         hyp, ref = substitution
@@ -113,11 +113,11 @@ def __boundary_confusion_matrix__(*args, **kwargs):
         hyp, ref = None, None
         boundary_type, side = addition
         if side == 'a':
-            hyp = None
-            ref = boundary_type
-        else:  # side == 'b'
             hyp = boundary_type
             ref = None
+        else:  # side == 'b'
+            hyp = None
+            ref = boundary_type
         assert side == 'a' or side == 'b'
         matrix[hyp][ref] += 1
     return matrix
