@@ -113,11 +113,11 @@ def __boundary_confusion_matrix__(*args, **kwargs):
         hyp, ref = None, None
         boundary_type, side = addition
         if side == 'a':
-            hyp = None
-            ref = boundary_type
-        else:  # side == 'b'
             hyp = boundary_type
             ref = None
+        else:  # side == 'b'
+            hyp = None
+            ref = boundary_type
         assert side == 'a' or side == 'b'
         matrix[hyp][ref] += 1
     return matrix
