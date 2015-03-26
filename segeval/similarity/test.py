@@ -37,6 +37,16 @@ class TestSimilarity(unittest.TestCase):
         self.assertEqual(cm[1][1], Decimal('1.5'))
         self.assertEqual(cm[2][2], 0)
 
+    def test_boundary_confusion_matrix_wide_transposition(self):
+        cm1 = boundary_confusion_matrix([5,5], [4,6], n_t=4)
+        self.assertEqual(cm1[None][1], 0)
+        self.assertEqual(cm1[1][None], 0)
+        self.assertEqual(cm1[1][1], Decimal('0.75'))
+        cm2 = boundary_confusion_matrix([5,5], [2,8], n_t=4)
+        self.assertEqual(cm2[None][1], 0)
+        self.assertEqual(cm2[1][None], 0)
+        self.assertEqual(cm2[1][1], Decimal('0.25'))
+
     def test_boundary_statistics(self):
         '''
         Test boundary statistics.
