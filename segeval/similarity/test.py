@@ -23,18 +23,17 @@ class TestSimilarity(unittest.TestCase):
         Test confusion matrix.
         '''
         cm = boundary_confusion_matrix(
-            [set([]), set([2]), set([]), set([]), set([1]), set([1]),
-             set([1]), set([1])],
-            [set([1]), set([1]), set([]), set([1]), set([]), set([1]),
-             set([]), set([])],
+            #    A-b        S         M         T --------T         M        A-a       A-a
+            [set([ ]), set([2]), set([ ]), set([ ]), set([1]), set([1]), set([1]), set([1])],
+            [set([1]), set([1]), set([ ]), set([1]), set([ ]), set([1]), set([ ]), set([ ])],
             boundary_format=BoundaryFormat.sets)
-        self.assertEqual(cm[None][1], 2)
-        self.assertEqual(cm[1][None], 1)
+        self.assertEqual(cm[None][1], 1)           # A-b
+        self.assertEqual(cm[1][None], 2)           # A-a
         self.assertEqual(cm[None][2], 0)
         self.assertEqual(cm[2][None], 0)
-        self.assertEqual(cm[2][1], 1)
+        self.assertEqual(cm[2][1], 1)              # S
         self.assertEqual(cm[1][2], 0)
-        self.assertEqual(cm[1][1], Decimal('1.5'))
+        self.assertEqual(cm[1][1], Decimal('1.5')) # M + T
         self.assertEqual(cm[2][2], 0)
 
     def test_boundary_statistics(self):
