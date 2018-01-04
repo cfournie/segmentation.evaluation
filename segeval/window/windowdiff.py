@@ -107,7 +107,7 @@ length (%(ref)i is not %(hyp)i).' % {'ref': len(reference),
         ref_boundaries = 0
         hyp_boundaries = 0
         # Check that the number of loops is correct
-        assert len(window) is window_size + 1
+        assert len(window) == window_size + 1
         # For pair in window
         for j in range(0, len(window) - 1):
             ref_part, hyp_part = zip(*window[j:j + 2])
